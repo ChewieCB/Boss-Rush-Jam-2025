@@ -972,7 +972,7 @@ func _init_slam_shockwave() -> void:
 	var _shockwave = slam_shockwave_prefab.instantiate()
 	_shockwave.finished.connect(
 		func(): 
-			_shockwave.body_entered.disconnect(_on_wave_collision)
+			#_shockwave.body_entered.disconnect(_on_wave_collision)
 			slam_shockwave_pool.push_back(_shockwave)
 	)
 	_shockwave.free_on_finished = false
@@ -1013,17 +1013,18 @@ func _on_stack_slam_slam_state_entered() -> void:
 	shockwave.global_transform = self.global_transform
 	shockwave.global_position.y = aoe_floor
 	shockwave.max_radius = slam_wave_radius
+	shockwave.arc_angle = 40
 	shockwave.damage = slam_damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = slam_wave_speed
 	shockwave.start_shockwave()
 	# FIXME - knockback not triggering
-	shockwave.body_entered.connect(
-		_on_wave_collision.bind(
-			slam_damage,
-			shockwave.global_position,
-			slam_wave_radius
-		)
-	)
+	#shockwave.body_entered.connect(
+		#_on_wave_collision.bind(
+			#slam_damage,
+			#shockwave.global_position,
+			#slam_wave_radius
+		#)
+	#)
 	
 	completed_slams += 1
 	
