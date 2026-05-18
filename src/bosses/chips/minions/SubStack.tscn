@@ -205,6 +205,10 @@ max_health = 1e+07
 [node name="NavigationComponent" parent="." index="6"]
 follow_target = false
 
+[node name="UI" parent="." index="7"]
+process_mode = 4
+visible = false
+
 [node name="HealthUI" parent="UI" index="0"]
 process_mode = 4
 visible = false
@@ -213,6 +217,9 @@ visible = false
 visible = false
 boss_name = "MINION DO NOT USE"
 sub_bar_count = 0
+
+[node name="DebugUI" parent="." index="8"]
+process_mode = 4
 
 [node name="Phase" parent="StateChart/Root" index="4"]
 initial_state = NodePath("Idle")
