@@ -966,12 +966,12 @@ func _init_slam_shockwave() -> void:
 	var _shockwave = slam_shockwave_prefab.instantiate()
 	_shockwave.finished.connect(
 		func(): 
+			_shockwave.body_entered.disconnect(_on_wave_collision)
 			slam_shockwave_pool.push_back(_shockwave)
-			_shockwave.process_mode = Node.PROCESS_MODE_DISABLED
 	)
-	_shockwave.process_mode = Node.PROCESS_MODE_DISABLED
 	_shockwave.free_on_finished = false
 	scene_root.add_child.call_deferred(_shockwave)
+	_shockwave.deactivate.call_deferred()
 	slam_shockwave_pool.push_back(_shockwave)
 
 #
@@ -1010,6 +1010,14 @@ func _on_stack_slam_slam_state_entered() -> void:
 	shockwave.damage = slam_damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = slam_wave_speed
 	shockwave.start_shockwave()
+	# FIXME - knockback not triggering
+	shockwave.body_entered.connect(
+		_on_wave_collision.bind(
+			slam_damage,
+			shockwave.global_position,
+			slam_wave_radius
+		)
+	)
 	
 	completed_slams += 1
 	
@@ -1159,12 +1167,18 @@ func _on_ss_charge_merging_state_entered() -> void:
 	area_collider.collision_layer = int(pow(2, 7))
 	area_collider.collision_mask = int(pow(2, 2 - 1)) # Player
 	area_collider.monitoring = true
-
+	
 	scene_root.add_child.call_deferred(area_collider)
-
+	
 	area_collider.set_deferred("global_position", self.global_position)
-	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage * GameManager.get_risk_dmg_mult()))
-
+	area_collider.body_entered.connect(
+		_on_wave_collision.bind(
+			split_rush_damage * GameManager.get_risk_dmg_mult(),
+			self,
+			3.0
+		)
+	)
+	
 	await get_tree().create_timer(0.3).timeout
 
 	area_collider.queue_free()
