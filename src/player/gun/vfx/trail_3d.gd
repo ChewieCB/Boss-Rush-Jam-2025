@@ -23,6 +23,8 @@ enum {X, Y, Z}
 @export_range(0, 0.5) var smoothing_ratio: float = 0.25
 @export_enum("View", "Normal", "Object") var alignment: int = VIEW
 @export_enum("X", "Y", "Z") var axis: int = Y
+@export var update_every_n_frames: int = 1   # set to 2 for 30hz updates
+var _frame_counter: int = 0
 
 
 var points := []
@@ -37,6 +39,8 @@ var _temp_segment := []
 var _points := []
 
 var _render_buffer: Array = []  # Pre-allocated array to write geometry to
+var _cached_cam_pos: Vector3
+var _cached_cam_valid: bool = false
 
 
 class Point:
@@ -66,10 +70,9 @@ func _prepare_geometry(point_prev: Point, point: Point, half_width: float, facto
 	var normal := Vector3()
 	
 	if alignment == VIEW:
-		if get_viewport().get_camera_3d():
-			var cam_pos = get_viewport().get_camera_3d().get_global_transform().origin
+		if _cached_cam_valid:
 			var path_direction: Vector3 = (point.transform.origin - point_prev.transform.origin).normalized()
-			normal = (cam_pos - (point.transform.origin + point_prev.transform.origin) / 2).cross(path_direction).normalized()
+			normal = (_cached_cam_pos - (point.transform.origin + point_prev.transform.origin) / 2).cross(path_direction).normalized()
 		else:
 			print("There is no camera in the scene")
 			
@@ -108,34 +111,6 @@ func render(update := false) -> void:
 func _render_realtime() -> void:
 	var render_points = _points + _temp_segment + [_C]
 	_render_geometry(render_points)
-
-
-func _render_geometry_from_parts(a: Array, b: Array, c: Point) -> void:
-	var count: int = a.size() + b.size() + (1 if c else 0)
-	if count < 2:
-		return
-	
-	_render_buffer.resize(count + 1)
-	
-	var idx: int = 1
-	for point in a:
-		_render_buffer[idx] = point
-		idx += 1
-	for point in b:
-		_render_buffer[idx] = point
-		idx += 1
-	if c:
-		_render_buffer[idx] = c
-	
-	# Hack from original to write lead point at idx 0
-	var first: Point = _render_buffer[1]
-	var second: Point = _render_buffer[2]
-	var _d: Vector3 = first.transform.origin - second.transform.origin
-	var _t: Transform3D = first.transform
-	_t.origin = _t.origin + _d
-	_render_buffer[0] = Point.new(_t, first.age)
-	
-	_render_geometry_from_buffer(count)
 
 
 func _render_geometry_from_buffer(count: int) -> void:
@@ -183,6 +158,12 @@ func _render_geometry(source: Array) -> void:
 	for i in range(count):
 		_render_buffer[i + 1] = source[i]
 	
+	# Cache camera pos
+	var cam = get_viewport().get_camera_3d()
+	_cached_cam_valid = cam != null
+	if _cached_cam_valid:
+		_cached_cam_pos = cam.global_transform.origin
+	
 	# The following section is a hack to make orientation "view" work.
 	# but it may cause an artifact at the end of the trail.
 	# You can use transparency in the gradient to hide it for now.
@@ -208,9 +189,7 @@ func _update_points() -> void:
 	var size_multiplier = [1, 2, 4, 6][smoothing_iterations]
 	var max_points_count: int = segments * size_multiplier
 	if _points.size() > max_points_count:
-		_points.reverse()
-		_points.resize(max_points_count)
-		_points.reverse()
+		_points = _points.slice(_points.size() - max_points_count)
 
 
 func smooth() -> void:
@@ -309,10 +288,23 @@ func _ready() -> void:
 
 
 func _process(delta) -> void:
+	_frame_counter += 1
+	var should_render: bool = _frame_counter % update_every_n_frames == 0
+	
+	if not should_render:
+		if _A and _B and _C:
+			_A.update(delta, _points)
+			_B.update(delta, _points)
+			_C.update(delta, _points)
+			for point in _points:
+				point.update(delta, _points)
+		return
+	
 	if emit:
 		_emit(delta)
 		return
-		
+	
 	if always_update:
 		# This is needed for alignment == view, so it can be updated every frame.
 		_render_geometry(points)
+		return
