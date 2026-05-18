@@ -2104,13 +2104,13 @@ func spawn_segments(path: Path3D) -> Array:
 	for idx in chiptopede_segments:
 		var path_follow := PathFollow3D.new()
 		path.add_child(path_follow)
-
+		
 		var new_segment: ChiptopedeSegment = get_segment_from_cache()
 		new_segment.segment_idx = idx
-
+		
 		# Moving segments
-		path_follow.add_child.call_deferred(new_segment)
-		new_segment.set_deferred("global_position", path_follow.global_position)
+		path_follow.add_child(new_segment)
+		new_segment.global_position = path_follow.global_position
 		new_segment.visible = true
 		new_segment.splash_particles.emitting = false
 		new_segment.splash_ring_particles.emitting = false
