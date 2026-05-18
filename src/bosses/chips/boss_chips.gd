@@ -1839,21 +1839,30 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 
 func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
-	for stack in active_stacks.duplicate(true):
-		# SFX trigger
-		big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
-		big_stack_sfx_player.play()
-
+	 #SFX trigger
+	big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
+	big_stack_sfx_player.play()
+	
+	for stack in active_stacks:
+		stack.set_deferred("collision_layer", 0)
+		stack.set_deferred("collision_mask", 0)
+	
+	var last_tween: Tween = null
+	for stack in active_stacks:
 		var tween: Tween = get_tree().create_tween()
 		tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
 		tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
-
-		await tween.finished
-
+		last_tween = tween
+	
+	if last_tween:
+		await last_tween.finished
+	
+	for stack in active_stacks.duplicate():
 		_deactivate_stack(stack)
+		await get_tree().physics_frame
 	
 	active_stacks = []
-
+	
 	if unstable_split_enabled:
 		unstable_split_timer.stop()
 

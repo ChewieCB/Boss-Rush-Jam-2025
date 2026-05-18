@@ -17,6 +17,11 @@ func _ready() -> void:
 	smoke.draw_pass_1.size = original_smoke_size
 	fire.finished.connect(check_count)
 	smoke.finished.connect(check_count)
+	explode()
+
+
+func explode() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
 	smoke.emitting = true
 	fire.emitting = true
 
@@ -40,4 +45,4 @@ func check_count():
 	count += 1
 	if count >= 2:
 		finished.emit()
-		call_deferred('queue_free')
+		self.process_mode = Node.PROCESS_MODE_DISABLED
