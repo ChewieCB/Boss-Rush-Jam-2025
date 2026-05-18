@@ -65,8 +65,9 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
-	current_sfx_ambient = sfx_ambience.pick_random()
-	SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
+	# FIXME - way too loud
+	#current_sfx_ambient = sfx_ambience.pick_random()
+	#var SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
 	super(body)
 	shove_player()
 

@@ -1,12 +1,33 @@
 extends Node
 class_name BaseBarrelEffect
 
+# NOTE: Do not change the enum order
+enum AttributeNameEnum {
+	NONE,
+	DAMAGE,
+	PROJECTILE_AMOUNT,
+	PROJECTILE_SPEED,
+	FIRERATE,
+	MAGAZINE_SIZE,
+	IS_HITSCAN,
+	SPREAD_ANGLE,
+	RELOAD_TIME,
+	RICOCHET_COUNT,
+	HOMING_STRENGTH,
+	RECOIL,
+	SCREENSHAKE,
+	SPREAD_HORIZONTAL_BIAS,
+	LIFETIME
+}
+
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
 @export_multiline var display_text_desc: String
 @export var positive_desc: Array[String]
 @export var negative_desc: Array[String]
 @export var icon_id: int = -1
+@export var is_archetype: bool = false
+@export var luck_triggers: Array[LuckTriggerInfo.LuckTriggerIdEnum]
 
 var owner_barrel: SpinBarrel
 ## This variable is to prevent a single shot trigger the effect multiple times.
@@ -56,7 +77,7 @@ func on_trigger_pulled():
 func on_trigger_released():
 	return
 
-## Check if can be shot.
+## Check if can be shot. Return bool.
 ## [Ex: Check for jamming chance / overheat / or simply not enough bullet left.]
 func on_fire_attempt() -> bool:
 	return true
@@ -94,28 +115,33 @@ func on_reload_interrupted():
 	return
 
 ## When bullet spawned / actual shooting happened
-func on_projectile_spawn(_projectile: BaseProjectile):
+func on_projectile_spawn(_projectile: BaseBullet):
 	return
 
 func on_projectile_travel_tick():
 	return
 
-func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
-func on_projectile_destroyed():
+func on_projectile_destroyed(_hit_boss: bool):
 	return
 
-## When bullet go out of barrel
-func on_damage_calculation():
+## Before bullet go out of barrel. Not take into account bullet effect yet.
+func on_gun_damage_calculation():
 	return
 
-## When bullet hit enemy but JUST before applied damage
-func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+## When bullet hit its own player
+func on_player_contact(_projectile: BaseBullet):
+	return
+
+## When bullet hit enemy but JUST before applied damage (but after normal damage calculation).
+## You can modify bullet damage which take into account bonus of each bullet here.
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	return
 
 ## After deal damage to enemy.
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
 func on_enemy_killed():

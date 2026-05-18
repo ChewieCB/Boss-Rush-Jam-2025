@@ -242,7 +242,7 @@ _data = {
 "death": SubResource("Animation_ny4xv")
 }
 
-[node name="BossPit" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_opefu")]
+[node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
 swipe_sprite = ExtResource("13_qgkan")
@@ -282,7 +282,6 @@ electric_hazard_duration = 5.0
 boss_id = 5
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("7_koy73")
 sfx_awaken = ExtResource("18_e8yae")
 sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug")])
@@ -306,12 +305,12 @@ visible = false
 transform = Transform3D(-0.12373, 0.177657, 0.976282, -0.365998, 0.906308, -0.211308, -0.922354, -0.383463, -0.0471154, -0.4, -0.4, 0.0931801)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
-transform = Transform3D(-0.905967, 1.1274, 0.397751, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
+transform = Transform3D(-0.905967, 1.1274, 0.39775, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
 mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 
 [node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
-transform = Transform3D(0.726626, -0.00388527, 0.687022, 0.0918519, 0.991556, -0.0915391, -0.680866, 0.129619, 0.720847, 0.372336, 0, -0.225533)
+transform = Transform3D(0.726626, -0.00388525, 0.687022, 0.0918519, 0.991556, -0.0915392, -0.680866, 0.129619, 0.720847, 0.372336, 0, -0.225533)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
 transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329769, 0.553034, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)

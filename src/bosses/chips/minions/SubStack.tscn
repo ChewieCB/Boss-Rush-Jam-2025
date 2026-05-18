@@ -111,7 +111,6 @@ script = ExtResource("2_u1ibk")
 spark_scene = ExtResource("3_0yylu")
 wave_amplitude = 7.0
 wave_frequency = 5.0
-time_elapsed = 0.0
 idle_radius = 1.5
 chip_projectile = ExtResource("4_llp1i")
 chip_shots_per_burst = 4
@@ -650,7 +649,7 @@ delay_in_seconds = "0.0"
 [node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 
-[node name="AnimationPlayer" parent="." index="20"]
+[node name="AnimationPlayer" parent="." index="21"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "substack": ExtResource("14_4pmxc")

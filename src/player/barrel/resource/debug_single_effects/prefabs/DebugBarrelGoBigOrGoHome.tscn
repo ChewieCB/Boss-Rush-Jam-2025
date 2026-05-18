@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://cj2lebkg35j31"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_66mpx"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_bec6x"]
+[ext_resource type="Script" path="res://src/player/barrel/go_big_or_go_home_effect.gd" id="3_xyd4x"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_50dgg"]
+[ext_resource type="Texture2D" uid="uid://ck261kbp83vob" path="res://assets/sprite/status_icon/crit_up.png" id="5_qh2ud"]
+
+[node name="DebugBarrelGoBigOrGoHome" type="Node3D"]
+script = ExtResource("1_66mpx")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GoBigOrGoHome" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_bec6x")
+display_text_title = "Go Big or Go Home"
+display_text_tag = "Just wear more red-lens glasses"
+positive_desc = Array[String](["+100% damage if shot is a critical hit", "+10% crit chance"])
+negative_desc = Array[String](["-80% damage if shot is not a critical hit"])
+
+[node name="GoBigOrGoHomeEffect" type="Node3D" parent="EffectContainer/GoBigOrGoHome"]
+script = ExtResource("3_xyd4x")
+not_crit_modify_dmg_perc = -80.0
+positive_desc = Array[String](["+100% damage if shot is a critical hit"])
+negative_desc = Array[String](["-10% critical chance", "-90% if shot is not a critical hit"])
+
+[node name="IncreaseCrit" type="Node3D" parent="EffectContainer/GoBigOrGoHome"]
+script = ExtResource("4_50dgg")
+display_name = "Increase critical chance"
+status_code = "go_big_go_home_increase_crit_chance"
+modified_stat = 11
+value = 0.1
+is_infinite_duration = true
+status_icon = ExtResource("5_qh2ud")
+show_duration_ui = true

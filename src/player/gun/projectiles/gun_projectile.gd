@@ -1,12 +1,15 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GunProjectile
 
 @export var gravity_modifier = 0.0
 
+@onready var collider: Area3D = $Area3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var trail: Trail3D = $Trail/Trail3D
+@onready var slowmo_trail: Trail3D = $Trail/Trail3DBulletTime
+
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
@@ -35,11 +38,17 @@ func _physics_process(delta: float) -> void:
 		if not homing_target:
 			return
 		var target_pos = homing_target.global_position
-		if homing_target.get_node("BodyCenter"):
+		if homing_target.has_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
-	global_position -= transform.basis.z * projectile_speed * delta
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
+		look_at(global_position + dir_to_target)
+
+	velocity = - transform.basis.z * projectile_speed * delta
+	global_position += velocity
 	travelled_distance += projectile_speed * delta
 
 
@@ -82,50 +91,75 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		found_hitscal_col = true
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
-	stop_elemental_particles()
-	call_deferred("queue_free")
+	if not keep_alive:
+		destroyed.emit(hit_boss)
+		stop_elemental_particles()
+		call_deferred("queue_free")
 
 func ricochet():
 	super ()
 	gravity_free_timer = 0
 	found_hitscal_col = false
-	is_ricochet_shot = true
-	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
+	# Redshift the bullet color after ricochet. Only do it once.
+	if is_ricochet_shot == false:
+		redshift_bullet()
+		is_ricochet_shot = true
+	
+	# Calculate bounce direction
+	var bounce_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor)
+		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
+	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	if body is Player and time_ricochetted == 0:
+		on_player_contact.emit(self )
+		return
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			before_damage_applied.emit(body, self )
+			#calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
+			hit_boss = true
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
+		else:
+			create_blood_splatter(global_position, Vector3.UP)
 	else:
 		if "health_component" in body:
 			if body is Shield:
 				body.impact(self.global_position)
-			elif body is BarrelEffectTrigger:
+			elif body is BarrelEffectTrigger or body is SingleEffectTrigger:
 				body.hit_with_effect(self.owner_gun.installed_barrels)
-			body.health_component.damage(damage)
-			damage_applied.emit(damage, true, global_position)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			damage_applied.emit(calculated_damage, true, global_position)
+			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
 		else:
 			create_spark(global_position, Vector3.UP)
 			create_bullet_decal(global_position, Vector3.UP)
-	impacted.emit(self, true, global_position)
+	impacted.emit(self , true, global_position)
+
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		stop_elemental_particles()
-		destroyed.emit()
-		call_deferred("queue_free")
+		if not keep_alive:
+			stop_elemental_particles()
+			destroyed.emit(hit_boss)
+			call_deferred("queue_free")
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -135,7 +169,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_area.set_deferred("monitoring", false)
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
@@ -146,3 +180,19 @@ func change_bullet_color(_new_color: Color):
 		mesh.mesh.material.emission = _new_color
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
 		trail.material_override.emission = _new_color
+
+func redshift_bullet():
+	var current_color = mesh.mesh.material.albedo_color
+	var redshifted_color = Color(
+		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
+		current_color.g * 0.7, # Reduce green
+		current_color.b * 0.3, # Reduce blue significantly
+		current_color.a
+	)
+	change_bullet_color(redshifted_color)
+
+func switch_to_slowmo_bullet_trail():
+	super ()
+	# Better optimization is instantiate and add the slowmo later?
+	trail.visible = false
+	slowmo_trail.visible = true

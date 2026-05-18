@@ -1,8 +1,6 @@
 extends Node3D
 class_name BossMap
 
-@export var bgm: AudioStream
-
 ## World Geometry & Navigation
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
@@ -10,11 +8,13 @@ var nav_region: NavigationRegion3D
 @export var nav_parent: Node3D
 @export var floor_parent: Node3D
 @export var floor_mesh: MeshInstance3D
+@export var remove_mesh_after_baking: bool = false
 
 @export_group("Actors")
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
+#@onready var nav_meshes := find_children("*", "NavBody3D")
 
 @export_group("UI")
 @export var win_subtext: Array[String] = [""]
@@ -28,7 +28,7 @@ var nav_region: NavigationRegion3D
 
 var chips_dropped: int = 0
 var chip_value_collected: int = 0
-
+var is_tutorial = false
 
 func _ready() -> void:
 	if OS.is_debug_build():
@@ -41,13 +41,10 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-
-	if bgm:
-		SoundManager.play_music(bgm, 0.5, "BGM")
-
+	
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-
+	
 	if not boss:
 		push_error("No boss defined for map.")
 	else:
@@ -56,48 +53,56 @@ func _ready() -> void:
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
 		boss.chip_dropped.connect(_on_chip_dropped)
-
+	
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
-		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
-		player.global_position = player_start_pos
-		player.rotation = GameManager.cached_player_rotation
-		player.player_camera.rotation = GameManager.cached_camera_rotation
-
-	player.stat_ui.show_luck_ui()
-
+		if elevator_doors:
+			var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
+			player.global_position = player_start_pos
+			player.rotation = GameManager.cached_player_rotation
+			player.player_camera.rotation = GameManager.cached_camera_rotation
+	
+	# TODO - manually trigger in levels
+	#player.stat_ui.show_all_ui()
+	
 	await get_tree().physics_frame
 	generate_navigation()
-
+	
+	player.controls_disabled = false
 	if elevator_doors:
 		elevator_doors.open()
+
+	GameManager.current_boss_map = self
 
 
 func generate_navigation() -> void:
 	if not nav_parent or not floor_mesh:
 		push_warning("Navmesh nodes not configured, navigation generation aborted")
 		return
-
+	
 	nav_region = NavigationRegion3D.new()
 	var nav_mesh := NavigationMesh.new()
 	nav_mesh.agent_radius = 1.2
 	#nav_mesh.agent_height = 1.0
 	nav_region.navigation_mesh = nav_mesh
-
+	
 	nav_parent.add_child(nav_region)
 	nav_parent.move_child(nav_region, 0)
-
+	
 	floor_parent.remove_child(floor_mesh)
 	nav_region.add_child(floor_mesh)
 	nav_region.move_child(floor_mesh, 0)
-
+	floor_mesh.global_transform = floor_parent.global_transform
+	
 	_rebake_nav()
-	# Switch the parse type to colliders after the initial bake
+	if remove_mesh_after_baking:
+		floor_mesh.queue_free()
+	# Switch the parse type to colliders after the initial bake 
 	# to reduce performance impact of runtime rebaking
 	#
 	# FIXME - this wipes out the nav mesh on rebaking,
-	# have a proper refactor of the cover navigation
+	# have a proper refactor of the cover navigation 
 	# to accomodate this gemoetry type parsing.
 	#nav_mesh.geometry_parsed_geometry_type = NavigationMesh.ParsedGeometryType.PARSED_GEOMETRY_STATIC_COLLIDERS
 
@@ -118,8 +123,13 @@ func show_end_panel() -> void:
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	await tween.finished
-
-	LoadingHandler.start_loading("Lobby")
+	
+	LoadingHandler.start_loading(
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+		"Back Room"
+	)
+	await ScreenTransition.transition_finished
+	LoadingHandler.load_scene_transition()
 
 
 func collect_all_chips() -> void:
@@ -139,12 +149,12 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
-
+	
 	if not boss.boss_id in GameManager.bosses_defeated:
 		GameManager.bosses_defeated.append(boss.boss_id)
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
-
+	
 	reward_bet_money()
 	show_end_panel()
 
@@ -156,17 +166,18 @@ func _on_player_death() -> void:
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	print_debug("Boss trigger volume activated")
-	boss.activate()
-	print_debug("Boss activate method called")
-	LuckHandler.enabled = true
-	if elevator_doors:
-		elevator_doors.close()
-	print_debug("Elevator doors closed, freeing trigger volume")
-	boss_trigger.queue_free()
+	if boss:
+		boss.activate()
+		print_debug("Boss activate method called")
+		LuckHandler.enabled = true
+		if elevator_doors:
+			elevator_doors.close()
+		print_debug("Elevator doors closed, freeing trigger volume")
+		boss_trigger.queue_free()
 
 
 func _on_spin_trigger_body_entered(body: Node3D) -> void:
-	spin_trigger.monitoring = false
+	spin_trigger.set_deferred("monitoring", false)
 	spin_trigger.queue_free()
 	body.current_gun.spin_all_barrels()
 
@@ -177,30 +188,21 @@ func _on_chip_dropped(value: int) -> void:
 	chip_value_collected += value
 
 
-func _on_level_select(level_path: String) -> void:
-	#SFXDoorClose.play()
-	ResourceLoader.load_threaded_request(level_path)
+func _on_level_select(level_path: String, loading_name: String = "") -> void:
+	LoadingHandler.start_loading(level_path, loading_name, false)
+	
+	#sfx_door_close.play()
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
-	# Wait until the level has been loaded on another thread
-	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
-		pass
+	
+	# Set the skip equip anim flag for seamless transition
+	LoadingHandler.skip_equip_anim = true
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
-
-	if is_inside_tree():
-		# TODO - fade this out via tween
-		SoundManager.stop_music(0.5)
-		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
-		# TODO - fixme
-		#if new_bgm:
-			#SoundManager.play_music(new_bgm, 0.25, "BGM")
-		#GameManager.is_free_reroll = false
-		get_tree().change_scene_to_packed(loaded_scene)
+	SoundManager.stop_music(0.5)
+	LoadingHandler.load_scene_seamless()
 
 
 func reward_bet_money():

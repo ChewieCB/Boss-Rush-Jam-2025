@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ck4tx1hg8qrew"]
+
+[ext_resource type="Texture2D" uid="uid://bgiye0wgt0fb5" path="res://assets/textures/walls/vert_strip_wall.jpg" id="1_p2r7f"]
+
+[resource]
+albedo_texture = ExtResource("1_p2r7f")
+metallic_specular = 0.0
+texture_filter = 2

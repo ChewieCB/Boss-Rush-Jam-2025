@@ -8,18 +8,11 @@
 script = ExtResource("3_wsjs4")
 barrel_id = 46
 barrel_name = "Elemental Infusion"
-barrel_desc = "[b]Elemental Infusion Barrel[/b]
-Infuse bullets with element and status effects.
-
-Possible rolls:
-[ul]
-Fire Infusion: Reduce damage and bullets can cause Burning status build up, which deal high damage over time in a short duration.
-Poison Infusion: Reduce fire rate and bullets can cause Poisoned status build up, which deal damage over time over a long duration.
-Cold Infusion: Reduce magazine size and bullets can cause Frozen status build up, which slow enemy movement speed.
-Electric Infusion: Increase recoiland bullets can cause Shocked status build up, which increases damage enemy taken.
-[/ul]
-"
+barrel_desc = "Infuse bullets with element and status effects."
+barrel_info_summary = "Infuse bullets with elemental or status effects."
 barrel_image = ExtResource("1_ducvj")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_wrun2")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

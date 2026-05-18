@@ -4,12 +4,20 @@ class_name LuckComponent
 signal luck_changed(new_luck: float, prev_luck: float)
 signal luck_diff(diff: float)
 signal luck_maxed()
+signal high_luck_entered()
+signal high_luck_exited()
 
 @export_category("Luck")
 @export var max_luck: float = 100
 
 var luck_loss_modifier: float = 1.0
 var luck_gain_modifier: float = 1.0
+
+# Luck buff icons
+# TODO - move these to resource objects with the icon, callable, and other data
+@export var hot_hand_icon: CompressedTexture2D
+@export var lucky_shot_icon: CompressedTexture2D
+@export var blindspot_icon: CompressedTexture2D
 
 var current_luck: float:
 	set(value):
@@ -38,7 +46,7 @@ func _ready() -> void:
 
 
 func decrease_luck(_reduction: float) -> void:
-	_reduction = round(_reduction * luck_loss_modifier)
+	_reduction = _reduction * luck_loss_modifier
 	if enabled:
 		current_luck -= _reduction
 	check_for_high_luck_buffs()
@@ -53,20 +61,35 @@ func increase_luck(_luck: float) -> void:
 func initialize_luck() -> void:
 	current_luck = 0.0
 
+
 func check_for_high_luck_buffs():
 	var player_base_stat = GameManager.player.base_stats
-
+	
 	if is_high_luck():
+		# Indicate high luck to player
+		high_luck_entered.emit()
+		
+		# TODO - refactor this so that we assign each luck buff/player skill to a callable that we call to here
 		# Hot Hand: 5% increased minimum damage per level
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
 			var increased_min_dmg = 0.05 * GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.HOT_HAND]
-			GameManager.create_and_add_status_effect("Hot Hand", "hot_hand_buff",
-			StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, increased_min_dmg, StatusEffect.ModifyType.FLAT)
+			GameManager.create_and_add_status_effect(
+				"Hot Hand", 
+				"hot_hand_buff",
+				StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, 
+				increased_min_dmg, 
+				StatusEffect.ModifyType.FLAT,
+				StatusEffect.INFINITE_DURATION, 
+				false, 
+				true, 
+				hot_hand_icon,
+				true,
+			)
 
 		# Lucky Shot: increased crit chance
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_SHOT):
 			var increased_crit = 0
-			match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.LUCKY_SHOT]:
+			match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.LUCKY_SHOT]):
 				1:
 					increased_crit = 0.04
 				2:
@@ -75,24 +98,46 @@ func check_for_high_luck_buffs():
 					increased_crit = 0.1
 				4:
 					increased_crit = 0.15
-			GameManager.create_and_add_status_effect("Lucky Shot", "lucky_shot_buff",
-			StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE, increased_crit, StatusEffect.ModifyType.FLAT)
+			GameManager.create_and_add_status_effect(
+				"Lucky Shot", 
+				"lucky_shot_buff",
+				StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE, 
+				increased_crit, 
+				StatusEffect.ModifyType.FLAT,
+				StatusEffect.INFINITE_DURATION,
+				false, 
+				true, 
+				lucky_shot_icon,
+				true,
+			)
 
 		# Blindspot: 10% increased dash iframe duration per level
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.BLINDSPOT):
 			var increased_dash_duration = player_base_stat[StatusEffect.PlayerStatEnum.DASH_DURATION] * 0.1 * \
 				GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLINDSPOT]
-			GameManager.create_and_add_status_effect("Blindspot", "blindspot_buff",
-			StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION, increased_dash_duration, StatusEffect.ModifyType.FLAT)
+			GameManager.create_and_add_status_effect(
+				"Blindspot", 
+				"blindspot_buff",
+				StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION, 
+				increased_dash_duration, 
+				StatusEffect.ModifyType.FLAT,
+				StatusEffect.INFINITE_DURATION,
+				false, 
+				true, 
+				blindspot_icon,
+				true,
+			)
 	else:
 		GameManager.player.remove_status_effect_by_name("hot_hand_buff")
 		GameManager.player.remove_status_effect_by_name("lucky_shot_buff")
 		GameManager.player.remove_status_effect_by_name("blindspot_buff")
+		high_luck_exited.emit()
 
 
 func get_high_luck_threshold():
-	var calculated_value = ((GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1) / 100.0)
+	var calculated_value = (((GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1)) / 100.0)
 	return calculated_value
 
 func is_high_luck():
-	return current_luck_ratio >= get_high_luck_threshold()
+	var res = current_luck_ratio >= get_high_luck_threshold()
+	return res

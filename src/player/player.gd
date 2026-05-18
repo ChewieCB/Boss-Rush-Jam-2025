@@ -24,6 +24,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var dash_cd: float = 1
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
+@export var jump_dust_ring_prefab: PackedScene
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
@@ -35,7 +36,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var reroll_heal_value: float = 25.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var interact_ui: Control = $UI/InteractUI
+@onready var interact_ui: InteractUI = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
 @onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
@@ -51,18 +52,19 @@ var movement_sfx_player: AudioStreamPlayer
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
+@onready var laser_guide_ray: RayCast3D = $Neck/ShakeCameraWrapper/Camera3D/LaserGuideRayCast
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
-@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 
 @onready var ui_parent = $UI
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+@onready var hitmarker: TextureRect = $UI/GunUI/HitMarker
 @onready var barrel_ui_tween: Tween = null
 var barrel_ui_active: bool = false
 
-@onready var debug_inventory_ui = $UI/InventoryUI
+@onready var debug_inventory_ui = $UI/DebugInventoryUI
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -71,6 +73,8 @@ var barrel_ui_active: bool = false
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
+@onready var near_enemy_area: Area3D = $NearEnemyRadius
+var enemy_near_counter = 0
 
 @export_group("Status Effects")
 @export_subgroup("Drunk")
@@ -96,8 +100,8 @@ const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
-const BULLET_SPAWN_POS_VARIATION: float = 10
-const INTERACT_DISTANCE = 5
+const BULLET_SPAWN_POS_VARIATION: float = 10.0
+const INTERACT_DISTANCE: float = 3.0
 
 const MOUSE_SENSITIVITY_COEEFICIENT = 10000
 const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
@@ -144,7 +148,7 @@ var last_dashed_timestamp
 var current_air_jump_count: int = 0
 var slide_dir = Vector2(0, 0)
 
-var controls_disabled: bool = false
+var controls_disabled: bool = true
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
@@ -158,9 +162,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_non_luck_ui()
+			stat_ui.hide_all_ui(true)
 		else:
-			stat_ui.show_non_luck_ui()
+			stat_ui.show_all_ui(true)
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -175,8 +179,10 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
 	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
 	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0.05, # In decimal, so 0.5 = 50%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
+	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
+	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
 }
 var current_stats = base_stats.duplicate(true)
 
@@ -186,11 +192,13 @@ var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.p
 
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
+var last_look_enemy_target: Node3D = null
 
 var freecam: FreeCam
 
 
 func _ready():
+	GameManager.change_fmod_bgm_player_is_dead(false)
 	GameManager.player = self
 	for mesh in debug_meshes.get_children():
 		mesh.visible = false
@@ -217,10 +225,15 @@ func _ready():
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_spin_stopped.connect(update_ammo_counter_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
+	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
@@ -231,13 +244,13 @@ func _ready():
 
 	check_permanent_buffs()
 	luck_component.check_for_high_luck_buffs()
-	
+
 	# CHEATS
 	if GameManager.CHEAT_godmode:
 		health_component.is_invincible = true
-	
-	debug_inventory_ui.has_custom_inventory = true
-	debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
+
+	#debug_inventory_ui.has_custom_inventory = true
+	#debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
 
 
 func _unhandled_input(event):
@@ -249,12 +262,19 @@ func _unhandled_input(event):
 
 	if is_in_menu:
 		return
+	
+	# Ignore touchpad / gyro events
+	if event is InputEventScreenTouch \
+	or event is InputEventScreenDrag \
+	or event is InputEventPanGesture \
+	or event is InputEventMagnifyGesture:
+		return
 
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
 		# (this prevents the PS4 trackpad from triggering aim)
-		# if Input.get_connected_joypads():
-		# 	return
+		if Input.get_connected_joypads():
+			return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
 		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
@@ -265,15 +285,19 @@ func _unhandled_input(event):
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
-		spin_barrels()
+		if GameManager.CHEAT_spin_mode != GameManager.DebugSpinMode.ON_RELOAD:
+			spin_barrels()
 	# DEBUG
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
-	#elif event.is_action_pressed("input_2"):
+	# DEBUG INPUT FOR TESTING
+	#elif event.is_action_pressed("input_1"):
+		#LuckHandler.reset_luck_triggers()
+		#LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
-	elif event.is_action_pressed("input_3"):
-		health_component.damage(20)
+	#elif event.is_action_pressed("input_3"):
+		#health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -319,7 +343,7 @@ func _unhandled_input(event):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
 		SoundManager.play_sound(sfx_stand.pick_random(), "SFX")
-	
+
 	if Input.is_action_just_pressed("show_detail"):
 		show_barrel_effect_ui()
 	elif Input.is_action_just_released("show_detail"):
@@ -336,20 +360,27 @@ func _process(delta):
 			status.duration -= delta
 			if status.duration <= 0:
 				remove_status_effect(status)
-
+	
+	object_to_be_interacted = null
+	interact_ui.visible = false
+	#
 	if aim_ray.is_colliding() and not is_in_menu:
-		var interact_collider = aim_ray.get_collider()
-		if interact_collider and \
-			interact_collider.has_method("interact") and \
-			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
-			object_to_be_interacted = interact_collider
-			interact_ui.visible = true
-		else:
-			object_to_be_interacted = null
-			interact_ui.visible = false
-	else:
-		object_to_be_interacted = null
-		interact_ui.visible = false
+		# TODO - refactor the interactible system to have an inheritable 
+		# template class with these methods/features for consistency.
+		# https://gnarled-hand.codecks.io/card/2xo-refactor-the-interactible-system-to-have-an-inheritable-template-class-with
+		var interact_col = aim_ray.get_collider()
+		if interact_col:
+			var _dist = interact_col.interact_dist if "interact_dist" in interact_col else INTERACT_DISTANCE
+			if interact_col and \
+			interact_col.has_method("interact") and \
+			interact_col.global_position.distance_to(global_position) <= _dist:
+				object_to_be_interacted = interact_col
+				interact_ui.visible = true
+					
+				if interact_col.has_method("get_interact_text"):
+					interact_ui.show_custom_text(interact_col.get_interact_text())
+				else:
+					interact_ui.show_default_text()
 
 
 	if controls_disabled or is_in_menu:
@@ -377,12 +408,21 @@ func _physics_process(delta):
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
 	if not is_dashing and not is_in_menu:
-		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down", GameManager.controller_deadzone)
 		input_dir = raw_input_dir.rotated(-rotation.y)
+
+	# Let the player ignore the wheelspin in Roulette boss if they are moving
+	var floor_velocity = get_platform_velocity()
+	if floor_velocity: # and input_dir != Vector2.ZERO:
+		var dir_weight = input_dir.dot(Vector2(
+			floor_velocity.normalized().x,
+			floor_velocity.normalized().z,
+		))
+		velocity += floor_velocity * dir_weight
 
 	# If the next line is for grounded only, we will have bunnyhop tech
 	# If not move, gradually reduce movespeed to 0 (speed decay)
-	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta
+	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta * current_stats[StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER]
 	# Stand still
 	if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
 		vel_horizontal = Vector2.ZERO
@@ -395,6 +435,7 @@ func _physics_process(delta):
 				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			jumped = false
 			vel_vertical = 0
+			create_jump_dust_ring()
 	else:
 		state_chart.send_event("airborne")
 
@@ -428,113 +469,135 @@ func _physics_process(delta):
 	var velocity_dir = velocity.normalized()
 	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER]
 
-	# Let the player ignore the wheelspin if they are moving
-	var floor_velocity = get_platform_velocity()
-	if floor_velocity and input_dir != Vector2.ZERO:
-		var dir_weight = input_dir.dot(Vector2(
-			floor_velocity.normalized().x,
-			floor_velocity.normalized().z,
-		))
-		velocity += floor_velocity * dir_weight
-
 	move_and_slide()
 
 	#show_debug_label()
+	# Gun sway when moving effect
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
-		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		var target_gun_container_pos = gun_container_original_pos - (gun_sway_velocity / 500)
+		target_gun_container_pos.y = clamp(target_gun_container_pos.y, gun_container_original_pos.y - 0.05, gun_container_original_pos.y + 0.05)
+		gun_container.position = lerp(gun_container.position, target_gun_container_pos, delta * 10)
 		if is_dashing:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
-	camera_control(delta)
+	special_camera_control(delta)
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
+	if aim_assist_ray_boss_check.is_colliding():
+		last_look_enemy_target = aim_assist_ray_boss_check.get_collider()
+
 
 func update_ammo_counter_ui() -> void:
-	stat_ui.current_ammo_label.text = "{0}".format([current_gun.magazine_ammo_left])
-	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
+	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)
+	#stat_ui.radial_ui_center_node.max_radial_segment_count = current_gun.modified_magazine_size
+	#stat_ui.radial_ui_center_node.active_radial_segment_count = current_gun.magazine_ammo_left
+
+
+func full_reload_ammo_counter_ui() -> void:
+	stat_ui.radial_ui_center_node.animate_full_reload(current_gun.current_reload_anim_time)
 
 
 func show_barrel_effect_ui() -> void:
 	if barrel_ui_active:
 		return
-	
+
 	if current_gun.max_barrels == 0:
 		return
-	
+
 	barrel_ui_active = true
-	
+
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
-	
+
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
-	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = i
-		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
-		if i < current_gun.barrel_container.get_child_count():
-			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
-	await barrel_ui_tween.finished
 	
+	for i in range(current_gun.max_barrels):
+		var effect_ui = barrel_detail_ui.effect_boxes[i]
+		if current_gun.barrel_container.get_child(i) is not NullBarrel:
+			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
+	await barrel_ui_tween.finished
+
 	Engine.time_scale = 0.1
 
 
 func hide_barrel_effect_ui() -> void:
 	if not barrel_ui_active:
 		return
-	
+
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
-	
+
 	barrel_ui_tween = get_tree().create_tween()
-	
+
 	Engine.time_scale = 1.0
-	
+
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = i
-		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
 	await barrel_ui_tween.finished
 
 
 func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = i
-		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			if barrel is NullBarrel:
+				effect_ui.modulate.a = 0.0
+				effect_ui.name_label.text = ""
+				effect_ui.desc_label.text = ""
+				continue
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
-			#if barrel:
+
 			if _effect.icon_id != -1:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
 			else:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/tmp-barrel-icon.png")
 			effect_ui.name_label.text = _effect.display_text_title
 			effect_ui.desc_label.text = _effect.display_text_tag
-			
+
 			for container in effect_ui.positives_container.get_children():
 				container.queue_free()
 			for container in effect_ui.negatives_container.get_children():
 				container.queue_free()
-			
+			effect_ui.clear_luck_triggers()
+
+			# effect_ui.add_neutral(_effect.display_text_desc)
 			for text in _effect.positive_desc:
 				effect_ui.add_positive(text)
 			for text in _effect.negative_desc:
 				effect_ui.add_negative(text)
-		
+			for trigger_id in _effect.luck_triggers:
+				var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
+				var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
+				var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
+				effect_ui.add_luck_trigger(trigger_info.name, trigger_info.desc, is_discovered)
+
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
 			effect_ui.desc_label.text = ""
+
+
+func toggle_anim_reticle(is_visible: bool) -> void:
+	ui_parent.toggle_aim_reticle(is_visible)
 
 
 func show_debug_label():
@@ -564,6 +627,8 @@ func jump(local_multiplier = 1.0):
 	is_dashing = false
 	is_crouching = false
 
+	create_jump_dust_ring()
+
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
 			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
@@ -573,6 +638,11 @@ func jump(local_multiplier = 1.0):
 			sfx_jump_air.pick_random(), randf_range(0.8, 1.1), "SFX"
 		)
 
+
+func create_jump_dust_ring():
+	var dust_ring_inst = jump_dust_ring_prefab.instantiate()
+	get_tree().get_root().add_child(dust_ring_inst)
+	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
@@ -596,7 +666,7 @@ func handle_controller_look(_delta):
 	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
 	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
 
-	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+	if abs(look_x) > GameManager.controller_deadzone or abs(look_y) > GameManager.controller_deadzone:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
 		if aim_assist_target:
 			var modifier = AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT * GameManager.aim_assist_strength
@@ -604,7 +674,14 @@ func handle_controller_look(_delta):
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
+func _reset_camera_look() -> void:
+	player_camera.rotation = Vector3.ZERO
+	neck.rotation = Vector3.ZERO
+
+
 func rotate_player(x: float, y: float):
+	if controls_disabled:
+		return
 	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
@@ -612,21 +689,28 @@ func rotate_player(x: float, y: float):
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 
-func camera_control(delta):
+func special_camera_control(delta):
+	if controls_disabled:
+		return
+
 	# Tilt camera
+	const MIN_DIR_TO_TILT = 0.1
+	const TILT_AMOUNT = 3.0
+	const TILT_TIME = 5.0
+
 	if GameManager.camera_tilt:
-		if raw_input_dir.x < 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
-		elif raw_input_dir.x > 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
+		if raw_input_dir.x < -MIN_DIR_TO_TILT:
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
+		elif raw_input_dir.x > MIN_DIR_TO_TILT:
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
 		else:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * TILT_TIME)
 
 	# Lower camera
 	if is_crouching:
-		neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+		neck.position.y = lerp(neck.position.y, -1.0, delta * TILT_TIME)
 	else:
-		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
+		neck.position.y = lerp(neck.position.y, 0.0, delta * TILT_TIME)
 
 
 func ground_slam():
@@ -647,6 +731,9 @@ func _on_dash_duration_timeout() -> void:
 
 func _on_grounded_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
@@ -659,6 +746,9 @@ func _on_grounded_state_physics_processing(_delta: float):
 
 func _on_airborne_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		if can_coyote_jump and not jumped:
 			jump()
 		elif current_air_jump_count < max_air_jump:
@@ -729,7 +819,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
 				var buff_value = 0
 				var buff_time = 0
-				match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]:
+				match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]):
 					1:
 						buff_value = 0.15
 						buff_time = 2
@@ -767,9 +857,22 @@ func _on_health_hurt_state_entered() -> void:
 
 
 func _on_health_dead_state_entered() -> void:
+	GameManager.change_fmod_bgm_player_is_dead(true)
 	controls_disabled = true
+	Engine.time_scale = 1.0
+	hide_barrel_effect_ui()
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
+
+func _on_health_dead_state_exited() -> void:
+	GameManager.change_fmod_bgm_player_is_dead(false)
+	hurt_overlay.revive()
+	stat_ui.show_all_ui()
+	var neck_tween = get_tree().create_tween()
+	neck_tween.parallel().tween_property(neck, "rotation:z", deg_to_rad(0), 0.3)
+	neck_tween.parallel().tween_property(neck, "rotation:y", deg_to_rad(0), 0.3)
+	controls_disabled = false
+
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -790,7 +893,7 @@ func add_status_effect(new_status: StatusEffect):
 
 func remove_status_effect(status: StatusEffect):
 	status_effect_list.erase(status)
-	status_effect_removed.emit(status.status_code)
+	status_effect_removed.emit(status)
 	apply_status_effects()
 
 
@@ -904,12 +1007,12 @@ func get_assist_rotation_velocity(delta: float):
 
 func get_barrel_sprite_screen_positions() -> Array[Vector2]:
 	var sprite_positions: Array[Vector2] = []
-	
+
 	for sprite in gun.barrel_sprites:
 		var pos_marker: Marker3D = sprite.get_node("Marker3D")
 		var _pos: Vector2 = player_camera.camera.unproject_position(pos_marker.global_position)
 		sprite_positions.append(_pos)
-	
+
 	return sprite_positions
 
 
@@ -930,7 +1033,7 @@ func spin_barrels() -> void:
 	# Spin with IOU skill
 	elif GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.IOU):
 		var hp_cost = 0
-		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.IOU]:
+		match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.IOU]):
 			1:
 				hp_cost = 25
 			2:
@@ -1040,10 +1143,9 @@ func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 
 func _enable_freecam() -> void:
 	controls_disabled = true
-	dash_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
-	
+
 	# Spawn freecam
 	freecam = freecam_prefab.instantiate()
 	get_parent().add_child(freecam)
@@ -1051,17 +1153,56 @@ func _enable_freecam() -> void:
 	freecam.global_rotation = neck.global_rotation
 	freecam.camera.global_rotation = player_camera.global_rotation
 	freecam.camera.current = true
-	
+
 	Engine.time_scale = 0.0
 
 
 func _disable_freecam() -> void:
 	controls_disabled = false
-	dash_disabled = false
 	gun_container.visible = true
 	player_camera.camera.current = true
 
 	freecam.queue_free()
 	freecam = null
-	
+
 	Engine.time_scale = 1.0
+
+
+func _enable_cutscene_cam() -> void:
+	controls_disabled = true
+	player_camera.camera.current = false
+	gun_container.visible = false
+	if movement_sfx_player:
+		movement_sfx_player.stop()
+
+
+func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
+	controls_disabled = false
+
+	if lerp_to_player_cam:
+		var active_camera: Camera3D = get_viewport().get_camera_3d()
+		var camera_tween := get_tree().create_tween()
+		camera_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		camera_tween.set_parallel(true)
+		camera_tween.tween_property(
+			active_camera,
+			"global_transform",
+			player_camera.global_transform,
+			0.8
+		)
+		await camera_tween.finished
+
+	player_camera.camera.current = true
+	gun_container.visible = true
+
+
+func change_near_enemy_radius(new_radius: float) -> void:
+	var coll_shape: CollisionShape3D = near_enemy_area.get_node("CollisionShape3D")
+	coll_shape.shape.radius = new_radius
+
+
+func _on_near_enemy_radius_body_entered(_body: Node3D) -> void:
+	enemy_near_counter += 1
+
+func _on_near_enemy_radius_body_exited(_body: Node3D) -> void:
+	enemy_near_counter -= 1

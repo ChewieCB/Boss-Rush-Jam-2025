@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3 uid="uid://cja5a1utmfoqe"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_1gknq"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_alk3p"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="3_1vbrx"]
+[ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="4_0oc8p"]
+[ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="5_0oxj4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_650bi"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/insurance_crit_effect.gd" id="6_g2yni"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/phantom_ammo_effect.gd" id="8_0b6yh"]
+
+[node name="DubiousBenefitBarrel" type="Node3D"]
+script = ExtResource("1_1gknq")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="FragileFeather" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_alk3p")
+display_text_title = "Fragile Feather"
+display_text_tag = "Maybe increase your survivability a bit"
+positive_desc = Array[String](["+25% dodge chance"])
+negative_desc = Array[String](["+25% damage taken"])
+icon_id = 55
+
+[node name="IncreaseDamageTaken" type="Node3D" parent="EffectContainer/FragileFeather"]
+script = ExtResource("3_1vbrx")
+display_name = "Increase damage taken"
+status_code = "fragile_feather_reduce_damage_resistance"
+modified_stat = 4
+value = -0.25
+is_infinite_duration = true
+is_bad_effect = true
+status_icon = ExtResource("4_0oc8p")
+show_duration_ui = true
+
+[node name="IncreaseDodgeChance" type="Node3D" parent="EffectContainer/FragileFeather"]
+script = ExtResource("3_1vbrx")
+display_name = "Increase dodge chance"
+status_code = "fragile_feather_increase_dodge_chance"
+modified_stat = 13
+value = 0.25
+is_infinite_duration = true
+status_icon = ExtResource("5_0oxj4")
+show_duration_ui = true
+
+[node name="CriticalInsurance" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_g2yni")
+display_text_title = "Critical Insurance"
+display_text_tag = "Definitely not a scam in term of DPS"
+positive_desc = Array[String](["Guarantee the next consumed bullet critical if previous one missed"])
+negative_desc = Array[String](["-50% critical damage"])
+icon_id = 56
+
+[node name="PhantomAmmo" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_alk3p")
+display_text_title = "Phantom Ammo"
+display_text_tag = "You have unlimited ammo! (with tradeoff)"
+positive_desc = Array[String](["Unlimited ammo"])
+negative_desc = Array[String](["-20% damage", "Firerate and accuracy keep getting worse as you shoot, until you reload"])
+icon_id = 58
+
+[node name="ReduceDamage" type="Node3D" parent="EffectContainer/PhantomAmmo"]
+script = ExtResource("5_650bi")
+attribute = 1
+modify_value = -20.0
+is_perc = true
+
+[node name="PhantomAmmoEffect" type="Node3D" parent="EffectContainer/PhantomAmmo"]
+script = ExtResource("8_0b6yh")

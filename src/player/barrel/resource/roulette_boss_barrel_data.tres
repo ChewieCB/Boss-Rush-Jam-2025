@@ -8,16 +8,11 @@
 script = ExtResource("3_fs5il")
 barrel_id = 8
 barrel_name = "Roulette Lady"
-barrel_desc = "[b]Roulett Barrel[/b]
-Barrel collected from the Roulette Boss. Grants you abilities similar to its owner.
-
-Possible rolls:
-[ul]
-Newton's Third Law: Adds knockback when shoot the nearby environment, enabling rocket jumping. Increased damage but decreased firerate.
-Protective Barrier: A group of blue shields circle you, granting you damage resistance.
-Ball Bullet: Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed.
-[/ul]"
+barrel_desc = "Grant you effect similar to its owner, Roulette Lady."
+barrel_info_summary = "Barrel collected from the Roulette Boss. Grants you abilities similar to its owner."
 barrel_image = ExtResource("1_lmo6o")
 barrel_cost = 200
 barrel_prefab = ExtResource("2_y352h")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

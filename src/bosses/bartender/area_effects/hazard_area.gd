@@ -27,6 +27,10 @@ var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_d
 var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 
 func _ready() -> void:
+	pass
+
+
+func start_hazard() -> void:
 	is_active = true
 	if sfx_break:
 		sfx_player.stream = sfx_break.pick_random()
@@ -81,7 +85,7 @@ func clear_hazard():
 	tween2.tween_property(light, "light_energy", 0, 2.0)
 	# Wait until all particles expired
 	await get_tree().create_timer(pe_expire_time).timeout
-	call_deferred("queue_free")
+	#call_deferred("queue_free")
 
 
 func _on_life_timer_timeout() -> void:

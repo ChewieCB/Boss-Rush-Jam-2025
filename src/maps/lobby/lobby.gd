@@ -1,13 +1,12 @@
 extends Node3D
 
-@export var bgm: AudioStream
-@onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
+# @onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
 
 signal ui_accept
 
-@onready var player: Player = find_children("*", "Player").front()
-@onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
-@onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
+@export var player: Player
+#@onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
+@export var elevator_buttons: Array[ElevatorButton]
 
 @onready var info_ui: Control = $UI/InfoBoxUI
 @onready var game_win_ui: Control = $UI/GameWinUI
@@ -16,21 +15,29 @@ signal ui_accept
 @onready var sfx_door_open: AudioStreamPlayer3D = $SFXDoorOpen
 @onready var sfx_door_close: AudioStreamPlayer3D = $SFXDoorClose
 
+@export var vendors: Array[Node]
+
 var display_barrels: Array = []
 
+var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
+
+
 func _ready() -> void:
-	#player.gun.reinstall_barrels()
-	#ScreenTransition.fill_screen()
 	Engine.time_scale = 1
-	SoundManager.stop_music(0.1)
+	#SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
-		button.pushed.connect(_on_level_select)
-	difficulty_menu.bet_started.connect(load_selected_level)
+		if button:
+			button.pushed.connect(_on_level_select)
+	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
+	for vendor in vendors:
+		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
+		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
 	
 	get_tree().paused = false
 	
-	lobby_music_player.play()
-
+	GameManager.current_boss_map = self
+	GameManager.change_fmod_bgm_music_state("Backroom") # Backroom is the new Lobby
+	
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
 		GameManager.update_total_playtime()
@@ -44,6 +51,12 @@ func _ready() -> void:
 	GameManager.is_free_reroll = true
 	GameManager.bet_value = 0
 	GameManager.reward_value = 0
+	
+	if GameManager.elevator_respawn_transform:
+		player.global_transform = GameManager.elevator_respawn_transform
+	
+	# HACK for backroom load
+	await ScreenTransition.transition_in()
 	
 	# HACK
 	if GameManager.player_gained_first_barrel:
@@ -60,7 +73,8 @@ func _ready() -> void:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
 	
-	player.stat_ui.show_health_ui()
+	player.stat_ui.show_all_ui()
+	player.controls_disabled = false
 
 
 func _input(event: InputEvent) -> void:
@@ -78,46 +92,66 @@ func show_panel(panel: Control) -> void:
 	tween.tween_property(panel, "modulate", Color(Color.WHITE, 0.0), 1.0)
 
 
-func _on_level_select(level_path: String) -> void:
+func _on_level_select(level_path: String, _elevator_doors: ElevatorDoors, _respawn_marker: Marker3D) -> void:
 	GameManager.selected_level_path = level_path
-	if level_path == "res://src/maps/tutorial/TutorialBoss.tscn":
-		elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_6_SlidingDoor
-		load_selected_level()
+	GameManager.elevator_respawn_transform = _respawn_marker.global_transform
+	if GameManager.selected_boss_id in no_difficulty_bosses:
+		load_selected_level(_elevator_doors)
 	else:
 		difficulty_menu.show_menu()
 
-func load_selected_level():
-	var level_path = GameManager.selected_level_path
+
+func load_selected_level(_elevator_doors: ElevatorDoors = null):
+	find_and_load_boss_bgm()
+	await LoadingHandler.start_loading(GameManager.selected_level_path, "", true)
 	sfx_door_close.play()
-	ResourceLoader.load_threaded_request(level_path)
-	elevator_doors.close()
-	await elevator_doors.anim_player.animation_finished
-	# Wait until the level has been loaded on another thread
-	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
-		pass
-	# Get the player's position relative to the elevator doors
-	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
-	GameManager.cached_player_rotation = GameManager.player.rotation
-	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
-  
-	if is_inside_tree():
-		# TODO - fade this out via tween
-		lobby_music_player.stop()
-		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
-		# TODO - fixme
-		#if new_bgm:
-			#SoundManager.play_music(new_bgm, 0.25, "BGM")
-		GameManager.is_free_reroll = false
-		get_tree().change_scene_to_packed(loaded_scene)
+	
+	if _elevator_doors:
+		_elevator_doors.close()
+		#await elevator_doors.anim_player.animation_finished
+		
+		# Set the skip equip anim flag for seamless transition
+		LoadingHandler.skip_equip_anim = false
+		## Get the player's position relative to the elevator doors
+		#GameManager.cached_player_pos_relative_to_elevator_doors = _elevator_doors.global_position - GameManager.player.global_position
+		#GameManager.cached_player_rotation = GameManager.player.rotation
+		#GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
+		#GameManager.elevator_respawn_rotation = -_elevator_doors.basis.z
+	#else:
+		#GameManager.cached_player_pos_relative_to_elevator_doors = Vector3.ZERO
+		#GameManager.cached_player_rotation = Vector3.ZERO
+		#GameManager.cached_camera_rotation = Vector3.ZERO
+		#GameManager.elevator_respawn_rotation = Vector3.ZERO
+	
+	GameManager.is_free_reroll = false
+	
+	#LoadingHandler.load_scene_seamless()
+	LoadingHandler.load_scene_transition()
 
 
-func _on_door_transition_area_body_entered(body: Node3D) -> void:
-	if body is Player:
-		elevator_doors.open()
+func find_and_load_boss_bgm() -> void:
+	match GameManager.selected_boss_id:
+		BossCore.BossIdEnum.SLOTS:
+			GameManager.change_fmod_bgm_music_state("Slotty")
+		BossCore.BossIdEnum.BARTENDER:
+			GameManager.change_fmod_bgm_music_state("Bartender")
+		BossCore.BossIdEnum.PIT:
+			GameManager.change_fmod_bgm_music_state("PitbossHallway")
+		BossCore.BossIdEnum.ROULETTE:
+			GameManager.change_fmod_bgm_music_state("Roulette")
+		BossCore.BossIdEnum.CHIPS:
+			GameManager.change_fmod_bgm_music_state("ChipbossStart")
+		BossCore.BossIdEnum.BLACKJACK:
+			GameManager.change_fmod_bgm_music_state("BlackjackStart")
+		BossCore.BossIdEnum.ELEVATOR:
+			GameManager.change_fmod_bgm_music_state("TutorialBossfight")
 
 
-func _on_door_transition_area_body_exited(body: Node3D) -> void:
-	if body is Player:
-		elevator_doors.close()
+#func _on_door_transition_area_body_entered(body: Node3D) -> void:
+	#if body is Player:
+		#elevator_doors.open()
+#
+#
+#func _on_door_transition_area_body_exited(body: Node3D) -> void:
+	#if body is Player:
+		#elevator_doors.close()

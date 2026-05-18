@@ -1,6 +1,7 @@
 extends Node3D
 class_name GPUParticleController
 
+@export var autostart = false
 @export var is_oneshot = false
 ## Set to -1 to not self destroy
 @export var self_destroy_after_time = -1
@@ -14,7 +15,7 @@ var turn_off_light = false
 var light_off_counter = 0
 
 func _ready() -> void:
-	if is_oneshot:
+	if is_oneshot or autostart:
 		turn_off_light = true
 		for elem in gpu_particles:
 			elem.emitting = true

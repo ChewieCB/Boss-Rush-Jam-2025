@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=82 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -46,6 +46,7 @@
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
 [ext_resource type="Script" path="res://src/components/health/health_component_player.gd" id="34_6waar"]
 [ext_resource type="PackedScene" uid="uid://di1fwsgnfbfd" path="res://src/utils/freecam/FreeCam.tscn" id="34_kq3ih"]
+[ext_resource type="PackedScene" uid="uid://by55cbg34v6j7" path="res://src/player/DustRing.tscn" id="34_ph8h0"]
 [ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/misc/HitText.tscn" id="35_uogvx"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
@@ -55,14 +56,18 @@
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/old_movie.gdshader" id="46_fqoxl"]
-[ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
 [ext_resource type="PackedScene" uid="uid://bqgedwbxkh8xa" path="res://src/ui/player/barrel_detail/BarrelDetailUI.tscn" id="48_6dr3i"]
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
+[ext_resource type="Script" path="res://src/player/interact_ui.gd" id="48_hxlt6"]
+[ext_resource type="PackedScene" uid="uid://dymal26tqayfd" path="res://src/ui/player/luck/LuckMessageUI.tscn" id="49_7wxbq"]
+[ext_resource type="PackedScene" uid="uid://d2m0w0bro5j5l" path="res://src/ui/player/StatUINew.tscn" id="51_vst8k"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
-[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="57_ojgux"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
+[ext_resource type="PackedScene" uid="uid://cu1jrlwvdnnl" path="res://src/ui/player/inventory/WorkshopInventoryUI.tscn" id="60_44qli"]
+[ext_resource type="Script" path="res://src/player/bullet_whizz_radius.gd" id="119_e0qef"]
+[ext_resource type="AudioStream" uid="uid://cw6g68pny04lp" path="res://src/player/assets/sfx/677373__robinhood76__12012-bullet-whizz.wav" id="120_wa66r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -100,9 +105,6 @@ material = SubResource("ShaderMaterial_cjv3t")
 flip_faces = true
 size = Vector2(2, 2)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("EffectIconsViewport")
-
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7pe4k"]
@@ -115,9 +117,17 @@ shader_parameter/projector_power = 0.2
 shader_parameter/vignette_param = 10.0
 shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_q6pr3"]
+radius = 5.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dxvay"]
+radius = 2.0
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
-collision_mask = 221
+collision_mask = 157
+wall_min_slide_angle = 0.0872665
+floor_stop_on_slope = false
 script = ExtResource("1_rl0vi")
 sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
 sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])
@@ -134,6 +144,7 @@ sfx_purchase = ExtResource("31_uqkio")
 sfx_too_expensive = ExtResource("32_vsild")
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
+jump_dust_ring_prefab = ExtResource("34_ph8h0")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
@@ -190,6 +201,7 @@ shape = SubResource("BoxShape3D_sjjg0")
 current = true
 fov = 90.0
 near = 0.001
+far = 6000.0
 
 [node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
@@ -198,59 +210,18 @@ mesh = SubResource("QuadMesh_bbump")
 
 [node name="AimRay" parent="Neck/ShakeCameraWrapper/Camera3D" instance=ExtResource("5_dqbuo")]
 collision_mask = 125
+hit_from_inside = true
 collide_with_areas = true
 
-[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_ymis7")
-script = ExtResource("42_rky08")
-
-[node name="HitMarker" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
-modulate = Color(1, 0.979667, 0.39, 0)
-texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_nkt42")
+[node name="LaserGuideRayCast" type="RayCast3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collision_mask = 69
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
-
-[node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="8"]
-texture = SubResource("ViewportTexture_rj1ni")
-
-[node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
-transform = Transform3D(0.735053, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
-surface_material_override/0 = null
-
-[node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
-transform = Transform3D(0.693706, -0.0523373, -0.718354, -0.71934, -2.604e-06, -0.694658, 0.0363546, 0.99863, -0.0376501, -0.15, 0, 1.76)
-surface_material_override/0 = null
-
-[node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
-transform = Transform3D(0.743941, -0.0342128, -0.666855, -0.665129, 0.040512, -0.745142, 0.05871, 0.892489, 0.00826027, -0.411454, 0.00172222, 3.20794)
-surface_material_override/0 = null
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
@@ -262,7 +233,7 @@ collide_with_bodies = false
 [node name="AimAssistRaycastBossCheck" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 target_position = Vector3(0, 0, -500)
-collision_mask = 4
+collision_mask = 68
 
 [node name="DebugLabel" type="Label" parent="Neck/ShakeCameraWrapper"]
 visible = false
@@ -280,8 +251,8 @@ one_shot = true
 wait_time = 0.2
 one_shot = true
 
-[node name="ShadowDecal" type="Decal" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.33908, 0)
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.27613, 0)
 texture_albedo = ExtResource("3_tgexf")
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -302,6 +273,7 @@ offset_right = 75.5
 offset_bottom = 87.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("48_hxlt6")
 
 [node name="Label" type="Label" parent="UI/InteractUI"]
 layout_mode = 2
@@ -316,9 +288,19 @@ vertical_alignment = 1
 layout_mode = 2
 assigned_action = "interact"
 
-[node name="StatUI" parent="UI" node_paths=PackedStringArray("health_component", "luck_component") instance=ExtResource("46_ob8n4")]
+[node name="StatUI" parent="UI" node_paths=PackedStringArray("health_component", "luck_component") instance=ExtResource("51_vst8k")]
+offset_left = 1156.0
+offset_top = 816.0
 health_component = NodePath("../../HealthComponent")
 luck_component = NodePath("../../LuckComponent")
+
+[node name="LuckMessageUI" parent="UI" instance=ExtResource("49_7wxbq")]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 1247.0
+offset_top = -362.0
+offset_bottom = -150.0
 
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
@@ -357,6 +339,57 @@ offset_top = -273.0
 offset_right = 1126.0
 offset_bottom = 391.0
 
+[node name="AimRecticle" type="TextureRect" parent="UI/GunUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ymis7")
+script = ExtResource("42_rky08")
+
+[node name="AimRecticle2" type="TextureRect" parent="UI/GunUI"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("4_ymis7")
+script = ExtResource("42_rky08")
+
+[node name="HitMarker" type="TextureRect" parent="UI/GunUI"]
+modulate = Color(1, 0.979667, 0.39, 0)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_nkt42")
+
 [node name="BossSpecialDialog" type="Control" parent="UI"]
 process_mode = 3
 visible = false
@@ -366,6 +399,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="BG" type="TextureRect" parent="UI/BossSpecialDialog"]
 layout_mode = 1
@@ -417,15 +451,12 @@ text = "Saving..."
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
 z_index = 10
-mouse_filter = 2
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1
 
-[node name="InventoryUI" parent="UI" instance=ExtResource("57_ojgux")]
+[node name="DebugInventoryUI" parent="UI" instance=ExtResource("60_44qli")]
 visible = false
-shop_title = "Debug Hotswap Inventory"
-has_custom_inventory = true
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")
@@ -499,6 +530,12 @@ delay_in_seconds = "0.0"
 
 [node name="Dead" type="Node" parent="StateChart/Root/Health"]
 script = ExtResource("8_dkhcu")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Health/Dead"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Idle")
+event = &"revive"
+delay_in_seconds = "0.0"
 
 [node name="Status" type="Node" parent="StateChart/Root"]
 script = ExtResource("16_7a84q")
@@ -578,6 +615,25 @@ delay_in_seconds = "0.0"
 
 [node name="DrunkTimer" type="Timer" parent="StateChart/Root/Status/Drunk"]
 
+[node name="NearEnemyRadius" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NearEnemyRadius"]
+shape = SubResource("SphereShape3D_q6pr3")
+
+[node name="BulletWhizzRadius" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.544568, 0)
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+script = ExtResource("119_e0qef")
+bullet_whizz_sfx = ExtResource("120_wa66r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BulletWhizzRadius"]
+shape = SubResource("SphereShape3D_dxvay")
+
 [connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
 [connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
@@ -589,11 +645,14 @@ delay_in_seconds = "0.0"
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Health/Hurt" to="." method="_on_health_hurt_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
 [connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
+[connection signal="body_entered" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_entered"]
+[connection signal="body_exited" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_exited"]
+[connection signal="area_entered" from="BulletWhizzRadius" to="BulletWhizzRadius" method="_on_area_entered"]
 
-[editable path="Neck/ShakeCameraWrapper/GunContainer/BlankGun"]
 [editable path="UI/HurtOverlay"]

@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cywwydmxkbh4x"]
+[gd_scene load_steps=12 format=3 uid="uid://cywwydmxkbh4x"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_w6qw3"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_rhvms"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="5_scrkd"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_2bruo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="6_61sk6"]
+[ext_resource type="Texture2D" uid="uid://cgjpqjw32dtqe" path="res://assets/sprite/status_icon/run_speed_down.png" id="6_mxbiv"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="7_6c636"]
 [ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="7_n73is"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="7_o6cqq"]
@@ -15,31 +17,43 @@ script = ExtResource("1_w6qw3")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="Shield" type="Node3D" parent="EffectContainer"]
-script = ExtResource("6_61sk6")
-shield_barrier_prefab = ExtResource("7_n73is")
+[node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_rhvms")
 display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
-display_text_desc = "25% damage resistance"
-positive_desc = Array[String](["Increases damage resistance"])
-negative_desc = Array[String](["TODO: add drawback (slower speed?)"])
+positive_desc = Array[String](["+25% damage resistance"])
+negative_desc = Array[String](["-20% move speed"])
 icon_id = 43
+
+[node name="ShieldEffect" type="Node3D" parent="EffectContainer/ProtectiveBarrier"]
+script = ExtResource("6_61sk6")
+shield_barrier_prefab = ExtResource("7_n73is")
+icon_id = 43
+
+[node name="DecreaseMoveSpeed" type="Node3D" parent="EffectContainer/ProtectiveBarrier"]
+script = ExtResource("5_scrkd")
+display_name = "Reduce movespeed"
+status_code = "protective_barrier_reduce_movepseed"
+modified_stat = 1
+modify_type = 1
+value = -20.0
+is_infinite_duration = true
+is_bad_effect = true
+status_icon = ExtResource("6_mxbiv")
+show_duration_ui = true
 
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Newton's Third Law"
 display_text_tag = "Safer Rocket Jump"
-display_text_desc = "+50% damage
--25% firerate
-Adds knockback when shoot the nearby environment, enabling rocket jumping. Increased damage but decreased firerate."
-positive_desc = Array[String](["Enables rocket-jumping knockback", "Higher damage"])
-negative_desc = Array[String](["Slower firerate"])
+positive_desc = Array[String](["Enables rocket-jumping knockback", "+25% damage"])
+negative_desc = Array[String](["-25% firerate"])
 icon_id = 42
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
 script = ExtResource("6_2bruo")
 attribute = 1
-modify_value = 50.0
+modify_value = 25.0
 is_perc = true
 
 [node name="ModifyFirerate" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
@@ -56,7 +70,7 @@ max_range = 3.0
 [node name="BallBullet" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Ball Bullet"
-display_text_tag = "Massize ball!"
+display_text_tag = "Massive ball!"
 display_text_desc = "Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed."
 positive_desc = Array[String](["Significantly higher damage", "Fires large projectile", "Adds richochet to projectile"])
 negative_desc = Array[String](["Slower firerate", "Slower projectile speed"])

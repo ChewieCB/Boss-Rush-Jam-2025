@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3 uid="uid://cireewkvow2ct"]
+
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="1_n0lsv"]
+[ext_resource type="Script" path="res://src/ui/player/inventory/gun_frame_item_ui.gd" id="2_0e07s"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="2_ax6s6"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_qln6d"]
+
+[node name="GunFrameItemUI" type="TextureRect" node_paths=PackedStringArray("button", "border_selected")]
+custom_minimum_size = Vector2(340, 120)
+texture = ExtResource("1_n0lsv")
+expand_mode = 3
+script = ExtResource("2_0e07s")
+button = NodePath("Button")
+border_selected = NodePath("BorderSelected")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Shotgun
+"
+autowrap_mode = 2
+
+[node name="BorderNormal" type="NinePatchRect" parent="."]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ax6s6")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BorderSelected" type="NinePatchRect" parent="."]
+visible = false
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_qln6d")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[connection signal="focus_entered" from="Button" to="." method="_on_button_focus_entered"]
+[connection signal="focus_exited" from="Button" to="." method="_on_button_focus_exited"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

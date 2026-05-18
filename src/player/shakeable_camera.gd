@@ -86,13 +86,13 @@ func _process(delta):
 
 
 func add_long_trauma(trauma_amount: float):
-	if GameManager.screen_shake_disabled:
+	if not GameManager.screen_shake_enabled:
 		return
 	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
 	long_trauma = clamp(long_trauma + trauma_amount, 0.0, MAX_TRAUMA)
 
 func add_trauma(trauma_amount: float):
-	if GameManager.screen_shake_disabled:
+	if not GameManager.screen_shake_enabled:
 		return
 	# Trauma over single tick, such as gunfire, small explosion, attacked, ...
 	trauma = clamp(trauma_amount, 0.0, MAX_TRAUMA) # Yes it replace existing trauma

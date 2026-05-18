@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://bfmgyr7k0l1xt"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_68u2d"]
+
+[resource]
+script = ExtResource("1_68u2d")
+boss_id = 7
+boss_quote = "\"Let's have fun together, shall we?\""
+ante_names = Array[String](["", "", "", "", ""])
+boss_risk_reward_mult = 1.5

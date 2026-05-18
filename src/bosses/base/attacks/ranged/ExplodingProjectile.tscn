@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://dh07gvrl3yr1o"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="1_pms8u"]
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/exploding_projectile.gd" id="1_y762l"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aih2w"]
+transparency = 1
+albedo_color = Color(1, 0.766048, 0, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_rffdb"]
+
+[sub_resource type="Curve" id="Curve_oc45i"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ck5ma"]
+
+[node name="ExplodingProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 35
+script = ExtResource("1_y762l")
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_aih2w")
+mesh = SubResource("ImmediateMesh_rffdb")
+script = ExtResource("1_pms8u")
+distance = 1.0
+segments = 10
+lifetime = 2.0
+width_profile = SubResource("Curve_oc45i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ck5ma")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

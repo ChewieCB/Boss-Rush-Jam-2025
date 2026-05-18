@@ -6,14 +6,14 @@ extends BaseBarrelEffect
 @export var change_color = false
 @export var new_color: Color
 
-func on_projectile_spawn(_projectile: BaseProjectile):
+func on_projectile_spawn(_projectile: BaseBullet):
 	if change_color:
 		_projectile.change_bullet_color(new_color)
 	_projectile.infuse_status_effect(status_effect)
 	_projectile.applied_emitting_elemental_vfx(status_effect)
 
 
-func on_before_damage_applied(enemy: CharacterBody3D, _projectile: BaseProjectile):
+func on_before_damage_applied(enemy: CharacterBody3D, _projectile: BaseBullet):
 	if enemy.has_method("apply_status_buildup"):
 		var build_up_amount = flat_build_up_amount + _projectile.damage * build_up_from_damage_multiplier
 		enemy.apply_status_buildup(status_effect, build_up_amount)

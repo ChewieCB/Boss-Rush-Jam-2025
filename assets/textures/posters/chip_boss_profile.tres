@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://duvecsgnc5lp3"]
+
+[ext_resource type="Texture2D" uid="uid://cc2gk7hm3t7pk" path="res://assets/textures/posters/chip_boss_profile.png" id="1_mj7ja"]
+
+[resource]
+albedo_texture = ExtResource("1_mj7ja")
+metallic_specular = 0.0
+texture_filter = 2

@@ -7,12 +7,30 @@ class_name PlayerUI
 @onready var stat_ui: StatUI = $StatUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
+@onready var reticle_ui_1 = $GunUI/AimRecticle
+@onready var reticle_ui_2 = $GunUI/AimRecticle2
+
 
 func _ready() -> void:
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
 	SaveManager.finished_saving.connect(hide_saving_indicator)
+	#LuckHandler.modifier_message.connect(update_luck_modifier_text)
 	pause_ui.setting_ui.setting_changed.connect(refresh_after_setting_changed)
 	refresh_after_setting_changed()
+
+
+#func update_luck_modifier_text(text: String, is_gain: bool) -> void:
+	#luck_modifier_text.text = text
+	#luck_modifier_text.visible = true
+	## TODO - add configurable timing and animation
+	#await get_tree().create_timer(1.0, false).timeout
+	#luck_modifier_text.text = ""
+	#luck_modifier_text.visible = false
+
+
+func toggle_aim_reticle(is_visible: bool) -> void:
+	for ui in [reticle_ui_1, reticle_ui_2]:
+		ui.visible = is_visible
 
 
 func hide_saving_indicator():

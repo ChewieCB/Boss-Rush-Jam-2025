@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://c243t2tftr4xy"]
+
+[ext_resource type="Script" path="res://src/ui/common/device_input_prompt/ui_input_prompt.gd" id="1_05ykf"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="1_7nmkg"]
+
+[node name="InputPrompt1" type="MarginContainer" node_paths=PackedStringArray("input_prompt", "label")]
+custom_minimum_size = Vector2(224, 0)
+size_flags_horizontal = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+script = ExtResource("1_05ykf")
+input_prompt = NodePath("HBoxContainer/DeviceInputPrompt")
+label = NodePath("HBoxContainer/Label")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="DeviceInputPrompt" parent="HBoxContainer" instance=ExtResource("1_7nmkg")]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 28

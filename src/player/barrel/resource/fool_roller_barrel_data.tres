@@ -8,16 +8,11 @@
 script = ExtResource("3_pahdn")
 barrel_id = 4
 barrel_name = "Fool Roller"
-barrel_desc = "[b]Fool Roller Barrel[/b]
-High risk, high reward.
-
-Possible rolls:
-[ul]
-Double Tap: Shoot in two-round bursts.
-Ammo Leech: Small chance to refund ammo on hit, but reduces base bullet damage.
-Gambler's Precision: Chance to crit on hit and jam gun on miss.
-[/ul]"
+barrel_desc = "A simple barrel with risky effect, but also potentially great reward for skillfully use of it."
+barrel_info_summary = "High risk, high reward."
 barrel_image = ExtResource("1_0ubde")
 barrel_cost = 650
 barrel_prefab = ExtResource("2_gxri0")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

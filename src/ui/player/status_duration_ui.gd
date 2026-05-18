@@ -6,7 +6,8 @@ extends TextureProgressBar
 @export var default_status_up: Texture2D
 
 @onready var timer: Timer = $Timer
-@onready var label: Label = $Label
+@onready var value_label: Label = $ValueLabel
+@onready var info_text_label: Label = $InfoTextLabel
 
 var status_effect: StatusEffect
 var max_time: float
@@ -45,18 +46,18 @@ func init(_status_effect: StatusEffect) -> void:
 	timer.start(status_effect.duration)
 
 	if status_effect.show_value_on_ui:
-		label.text = str(int(status_effect.value))
+		value_label.text = str(int(status_effect.value))
 	else:
-		label.text = ""
+		value_label.text = ""
 
 func refresh(updated_status: StatusEffect):
 	status_effect = updated_status
 	max_time = status_effect.duration
 	timer.start(status_effect.duration)
 	if status_effect.show_value_on_ui:
-		label.text = str(int(status_effect.value))
+		value_label.text = str(int(status_effect.value))
 	else:
-		label.text = ""
+		value_label.text = ""
 
 func remove():
 	call_deferred("queue_free")

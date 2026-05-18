@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c8t7wq0ookess"
+path="res://.godot/imported/attack taunt 14-1 youre wasting my time .mp3-b51e2db101be1ebf19d782f9ae59b2d1.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 14-1 youre wasting my time .mp3"
+dest_files=["res://.godot/imported/attack taunt 14-1 youre wasting my time .mp3-b51e2db101be1ebf19d782f9ae59b2d1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nbm5ws47b0gs"
+path="res://.godot/imported/Razor Card Stick in Ground 1.mp3-186023d3dfbec276d34f52f0257e025d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Razor Card Stick in Ground 1.mp3"
+dest_files=["res://.godot/imported/Razor Card Stick in Ground 1.mp3-186023d3dfbec276d34f52f0257e025d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

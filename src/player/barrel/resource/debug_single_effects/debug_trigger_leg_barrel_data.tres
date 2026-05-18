@@ -9,6 +9,7 @@ script = ExtResource("8_78fx2")
 barrel_id = 63
 barrel_name = "TriggerLeg"
 barrel_desc = "Dash and blast!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_3qb7m")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_ps05b")

@@ -1,11 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyak3rklcc1gg"]
+[gd_scene load_steps=12 format=3 uid="uid://dyak3rklcc1gg"]
 
 [ext_resource type="Script" path="res://src/player/luck_handler.gd" id="1_718cx"]
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="2_0f31e"]
+[ext_resource type="Resource" uid="uid://cktfqbe0gvy72" path="res://src/ui/player/luck/luck_trigger_data/GamblersPrecision_LuckyShot.tres" id="3_45r3b"]
+[ext_resource type="Resource" uid="uid://c5un1ai2pgdpo" path="res://src/ui/player/luck/luck_trigger_data/GamblersPrecision_LetItRide.tres" id="4_awui0"]
+[ext_resource type="Resource" uid="uid://brkrjtogbrksh" path="res://src/ui/player/luck/luck_trigger_data/ExplosiveBullet_BadaBingBadaBoom.tres" id="5_67a7k"]
+[ext_resource type="Resource" uid="uid://w0dskmn55fpr" path="res://src/ui/player/luck/luck_trigger_data/Ricochet_Ricoshot.tres" id="6_tshfl"]
+[ext_resource type="Resource" uid="uid://dqsisn61sa5ei" path="res://src/ui/player/luck/luck_trigger_data/BulletTime_Foresight.tres" id="7_diksw"]
+[ext_resource type="Resource" uid="uid://d3xsfyynx6fm8" path="res://src/ui/player/luck/luck_trigger_data/BulletTime_Passthrough.tres" id="8_s5dy7"]
+[ext_resource type="Resource" uid="uid://b5l2mghk3fls4" path="res://src/ui/player/luck/luck_trigger_data/LaserGuided_ElaboratedAngle.tres" id="9_ew7qh"]
+[ext_resource type="Resource" uid="uid://2fdmjkfh05mw" path="res://src/ui/player/luck/luck_trigger_data/StickyBomb_ClusterBomb.tres" id="10_3bi80"]
+[ext_resource type="Resource" uid="uid://jx3qhymvhjim" path="res://src/ui/player/luck/luck_trigger_data/StickyBomb_DangerClose.tres" id="11_gk8jg"]
 
 [node name="LuckHandler" type="Node"]
 script = ExtResource("1_718cx")
+luck_triggers = Array[ExtResource("2_0f31e")]([ExtResource("3_45r3b"), ExtResource("4_awui0"), ExtResource("5_67a7k"), ExtResource("6_tshfl"), ExtResource("8_s5dy7"), ExtResource("7_diksw"), ExtResource("9_ew7qh"), ExtResource("10_3bi80"), ExtResource("11_gk8jg")])
 
 [node name="LuckDecayTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.06
 autostart = true
 
 [node name="DPSWindowTimer" type="Timer" parent="."]

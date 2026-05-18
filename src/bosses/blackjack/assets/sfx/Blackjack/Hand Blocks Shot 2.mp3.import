@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://etsc41kmjg7d"
+path="res://.godot/imported/Hand Blocks Shot 2.mp3-2fa9dc5665c89dc3b9a1b5eeb115c188.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Blocks Shot 2.mp3"
+dest_files=["res://.godot/imported/Hand Blocks Shot 2.mp3-2fa9dc5665c89dc3b9a1b5eeb115c188.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

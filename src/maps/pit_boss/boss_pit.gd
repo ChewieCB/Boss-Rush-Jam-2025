@@ -1,7 +1,5 @@
 extends BossMap
 
-@export var active_bgm: AudioStream
-
 @onready var arena_doors: ElevatorDoors = find_children("*", "ElevatorDoors")[1]
 ## Boss Tracking
 @onready var pit_boss: BossPit = find_children("*", "BossPit").front()
@@ -125,11 +123,11 @@ func _on_cover_destroyed(cover: Cover) -> void:
 	nav_region.bake_navigation_mesh()
 
 
-func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	spawn_cover()
+	GameManager.change_fmod_bgm_music_state("PitbossMainfight")
 	surveillance_boss.activate()
 	pit_boss.activate()
-	SoundManager.play_music(active_bgm, 0.1, "BGM")
 	elevator_doors.close()
 	arena_doors.close()
 	LuckHandler.enabled = true

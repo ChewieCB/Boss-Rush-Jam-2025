@@ -9,6 +9,7 @@ script = ExtResource("4_na73y")
 barrel_id = 25
 barrel_name = "MedicalPayout"
 barrel_desc = "Hurt others to heal yourself"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_wabjw")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_eqcma")

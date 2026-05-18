@@ -52,6 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func toggle_pause_menu() -> void:
 	is_paused = not is_paused
+	GameManager.change_fmod_bgm_menu_is_up(is_paused)
 	
 	get_tree().paused = is_paused
 	self.visible = is_paused
@@ -89,39 +90,46 @@ func _on_setting_button_pressed() -> void:
 
 func _on_lobby_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	#ScreenTransition.transition_out()
-	#await ScreenTransition.transition_finished
-	# TODO - background loading here
-	if GameManager.tutorial_completed:
-		LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	GameManager.change_fmod_bgm_menu_is_up(false)
+
+	if not GameManager.tutorial_completed:
+		LoadingHandler.start_loading(
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
+			"Tutorial"
+		)
 	else:
-		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
-	LoadingHandler.start_loading("Lobby")
+		LoadingHandler.start_loading(
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+			"Backroom"
+		)
+	
 	# Toggle low pass filter for BGM
-	await LoadingHandler.loading_finished
+	await ScreenTransition.transition_finished
 	AudioServer.set_bus_effect_enabled(1, 0, false)
+	LoadingHandler.load_scene_transition()
 
 
 func _on_main_menu_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	GameManager.change_fmod_bgm_menu_is_up(false)
+	
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	GameManager.reset_current_save_data()
 	SaveManager.save_data_is_loaded = false
 	
-	#ScreenTransition.transition_out()
-	#await ScreenTransition.transition_finished
 	## TODO - background loading here
-	LoadingHandler.current_scene_path = "res://src/ui/main_menu/MainMenu.tscn"
-	LoadingHandler.start_loading("Main Menu")
+	LoadingHandler.start_loading("res://src/ui/main_menu/MainMenu.tscn", "Main Menu")
 	# Toggle low pass filter for BGM
-	await LoadingHandler.loading_finished
+	await ScreenTransition.transition_finished
 	AudioServer.set_bus_effect_enabled(1, 0, false)
+	LoadingHandler.load_scene_transition()
 
 
 func _on_quit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	GameManager.change_fmod_bgm_menu_is_up(false)
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)

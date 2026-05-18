@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://cktfqbe0gvy72"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_u3o24"]
+
+[resource]
+script = ExtResource("1_u3o24")
+id = 0
+name = "Lucky Shot"
+desc = "+4 luck on critical hit"
+message = ""

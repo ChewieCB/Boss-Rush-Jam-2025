@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkjt6ep3mqm0e"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_0frwj"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/loaded_wallet_effect.gd" id="2_eo0bl"]
+
+[node name="DebugBarrelLoadedWallet" type="Node3D"]
+script = ExtResource("1_0frwj")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="LoadedWallet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_eo0bl")
+bonus_flat_crit_chance = 0.35
+display_text_title = "Loaded Wallet"
+display_text_tag = "I hope you had some saving"
+positive_desc = Array[String](["+35% crit chance"])
+negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
+icon_id = 61

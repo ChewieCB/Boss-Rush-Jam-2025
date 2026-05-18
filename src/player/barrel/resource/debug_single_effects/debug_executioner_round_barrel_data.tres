@@ -9,6 +9,7 @@ script = ExtResource("4_tcv4n")
 barrel_id = 54
 barrel_name = "ExecutionerRound"
 barrel_desc = "Finish them"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_4c43f")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_apecf")

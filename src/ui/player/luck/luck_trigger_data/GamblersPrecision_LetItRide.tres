@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://c5un1ai2pgdpo"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_tjl0w"]
+
+[resource]
+script = ExtResource("1_tjl0w")
+id = 1
+name = "Let It Ride"
+desc = "+25 luck for 4 consecutive hits without missing"
+message = ""

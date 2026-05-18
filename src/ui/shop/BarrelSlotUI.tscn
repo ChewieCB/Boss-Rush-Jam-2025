@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhx5vqirejsxe"]
+
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_igsxx"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_8b8o3"]
+[ext_resource type="Script" path="res://src/ui/shop/barrel_slot_ui.gd" id="2_nd0am"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_hirao"]
+
+[node name="BarrelSlot" type="TextureRect" node_paths=PackedStringArray("item_ui")]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(120, 120)
+texture = ExtResource("1_igsxx")
+script = ExtResource("2_nd0am")
+item_ui = NodePath("BarrelItemUI")
+
+[node name="BarrelItemUI" parent="." instance=ExtResource("2_8b8o3")]
+layout_mode = 2
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 110.0
+offset_bottom = 110.0
+
+[node name="BorderNormal" type="NinePatchRect" parent="."]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_hirao")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20

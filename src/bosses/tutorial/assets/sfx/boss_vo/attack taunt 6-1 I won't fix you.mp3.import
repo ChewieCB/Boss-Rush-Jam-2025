@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nc8efuucqwef"
+path="res://.godot/imported/attack taunt 6-1 I won't fix you.mp3-d16a5e33e41e9b33a09ec98fa469fca4.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 6-1 I won't fix you.mp3"
+dest_files=["res://.godot/imported/attack taunt 6-1 I won't fix you.mp3-d16a5e33e41e9b33a09ec98fa469fca4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

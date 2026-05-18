@@ -9,6 +9,7 @@ script = ExtResource("3_ixg24")
 barrel_id = 29
 barrel_name = "Homing"
 barrel_desc = "Skill issues solved!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_8fl3s")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_y8r0x")

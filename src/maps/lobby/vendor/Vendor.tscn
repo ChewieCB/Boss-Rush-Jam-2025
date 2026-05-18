@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_xd7ad"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_q1oya"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="2_ut4j6"]
-[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/GunCustomizeUI.tscn" id="5_68842"]
+[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/Shop.tscn" id="5_68842"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dp6qw"]
 size = Vector3(2.5, 3.1, 2.3)
@@ -15,11 +15,6 @@ radius = 5.0
 collision_layer = 96
 collision_mask = 79
 script = ExtResource("1_xd7ad")
-interact_text = Array[String](["Get your barrels here! All chips accepted!", "Welcome to my shop!", "Welcome, welcome!"])
-exit_text = Array[String](["Bye bye!", "See you soon!"])
-hurt_text = Array[String](["Ouch!", "Quit it!", "Hey!"])
-purchase_text = Array[String](["Thank you!", "Thanks for your patron!", "Excellent choice!", "A fine aquisition!"])
-too_expensive_text = Array[String](["You don't have enough!", "Another time perhaps?", "Perhaps something a little more in budget, sir?", "Come back when you're a little mmmm richer"])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.55, -0.15)
@@ -28,10 +23,12 @@ shape = SubResource("BoxShape3D_dp6qw")
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.16, 1.44, 0)
 billboard = 2
+render_priority = -1
 texture = ExtResource("2_ut4j6")
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+visible = false
 billboard = 1
 no_depth_test = true
 render_priority = 2
@@ -43,7 +40,7 @@ outline_size = 24
 max_health = 1e+07
 
 [node name="InteractArea" type="Area3D" parent="."]
-collision_layer = 64
+collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
@@ -52,7 +49,8 @@ shape = SubResource("SphereShape3D_rsf6f")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="GunCustomizeUI" parent="UI" instance=ExtResource("5_68842")]
+[node name="ShopUI" parent="UI" instance=ExtResource("5_68842")]
+metadata/_edit_use_anchors_ = true
 
 [connection signal="body_entered" from="InteractArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="InteractArea" to="." method="_on_body_exited"]

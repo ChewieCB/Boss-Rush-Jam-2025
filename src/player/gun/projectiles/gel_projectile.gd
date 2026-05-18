@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GelProjectile
 
 @export var stick_time = 1
@@ -7,6 +7,7 @@ class_name GelProjectile
 @export var deflate_accel = 10
 @export var deflate_speed = 1
 
+@onready var area: Area3D = $Area3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 @onready var life_timer: Timer = $LifeTimer
@@ -54,6 +55,10 @@ func _physics_process(delta: float) -> void:
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
+		look_at(global_position + dir_to_target)
 
 	# Make it fly forward
 	global_position -= transform.basis.z * projectile_speed * delta
@@ -82,9 +87,21 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func ricochet():
 	super ()
+	area.set_collision_mask_value(2, true)
 	found_hitscal_col = false
 	is_ricochet_shot = true
-	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
+	
+	# Calculate bounce direction
+	var bounce_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor)
+		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
+	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
@@ -98,7 +115,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = _pos
 
 	for i in range(split_count):
-		if not is_instance_valid(self):
+		if not is_instance_valid(self ):
 			return
 		var new_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
@@ -110,21 +127,26 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
+
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			before_damage_applied.emit(body, self )
+			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
+			hit_boss = true
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 		elif "health_component" in body:
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 	self.reparent.call_deferred(body)
 	sticked = true
-	impacted.emit(self, true, global_position)
+	impacted.emit(self , true, global_position)
 	life_timer.stop()
 	stick_timer.start(stick_time)
 	if found_hitscal_col:
@@ -140,7 +162,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(hit_boss)
 	deactivate()
 
 
@@ -202,7 +224,7 @@ func activate(start_pos: Vector3, dir: Vector3) -> void:
 	set_physics_process(true)
 	
 func deactivate() -> void:
-	if GameManager.object_pooling_manager:
+	if GameManager.object_pooling_manager and self.get_parent() and not self.get_parent() is ObjectPoolingManager:
 		self.reparent.call_deferred(GameManager.object_pooling_manager)
 	visible = false
 	active = false

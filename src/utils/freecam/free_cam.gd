@@ -18,9 +18,10 @@ var disable_input: bool = false
 
 func _ready() -> void:
 	camera.fov = GameManager.camera_fov
-	GameManager.pause_ui.pause_ui_toggled.connect(
-		func(): disable_input = !disable_input
-	)
+	#if GameManager.pause_ui:
+		#GameManager.pause_ui.pause_ui_toggled.connect(
+			#func(): disable_input = !disable_input
+		#)
 
 
 func _input(event: InputEvent) -> void:

@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name BartenderShotgunProjectile
 
 @onready var push_force = 20
@@ -9,11 +9,11 @@ func _physics_process(delta: float) -> void:
 	global_position -= transform.basis.z * projectile_speed * delta
 
 
-func init(start_pos: Vector3, dir: Vector3, _damage: int, _ricochet_count_left: int, _speed: float):
+func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float=500):
 	life_timer.start()
 	projectile_speed = _speed
 	damage = _damage
-	ricochet_count_left = _ricochet_count_left
+	ricochet_count_left = ricochet_count
 	current_dir = dir.normalized()
 	look_at_from_position(start_pos, start_pos + dir)
 
@@ -47,7 +47,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit()
+		destroyed.emit(false)
 		call_deferred("queue_free")
 
 

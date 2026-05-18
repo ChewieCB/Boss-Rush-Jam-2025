@@ -1,6 +1,6 @@
 extends Area3D
 class_name BaseBossProjectile
-# Should remove this and use BaseProjectile instead, like Bartender's shotgun proj
+# Should remove this and use BaseBullet instead, like Bartender's shotgun proj
 
 @export var projectile_damage: float = 10.0
 @export var projectile_speed: float = 50.0
@@ -15,6 +15,7 @@ var current_dir: Vector3
 var found_hitscal_col = false
 var hitscan_col_point: Vector3 = Vector3.ZERO
 var hitscan_col_normal: Vector3 = Vector3.ZERO
+var life_time = 0
 
 func _ready() -> void:
 	current_dir = - global_transform.basis.z.normalized()
@@ -27,6 +28,9 @@ func _ready() -> void:
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
+
+func _process(delta: float) -> void:
+	life_time += delta
 
 func _physics_process(delta: float) -> void:
 	current_dir = - transform.basis.z.normalized()

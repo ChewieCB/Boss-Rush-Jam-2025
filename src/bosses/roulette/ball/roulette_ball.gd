@@ -121,7 +121,7 @@ func _on_body_entered(body: Node) -> void:
 	if body == target:
 		target.health_component.damage(damage)
 		destroy()
-	if body is BaseProjectile:
+	if body is BaseBullet:
 		pass
 	else:
 		# Only increment environment collisions if the normal of the collision is not vertical

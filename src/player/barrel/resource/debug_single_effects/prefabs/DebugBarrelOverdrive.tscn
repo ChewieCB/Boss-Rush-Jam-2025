@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://dw8a3mgt3cfdr"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_1unhj"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_ktm4e"]
+[ext_resource type="Script" path="res://src/player/barrel/overdrive_effect.gd" id="3_poykr"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_j5yog"]
+
+[node name="DebugBarrelOverdrive" type="Node3D"]
+script = ExtResource("1_1unhj")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Overdrive" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_ktm4e")
+display_text_title = "Overdrive"
+display_text_tag = "Keep count the ammo you spent"
+positive_desc = Array[String](["+2 flat magazine size", "+2 flat firerate (rounds per second)"])
+negative_desc = Array[String](["+1% chance to explode the gun per ammo spent", "100% will explode when you empty the magazine"])
+icon_id = 62
+
+[node name="OverdriveEffect" type="Node3D" parent="EffectContainer/Overdrive"]
+script = ExtResource("3_poykr")
+
+[node name="IncreaseFlatMagazineSize" type="Node3D" parent="EffectContainer/Overdrive"]
+script = ExtResource("4_j5yog")
+attribute = 5
+modify_value = 2.0
+
+[node name="IncreaseFlatFirerate" type="Node3D" parent="EffectContainer/Overdrive"]
+script = ExtResource("4_j5yog")
+attribute = 4
+modify_value = 2.0

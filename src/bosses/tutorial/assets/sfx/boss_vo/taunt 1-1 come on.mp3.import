@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b71lrf1517fp8"
+path="res://.godot/imported/taunt 1-1 come on.mp3-19b181e6c9bfa9a577fa2a020f00fd98.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 1-1 come on.mp3"
+dest_files=["res://.godot/imported/taunt 1-1 come on.mp3-19b181e6c9bfa9a577fa2a020f00fd98.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

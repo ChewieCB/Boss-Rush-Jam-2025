@@ -22,11 +22,11 @@ func _ready() -> void:
 	fire.emitting = true
 
 
-func change_mesh_scale(new_scale):
-	fire.draw_pass_1.radius = original_fire_radius * new_scale
-	fire.draw_pass_1.height = original_fire_height * new_scale
-	smoke.draw_pass_1.radius = original_smoke_radius * new_scale
-	smoke.draw_pass_1.height = original_smoke_height * new_scale
+#func change_mesh_scale(new_scale):
+	#fire.draw_pass_1.radius = original_fire_radius * new_scale
+	#fire.draw_pass_1.height = original_fire_height * new_scale
+	#smoke.draw_pass_1.radius = original_smoke_radius * new_scale
+	#smoke.draw_pass_1.height = original_smoke_height * new_scale
 
 func check_count():
 	count += 1

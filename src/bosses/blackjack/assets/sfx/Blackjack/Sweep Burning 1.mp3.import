@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://pvvt6sg3m4bg"
+path="res://.godot/imported/Sweep Burning 1.mp3-12f6fdf8b55f42a6b47f56dd67ca9cea.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Sweep Burning 1.mp3"
+dest_files=["res://.godot/imported/Sweep Burning 1.mp3-12f6fdf8b55f42a6b47f56dd67ca9cea.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

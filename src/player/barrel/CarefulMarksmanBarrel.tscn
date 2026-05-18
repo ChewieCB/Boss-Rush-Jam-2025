@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsr7gyu5w7ybg"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_7j35g"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_o0oe4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/laser_guided_effect.gd" id="3_dfwsl"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/safety_fold_effect.gd" id="5_fsj34"]
+[ext_resource type="Script" path="res://src/player/barrel/measured_shot_effect.gd" id="6_ttvet"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="7_aowsl"]
+
+[node name="CarefulMarksmanBarrel" type="Node3D"]
+script = ExtResource("1_7j35g")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GuidedHand" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_o0oe4")
+display_text_title = "Guided Hand"
+display_text_tag = "Keep aiming at the target"
+positive_desc = Array[String](["Bullet homing to aimed location"])
+negative_desc = Array[String](["-50% projectile speed"])
+icon_id = 57
+luck_triggers = Array[int]([6])
+
+[node name="LaserGuidedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("3_dfwsl")
+
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("7_aowsl")
+attribute = 3
+modify_value = -50.0
+is_perc = true
+
+[node name="SafetyFold" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_o0oe4")
+display_text_title = "Safety Fold"
+display_text_tag = "..know when to fold 'em"
+positive_desc = Array[String](["Gain 50% damage resistance during reload"])
+negative_desc = Array[String](["-50% reload speed"])
+icon_id = 59
+
+[node name="SafetyFoldEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("5_fsj34")
+
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("7_aowsl")
+attribute = 8
+modify_value = 50.0
+is_perc = true
+
+[node name="MeasuredShot" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_o0oe4")
+display_text_title = "Measured Shot"
+display_text_tag = "Stay calm. Wait for the best moment. Shoot when you are ready."
+positive_desc = Array[String](["Wait for 2 seconds to stablize and +200% damage for the next shot"])
+negative_desc = Array[String](["-50% damage when unstable", "+100% bullet spread when unstable"])
+icon_id = 19
+
+[node name="MeasuredShotEffect" type="Node3D" parent="EffectContainer/MeasuredShot"]
+script = ExtResource("6_ttvet")

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://c7jc72exa8eg2"]
+[gd_scene load_steps=9 format=3 uid="uid://c7jc72exa8eg2"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2a2qf"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_q7s8s"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_duuhv"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_307l2"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/sticky_bomb_effect.gd" id="5_qwmr5"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="6_j8ucp"]
 [ext_resource type="PackedScene" uid="uid://35lbaqwytewn" path="res://src/player/gun/projectiles/StickyBombProjectile.tscn" id="7_2jtxl"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/medical_payout_effect.gd" id="8_0by4g"]
@@ -14,15 +15,15 @@ script = ExtResource("1_2a2qf")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="BulletTime" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
-display_text_tag = "You are not Neo though"
-display_text_desc = "-50% projectile speed
-+25% damage"
-positive_desc = Array[String](["Increased damage"])
-negative_desc = Array[String](["Projectile speed decreased"])
+display_text_tag = "You are not N*o though"
+display_text_desc = "-80% projectile speed
++35% damage"
+positive_desc = Array[String](["+35% damage"])
+negative_desc = Array[String](["-80% projectile speed"])
 icon_id = 19
+luck_triggers = Array[int]([4, 5])
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("4_duuhv")
@@ -37,19 +38,17 @@ is_perc = true
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 25.0
+modify_value = 35.0
 is_perc = true
 
-[node name="StickyBomb" type="Node3D" parent="EffectContainer"]
-script = ExtResource("3_q7s8s")
+[node name="StickyBomb" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("explosive_dps_dealt_window_timer")]
+script = ExtResource("5_qwmr5")
+explosive_dps_dealt_window_timer = NodePath("DPSWindowTImer")
 display_text_title = "Sticky Bomb"
-display_text_tag = "Keep distance"
-display_text_desc = "+30% damage
--50% firerate
- Bullets stick to enemies and detonate after 2 seconds."
-positive_desc = Array[String](["Slightly increased damage", "Rounds stick and explode after 2s"])
-negative_desc = Array[String](["Slower firerate", "Explosions hurt you too"])
+display_text_tag = "Keep Your Distance!"
+display_text_desc = "Bullets stick to enemies, then detonate after 2 seconds."
 icon_id = 21
+luck_triggers = Array[int]([7, 7])
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("6_j8ucp")
@@ -67,13 +66,14 @@ attribute = 4
 modify_value = -50.0
 is_perc = true
 
+[node name="DPSWindowTImer" type="Timer" parent="EffectContainer/StickyBomb"]
+
 [node name="MedicalPayout" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("8_0by4g")
 display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"
-display_text_desc = "Store 1 HP every 100 damage dealt
-Recover HP on reload"
-positive_desc = Array[String](["Convert damage dealt into health on reload."])
-negative_desc = Array[String](["TODO: add a drawback"])
+positive_desc = Array[String](["Store 1 HP every 100 damage dealt", "Recover stored HP on reload"])
+negative_desc = Array[String](["Reload cost chip based on your current health"])
 icon_id = 20
+
+[connection signal="timeout" from="EffectContainer/StickyBomb/DPSWindowTImer" to="EffectContainer/StickyBomb" method="_on_dps_dealt_window_timer_timeout"]

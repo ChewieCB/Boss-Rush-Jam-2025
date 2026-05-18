@@ -5,7 +5,7 @@ extends GPUParticles3D
 var is_on_floor: bool = false
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if is_on_floor:
 		if floor_ray.is_colliding():
 			var floor_y = floor_ray.get_collision_point().y

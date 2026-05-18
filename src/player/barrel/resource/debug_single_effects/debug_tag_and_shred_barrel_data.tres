@@ -8,9 +8,9 @@
 script = ExtResource("6_441ka")
 barrel_id = 35
 barrel_name = "TagAndShred"
-barrel_desc = "Wear them down
-
-Reduced initial damage, but increased damage for every projectile hit target."
+barrel_desc = "Keep chipping at them
+"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_6f2qf")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_pnt7i")

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ntpty3yr1ali"]
+
+[ext_resource type="Texture2D" uid="uid://dlv6wfbrinq53" path="res://src/player/barrel/resource/sprite/pure_gamble.png" id="1_sic7u"]
+[ext_resource type="PackedScene" uid="uid://cni0oukv3jis3" path="res://src/player/barrel/PureGambleBarrel.tscn" id="2_8d67m"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_d7woh"]
+
+[resource]
+script = ExtResource("3_d7woh")
+barrel_id = 78
+barrel_name = "Pure Gamble"
+barrel_desc = "When you really believe in luck over skill."
+barrel_info_summary = "When you really believe in luck over skill."
+barrel_image = ExtResource("1_sic7u")
+barrel_cost = 1500
+barrel_prefab = ExtResource("2_8d67m")
+is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = true

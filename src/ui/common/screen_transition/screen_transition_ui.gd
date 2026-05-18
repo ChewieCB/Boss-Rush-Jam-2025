@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+signal transition_midpoint
 signal transition_finished
 
 @onready var ui: ColorRect = $UI/ColorRect
@@ -9,7 +10,9 @@ signal transition_finished
 
 
 func _ready() -> void:
-	transition_in(0.0)
+	pass
+	#_fill_screen()
+	#transition_in(0.0)
 
 
 func update_progress_bar(value: float) -> void:
@@ -51,12 +54,22 @@ func transition_out(duration: float = 0.7) -> void:
 
 
 func tween_transition(start: float, finish: float, duration: float = 0.7) -> void:
+	var diff: float = finish - start
 	var transition_tween := get_tree().create_tween()
 	transition_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	transition_tween.set_parallel(false)
 	transition_tween.tween_method(
-		_set_transition_height, start, finish, duration
+		_set_transition_height, start, start + diff / 2, duration / 2
+	)
+	transition_tween.tween_callback(_transition_midway)
+	transition_tween.tween_method(
+		_set_transition_height, start + diff / 2, finish, duration / 2
 	)
 	await transition_tween.finished
+
+
+func _transition_midway() -> void:
+	transition_midpoint.emit()
 
 
 func _set_transition_height(height: float) -> void:

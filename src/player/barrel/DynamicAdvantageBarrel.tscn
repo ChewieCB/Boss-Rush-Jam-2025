@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dy7nqvo7uq1ti"]
+[gd_scene load_steps=6 format=3 uid="uid://dy7nqvo7uq1ti"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_54i25"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="3_w70eq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_ayuco"]
-[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_tc2w0"]
 
 [node name="DynamicAdvantageBarrel" type="Node3D"]
 script = ExtResource("1_54i25")
@@ -22,7 +21,6 @@ display_text_tag = "Keep shooting"
 display_text_desc = "+5% firerate per 0.2s
 non-stop shooting"
 positive_desc = Array[String](["Firerate increases as you keep firing"])
-negative_desc = Array[String](["Burns through ammo faster"])
 icon_id = 24
 
 [node name="ExtendedDrum" type="Node3D" parent="EffectContainer"]
@@ -31,8 +29,8 @@ display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"
 display_text_desc = "+100% magazine size
 +200% reload time"
-positive_desc = Array[String](["Double magazine size"])
-negative_desc = Array[String](["Much slower reload speed"])
+positive_desc = Array[String](["+100% magazine size"])
+negative_desc = Array[String](["+200% reload speed"])
 icon_id = 23
 
 [node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrum"]
@@ -47,13 +45,19 @@ attribute = 8
 modify_value = 150.0
 is_perc = true
 
-[node name="ExplosiveBullet" type="Node3D" parent="EffectContainer"]
+[node name="ExplosiveBullet" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("dps_dealt_window_timer")]
 script = ExtResource("6_ayuco")
-damage = 10
-explosion_damage = ExtResource("7_tc2w0")
+damage = 30
+range = 2.5
+dps_dealt_window_timer = NodePath("DPSWindowTImer")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
-positive_desc = Array[String](["Rounds explode on impact"])
+positive_desc = Array[String](["Rounds explode on impact, deal flat 10 damage"])
 negative_desc = Array[String](["Explosive damage hurts you too"])
 icon_id = 22
+luck_triggers = Array[int]([2])
+
+[node name="DPSWindowTImer" type="Timer" parent="EffectContainer/ExplosiveBullet"]
+
+[connection signal="timeout" from="EffectContainer/ExplosiveBullet/DPSWindowTImer" to="EffectContainer/ExplosiveBullet" method="_on_dps_dealt_window_timer_timeout"]

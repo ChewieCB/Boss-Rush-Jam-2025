@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="GunFrameResource" load_steps=8 format=3 uid="uid://8jn7pqk44l08"]
+
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="1_4uh2v"]
+[ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_212x6"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="2_epain"]
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="4_hu574"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="5_ifvns"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="6_e4xa0"]
+[ext_resource type="AudioStream" uid="uid://bh8fwafto05bl" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ WITHCOIN1.mp3" id="7_2iyb7"]
+
+[resource]
+script = ExtResource("1_212x6")
+frame_name = "Shotgun"
+frame_id = 2
+frame_description = "Has high projectile count. Strong at close range."
+flavour_text = "This, is my boomstick!"
+shop_ui_sprite = ExtResource("4_hu574")
+reload_sfx = Array[AudioStream]([ExtResource("1_4uh2v"), ExtResource("2_epain")])
+shot_sfx = Array[AudioStream]([ExtResource("5_ifvns"), ExtResource("6_e4xa0"), ExtResource("7_2iyb7")])
+frame_cost = 0
+base_damage = 10
+base_projectile_amount = 8
+base_firerate = 1.5
+base_magazine_size = 10
+base_reload_time = 2.0
+base_spin_time = 1.0
+base_spread_angle = 8.0
+is_hitscan = false
+base_projectile_speed = 50.0
+recoil_amount = 0.1
+screenshake_amount = 0.2

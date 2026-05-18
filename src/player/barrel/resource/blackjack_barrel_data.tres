@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dgt2ro31j7l13"]
+
+[ext_resource type="Texture2D" uid="uid://dpkb6mkg84k8p" path="res://src/player/barrel/resource/sprite/blackjack.png" id="1_2vd0e"]
+[ext_resource type="PackedScene" uid="uid://bue0axdtvr84v" path="res://src/player/barrel/BlackjackBarrel.tscn" id="2_eibd5"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_inasw"]
+
+[resource]
+script = ExtResource("3_inasw")
+barrel_id = 74
+barrel_name = "Blackjack"
+barrel_desc = "Grant you effect similar to its owner."
+barrel_info_summary = "Grant you effect similar to its owner, Blackjack."
+barrel_image = ExtResource("1_2vd0e")
+barrel_cost = 1500
+barrel_prefab = ExtResource("2_eibd5")
+is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = true

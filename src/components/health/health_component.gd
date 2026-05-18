@@ -49,7 +49,7 @@ func _ready() -> void:
 	initialize_health()
 
 
-func damage(_damage: float, _color: Color = Color.WHITE) -> void:
+func damage(_damage: float, color: Color = Color.WHITE, text_scale_pop: float = 1.3, detail_text: String = "") -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 	if enabled:
 		if not is_invincible:
@@ -57,12 +57,17 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 		if show_damage_text and not is_invincible:
 			if not text_effect:
 				return
+			
+			var text_str: String = str(_damage)
+			if detail_text:
+				text_str = detail_text + "\n" + text_str
+			
 			if text_effect_location:
-				create_text(text_effect_location.global_position, str(_damage), _color)
+				create_text(text_effect_location.global_position, text_str, color, text_scale_pop)
 			else:
-				create_text(self.global_position, str(_damage), _color)
+				create_text(self.global_position, text_str, color, text_scale_pop)
 
-func heal(health: float, _color: Color = Color.GREEN) -> void:
+func heal(health: float, color: Color = Color.GREEN, text_scale_pop: float = 1.3) -> void:
 	if enabled:
 		var health_amount: float = health * heal_multiplier
 		if is_owned_by_player:
@@ -72,18 +77,18 @@ func heal(health: float, _color: Color = Color.GREEN) -> void:
 			if not text_effect:
 				return
 			if text_effect_location:
-				create_text(text_effect_location.global_position, str(health), _color)
+				create_text(text_effect_location.global_position, str(health), color, text_scale_pop)
 			else:
-				create_text(self.global_position, str(health), _color)
+				create_text(self.global_position, str(health), color, text_scale_pop)
 
 
 func initialize_health() -> void:
 	current_health = max_health
 
-func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, size: float = 92.0) -> void:
+func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, text_scale_pop: float = 1.3, text_size: float = 92.0) -> void:
 	if GameManager.hide_damage_number:
 		return
-	var text_inst = text_effect.instantiate()
+	var text_inst: HitText = text_effect.instantiate()
 	get_parent().add_child(text_inst)
 	var variance = 1
 	var rand_x = randf_range(-variance, variance)
@@ -91,6 +96,8 @@ func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, size: f
 	var rand_z = randf_range(-variance, variance)
 	text_inst.text = text
 	text_inst.modulate = color
-	text_inst.font_size = size
-	text_inst.outline_size = size / 2
+	text_inst.scale_pop = text_scale_pop
+	text_inst.font_size = int(text_size)
+	text_inst.outline_size = round(text_size / 2.0)
 	text_inst.global_position = pos + Vector3(rand_x, rand_y, rand_z)
+	text_inst.activate()

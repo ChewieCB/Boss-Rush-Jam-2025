@@ -1,21 +1,5 @@
 extends BaseBarrelEffect
 
-enum AttributeNameEnum {
-	NONE,
-	DAMAGE,
-	PROJECTILE_AMOUNT,
-	PROJECTILE_SPEED,
-	FIRERATE,
-	MAGAZINE_SIZE,
-	IS_HITSCAN,
-	SPREAD_ANGLE,
-	RELOAD_TIME,
-	RICOCHET_COUNT,
-	HOMING_STRENGTH,
-	RECOIL,
-	SCREENSHAKE,
-}
-
 @export var attribute: AttributeNameEnum
 ## By default is flat value. If is_perc is true, 50 = 50%. For boolean value, 0 for false and 1 for true
 @export var modify_value: float
@@ -49,6 +33,9 @@ func on_effect_set():
 		AttributeNameEnum.SPREAD_ANGLE:
 			owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(
 				owner_barrel.owner_gun.modified_spread_angle, modify_value, is_perc, false)
+		AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+			owner_barrel.owner_gun.modified_spread_horizontal_bias = calculate_new_value(
+				owner_barrel.owner_gun.modified_spread_horizontal_bias, modify_value, is_perc, false)
 		AttributeNameEnum.RICOCHET_COUNT:
 			owner_barrel.owner_gun.modified_ricochet_count = calculate_new_value(
 				owner_barrel.owner_gun.modified_ricochet_count, modify_value, is_perc, true)
@@ -65,12 +52,13 @@ func on_effect_set():
 			owner_barrel.owner_gun.modified_screenshake = calculate_new_value(
 				owner_barrel.owner_gun.modified_screenshake, modify_value, is_perc, false)
 
+
 func on_fire_rate_check():
 	super ()
-	match attribute:
-		AttributeNameEnum.FIRERATE:
-			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
-				owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
+	#match attribute:
+		#AttributeNameEnum.FIRERATE:
+			#owner_barrel.owner_gun.modified_firerate = calculate_new_value(
+				#owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
 
 func on_prepare_to_fire():
 	super ()
@@ -94,6 +82,9 @@ func on_prepare_to_fire():
 		AttributeNameEnum.SPREAD_ANGLE:
 			owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(
 				owner_barrel.owner_gun.modified_spread_angle, modify_value, is_perc, false)
+		AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+			owner_barrel.owner_gun.modified_spread_horizontal_bias = calculate_new_value(
+				owner_barrel.owner_gun.modified_spread_horizontal_bias, modify_value, is_perc, false)
 		AttributeNameEnum.RICOCHET_COUNT:
 			owner_barrel.owner_gun.modified_ricochet_count = calculate_new_value(
 				owner_barrel.owner_gun.modified_ricochet_count, modify_value, is_perc, true)
@@ -101,7 +92,6 @@ func on_prepare_to_fire():
 			owner_barrel.owner_gun.modified_homing_strength = calculate_new_value(
 				owner_barrel.owner_gun.modified_homing_strength, modify_value, is_perc, false)
 		AttributeNameEnum.RECOIL:
-			print("recoil ", owner_barrel.owner_gun.modified_recoil, modify_value, is_perc)
 			owner_barrel.owner_gun.modified_recoil = calculate_new_value(
 				owner_barrel.owner_gun.modified_recoil, modify_value, is_perc, false)
 		AttributeNameEnum.SCREENSHAKE:
@@ -111,14 +101,25 @@ func on_prepare_to_fire():
 
 func on_reload_start():
 	super ()
-	match attribute:
-		AttributeNameEnum.RELOAD_TIME:
-			owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
-				owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
+	#match attribute:
+		#AttributeNameEnum.MAGAZINE_SIZE:
+			#owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
+				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
+		#AttributeNameEnum.RELOAD_TIME:
+			#owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
+				#owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
 
 func on_reload_end():
 	super ()
-	match attribute:
-		AttributeNameEnum.MAGAZINE_SIZE:
-			owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
-				owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
+	#match attribute:
+		#AttributeNameEnum.MAGAZINE_SIZE:
+			#owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
+				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
+
+
+func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
+	super (_enemy, projectile)
+	const LUCK_ON_RICOCHET = 3
+	if projectile.is_ricochet_shot and !(_enemy is Player):
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.RICOCHET__RICOSHOT)
+		LuckHandler.increase_luck(LUCK_ON_RICOCHET, "+3 Ricoshot!")

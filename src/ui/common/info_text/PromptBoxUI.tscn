@@ -5,44 +5,44 @@
 [ext_resource type="PackedScene" uid="uid://di7bmsw28rqlg" path="res://src/ui/common/info_text/PromptBoxLineContainer.tscn" id="4_p838e"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="6_kamy6"]
 
-[node name="PromptBox" type="Control"]
+[node name="PromptBox" type="Control" node_paths=PackedStringArray("active_line_container")]
 process_mode = 3
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_khrjr")
 elements = Array[String](["Press", "[shoot]", "to shoot"])
 input_prompt_prefab = ExtResource("6_kamy6")
 line_container = ExtResource("4_p838e")
+active_line_container = NodePath("PanelContainer/MarginContainer/VBoxContainer/MarginContainer")
 
 [node name="PanelContainer" type="MarginContainer" parent="."]
-custom_minimum_size = Vector2(400, 160)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -208.0
-offset_right = 200.0
-offset_bottom = 208.0
+offset_left = -32.0
+offset_top = -25.0
+offset_right = 32.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_bottom = 256
+theme_override_constants/margin_left = 768
+theme_override_constants/margin_bottom = 128
 
 [node name="Background" type="ColorRect" parent="PanelContainer"]
-custom_minimum_size = Vector2(400, 160)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 0.47451)
+color = Color(0, 0, 0, 0.356863)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/Background"]
+visible = false
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 custom_minimum_size = Vector2(400, 160)
 layout_mode = 1
@@ -68,3 +68,5 @@ mouse_filter = 2
 
 [node name="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_p838e")]
 layout_mode = 2
+
+[editable path="PanelContainer/MarginContainer/VBoxContainer/MarginContainer"]

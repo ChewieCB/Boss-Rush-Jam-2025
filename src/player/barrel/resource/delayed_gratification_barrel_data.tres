@@ -8,16 +8,11 @@
 script = ExtResource("3_ekiv5")
 barrel_id = 13
 barrel_name = "Delayed Gratification"
-barrel_desc = "[b]Delayed Gratification Barrel[/b]
-Be patient for some big returns.
-
-Possible rolls:
-[ul]
-Sticky Bomb : Bullets stick to enemies and detonate after 2 seconds.
-Bullet Time: Bullets travel slower, but heavily increases their damage.
-Medical Payout: Accumulate dealt damage to convert into health on reload.
-[/ul]"
+barrel_desc = "It reward user who has patience. Or elaborated setup."
+barrel_info_summary = "Be patient for some big returns."
 barrel_image = ExtResource("1_4n2ic")
 barrel_cost = 1230
 barrel_prefab = ExtResource("1_i2um6")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

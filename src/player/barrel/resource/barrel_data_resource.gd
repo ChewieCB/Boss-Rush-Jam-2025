@@ -1,4 +1,4 @@
-extends Resource
+extends BaseDataResource
 class_name BarrelDataResource
 
 ## Keep adding new item at the bottom, dont add at the middle of list
@@ -79,7 +79,13 @@ enum BarrelIdEnum {
 	DEBUG_AMERICAN_RIFLE,
 	DEBUG_RUSSIAN_RIFLE,
 	DEBUG_LMG,
-	DEBUG_VECTOR
+	DEBUG_VECTOR,
+	
+	BLACKJACK,
+	DUBIOUS_BENEFIT,
+	CAREFUL_MARKSMAN,
+	CONTROLLED_RISK,
+	PURE_GAMBLE
 }
 
 @export var barrel_id: BarrelIdEnum
@@ -90,3 +96,5 @@ enum BarrelIdEnum {
 @export var barrel_cost: int = 200
 @export var barrel_prefab: PackedScene
 @export var is_archetype_barrel: bool = false
+@export var reloads_before_spin: int = 3
+@export var locked_for_demo: bool = false

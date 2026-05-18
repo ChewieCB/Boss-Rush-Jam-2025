@@ -8,7 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://dnkyiungq7xbo" path="res://src/maps/lobby/assets/Lift Button Press 2.mp3" id="6_etw1e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vmvmc"]
-size = Vector3(0.911914, 0.257544, 0.4)
+size = Vector3(0.911914, 2, 0.4)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_f6eaw"]
 _surfaces = [{
@@ -100,9 +100,10 @@ stream_1/stream = ExtResource("6_etw1e")
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("3_3558c")
+interact_dist = 3.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0691895, 0.00640867, 1.49012e-08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0691895, -0.122363, 1.49012e-08)
 shape = SubResource("BoxShape3D_vmvmc")
 
 [node name="ElevatorButton" type="MeshInstance3D" parent="."]

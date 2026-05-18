@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dcshtq5yyxdk1"
+path="res://.godot/imported/Wrench Slam AOE Impact.mp3-2ddfcd7c0bde53f07940c66612286470.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3"
+dest_files=["res://.godot/imported/Wrench Slam AOE Impact.mp3-2ddfcd7c0bde53f07940c66612286470.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

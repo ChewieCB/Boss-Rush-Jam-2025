@@ -188,6 +188,55 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
+[node name="ControllerDeadzone" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -21.0
+offset_right = 220.0
+offset_bottom = 21.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "Controller Deadzone"
+
+[node name="ControlerDeadzoneSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -472.0
+offset_top = -12.0
+offset_right = -96.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("4_fifb6")
+max_value = 1.0
+step = 0.01
+value = 0.1
+
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "0.1"
+horizontal_alignment = 1
+
 [node name="ControllerAimAssistSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
@@ -421,7 +470,7 @@ offset_left = 296.0
 offset_top = 4.0
 offset_right = 403.0
 offset_bottom = 35.0
-selected = 2
+selected = 5
 allow_reselect = true
 item_count = 6
 popup/item_0/text = "30"
@@ -453,7 +502,7 @@ offset_left = 296.0
 offset_top = 2.0
 offset_right = 410.0
 offset_bottom = 33.0
-selected = 1
+selected = 0
 allow_reselect = true
 item_count = 3
 popup/item_0/text = "Disabled"
@@ -871,6 +920,70 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
+[node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/SkipTutorial"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Skip Tutorial"
+
+[node name="SkipTutorialToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/SkipTutorial"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="DemoMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DemoMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Demo Mode"
+
+[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/DemoMode"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="DemoModeTimeout" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Demo Mode Timeout"
+
+[node name="SpinBox" type="SpinBox" parent="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -14.0
+offset_right = -10.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 300.0
+
 [node name="FreeMoney" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -913,6 +1026,7 @@ theme_override_font_sizes/font_size = 26
 text = "Inventory always accessible"
 
 [node name="AlwaysInventoryToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/AlwaysInventory"]
+layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
 offset_right = 332.0
@@ -937,6 +1051,31 @@ offset_top = 6.0
 offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
+
+[node name="BarrelSpinMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Barrel Spin Mode"
+
+[node name="BarrelSpinModeDropdown" type="OptionButton" parent="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 372.0
+offset_bottom = 34.0
+selected = 2
+item_count = 3
+popup/item_0/text = "On Reload"
+popup/item_1/text = "Manual Spin"
+popup/item_1/id = 1
+popup/item_2/text = "Seeded Auto-spin"
+popup/item_2/id = 2
 
 [node name="Freecam" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
@@ -1045,6 +1184,8 @@ text = "Back"
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_tab_container_tab_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/ControlerDeadzoneSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/ControlerDeadzoneSlider" to="." method="_on_controler_deadzone_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider" to="." method="_on_aim_assist_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding/EditKeybindButton" to="." method="play_button_hover_sfx"]
@@ -1087,11 +1228,19 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="_on_skip_tutorial_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="_on_demo_mode_toggle_toggled"]
+[connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox" to="." method="_on_demo_timeout_value_changed"]
 [connection signal="pressed" from="TabContainer/DEBUG/VBoxContainer/FreeMoney/FreeMoneyButton" to="." method="_on_free_money_button_pressed"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="_on_always_inventory_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="item_selected" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]

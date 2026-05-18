@@ -1,14 +1,14 @@
-[gd_scene load_steps=100 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=135 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
+[ext_resource type="Texture2D" uid="uid://cwskh10bq3msx" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Pulled_Lever.png" id="3_dsptn"]
 [ext_resource type="AudioStream" uid="uid://biv0t34kylfov" path="res://src/bosses/slots/assets/sfx/Basic Long Slot Machine Improved.mp3" id="3_o5exi"]
 [ext_resource type="Texture2D" uid="uid://bbblp8vkvd3no" path="res://src/bosses/slots/assets/icons/temp/flip_full.png" id="3_say4o"]
 [ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="4_6oj0s"]
-[ext_resource type="Texture2D" uid="uid://8rlesfd54n8r" path="res://src/bosses/slots/assets/icons/temp/suit_hearts.png" id="4_oaydl"]
 [ext_resource type="AudioStream" uid="uid://djvdypgx1y3j6" path="res://src/bosses/slots/assets/sfx/Basic Short Slot Machine Improved.mp3" id="4_vhne6"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="5_3q2k6"]
-[ext_resource type="AudioStream" uid="uid://vjjoalu8btt5" path="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3" id="5_lghps"]
+[ext_resource type="AudioStream" uid="uid://vjjoalu8btt5" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS TELEGRAPH COINS ISOLATED.mp3" id="5_lghps"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_lu46i"]
 [ext_resource type="Texture2D" uid="uid://bgeh57tcie1pi" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss.png" id="5_wqq5t"]
 [ext_resource type="AudioStream" uid="uid://6j2g27g0yi0d" path="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST COINS.mp3" id="6_q1utd"]
@@ -24,26 +24,34 @@
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
 [ext_resource type="Texture2D" uid="uid://b5j7lvip5mjnj" path="res://src/bosses/slots/assets/icons/bull-horns.png" id="13_nh3cu"]
+[ext_resource type="Texture2D" uid="uid://cof4mcbiwepqn" path="res://src/bosses/slots/assets/icons/ringing-bell.png" id="13_uxh3c"]
 [ext_resource type="Texture2D" uid="uid://11i81ijkmtni" path="res://src/bosses/slots/assets/icons/unlit-bomb.png" id="15_gni4v"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
 [ext_resource type="Texture2D" uid="uid://cmleylm1metko" path="res://src/bosses/slots/assets/icons/pinball.png" id="16_xk200"]
 [ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="17_6xi00"]
 [ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="18_0lbrd"]
 [ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="19_aidds"]
+[ext_resource type="AudioStream" uid="uid://b8oj1kfldgvko" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 1.mp3" id="19_ar317"]
+[ext_resource type="AudioStream" uid="uid://p38ber7fs63l" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3" id="20_ej555"]
 [ext_resource type="AudioStream" uid="uid://ba3k7kprithnp" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3" id="20_tmjxh"]
+[ext_resource type="AudioStream" uid="uid://b6hry7fd6c60y" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 3.mp3" id="21_1qne4"]
 [ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="21_wokd2"]
 [ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="22_0em2w"]
 [ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="23_sjuev"]
 [ext_resource type="Texture2D" uid="uid://dndtyj8hh404v" path="res://assets/sprite/aoe_markers/aoe_ring.png" id="25_4viup"]
 [ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="26_27dae"]
 [ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="26_ttq7b"]
+[ext_resource type="PackedScene" path="res://src/bosses/slots/bell/BellFlare.tscn" id="27_k7143"]
 [ext_resource type="AudioStream" uid="uid://ddhs0duid8pk8" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 2.mp3" id="27_q6v3x"]
 [ext_resource type="AudioStream" uid="uid://xuyc45uopqlk" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 3.mp3" id="28_d1bvs"]
 [ext_resource type="AudioStream" uid="uid://di0dji8wpexg6" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 1.mp3" id="29_757fw"]
 [ext_resource type="AudioStream" uid="uid://boyjiwip3m72n" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3" id="30_agl3v"]
 [ext_resource type="AudioStream" uid="uid://pib154j0akr3" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 3.mp3" id="31_opgs0"]
 [ext_resource type="AudioStream" uid="uid://dy7dp3qgxrb1n" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK 2.mp3" id="32_1rwgx"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="32_g6j0f"]
 [ext_resource type="AudioStream" uid="uid://d3ibk35sllumq" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK 3.mp3" id="33_31vh7"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="33_a5o10"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="34_3uy68"]
 [ext_resource type="AudioStream" uid="uid://b15by5itg11gr" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK.mp3" id="34_otbm5"]
 [ext_resource type="AudioStream" uid="uid://c1t5q0u05luro" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 1.mp3" id="36_pqkkl"]
 [ext_resource type="AudioStream" uid="uid://b7ldij2udgm6r" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 2.mp3" id="37_0sig5"]
@@ -55,8 +63,10 @@
 [ext_resource type="AudioStream" uid="uid://bra43p42twq7c" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 7.mp3" id="42_vntjg"]
 [ext_resource type="AudioStream" uid="uid://b3a487rtqugc6" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 8.mp3" id="43_2donj"]
 [ext_resource type="AudioStream" uid="uid://dsk2dfx34iy6m" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 1.mp3" id="45_ishi6"]
+[ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="46_36cao"]
 [ext_resource type="AudioStream" uid="uid://b1h5uugbn6oed" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 2.mp3" id="46_vgcme"]
 [ext_resource type="AudioStream" uid="uid://dtumhkhlkde2g" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 3.mp3" id="47_hafh8"]
+[ext_resource type="PackedScene" path="res://src/bosses/slots/SlotCrackDecal.tscn" id="47_xyq4h"]
 [ext_resource type="PackedScene" uid="uid://xsg605o1mpcb" path="res://src/bosses/base/attacks/ranged/RicochetPinballProjectile.tscn" id="48_1shbk"]
 [ext_resource type="AudioStream" uid="uid://bu1ukh2e2to0u" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 4.mp3" id="48_qbsnc"]
 [ext_resource type="AudioStream" uid="uid://ek641dpub6ow" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 5.mp3" id="49_sigie"]
@@ -67,10 +77,15 @@
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
 [ext_resource type="Texture2D" uid="uid://cy008ijk50dtk" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_hit.png" id="62_ci6xi"]
-[ext_resource type="AnimationLibrary" uid="uid://cbukxypul85wr" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="65_q3x8w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="66_4ktje"]
+[ext_resource type="Texture2D" uid="uid://doyroroqrxl6l" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Gun_Only.png" id="66_h52w4"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
+[ext_resource type="Texture2D" uid="uid://c40sn6u84htf2" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_No_Gun.png" id="74_lmlvi"]
+[ext_resource type="Texture2D" uid="uid://c3hh12ccy487b" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_1.png" id="83_kw510"]
+[ext_resource type="PackedScene" path="res://src/bosses/slots/SlotDustHover.tscn" id="84_3o44s"]
+[ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="84_4w3pm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -182,18 +197,787 @@ guard = SubResource("Resource_uhsr0")
 radius = 4.0
 height = 8.0
 
+[sub_resource type="Animation" id="Animation_1pgvl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_wqq5t")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.9, -0.28, -0.1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_m1stq"]
+resource_name = "charge_telegraph"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("83_kw510"), ExtResource("84_4w3pm")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.8, 0.6, 0.8), Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.296015, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5n3pr"]
+resource_name = "coin_shot_telegraph"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.2, 1.2, 1.2), Vector3(1.6, 1.6, 1.6), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.85567, 0, 1), Color(1, 0.412919, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.9, -0.28, -0.1), Vector3(1.97397, -0.193698, -0.1), Vector3(1.88767, -0.16904, -0.1), Vector3(1.93699, -0.243014, -0.1), Vector3(1.87534, -0.218356, -0.1), Vector3(1.93699, -0.218356, -0.1), Vector3(1.9, -0.28, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_mppog"]
 length = 0.1
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
-_data = {
-"death": SubResource("Animation_mppog")
+[sub_resource type="Animation" id="Animation_gp6ku"]
+resource_name = "diamond_shot_telegraph"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.2, 1.2, 1.2), Vector3(1.6, 1.6, 1.6), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 0.989732, 1, 1), Color(0, 0.114498, 1, 1), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.9, -0.28, -0.1), Vector3(1.97397, -0.193698, -0.1), Vector3(1.88767, -0.16904, -0.1), Vector3(1.93699, -0.243014, -0.1), Vector3(1.87534, -0.218356, -0.1), Vector3(1.93699, -0.218356, -0.1), Vector3(1.9, -0.28, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
 }
 
-[node name="BossSlots" node_paths=PackedStringArray("elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_qxyx0")]
+[sub_resource type="Animation" id="Animation_kh5dm"]
+resource_name = "quick_bomb_shot"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.2, 1.2, 1.2), Vector3(1.6, 1.6, 1.6), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.85567, 0, 1), Color(1, 0.412919, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_cf6fg"]
+resource_name = "quick_coin_shot"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.2, 1.2, 1.2), Vector3(1.6, 1.6, 1.6), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.85567, 0, 1), Color(1, 0.412919, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_600pn"]
+resource_name = "summon_bell_raise_gun"
+length = 0.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.9, -0.28, -0.1), Vector3(1.9, 0.2, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lvnig"]
+resource_name = "summon_bell_shoot"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.2, 1.2, 1.2), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.9, 0.2, -0.1), Vector3(1.9, -0.1, -0.1), Vector3(1.9, 0.2, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
+_data = {
+"RESET": SubResource("Animation_1pgvl"),
+"charge_telegraph": SubResource("Animation_m1stq"),
+"coin_shot_telegraph": SubResource("Animation_5n3pr"),
+"death": SubResource("Animation_mppog"),
+"diamond_shot_telegraph": SubResource("Animation_gp6ku"),
+"quick_bomb_shot": SubResource("Animation_kh5dm"),
+"quick_coin_shot": SubResource("Animation_cf6fg"),
+"summon_bell_raise_gun": SubResource("Animation_600pn"),
+"summon_bell_shoot": SubResource("Animation_lvnig")
+}
+
+[sub_resource type="Gradient" id="Gradient_1uxvx"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u81y5"]
+gradient = SubResource("Gradient_1uxvx")
+
+[sub_resource type="Gradient" id="Gradient_ahqq8"]
+offsets = PackedFloat32Array(0, 0.801527, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.371094, 0.371094, 0.371094, 1, 1, 1, 1, 0.466667)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5bleu"]
+gradient = SubResource("Gradient_ahqq8")
+
+[sub_resource type="Curve" id="Curve_v4c7c"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.587329, 0.501806), -3.14482, -3.14482, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_28epx"]
+curve = SubResource("Curve_v4c7c")
+
+[sub_resource type="Curve" id="Curve_cy6xi"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_alkr5"]
+curve = SubResource("Curve_cy6xi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s7jl4"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+angle_max = 90.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 3, 0)
+scale_min = 0.7
+scale_curve = SubResource("CurveTexture_28epx")
+color = Color(1, 1, 1, 0.458824)
+color_ramp = SubResource("GradientTexture1D_5bleu")
+color_initial_ramp = SubResource("GradientTexture1D_u81y5")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
+turbulence_influence_over_life = SubResource("CurveTexture_alkr5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3d7j"]
+transparency = 1
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_udcdq"]
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cCAAAnQ/fuugIAAAAAzYBJAQAAFSTpJFoAAADqoQAAAAAAAPbrpTbZAAAA///keh8BAAAa8Oq7TgEAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_t626q"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": SubResource("StandardMaterial3D_t3d7j"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_udcdq")
+
+[node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
+pulled_lever_sprite = ExtResource("3_dsptn")
 DESIRED_HEIGHT = 3.1
 DROP_FACTOR = 1.0
 SLOT_TICKS = 20
@@ -208,7 +992,7 @@ sfx_slot_pick_diamond = ExtResource("9_qwmyu")
 sfx_slot_pick_cherry = ExtResource("10_88yvd")
 sfx_slot_pick_pinball = ExtResource("6_q1utd")
 icon_coin = ExtResource("3_say4o")
-icon_bell = ExtResource("4_oaydl")
+icon_bell = ExtResource("13_uxh3c")
 icon_charge = ExtResource("13_nh3cu")
 icon_diamond = ExtResource("4_6oj0s")
 icon_cherry_bomb = ExtResource("15_gni4v")
@@ -217,17 +1001,22 @@ coin_damage = 2.0
 coin_speed = 50.0
 coin_projectile = ExtResource("16_52y3v")
 coin_shots_per_burst = 8
-num_bursts = 2
-delay_between_burst = 0.6
+coin_burst_repeat = 3
+coin_firerate = 10.0
+coin_spread = 15.0
+delay_between_coin_burst = 0.5
+sfx_coin_gun_blast = Array[AudioStream]([ExtResource("19_ar317"), ExtResource("20_ej555"), ExtResource("21_1qne4")])
 sfx_coin_shot = Array[AudioStream]([ExtResource("17_6xi00"), ExtResource("18_0lbrd"), ExtResource("19_aidds"), ExtResource("20_tmjxh"), ExtResource("21_wokd2"), ExtResource("22_0em2w"), ExtResource("23_sjuev")])
 bell_damage = 20.0
 bell_scene = ExtResource("9_6qwni")
+bell_flare_prefab = ExtResource("27_k7143")
 bell_aoe_marker_ring = ExtResource("25_4viup")
 bell_aoe_marker_arrows = ExtResource("26_27dae")
 drop_shadow_material = SubResource("ShaderMaterial_o7nhx")
 bell_shadow_time = 1.4
 bell_spawn_area_radius = 28.0
 bells_to_spawn = 4
+sfx_shoot_bell_flare = Array[AudioStream]([ExtResource("32_g6j0f"), ExtResource("33_a5o10"), ExtResource("34_3uy68")])
 sfx_bell_windup = Array[AudioStream]([ExtResource("26_ttq7b"), ExtResource("27_q6v3x"), ExtResource("28_d1bvs")])
 sfx_bell_impact = Array[AudioStream]([ExtResource("29_757fw"), ExtResource("30_agl3v"), ExtResource("31_opgs0")])
 swipe_damage = 5.0
@@ -237,13 +1026,17 @@ sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_3
 charge_damage = 10.0
 charge_knockback = 50.0
 min_charge_distance = 10.0
+speedline_vfx_prefab = ExtResource("46_36cao")
+crack_decal_prefab = ExtResource("47_xyq4h")
 sfx_charge = Array[AudioStream]([ExtResource("37_cawc0")])
 sfx_charge_impact = Array[AudioStream]([])
 diamond_damage = 3.0
-diamond_speed = 35.0
+diamond_speed = 20.0
+diamond_homing_speed = 40.0
+diamond_spread = 30.0
 diamond_projectile = ExtResource("11_dqr52")
-diamond_shots_per_attack = 12
-diamond_shot_time = 1.3
+diamond_shots_per_attack = 7
+sfx_diamond_gun_blast = Array[AudioStream]([ExtResource("19_ar317"), ExtResource("20_ej555"), ExtResource("21_1qne4")])
 sfx_diamond_shot = Array[AudioStream]([ExtResource("36_pqkkl"), ExtResource("37_0sig5"), ExtResource("38_hfhsu"), ExtResource("39_gde5g"), ExtResource("40_8wl1k"), ExtResource("41_182io"), ExtResource("42_vntjg"), ExtResource("43_2donj")])
 pinball_damage = 3.0
 pinball_speed = 300.0
@@ -266,9 +1059,22 @@ chip_value_to_heal_ratio = 0.5
 boss_id = 1
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
+status_resist = {
+1: 1000,
+2: 1000,
+3: 1000,
+4: 500,
+5: 2000
+}
+increased_status_tolerance = {
+1: 500,
+2: 500,
+3: 500,
+4: 250,
+5: 1500
+}
 barrel_to_drop = ExtResource("11_5va1t")
-sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12")]
+sfx_players = [NodePath("SFXPlayerHolder/SFXPlayer"), NodePath("SFXPlayerHolder/SFXPlayer2"), NodePath("SFXPlayerHolder/SFXPlayer3"), NodePath("SFXPlayerHolder/SFXPlayer4"), NodePath("SFXPlayerHolder/SFXPlayer5"), NodePath("SFXPlayerHolder/SFXPlayer6"), NodePath("SFXPlayerHolder/SFXPlayer7"), NodePath("SFXPlayerHolder/SFXPlayer8"), NodePath("SFXPlayerHolder/SFXPlayer9"), NodePath("SFXPlayerHolder/SFXPlayer10"), NodePath("SFXPlayerHolder/SFXPlayer11"), NodePath("SFXPlayerHolder/SFXPlayer12")]
 sfx_awaken = ExtResource("51_nikje")
 sfx_hit = Array[AudioStream]([ExtResource("53_c2xtu"), ExtResource("54_56pdr"), ExtResource("55_5buyr"), ExtResource("56_ft1nf"), ExtResource("57_f27rp")])
 sfx_death = ExtResource("67_pi67a")
@@ -278,9 +1084,12 @@ attack_recovery_time = 0.5
 telegraph_time = 0.4
 projectiles_per_phase = 8
 delay_per_projectile = 0.2
+TURN_SPEED_FAST = 12.0
+TURN_SPEED_SLOW = 10.0
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 texture = ExtResource("5_wqq5t")
 
 [node name="SlotIcons" type="Node3D" parent="Sprite3D" index="0"]
@@ -300,8 +1109,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 billboard = 2
 texture = ExtResource("4_6oj0s")
 
+[node name="GunOnlySprite" type="Sprite3D" parent="Sprite3D" index="1"]
+transform = Transform3D(1.01626, 0.264044, 0, -0.264044, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+visible = false
+layers = 2
+billboard = 2
+texture = ExtResource("66_h52w4")
+
 [node name="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("CapsuleShape3D_vg3vh")
 
 [node name="DebugMesh" parent="." index="2"]
@@ -311,12 +1127,15 @@ mesh = SubResource("SphereMesh_unuxb")
 [node name="MarkerPivot" type="Node3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
 
-[node name="Marker3D" type="Marker3D" parent="MarkerPivot" index="0"]
+[node name="ProjectileSpawnMarker" type="Marker3D" parent="MarkerPivot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/Marker3D" index="0"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/ProjectileSpawnMarker" index="0"]
 visible = false
 mesh = SubResource("SphereMesh_lr0sl")
+
+[node name="ExplosionPoly" parent="MarkerPivot/ProjectileSpawnMarker" index="1" instance=ExtResource("65_q3x8w")]
+free_on_finished = false
 
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true
@@ -1226,88 +2045,106 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 [node name="DebugDistanceLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
-[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
+[node name="SFXPlayerHolder" type="Node3D" parent="." index="14"]
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="0"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="15"]
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="1"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="16"]
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="2"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="17"]
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="3"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="18"]
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="4"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="19"]
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="5"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="20"]
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="6"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="21"]
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="7"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="22"]
+[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="8"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="23"]
+[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="9"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="24"]
+[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="10"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="25"]
+[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="11"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 shape = SubResource("CapsuleShape3D_o53xj")
 
-[node name="AnimationPlayer" parent="." index="32"]
+[node name="AnimationPlayer" parent="." index="21"]
 libraries = {
-"": SubResource("AnimationLibrary_wocs5"),
-"slot_boss_anims": ExtResource("64_5u1vo")
+"": SubResource("AnimationLibrary_wocs5")
 }
 
-[node name="AbsorbChipTimer" type="Timer" parent="." index="34"]
+[node name="AbsorbChipTimer" type="Timer" parent="." index="23"]
+
+[node name="FloorRaycast" type="RayCast3D" parent="." index="26"]
+exclude_parent = false
+
+[node name="Phase2Smoke" type="GPUParticles3D" parent="." index="27"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.36659, 0)
+emitting = false
+amount = 64
+lifetime = 4.0
+explosiveness = 0.3
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_s7jl4")
+draw_pass_1 = SubResource("ArrayMesh_t626q")
+
+[node name="SlotDustHover" parent="." index="28" instance=ExtResource("84_3o44s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = null
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

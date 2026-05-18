@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b2s2hqe5av45a"
+path="res://.godot/imported/GUN EXTRAS! EXPLODNG BULLETS.mp3-528fd7d5f35de2b794a85b69c186e3c4.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/explosive_shot/GUN EXTRAS! EXPLODNG BULLETS.mp3"
+dest_files=["res://.godot/imported/GUN EXTRAS! EXPLODNG BULLETS.mp3-528fd7d5f35de2b794a85b69c186e3c4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

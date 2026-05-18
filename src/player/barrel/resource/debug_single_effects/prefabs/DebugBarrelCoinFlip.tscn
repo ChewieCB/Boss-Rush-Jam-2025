@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2ouovdoh77hg"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fn18t"]
+[ext_resource type="Script" path="res://src/player/barrel/coin_flip_effect.gd" id="2_rdqf2"]
+
+[node name="DebugBarrelCoinFlip" type="Node3D"]
+script = ExtResource("1_fn18t")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CoinFlip" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_rdqf2")
+display_text_title = "Coin Flip"
+display_text_tag = "Toss and see"
+positive_desc = Array[String](["50% chance to double your damage"])
+negative_desc = Array[String](["50% to deal zero damage"])

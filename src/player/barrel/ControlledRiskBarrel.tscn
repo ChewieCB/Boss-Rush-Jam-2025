@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://brilx80deadqd"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_or1fu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_0ksuw"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/daredevil_effect.gd" id="2_80x4o"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/loaded_wallet_effect.gd" id="3_r1t4a"]
+[ext_resource type="Script" path="res://src/player/barrel/overdrive_effect.gd" id="5_1hola"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="7_vis85"]
+
+[node name="ControlledRiskBarrel" type="Node3D"]
+script = ExtResource("1_or1fu")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_80x4o")
+min_distance_to_boss = 7.0
+display_text_title = "Daredevil"
+display_text_tag = "Stick close to the enemy"
+positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
+negative_desc = Array[String](["Decreases damage otherwise"])
+icon_id = 60
+
+[node name="LoadedWallet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_r1t4a")
+bonus_flat_crit_chance = 0.35
+display_text_title = "Loaded Wallet"
+display_text_tag = "I hope you had some saving"
+positive_desc = Array[String](["+35% crit chance"])
+negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
+icon_id = 61
+
+[node name="Overdrive" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_0ksuw")
+display_text_title = "Overdrive"
+display_text_tag = "Keep count the ammo you spent"
+positive_desc = Array[String](["+2 flat magazine size", "+2 flat firerate (rounds per second)"])
+negative_desc = Array[String](["+1% chance to explode the gun per ammo spent", "100% will explode when you empty the magazine"])
+icon_id = 62
+
+[node name="OverdriveEffect" type="Node3D" parent="EffectContainer/Overdrive"]
+script = ExtResource("5_1hola")
+
+[node name="IncreaseFlatMagazineSize" type="Node3D" parent="EffectContainer/Overdrive"]
+script = ExtResource("7_vis85")
+attribute = 5
+modify_value = 2.0
+
+[node name="IncreaseFlatFirerate" type="Node3D" parent="EffectContainer/Overdrive"]
+script = ExtResource("7_vis85")
+attribute = 4
+modify_value = 2.0

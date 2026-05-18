@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://doc6ypauvowis"
+path="res://.godot/imported/backroom.6.map-507f9c9bbec7967409bb37e165ac02c8.tres"
+
+[deps]
+
+source_file="res://src/maps/backroom/autosave/backroom.6.map"
+dest_files=["res://.godot/imported/backroom.6.map-507f9c9bbec7967409bb37e165ac02c8.tres"]
+
+[params]
+

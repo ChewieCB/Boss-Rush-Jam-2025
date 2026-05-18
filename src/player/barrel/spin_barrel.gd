@@ -15,11 +15,19 @@ var chosen_id: int:
 	set(value):
 		chosen_id = value
 		barrel_effect_changed.emit(self, effect_list[chosen_id])
+var force_next_spin_id: int = -1
 var is_equipped = false
 var last_chosen_queue = []
 
+# TODO - reloads before spin for each barrel should be generated on save file creation, seeded
+var reloads_before_spin: int
+var reload_count: int = 0
+
 
 func _ready() -> void:
+	if owner_gun == null:
+		return
+
 	for child in effect_container.get_children():
 		# This help with debugging, you can show/hide barrel effect to avoid
 		# spamming spin barrel when testing it
@@ -38,7 +46,11 @@ func start_spin():
 func stop_spin():
 	is_spinning = false
 	#prevent_roll_same_effect()
-	chosen_id = get_less_used_effects()
+	if force_next_spin_id >= 0:
+		chosen_id = force_next_spin_id
+		force_next_spin_id = -1
+	else:
+		chosen_id = get_less_used_effects()
 	# When we pick a new effect, move it to the front of the last used queue
 	# so we can deprioritise it next spin
 	if chosen_id in last_chosen_queue:
@@ -54,55 +66,56 @@ func _process(delta: float) -> void:
 	if spin_interval_timer > SPIN_INTERVAL:
 		spin_interval_timer = 0
 		chosen_id = randi_range(0, len(effect_list) - 1)
-		#chosen_id = get_less_used_effects()
 
 
 func instant_spin():
 	chosen_id = randi_range(0, len(effect_list) - 1)
+	get_active_effect().on_effect_set()
 
 
-func get_active_effect():
+func get_active_effect() -> BaseBarrelEffect:
 	return effect_list[chosen_id]
 
 
 func get_less_used_effects() -> int:
-	var effect_id: int = -1
+	var effect_id: int = 0
 	var chance: float = randf()
-	var max_idx: int = effect_list.size() - 1
-	if max_idx == 0:
+	var effect_size: int = effect_list.size()
+	if effect_size <= 1:
 		effect_id = 0
 	else:
 		match last_chosen_queue.size():
 			# If we haven't chosen any effects, pick one at random
 			0:
-				effect_id = randi_range(0, len(effect_list) - 1)
-			# If we have chosen all effects previously, pick the least recent effect
-			max_idx:
-				# 20% chance to get same barrel
-				if chance <= 0.4:
-					effect_id = last_chosen_queue.front()
-				elif chance <= 0.7:
-					effect_id = last_chosen_queue[1]
+				effect_id = randi_range(0, effect_size - 1)
+			# If we have chosen all effects previously, 50% pick least recent, 50% pick randomly
+			effect_size:
+				var same_barrel_chance = 0.5
+				if GameManager.current_boss_map and not GameManager.tutorial_completed:
+					same_barrel_chance = -100
+				if chance <= same_barrel_chance:
+					effect_id = randi_range(0, effect_size - 1)
 				else:
 					effect_id = last_chosen_queue.back()
 			# If we've chosen some, but not all, effects before, pick a random effect we haven't chosen yet
 			_:
-				# 20% chance to get same barrel
-				if chance <= 0.2:
+				# 20% chance to get same barrel, unless it tutorial room
+				var same_barrel_chance = 0.2
+				if GameManager.current_boss_map:
+					if GameManager.tutorial_completed:
+						same_barrel_chance = -100
+
+				if chance <= same_barrel_chance:
 					effect_id = last_chosen_queue.front()
 				else:
-					var unused_effects = range(0, len(effect_list))
+					var unused_effects = range(0, effect_size)
 					unused_effects = unused_effects.filter(
 						func(id):
 							return id not in last_chosen_queue
 					)
 					if unused_effects:
-						if chance <= 0.6:
-							effect_id = unused_effects.front()
-						else:
-							effect_id = unused_effects.back()
-					#effect_id = unused_effects.pick_random()
-	
+						effect_id = unused_effects.pick_random()
+
 	return effect_id
 
 
@@ -115,10 +128,12 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 	if barrel_effect.get("is_archetype") && barrel_effect.is_archetype:
 		is_archetype = true
 	var res = {
-		"display_text_title": barrel_effect.display_text_title,
-		"display_text_tag": barrel_effect.display_text_tag,
+		"title": barrel_effect.display_text_title,
+		"flavour_text": barrel_effect.display_text_tag,
+		"description": barrel_effect.display_text_desc,
 		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
+		"icon_id": barrel_effect.icon_id,
 	 }
 	return res

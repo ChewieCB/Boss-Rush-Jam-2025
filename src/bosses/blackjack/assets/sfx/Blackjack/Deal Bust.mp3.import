@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b357lkc52dm60"
+path="res://.godot/imported/Deal Bust.mp3-15f294f833f8e7173ee9f27e81f1aea4.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust.mp3"
+dest_files=["res://.godot/imported/Deal Bust.mp3-15f294f833f8e7173ee9f27e81f1aea4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

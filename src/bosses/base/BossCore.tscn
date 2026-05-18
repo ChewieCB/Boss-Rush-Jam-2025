@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=35 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="2_5bmmu"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://8r3wmjnp5n1e" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBoss.tscn" id="21_tfgrr"]
 [ext_resource type="PackedScene" uid="uid://5870aiiy0cj0" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBoss.tscn" id="22_m4oop"]
 [ext_resource type="PackedScene" uid="uid://ccohk42f3e4ii" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBoss.tscn" id="23_61k5s"]
+[ext_resource type="PackedScene" uid="uid://bnirh0n2yojht" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmitBoss.tscn" id="24_om1v8"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
 radius = 1.0
@@ -63,12 +64,13 @@ _data = {
 "death": SubResource("Animation_dshkv")
 }
 
-[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
+[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("elemental_emitting_vfx", "navigation_component", "health_component")]
 process_mode = 1
 collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
 chip_scene = ExtResource("2_hj7qa")
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), NodePath("StatusEffectVFX/ProjectileBleedEmitBoss")]
 barrel_pickup_scene = ExtResource("2_5bmmu")
 sfx_slowmo = ExtResource("4_rbx6b")
 navigation_component = NodePath("NavigationComponent")
@@ -121,6 +123,7 @@ offset_left = -486.0
 offset_right = 486.0
 offset_bottom = 168.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="BossHealthContainer" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
 layout_mode = 1
@@ -444,8 +447,6 @@ to = NodePath("../../Inactive")
 event = &"remove_status_frozen"
 delay_in_seconds = "0.0"
 
-[node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Frozen"]
-
 [node name="Shocked" type="Node" parent="StateChart/Root/Status"]
 script = ExtResource("6_nojwf")
 initial_state = NodePath("Inactive")
@@ -469,8 +470,6 @@ to = NodePath("../../Inactive")
 event = &"remove_status_shocked"
 delay_in_seconds = "0.0"
 
-[node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Shocked"]
-
 [node name="Bleeding" type="Node" parent="StateChart/Root/Status"]
 script = ExtResource("6_nojwf")
 initial_state = NodePath("Inactive")
@@ -493,8 +492,6 @@ script = ExtResource("8_lsrry")
 to = NodePath("../../Inactive")
 event = &"remove_status_bleeding"
 delay_in_seconds = "0.0"
-
-[node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Bleeding"]
 
 [node name="Phase" type="Node" parent="StateChart/Root"]
 script = ExtResource("6_nojwf")
@@ -583,6 +580,11 @@ visible = false
 [node name="ProjectileShockEmitBoss" parent="StatusEffectVFX" instance=ExtResource("23_61k5s")]
 visible = false
 
+[node name="ProjectileBleedEmitBoss" parent="StatusEffectVFX" instance=ExtResource("24_om1v8")]
+visible = false
+
+[node name="Node3D" type="Node3D" parent="."]
+
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]
@@ -597,6 +599,7 @@ visible = false
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Jumping" to="." method="_on_movement_jumping_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Attacking/Telegraph" to="." method="_on_attack_telegraph_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attacking/Telegraph" to="." method="_on_attack_telegraph_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Health/Idle" to="." method="_on_health_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
@@ -611,15 +614,12 @@ visible = false
 [connection signal="state_entered" from="StateChart/Root/Status/Frozen/Active" to="." method="_on_status_frozen_active_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/Frozen/Active" to="." method="_on_status_frozen_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Frozen/Active" to="." method="_on_status_frozen_active_state_physics_processing"]
-[connection signal="timeout" from="StateChart/Root/Status/Frozen/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Status/Shocked/Active" to="." method="_on_status_shocked_active_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/Shocked/Active" to="." method="_on_status_shocked_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Shocked/Active" to="." method="_on_status_shocked_active_state_physics_processing"]
-[connection signal="timeout" from="StateChart/Root/Status/Shocked/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Status/Bleeding/Active" to="." method="_on_status_bleeding_active_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/Bleeding/Active" to="." method="_on_status_bleeding_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Bleeding/Active" to="." method="_on_status_bleeding_active_state_physics_processing"]
-[connection signal="timeout" from="StateChart/Root/Status/Bleeding/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
 [connection signal="timeout" from="DPSWindowTimer" to="." method="_on_dps_window_timer_timeout"]
 [connection signal="timeout" from="HurtFrameTimer" to="." method="_on_hurt_frame_timer_timeout"]

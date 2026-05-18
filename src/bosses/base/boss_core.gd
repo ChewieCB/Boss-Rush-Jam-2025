@@ -4,6 +4,7 @@ class_name BossCore
 ## Emit when boss HP drop to 0.
 signal died
 signal death_anim_finished
+signal inactive_loaded
 ## Emit after collected the barrel,
 ## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.
@@ -18,6 +19,8 @@ enum BossIdEnum {
 	BARTENDER,
 	PIT,
 	CHIPS,
+	ELEVATOR,
+	BLACKJACK,
 	SINGER
 }
 
@@ -29,6 +32,15 @@ enum BossStatusEffect {
 	SHOCKED, # Take increased damage
 	BLEEDING # Take damage based on their movement
 }
+
+@export var target: Node3D:
+	set(value):
+		target = value
+		if target:
+			if not target.is_node_ready():
+				await target.ready
+			navigation_component.target = target
+var cached_target: Node3D
 
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
@@ -48,17 +60,30 @@ enum BossStatusEffect {
 	BossStatusEffect.SHOCKED: 1000,
 	BossStatusEffect.BLEEDING: 1000,
 }
-@export var status_duration = 10
+@export var status_duration: Dictionary = {
+	BossStatusEffect.BURNING: 10,
+	BossStatusEffect.POISONED: 10,
+	BossStatusEffect.FROZEN: 10,
+	BossStatusEffect.SHOCKED: 10,
+	BossStatusEffect.BLEEDING: 1,
+}
 ## Status resist increased by this amount after each status application
-@export var increased_tolerance = 500
+@export var increased_status_tolerance: Dictionary = {
+	BossStatusEffect.BURNING: 500,
+	BossStatusEffect.POISONED: 500,
+	BossStatusEffect.FROZEN: 500,
+	BossStatusEffect.SHOCKED: 500,
+	BossStatusEffect.BLEEDING: 1000,
+}
 var current_status_buildup: Dictionary = {
 	BossStatusEffect.BURNING: 0,
 	BossStatusEffect.POISONED: 0,
 	BossStatusEffect.FROZEN: 0,
 	BossStatusEffect.SHOCKED: 0,
-	BossStatusEffect.BLEEDING: 1000,
+	BossStatusEffect.BLEEDING: 0,
 }
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
+const SHOCKED_DMG_MULTIPLIER = 0.25
 
 @export_subgroup("DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
@@ -98,12 +123,16 @@ var debug_trajectory_mesh: MeshInstance3D
 @export var base_sprite: CompressedTexture2D
 @export var hurt_sprite: CompressedTexture2D
 @export var death_sprites: Array[CompressedTexture2D]
+# const HIT_EFFECT_INITIAL_VALUE = 0.4
+# const HIT_EFFECT_FADE_SPEED = 1.5
 @export_subgroup("Hurt Frame")
 # TODO - make this an actual stagger that delays/interrupts attacks?
 @export var hurt_frame_window: float = 0.6
 @export var hurt_frame_cooldown: float = 1.5
 @onready var hurt_frame_timer: Timer = $HurtFrameTimer
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
+## So hurt frame doesnt override telegraph frames
+var block_hurt_frame = false
 
 @export_group("Phase")
 @export var current_phase: int = 1
@@ -173,24 +202,23 @@ const JUMP_FORCE: float = 8
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 20.0
-var time_elapsed: float = 0
-
-var vel_vertical: float = 0
-
-@export var target: Node3D:
-	set(value):
-		target = value
-		if target:
-			if not target.is_node_ready():
-				await target.ready
-			navigation_component.target = target
-var cached_target: Node3D
 
 @onready var scene_root = get_parent().get_parent()
 
+var time_elapsed: float = 0
+var vel_vertical: float = 0
+
+# Hit effect
+var hit_effect_shake_strength = 0.08
+var hit_effect_shake_duration = 0.12
+var hit_effect_flash_duration = 0.08
+var _original_sprite_position: Vector3
+var _original_sprite_modulate: Color
 
 func _ready() -> void:
 	print_debug("BossCore ready")
+	_original_sprite_position = sprite.position
+	_original_sprite_modulate = sprite.modulate
 	randomize()
 	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
@@ -212,8 +240,19 @@ func _ready() -> void:
 		health_component.max_health = 1
 		health_component.current_health = 1
 
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(int(health_component.max_health), 1)
+
 	if owner:
 		await owner.ready
+	print_debug("BossCore ready end")
+
+
+# func _process(delta: float) -> void:
+# 	var current_sprite_shader_hit_effect = sprite.material_override.get_shader_parameter("hit_effect")
+# 	if current_sprite_shader_hit_effect > 0:
+# 		current_sprite_shader_hit_effect -= HIT_EFFECT_FADE_SPEED * delta
+# 		sprite.material_override.set_shader_parameter("hit_effect", current_sprite_shader_hit_effect)
 
 
 func _physics_process(delta: float) -> void:
@@ -221,14 +260,6 @@ func _physics_process(delta: float) -> void:
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
 	move_and_slide()
-
-	# DEBUG
-	# TODO - add export var for burning status length so we can configure it
-	# per boss/effect
-	#if Input.is_action_just_pressed("input_1"):
-		#apply_status(BossStatusEffect.BURNING, 5.0)
-	#if Input.is_action_just_pressed("input_2"):
-		#apply_status(BossStatusEffect.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:
@@ -244,21 +275,32 @@ func hide_health() -> void:
 
 
 func _turn_towards_target(speed: float, delta: float) -> void:
-	var direction: Vector3 = self.global_position.direction_to(target.global_position)
-	self.rotation.y = lerp_angle(
-		self.rotation.y, atan2(
-			- direction.x, -direction.z
-		),
-		delta * speed
-	)
+	if target:
+		var direction: Vector3 = self.global_position.direction_to(target.global_position)
+		self.rotation.y = lerp_angle(
+			self.rotation.y, atan2(
+				- direction.x, -direction.z
+			),
+			delta * speed
+		)
 
 
 func orbit_player(delta: float) -> void:
+	orbit_around_position(target.global_position, delta)
+
+
+func orbit_around_position(pos: Vector3, delta: float, invert: bool = false) -> void:
 	orbit_angle += angle_speed * delta
 	# offset in XZ-plane
-	var offset_x = cos(orbit_angle) * desired_distance
-	var offset_z = sin(orbit_angle) * desired_distance
-	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	var offset_x: float
+	var offset_z: float
+	if invert:
+		offset_x = - cos(orbit_angle) * desired_distance
+		offset_z = - sin(orbit_angle) * desired_distance
+	else:
+		offset_x = cos(orbit_angle) * desired_distance
+		offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = pos + Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
@@ -267,11 +309,11 @@ func orbit_towards_player(
 	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
 ) -> void:
 	orbit_angle += angle_speed * delta
-	
+
 	orbit_radius -= approach_speed * delta
 	if min_radius:
 		orbit_radius = max(orbit_radius, min_radius)
-	
+
 	# offset in XZ-plane
 	var offset_x = cos(orbit_angle) * orbit_radius
 	var offset_z = sin(orbit_angle) * orbit_radius
@@ -279,19 +321,16 @@ func orbit_towards_player(
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
+	if len(sfx_arr) > 0:
+		play_positional_sound(sfx_arr.pick_random())
 
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> Area3D:
-	var _sfx_player = get_available_sfx_player()
-	if not _sfx_player:
-		# TODO - error handling
-		pass
-	if sfx_arr:
-		_sfx_player.stream = sfx_arr.pick_random()
-		_sfx_player.play()
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
-	projectile.look_at(target.global_position, Vector3.UP)
+	var dir_to_target = spawn_pos.direction_to(target.global_position)
+	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
 	return projectile
 
 
@@ -380,17 +419,29 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 	return null
 
 
+func play_positional_sound(stream: AudioStream) -> AudioStreamPlayer3D:
+	var _player: AudioStreamPlayer3D = get_available_sfx_player()
+
+	if not _player:
+		return
+
+	_player.stream = stream
+	_player.play()
+
+	return _player
+
+
 func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
 	# Check if we've already given the player this barrel
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
-		defeated.emit(self)
+		defeated.emit(self )
 		return
 
 	if barrel_pickup_scene == null:
 		push_warning("No barrel to spawn.")
-		defeated.emit(self)
+		defeated.emit(self )
 		return
 
 	# Instance a pickup object with the barrel data
@@ -459,7 +510,7 @@ func _on_barrel_collected(_data: BarrelDataResource) -> void:
 	#
 	# Wait for player to click continue
 	#
-	defeated.emit(self)
+	defeated.emit(self )
 
 
 func select_attack() -> void:
@@ -563,7 +614,39 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 
 ### HEALTH --------------------------------
 #### HIT
+func hit_effect_sprite_shake():
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
+	var shake_time = 6
+	for i in range(shake_time):
+		var offset = Vector3(
+			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
+			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
+			0
+		)
+		tween.tween_property(
+			sprite,
+			"position",
+			_original_sprite_position + offset,
+			hit_effect_shake_duration / shake_time
+		)
+	tween.tween_property(self , "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
+
+func hit_effect_sprite_flash():
+	var tween = create_tween()
+	tween.tween_property(sprite, "modulate", Color.RED, hit_effect_flash_duration)
+	tween.tween_property(sprite, "modulate", _original_sprite_modulate, hit_effect_flash_duration)
+
+func play_sprite_hit_effect() -> void:
+	# TODO: Add a SpriteHolder so we can modify sprite position and scale without
+	# affecting AnimationPlayer.
+	# hit_effect_sprite_shake()
+	# hit_effect_sprite_flash()
+	pass
+
 func _on_health_hit_state_entered() -> void:
+	play_sprite_hit_effect()
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	state_chart.send_event("end_damage")
@@ -584,6 +667,10 @@ func _on_health_dead_state_entered() -> void:
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()
 
+#### Revival
+func _on_health_idle_state_entered() -> void:
+	sprite.modulate = Color.WHITE
+
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
@@ -594,13 +681,17 @@ func _on_attack_telegraph_state_exited() -> void:
 	sprite.modulate = Color.WHITE
 
 
+func toggle_block_hurt_frame(_enabled: bool) -> void:
+	block_hurt_frame = _enabled
+
+
 ## ======== Signal Callback Methods ========
 
 func _on_stagger() -> void:
 	# Play a hurt frame when we do enough DPS
 	# TODO - let this interrupt/restart the attack telegraph for some attacks
 	if hurt_sprite:
-		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
 			sprite.texture = hurt_sprite
 			hurt_frame_timer.start(hurt_frame_window)
 
@@ -663,6 +754,9 @@ func _on_hurt_frame_timer_timeout() -> void:
 ## STATUS EFFECTS
 
 func toggle_emitting_elemental_vfx(status: BossStatusEffect, is_on: bool = true):
+	if elemental_emitting_vfx.size() == 0:
+		return
+
 	var element_vfx_node = elemental_emitting_vfx[int(status) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = is_on
@@ -678,7 +772,7 @@ func apply_status_buildup(status: BossStatusEffect, amount: float) -> void:
 	if current_status_buildup[status] < status_resist[status]:
 		current_status_buildup[status] += amount
 		if current_status_buildup[status] >= status_resist[status]:
-			apply_status(status, status_duration)
+			apply_status(status, status_duration[status])
 
 func apply_status(status: BossStatusEffect, duration: float) -> void:
 	toggle_emitting_elemental_vfx(status, true)
@@ -688,7 +782,7 @@ func apply_status(status: BossStatusEffect, duration: float) -> void:
 	remove_status(status)
 
 func remove_status(status: BossStatusEffect) -> void:
-	status_resist[status] += increased_tolerance
+	status_resist[status] += increased_status_tolerance[status] * GameManager.get_risk_status_resist_mult()
 	current_status_buildup[status] = 0
 	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("remove_" + event_string)
@@ -709,14 +803,11 @@ func _on_status_burning_active_state_physics_processing(_delta: float) -> void:
 
 func _on_status_burning_active_state_exited() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.BURNING, false)
-	# TODO - remove burning effect particles/shader/icon
-	#
 	burning_timer.stop()
 
 
 func _on_status_poisoned_active_state_entered() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, true)
-	# TODO - add burning effect particles/shader/icon
 	poisoned_timer.start(2.5) # Interval between damage
 
 
@@ -726,33 +817,7 @@ func _on_status_poisoned_active_state_physics_processing(_delta: float) -> void:
 
 func _on_status_poisoned_active_state_exited() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, false)
-	# TODO - remove burning effect particles/shader/icon
-	#
 	poisoned_timer.stop()
-
-
-func _on_burning_timer_timeout() -> void:
-	# TODO - let specific attacks/modifiers change how much damage the effect does
-	const BURN_DMG_MAX_HP_PERC_PER_TICK = 0.002
-	const BURN_DMG_FLAT_PER_TICK = 25
-	# (0.2% max hp dmg per tick and flat 25)
-	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
-	health_component.damage(burn_dmg, Color.ORANGE)
-	sprite.modulate = Color.ORANGE
-	await get_tree().create_timer(0.2).timeout
-	sprite.modulate = Color.WHITE
-
-
-func _on_poisoned_timer_timeout() -> void:
-	# TODO - let specific attacks/modifiers change how much damage the effect does
-	const POISON_DMG_MAX_HP_PERC_PER_TICK = 0.012
-	const POISON_DMG_FLAT_PER_TICK = 140
-	# (1.2% max hp dmg per tick and flat 140)
-	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
-	health_component.damage(poison_dmg, Color.WEB_GREEN)
-	sprite.modulate = Color.WEB_GREEN
-	await get_tree().create_timer(1).timeout
-	sprite.modulate = Color.WHITE
 
 
 func _on_status_frozen_active_state_entered() -> void:
@@ -763,26 +828,83 @@ func _on_status_frozen_active_state_exited() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.FROZEN, false)
 
 func _on_status_frozen_active_state_physics_processing(_delta: float) -> void:
+	# TODO: Implement frozen effect
 	pass
 
 func _on_status_bleeding_active_state_entered() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, true)
-
-
-func _on_status_bleeding_active_state_exited() -> void:
-	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, false)
+	take_bleed_burst_damage()
 
 func _on_status_bleeding_active_state_physics_processing(_delta: float) -> void:
 	pass
 
+func _on_status_bleeding_active_state_exited() -> void:
+	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, false)
+
 
 func _on_status_shocked_active_state_entered() -> void:
-	health_component.received_dmg_multiplier += 0.2
+	health_component.received_dmg_multiplier += SHOCKED_DMG_MULTIPLIER
 	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, true)
 
 func _on_status_shocked_active_state_exited() -> void:
-	health_component.received_dmg_multiplier -= 0.2
+	health_component.received_dmg_multiplier -= SHOCKED_DMG_MULTIPLIER
 	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, false)
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
 	pass
+
+
+func take_bleed_burst_damage() -> void:
+	# Take 4% max hp damage and 100 flat damage
+	const BLEED_DMG_MAX_HP_PERC = 0.04
+	const BLEED_DMG_FLAT = 100
+	var bleed_dmg = int(health_component.max_health * BLEED_DMG_MAX_HP_PERC + BLEED_DMG_FLAT)
+	health_component.damage(bleed_dmg, Color.DARK_RED)
+	sprite.modulate = Color.DARK_RED
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_burning_timer_timeout() -> void:
+	const BURN_DMG_MAX_HP_PERC_PER_TICK = 0.003
+	const BURN_DMG_FLAT_PER_TICK = 25
+	# (0.3% max hp dmg per tick and flat 25)
+	# With 20 ticks, 6% max hp and 500 flat damage
+	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
+	health_component.damage(burn_dmg, Color.ORANGE)
+	sprite.modulate = Color.ORANGE
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_poisoned_timer_timeout() -> void:
+	const POISON_DMG_MAX_HP_PERC_PER_TICK = 0.02
+	const POISON_DMG_FLAT_PER_TICK = 140
+	# (2% max hp dmg per tick and flat 140)
+	# With 4 ticks, 8% max hp and 560 flat damage
+	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
+	health_component.damage(poison_dmg, Color.WEB_GREEN)
+	sprite.modulate = Color.WEB_GREEN
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+## Attack spawn helpers
+#
+## DECALS
+func spawn_decal_at_pos(pos: Vector3, texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
+	var _decal := _create_decal(texture, size)
+	scene_root.add_child(_decal)
+	_decal.global_position = pos
+	return _decal
+
+func _create_decal(texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
+	var _decal := Decal.new()
+	_decal.cull_mask = 1
+	_decal.texture_albedo = texture
+	_decal.size = size
+	return _decal
+
+func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
+	for decal in decals_to_remove:
+		decal.queue_free()

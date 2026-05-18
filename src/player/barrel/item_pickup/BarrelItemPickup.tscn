@@ -1,13 +1,33 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2ciesqygpo5a"]
+[gd_scene load_steps=14 format=3 uid="uid://b2ciesqygpo5a"]
 
 [ext_resource type="Script" path="res://src/player/barrel/item_pickup/barrel_item_pickup.gd" id="1_l8r1a"]
-[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="2_15nf5"]
+[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrel_data.tres" id="2_15nf5"]
+[ext_resource type="Texture2D" uid="uid://btg2qego5wfsn" path="res://assets/textures/walls/roller_panel_alt.png" id="3_jgf86"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8mavw"]
 resource_local_to_scene = true
+albedo_texture = ExtResource("3_jgf86")
+uv1_scale = Vector3(-1.27, 1.13, 1)
+uv1_offset = Vector3(0.05, 0.5, 0)
+uv1_triplanar = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_y5dr1"]
 height = 0.5
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wq1xp"]
+load_path = "res://.godot/imported/roller_panel_alt.png-85930da5148625317d5772ebfee92e4b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_836sx"]
+resource_local_to_scene = true
+albedo_texture = SubResource("CompressedTexture2D_wq1xp")
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_offset = Vector3(0.19, 0, 0)
+uv1_triplanar = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kxw2c"]
+top_radius = 0.499
+bottom_radius = 0.499
+height = 0.01
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lcyxn"]
 
@@ -93,6 +113,18 @@ transform = Transform3D(-7.23998e-06, 0, -2, -2, -8.74228e-08, 7.23998e-06, -8.7
 billboard = 1
 text = "Projectile Count"
 
+[node name="InnerFaces" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 4.74375e-17, 0, 4.74375e-17, 1, 0, 0.24732, 9.23322e-18)
+material_override = SubResource("StandardMaterial3D_836sx")
+mesh = SubResource("CylinderMesh_kxw2c")
+skeleton = NodePath("../..")
+
+[node name="InnerFaces2" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 4.74375e-17, 0, 4.74375e-17, 1, 0, -0.246899, 9.78171e-18)
+material_override = SubResource("StandardMaterial3D_836sx")
+mesh = SubResource("CylinderMesh_kxw2c")
+skeleton = NodePath("../..")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 shape = SubResource("SphereShape3D_lcyxn")
@@ -103,23 +135,6 @@ libraries = {
 }
 autoplay = "spin"
 speed_scale = 0.5
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.435172, 0)
-light_color = Color(1, 0.780655, 0.14372, 1)
-light_volumetric_fog_energy = 5.0
-shadow_enabled = true
-omni_range = 3.0
-
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 9.1803, 0)
-light_color = Color(1, 0.710778, 0, 1)
-light_energy = 15.0
-light_volumetric_fog_energy = 16.0
-light_bake_mode = 0
-spot_range = 20.0
-spot_angle = 15.0
-spot_angle_attenuation = 0.0490367
 
 [node name="AimAssitBubble" type="Area3D" parent="."]
 collision_layer = 128

@@ -249,7 +249,12 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-	super ()
+	super()
+	
+	health_component.initialize_health()
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(int(health_component.max_health), 2)
+	
 	if GameManager.boss_ante >= 1:
 		place_your_bet_attack_enabled = true
 	if GameManager.boss_ante >= 2:
@@ -262,9 +267,17 @@ func _ready() -> void:
 		small_stack_count = 5
 	if GameManager.boss_ante >= 5:
 		pass # In boss_chip map script
+	
+	# Chiptopede
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
+	_create_segment_cache()
+	generate_snake_graph()
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	aoe_markers = get_tree().get_nodes_in_group("chip_boss_aoe_marker")
 
 func activate() -> void:
 	print_debug("BossChips activate called")
@@ -292,6 +305,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super (new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		if current_phase == 1:
+			current_phase = 2
 			state_chart.send_event("start_phase_2")
 
 
@@ -1058,7 +1072,6 @@ func _on_phase_2_state_entered() -> void:
 
 	# Update the center position to account for the platform
 	center_pos.y = 2.0
-	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
@@ -1261,10 +1274,7 @@ func _on_phase_3_state_entered() -> void:
 
 	#
 	self.global_position = despawned_pos
-	_create_segment_cache()
-	generate_snake_graph()
-
-	# TODO - screen shake, particles, polish, etc.
+	
 	break_floor.emit()
 	# 6.5s  delay
 	await get_tree().create_timer(3.8).timeout
@@ -1272,6 +1282,10 @@ func _on_phase_3_state_entered() -> void:
 
 
 func activate_chiptopede() -> void:
+	# Play awakening sound from below
+	chiptopede_sfx_player.stream = sfx_chiptopede_awaken
+	chiptopede_sfx_player.play()
+	
 	# Re-fill health bar, change name, and show
 	health_component.has_died = false
 	if GameManager.CHEAT_oneshot:
@@ -1279,7 +1293,9 @@ func activate_chiptopede() -> void:
 	health_component.max_health = chiptopede_max_health
 	health_component.current_health = chiptopede_max_health
 	health_component.received_dmg_multiplier = 0.5
-	health_ui.init_health_ui(chiptopede_max_health)
+	#health_ui.init_health_ui(chiptopede_max_health)
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(int(chiptopede_max_health), 1)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
 
@@ -1603,6 +1619,7 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 		var small_stack_inst: CharacterBody3D = small_stack_prefab.instantiate()
 		get_parent().add_child(small_stack_inst)
+		small_stack_inst.big_stack = self
 		small_stack_inst.global_transform = self.global_transform
 		small_stack_inst.scale = Vector3(0, 1, 0)
 
@@ -1616,6 +1633,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 		small_stack_inst.group_idx = i
 		small_stack_inst.center_pos = center_pos
 		small_stack_inst.aoe_markers = aoe_markers
+		if len(aoe_markers) == 0:
+			print_debug("boss chip aoe_markers is empty")
+			breakpoint
 		if current_phase == 2:
 			small_stack_inst.navigation_component.disable()
 
@@ -1652,7 +1672,8 @@ func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 
 		await stack_spawn_tween.finished
 
-		stack.queue_free()
+		if is_instance_valid(stack):
+			stack.queue_free()
 
 	if unstable_split_enabled:
 		unstable_split_timer.stop()
@@ -1829,15 +1850,13 @@ func _create_segment_cache() -> Node3D:
 	for idx in range(chiptopede_segments):
 		var segment = chiptopede_segment_prefab.instantiate()
 		segment.health_component.health_diff.connect(_on_chiptopede_hurt)
+		segment.big_stack = self
 		cache_segment(segment)
-
+	
 	# Setup sfx player at head segment
 	var chiptopede_head = segment_cache_parent.get_child(0)
 	chiptopede_head.add_child(chiptopede_sfx_player)
-	# Play awakening sound from below
-	chiptopede_sfx_player.stream = sfx_chiptopede_awaken
-	chiptopede_sfx_player.play()
-
+	
 	return segment_cache_parent
 
 

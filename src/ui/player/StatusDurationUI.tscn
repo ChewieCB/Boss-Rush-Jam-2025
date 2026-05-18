@@ -7,7 +7,7 @@
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="5_fdk32"]
 
 [node name="StatusDurationUI" type="TextureProgressBar"]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(32, 32)
 mouse_filter = 2
 value = 35.0
 fill_mode = 3
@@ -24,7 +24,7 @@ default_status_up = ExtResource("4_a22mu")
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="Label" type="Label" parent="."]
+[node name="ValueLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -42,6 +42,25 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("5_fdk32")
 theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+
+[node name="InfoTextLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -80.0
+offset_right = 32.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("5_fdk32")
 horizontal_alignment = 1
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

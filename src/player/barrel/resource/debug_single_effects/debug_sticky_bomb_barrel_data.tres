@@ -8,7 +8,8 @@
 script = ExtResource("7_hhia2")
 barrel_id = 24
 barrel_name = "StickyBomb"
-barrel_desc = "Keep distance"
+barrel_desc = "Keep your distance"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_y61da")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_1b78s")

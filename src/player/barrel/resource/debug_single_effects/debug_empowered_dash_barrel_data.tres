@@ -9,6 +9,7 @@ script = ExtResource("4_nc7xv")
 barrel_id = 33
 barrel_name = "EmpoweredDash"
 barrel_desc = "Shoot n Dash!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_b14yi")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_aty4w")

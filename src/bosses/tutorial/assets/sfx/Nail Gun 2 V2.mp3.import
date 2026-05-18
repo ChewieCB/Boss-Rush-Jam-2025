@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cus1umlbiwd56"
+path="res://.godot/imported/Nail Gun 2 V2.mp3-7064fecf2815a9801c2e7c88db650533.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/Nail Gun 2 V2.mp3"
+dest_files=["res://.godot/imported/Nail Gun 2 V2.mp3-7064fecf2815a9801c2e7c88db650533.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

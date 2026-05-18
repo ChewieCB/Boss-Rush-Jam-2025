@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b1svhegbdr27d"
+path="res://.godot/imported/Wrench Swing Miss.mp3-1394b3360493576977b7a355189231e5.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss.mp3"
+dest_files=["res://.godot/imported/Wrench Swing Miss.mp3-1394b3360493576977b7a355189231e5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_iiqbo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_0goaf"]
-[ext_resource type="Script" path="res://src/player/barrel/springy_feet_effect.gd" id="3_t02bk"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/springy_feet_effect.gd" id="3_t02bk"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_o6jhr"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="5_72wlh"]
 
