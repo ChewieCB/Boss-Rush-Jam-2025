@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://35lbaqwytewn"]
+[gd_scene load_steps=25 format=3 uid="uid://35lbaqwytewn"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/sticky_bomb_projectile.gd" id="1_oktax"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_c01wk"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="3_h00rf"]
 [ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="4_mp8wv"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_qa43f"]
+[ext_resource type="AudioStream" uid="uid://dlfvffegwrud3" path="res://src/player/gun/assets/sfx/effects/sticky_bomb/New Member click 1.wav" id="4_uf018"]
 [ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="5_8l5x6"]
 [ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="6_e5scs"]
 [ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="6_farcl"]
@@ -17,12 +18,14 @@
 [ext_resource type="PackedScene" uid="uid://vpa0pjfgcoxj" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmitSmall.tscn" id="14_k6cjs"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch7l"]
+resource_local_to_scene = true
 albedo_color = Color(0.860888, 0.539123, 3.85046e-07, 1)
 emission_enabled = true
 emission = Color(0.862745, 0.537255, 0, 1)
 rim_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_ynnlg"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_hch7l")
 radius = 0.1
 height = 0.2
@@ -45,7 +48,12 @@ point_count = 2
 [sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
 radius = 1.0
 
-[node name="StickyBombProjectile" type="Node3D"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_13u20"]
+random_pitch = 1.02
+streams_count = 1
+stream_0/stream = ExtResource("4_uf018")
+
+[node name="StickyBombProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_oktax")
 explosion_prefab = ExtResource("2_c01wk")
 explosion_vfx = ExtResource("3_h00rf")
@@ -102,18 +110,27 @@ collision_mask = 29
 
 [node name="ProjectileBurnEmitSmall" parent="ElementalVFX" instance=ExtResource("6_quv1y")]
 visible = false
+time_until_queue_free = 1.0
 
 [node name="ProjectilePoisonEmitSmall" parent="ElementalVFX" instance=ExtResource("7_udfh0")]
 visible = false
+time_until_queue_free = 1.0
 
 [node name="ProjectileFreezeEmitSmall" parent="ElementalVFX" instance=ExtResource("10_m0cuo")]
 visible = false
+time_until_queue_free = 1.0
 
 [node name="ProjectileShockEmitSmall" parent="ElementalVFX" instance=ExtResource("9_wt430")]
 visible = false
 
 [node name="ProjectileBleedEmitSmall" parent="ElementalVFX" instance=ExtResource("14_k6cjs")]
 visible = false
+time_until_queue_free = 1.0
+
+[node name="TickSFXPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_13u20")
+volume_db = -6.0
+unit_size = 5.0
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

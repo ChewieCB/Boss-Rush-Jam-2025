@@ -57,7 +57,9 @@ func _input(event: InputEvent) -> void:
 			return
 	
 	if visible:
-		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+		var focused_ui: Control = null
+		if active_focus_idx >= 0 and current_focus_area:
+			focused_ui = current_focus_area.get_child(active_focus_idx)
 		
 		if event.is_action_pressed("interact"):
 			close()
@@ -98,7 +100,7 @@ func _input(event: InputEvent) -> void:
 				input_prompt_navigate.animate()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not visible:
 		return
 	
@@ -107,7 +109,10 @@ func _process(delta: float) -> void:
 
 func toggle():
 	SoundManager.play_sound(sfx_open, "SFX")
-	await close() if visible else await open()
+	if visible:
+		close()
+	else:
+		open()
 
 
 func open():
@@ -124,7 +129,11 @@ func open():
 	
 	# We need to wait a frame so the button doesn't drop focus
 	await get_tree().process_frame
-	get_first_item_for_focus().grab_focus.call_deferred()
+	await get_tree().process_frame
+
+	var focus_item = get_first_item_for_focus()
+	if focus_item:
+		focus_item.grab_focus.call_deferred()
 
 
 func close():
@@ -137,22 +146,27 @@ func close():
 	
 	visible = false
 	
-	var focused_ui: Control = get_first_item_for_focus().get_parent()
-	if focused_ui:
-		hide_effect_detail_view(focused_ui)
+	var first_item_focus = get_first_item_for_focus()
+	if first_item_focus and first_item_focus.get_parent():
+		var focused_ui: Control = first_item_focus.get_parent()
+		if focused_ui:
+			hide_effect_detail_view(focused_ui)
 	
 	inventory_closed.emit()
 
 
-func full_refresh_ui(focus_area_callable: Callable, forced: bool = false) -> void:
+func placeholder_func() -> void:
+	return
+
+func full_refresh_ui(_focus_area_callable: Callable = placeholder_func, _forced: bool = false) -> void:
 	push_error("method not overriden")
 
 
-func show_effect_detail_view(focused_ui: Control) -> void:
+func show_effect_detail_view(_focused_ui: Control) -> void:
 	push_error("method not overriden")
 
 
-func hide_effect_detail_view(focused_ui: Control) -> void:
+func hide_effect_detail_view(_focused_ui: Control) -> void:
 	push_error("method not overriden")
 
 
@@ -166,9 +180,9 @@ func handle_controller_scrolling() -> void:
 	if abs(controller_scroll_y) < GameManager.controller_deadzone:
 		return
 	
-	scroll_container.scroll_vertical += controller_scroll_y * CONTROLLER_SCROLL_SPEED_COOEFFICIENT
+	scroll_container.scroll_vertical += int(controller_scroll_y * CONTROLLER_SCROLL_SPEED_COOEFFICIENT)
 	scroll_container.scroll_vertical = clamp(
-		scroll_container.scroll_vertical, 0, 
+		scroll_container.scroll_vertical, 0,
 		scroll_container.get_v_scroll_bar().max_value
 	)
 
@@ -234,7 +248,7 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 
 func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
 	for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
-		if neighbor:
+		if neighbor and has_node(neighbor):
 			var node = get_node(neighbor)
 			if node:
 				node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
@@ -319,7 +333,7 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	input_prompt_cancel.update_text("Cancel")
 
 
-func _on_item_ui_button_pressed(ui: Control) -> void:
+func _on_item_ui_button_pressed(_ui: Control) -> void:
 	push_error("method not overriden")
 
 
@@ -379,7 +393,6 @@ func update_gun_frame_info(data: GunFrameResource = null, is_locked: bool = fals
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
 	var lost_focus_parent: Control = button.get_parent()
-	var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 	# When the mouse leaves an ItemUI:
 	#  - if nothing is currently selected in the equip or inventory areas, 
 	#      show an empty barrel overview.
@@ -409,17 +422,17 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 		input_prompt_tab_right.update_text("Change Frame")
 
 
-func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
+func _on_item_ui_interact(item_ui: ItemUI, _data: BarrelDataResource) -> void:
 	current_selected_item_ui = null
 	_reset_sibling_saturation(item_ui)
 	input_prompt_accept.update_text("Select")
 	input_prompt_cancel.update_text("Exit")
 
-func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
+func _on_gun_frame_item_ui_select(_gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	push_error("method not overriden")
 
 
-func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
+func _on_gun_frame_item_ui_interact(_gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	push_error("method not overriden")
 
 

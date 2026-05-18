@@ -4,3 +4,5 @@
 
 [node name="NullBarrel" type="Node3D"]
 script = ExtResource("1_f0d5f")
+
+[node name="EffectContainer" type="Node3D" parent="."]

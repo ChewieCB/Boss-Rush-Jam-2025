@@ -261,15 +261,15 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: int = -1) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
-	
+
 	var equipped_count: int = 0
 	for elem in equipped_barrels:
 		if elem != null:
 			equipped_count += 1
-	
+
 	if equipped_count >= player.current_gun.max_barrels:
 		return "Can not equip more barrels"
-		
+
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
@@ -281,7 +281,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: i
 				continue
 			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
 				return "Can only equip 1 archetype barrel"
-		
+
 		inventory_barrels.erase(found_data)
 		equipped_barrels[slot_idx] = found_data
 		refresh_shop_ui.emit()
@@ -294,7 +294,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: i
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading or player.current_gun.is_spinning:
 		return "Can not change barrel while reloading"
-	
+
 	var found_data: BarrelDataResource = null
 	var barrel_idx: int = -1
 	for i in range(equipped_barrels.size()):
@@ -306,7 +306,7 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 				found_data = barrel
 				barrel_idx = i
 				break
-	
+
 	if found_data:
 		GameManager.player.current_gun.remove_barrel(barrel_idx)
 		equipped_barrels[barrel_idx] = null
@@ -370,11 +370,11 @@ func reset_reroll_cost() -> void:
 #region Save helper
 func load_new_save_data():
 	tutorial_completed = CHEAT_skip_tutorial_on_new_game
-	
+
 	equipped_gun_frame = starting_gun_frame
 	inventory_gun_frames = []
 	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
-	
+
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
 	for barrel_data in barrel_database:
@@ -398,7 +398,7 @@ func load_new_save_data():
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		shop_barrels.append(data)
-	
+
 	LuckHandler.reset_luck_triggers()
 
 

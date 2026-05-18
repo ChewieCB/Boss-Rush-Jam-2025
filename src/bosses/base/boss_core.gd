@@ -239,7 +239,7 @@ func _ready() -> void:
 	if GameManager.CHEAT_oneshot:
 		health_component.max_health = 1
 		health_component.current_health = 1
-	
+
 	health_ui.clear_sub_health_bars()
 	health_ui.init_boss_health_ui(int(health_component.max_health), 1)
 
@@ -254,20 +254,12 @@ func _ready() -> void:
 # 		current_sprite_shader_hit_effect -= HIT_EFFECT_FADE_SPEED * delta
 # 		sprite.material_override.set_shader_parameter("hit_effect", current_sprite_shader_hit_effect)
 
-	
+
 func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
 	move_and_slide()
-
-	# DEBUG
-	# TODO - add export var for burning status length so we can configure it
-	# per boss/effect
-	#if Input.is_action_just_pressed("input_1"):
-		#apply_status(BossStatusEffect.BURNING, 5.0)
-	#if Input.is_action_just_pressed("input_2"):
-		#apply_status(BossStatusEffect.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:
@@ -317,11 +309,11 @@ func orbit_towards_player(
 	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
 ) -> void:
 	orbit_angle += angle_speed * delta
-	
+
 	orbit_radius -= approach_speed * delta
 	if min_radius:
 		orbit_radius = max(orbit_radius, min_radius)
-	
+
 	# offset in XZ-plane
 	var offset_x = cos(orbit_angle) * orbit_radius
 	var offset_z = sin(orbit_angle) * orbit_radius
@@ -332,7 +324,7 @@ func orbit_towards_player(
 func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	if len(sfx_arr) > 0:
 		play_positional_sound(sfx_arr.pick_random())
-	
+
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
@@ -429,13 +421,13 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 
 func play_positional_sound(stream: AudioStream) -> AudioStreamPlayer3D:
 	var _player: AudioStreamPlayer3D = get_available_sfx_player()
-	
+
 	if not _player:
 		return
-	
+
 	_player.stream = stream
 	_player.play()
-	
+
 	return _player
 
 
@@ -764,7 +756,7 @@ func _on_hurt_frame_timer_timeout() -> void:
 func toggle_emitting_elemental_vfx(status: BossStatusEffect, is_on: bool = true):
 	if elemental_emitting_vfx.size() == 0:
 		return
-	
+
 	var element_vfx_node = elemental_emitting_vfx[int(status) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = is_on
