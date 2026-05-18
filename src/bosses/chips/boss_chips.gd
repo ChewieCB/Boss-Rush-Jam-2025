@@ -2046,7 +2046,7 @@ func _create_segment_cache() -> Node3D:
 		segment_hit_area.add_child(shape)
 		_segment_col_shapes.append(shape)
 		
-		cache_segment.call_deferred(segment)
+		cache_segment(segment)
 	
 	# Setup sfx player at head segment
 	var chiptopede_head = segment_cache_parent.get_child(0)
