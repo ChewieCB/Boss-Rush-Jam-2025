@@ -87,7 +87,7 @@ func _on_body_entered(body: Node3D) -> void:
 	elif body is BossCore:
 		pass
 	else:
-		queue_free()
+		finished.emit()
 
 
 # TODO - make a global util method
@@ -98,7 +98,7 @@ func spark() -> void:
 
 
 func _on_timer_timeout() -> void:
-	deactivate()
+	finished.emit()
 
 
 func activate() -> void:
