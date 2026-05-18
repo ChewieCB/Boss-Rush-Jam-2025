@@ -40,6 +40,7 @@ var center_pos: Vector3
 @export var swipe_speed: float = 15.0
 @export var swipe_targeting_timeout: float = 2.0
 @onready var swipe_targeting_timer: Timer = $MeleeTargetingTimer
+var swipe_proj_pool: Array = []
 var active_arc_projectiles: Array = []
 # SFX
 @export var sfx_swipe: Array[AudioStream]
@@ -98,10 +99,13 @@ func _ready() -> void:
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
-
-	debug_trajectory_mesh = MeshInstance3D.new()
-	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
+	
+	# TODO - remove or replace with array mesh
+	#debug_trajectory_mesh = MeshInstance3D.new()
+	#debug_trajectory_mesh.mesh = ImmediateMesh.new()
+	#get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
+	
+	_init_swipe_projectiles()
 
 	if GameManager.boss_ante >= 1:
 		pass
@@ -364,6 +368,14 @@ func _recover_state_entered() -> void:
 
 ## ARC SWIPE
 
+func _init_swipe_projectiles() -> void:
+	swipe_proj_pool.clear()
+	for i in range(num_swipes * 4):
+		var _proj = swipe_prefab.instantiate()
+		scene_root.add_child.call_deferred(_proj)
+		_proj.deactivate()
+		swipe_proj_pool.push_back(_proj)
+
 
 func _on_arc_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Targeting"
@@ -468,7 +480,7 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 			await get_tree().create_timer(delay_between_swipe).timeout
 
 			spark(spark_marker.global_position)
-			anim_player.play("substack/slash_spark")
+			anim_player.play("substack/slawsh_spark")
 		sprite.flip_h = !sprite.flip_h
 
 	sprite.flip_h = false
@@ -479,12 +491,30 @@ func _spawn_arc_proj() -> void:
 	sfx_player.stream = sfx_swipe.pick_random()
 	sfx_player.play()
 	#
-	var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
+	var arc_proj := fire_projectile_pooled(swipe_proj_pool, projectile_spawn_marker.global_position)
+	#var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
 	arc_proj.rotation_degrees.z += randf_range(-10, 10)
 	arc_proj.velocity = (
 		arc_proj.get_arc_vector(target.global_position)
 	)
 	active_arc_projectiles.append(arc_proj)
+
+
+func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
+	if len(sfx_arr) > 0:
+		play_positional_sound(sfx_arr.pick_random())
+
+	var projectile = proj_pool.pop_front()
+	if not projectile:
+		return
+	
+	projectile.global_position = spawn_pos
+	projectile.finished.connect(func(): proj_pool.push_back(projectile))
+	var dir_to_target = spawn_pos.direction_to(target.global_position)
+	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
+	projectile.activate()
+	return projectile
 
 
 func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:
@@ -724,22 +754,22 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: floa
 	)
 
 	# Drawing
-	if debug:
-		var trajectory_points: Array = []
+	#if debug:
+		#var trajectory_points: Array = []
+#
+		#for i in range(1, 151):
+			#var t = time * float(i) / float(151)
+			#var x = start_pos.x + initial_velocity.x * t
+			#var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
+			#var z = start_pos.z + initial_velocity.z * t
+			#trajectory_points.append(Vector3(x, y, z))
 
-		for i in range(1, 151):
-			var t = time * float(i) / float(151)
-			var x = start_pos.x + initial_velocity.x * t
-			var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
-			var z = start_pos.z + initial_velocity.z * t
-			trajectory_points.append(Vector3(x, y, z))
-
-		debug_trajectory_mesh.mesh.clear_surfaces()
-		debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
-		for p in trajectory_points:
-			debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
-			debug_trajectory_mesh.mesh.surface_add_vertex(p)
-		debug_trajectory_mesh.mesh.surface_end()
+		#debug_trajectory_mesh.mesh.clear_surfaces()
+		#debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+		#for p in trajectory_points:
+			#debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
+			#debug_trajectory_mesh.mesh.surface_add_vertex(p)
+		#debug_trajectory_mesh.mesh.surface_end()
 
 	return [initial_velocity, time_up, time_down]
 
