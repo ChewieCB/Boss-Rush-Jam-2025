@@ -82,7 +82,7 @@ var rolling_chip_spread_deg: float = 90 # Based on ante 3
 @export var sweep_time: float = 0.05
 @export var sweep_delay: float = 0.4
 @export var chip_sweep_prefab: PackedScene
-var chip_sweep_instances: Array = []
+var chip_sweep_pool: Array = []
 # SFX
 @export var sfx_chip_sweep_out: Array[AudioStream]
 #
@@ -286,6 +286,8 @@ func _ready() -> void:
 		_init_slam_shockwave()
 	for i in range(n_chips_per_roll):
 		_init_backspin_chip()
+	for i in range(n_chips_per_sweep_volley * chip_sweep_repeat):
+		_init_chip_sweep()
 	
 	# Stack pool init
 	var _parent = get_parent()
@@ -794,7 +796,7 @@ func _init_backspin_chip() -> void:
 	chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
 	chip_inst.deactivate()
 	scene_root.add_child.call_deferred(chip_inst)
-	chip_inst.global_position = despawned_pos
+	chip_inst.set_deferred("global_position", despawned_pos)
 	
 	rolling_chip_pool.push_back(chip_inst)
 
@@ -887,6 +889,15 @@ func _on_backspin_chip_state_exited() -> void:
 
 
 ## Chip Sweep
+
+func _init_chip_sweep() -> void:
+	var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
+	sweep_proj.init(chip_sweep_damage * GameManager.get_risk_dmg_mult())
+	scene_root.add_child.call_deferred(sweep_proj)
+	#sweep_proj.set_deferred("global_position", despawned_pos)
+	
+	chip_sweep_pool.push_back(sweep_proj)
+
 #
 func _on_chip_sweep_targeting_state_entered() -> void:
 	_targeting_entered("start_sweep", "Chip Sweep")
@@ -894,60 +905,54 @@ func _on_chip_sweep_targeting_state_entered() -> void:
 
 func _on_chip_sweep_sweep_state_entered() -> void:
 	debug_state_label.text = "Chip Sweep | Sweep"
-
+	
 	anim_player.play("big_stack/projectile_telegraph")
 	await _telegraph_attack()
-	# Catch and handle a mid-await state change
-	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
-		return 
-
+	
 	for i in chip_sweep_repeat:
 		# HACK - break out of this loop if we send an end_attack event
 		if "end_attack" in state_chart._queued_events:
 			return
-
+		
 		for j in range(n_chips_per_sweep_volley):
-			var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
-			sweep_proj.init(chip_sweep_damage * GameManager.get_risk_dmg_mult())
-			scene_root.add_child(sweep_proj)
+			var sweep_proj: ChipSweepProjectile = chip_sweep_pool.pop_front()
+			await get_tree().physics_frame
 			sweep_proj.global_transform = self.global_transform
-			chip_sweep_instances.append(sweep_proj)
-
+			sweep_proj.activate()
+			
 			var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
 			sweep_proj.anim_time = sweep_time / chips_to_player
-
+			
 			anim_player.play("big_stack/projectile_fire")
 			# SFX
 			big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
 			big_stack_sfx_player.play()
-
+			
 			sweep_proj.add_chips(chips_to_player + 2)
 			await sweep_proj.chips_placed
 			# TODO - return sfx
 			# SFX
 			#big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
 			#big_stack_sfx_player.play()
-
+			
 			sweep_proj.remove_chips()
 			await sweep_proj.chips_removed
 			anim_player.play("big_stack/projectile_telegraph")
-			chip_sweep_instances.erase(sweep_proj)
-			sweep_proj.queue_free()
-
+			#sweep_proj.global_position = despawned_pos
+			sweep_proj.deactivate()
+			chip_sweep_pool.push_back(sweep_proj)
+		
 		await get_tree().create_timer(sweep_delay).timeout
 		# Catch and handle a mid-await state change
 		if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 			return 
-
+	
 	anim_player.play("big_stack/idle")
 	state_chart.send_event("end_sweep")
 
 
 func _on_chip_sweep_state_exited() -> void:
-	for inst in chip_sweep_instances:
-		if is_instance_valid(inst):
-			inst.queue_free()
-	chip_sweep_instances = []
+	return
 
 
 ## Stack Slam
@@ -1152,7 +1157,7 @@ func _on_ss_charge_merging_state_entered() -> void:
 
 	scene_root.add_child.call_deferred(area_collider)
 
-	area_collider.global_position = self.global_position
+	area_collider.set_deferred("global_position", self.global_position)
 	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage * GameManager.get_risk_dmg_mult()))
 
 	await get_tree().create_timer(0.3).timeout
@@ -2304,7 +2309,7 @@ func _init_aoe_wave() -> void:
 	wave.add_child(wave_mesh)
 	wave.add_child(area_collider)
 	scene_root.add_child.call_deferred(wave)
-	wave.global_position = despawned_pos
+	wave.set_deferred("global_position", despawned_pos)
 	wave.visible = false
 	
 	spawned_area_objects.append([area_collider, wave_mesh])
@@ -2367,7 +2372,7 @@ func _init_aoe_bubble() -> void:
 
 	bubble.add_child(area_collider)
 	scene_root.add_child.call_deferred(bubble)
-	bubble.global_position = despawned_pos
+	bubble.set_deferred("global_position", despawned_pos)
 	bubble.visible = false
 	
 	spawned_area_objects.append([area_collider])
