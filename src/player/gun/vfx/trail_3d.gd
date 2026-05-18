@@ -23,9 +23,6 @@ enum {X, Y, Z}
 @export_range(0, 0.5) var smoothing_ratio: float = 0.25
 @export_enum("View", "Normal", "Object") var alignment: int = VIEW
 @export_enum("X", "Y", "Z") var axis: int = Y
-@export var update_every_n_frames: int = 1   # set to 2 for 30hz updates
-var _frame_counter: int = 0
-
 
 var points := []
 var color := Color(1, 1, 1, 1)
@@ -38,10 +35,8 @@ var _C: Point
 var _temp_segment := []
 var _points := []
 
-var _render_buffer: Array = []  # Pre-allocated array to write geometry to
 var _cached_cam_pos: Vector3
 var _cached_cam_valid: bool = false
-
 
 class Point:
 	var transform: Transform3D
@@ -113,68 +108,51 @@ func _render_realtime() -> void:
 	_render_geometry(render_points)
 
 
-func _render_geometry_from_buffer(count: int) -> void:
-	if count < 2:
+func _render_geometry(source: Array) -> void:
+	var points_count = source.size()
+	if points_count < 2:
 		return
-	
+
+	# The following section is a hack to make orientation "view" work.
+	# but it may cause an artifact at the end of the trail.
+	# You can use transparency in the gradient to hide it for now.
+	var _d: Vector3 = source[0].transform.origin - source[1].transform.origin
+	var _t: Transform3D = source[0].transform
+	_t.origin = _t.origin + _d
+	var point = Point.new(_t, source[0].age)
+	var to_be_rendered = [point] + source
+	points_count += 1
+
 	var half_width: float = base_width / 2.0
-	var u: float = 0.0
-	
+	var u := 0.0
+
 	mesh.clear_surfaces()
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, null)
-	
-	# First entry in buffer is the extrapolated lead point,
-	# so we start the loop at index 1.
-	for i in range(1, count + 1):
-		var factor: float = float(i) / float(count)
-		var point_prev: Point = _render_buffer[i - 1]
-		var point_curr: Point = _render_buffer[i]
-		
-		var verts = _prepare_geometry(point_prev, point_curr, half_width, 1.0 - factor)
-		
+	for i in range(1, points_count):
+		var factor: float = float(i) / (points_count - 1)
+
+		var vertices = _prepare_geometry(to_be_rendered[i - 1], to_be_rendered[i], half_width, 1.0 - factor)
 		if tiled_texture:
 			if tiling > 0:
 				factor *= tiling
 			else:
-				var travel: float = (point_prev.transform.origin - point_curr.transform.origin).length()
+				var travel = (to_be_rendered[i - 1].transform.origin - to_be_rendered[i].transform.origin).length()
 				u += travel / base_width
 				factor = u
+
 		
 		mesh.surface_set_uv(Vector2(factor, 0))
-		mesh.surface_add_vertex(verts[0])
+		mesh.surface_add_vertex(vertices[0])
 		mesh.surface_set_uv(Vector2(factor, 1))
-		mesh.surface_add_vertex(verts[1])
-	
+		mesh.surface_add_vertex(vertices[1])
+
+
 	mesh.surface_end()
-
-
-func _render_geometry(source: Array) -> void:
-	var count = source.size()
-	if count < 2:
-		return
-	
-	# Update buffer
-	_render_buffer.resize(count + 1)
-	for i in range(count):
-		_render_buffer[i + 1] = source[i]
-	
 	# Cache camera pos
 	var cam = get_viewport().get_camera_3d()
 	_cached_cam_valid = cam != null
 	if _cached_cam_valid:
 		_cached_cam_pos = cam.global_transform.origin
-	
-	# The following section is a hack to make orientation "view" work.
-	# but it may cause an artifact at the end of the trail.
-	# You can use transparency in the gradient to hide it for now.
-	var first: Point = _render_buffer[1]
-	var second: Point = _render_buffer[2]
-	var _d: Vector3 = first.transform.origin - second.transform.origin
-	var _t: Transform3D = first.transform
-	_t.origin = _t.origin + _d
-	_render_buffer[0] = Point.new(_t, first.age)
-	
-	_render_geometry_from_buffer(count)
 
 
 func _update_points() -> void:
@@ -288,18 +266,6 @@ func _ready() -> void:
 
 
 func _process(delta) -> void:
-	_frame_counter += 1
-	var should_render: bool = _frame_counter % update_every_n_frames == 0
-	
-	if not should_render:
-		if _A and _B and _C:
-			_A.update(delta, _points)
-			_B.update(delta, _points)
-			_C.update(delta, _points)
-			for point in _points:
-				point.update(delta, _points)
-		return
-	
 	if emit:
 		_emit(delta)
 		return
