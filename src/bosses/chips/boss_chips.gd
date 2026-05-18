@@ -42,7 +42,6 @@ var center_pos := Vector3(0, 0, -2)
 
 ## Attacks
 @export_group("Attacks | General")
-@export var explosion_scene: PackedScene
 @export var pushback_force: float = 20.0
 var aoe_wave_pool: Array = []
 var aoe_bubble_pool: Array = []
@@ -56,6 +55,7 @@ var big_attacks_performed: int = 0
 @export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 var _spawn_tweens: Array[Tween] = []
+
 # SFX
 @export var sfx_stack_split: Array[AudioStream]
 @export var sfx_stack_merge: Array[AudioStream]
@@ -385,12 +385,11 @@ func _on_health_dead_state_entered() -> void:
 	# Create an explosion
 	sprite.render_priority = -1
 	SoundManager.play_sound(sfx_chiptopede_impact.pick_random(), "SFX")
-	var explosion_inst = explosion_scene.instantiate()
-	add_child(explosion_inst)
-	explosion_inst.change_mesh_scale(4.0)
-	explosion_inst.global_position = self.global_position
-	var tween: Tween = get_tree().create_tween()
-	tween.tween_property(sprite, "modulate:a", 0.0, explosion_inst.fire.lifetime / 2)
+	
+	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+	explosion_inst.init(0)
+	explosion_inst.set_damage_radius(8.0)
+	explosion_inst.activate(self.global_position)
 
 	death_anim_finished.emit()
 
@@ -784,10 +783,10 @@ func _on_big_stack_state_entered_phase_2() -> void:
 
 	# TODO - make this area damage explosion a generic method we can re-use
 	# Create an explosion
-	var explosion_inst = explosion_scene.instantiate()
-	add_child(explosion_inst)
-	explosion_inst.change_mesh_scale(4.0)
-	explosion_inst.global_position = self.global_position
+	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+	explosion_inst.init(0)
+	explosion_inst.set_damage_radius(14.0)
+	explosion_inst.activate(self.global_position)
 
 	merge_stacks()
 
@@ -991,6 +990,7 @@ func _on_stack_slam_jump_state_entered() -> void:
 
 
 func _on_stack_slam_slam_state_entered() -> void:
+	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
 	var shockwave = slam_shockwave_prefab.instantiate()
 	scene_root.add_child(shockwave)
 
@@ -1133,13 +1133,12 @@ func _on_ss_charge_merging_state_entered() -> void:
 	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
 	big_stack_sfx_player.play()
 
-	# TODO - make this area damage explosion a generic method we can re-use
-	#
 	# Create an explosion
-	var explosion_inst = explosion_scene.instantiate()
-	add_child(explosion_inst)
-	explosion_inst.change_mesh_scale(4.0)
-
+	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+	explosion_inst.init(0)
+	explosion_inst.set_damage_radius(16.0)
+	explosion_inst.activate(self.global_position + Vector3(0, 1.4, 0))
+	
 	# Create an AoE damage
 	var area_collider := Area3D.new()
 	var area_collider_shape := CollisionShape3D.new()
@@ -1222,6 +1221,7 @@ func _on_merge_aoe_targeting_state_entered() -> void:
 
 func _on_merge_aoe_slam_state_entered() -> void:
 	# Slam down and generate a radial wave AoE on impact
+	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
 	var shockwave = slam_shockwave_prefab.instantiate()
 	scene_root.add_child(shockwave)
 
@@ -1451,7 +1451,8 @@ func _on_chiptopede_leap_leaping_state_entered() -> void:
 
 	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
 	chiptopede_sfx_player.play()
-
+	
+	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
 	var chip_particles = chip_stack_particles_prefab.instantiate()
 	scene_root.add_child(chip_particles)
 	chip_particles.global_position = self.global_position
@@ -1490,6 +1491,7 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 		var result = space_state.intersect_ray(query)
 		if result:
 			if result.collider is Area3D:
+				# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
 				var splash = splash_particle_prefab.instantiate()
 				scene_root.add_child(splash)
 				splash.global_position = result.collider.global_position
@@ -1500,6 +1502,7 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 				splash.emitting = true
 			else:
 				if is_leap_first_impact:
+					# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
 					var chip_particles = chip_stack_particles_prefab.instantiate()
 					scene_root.add_child(chip_particles)
 					chip_particles.global_position = segment.global_position
@@ -1516,11 +1519,11 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 		spawn_aoe_bubble(leap_aoe_radius, leap_damage * GameManager.get_risk_dmg_mult(), segment.global_position, 0.4, segment)
 		#spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
 		# Create an explosion
-		var explosion_inst = explosion_scene.instantiate()
-		add_child(explosion_inst)
-		explosion_inst.change_mesh_scale(8.0)
-		explosion_inst.global_position = segment.global_position
-
+		var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+		explosion_inst.init(0)
+		explosion_inst.set_damage_radius(14.0)
+		explosion_inst.activate(segment.global_position)
+		
 		last_leap_end_pos = segment.global_position
 		leap_damage_timer.start(leap_damage_cooldown)
 
@@ -1701,6 +1704,7 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
+	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
 	var splash = splash_particle_prefab.instantiate()
 	scene_root.add_child(splash)
 	splash.global_position = follow_nodes[0].global_position
@@ -2292,7 +2296,7 @@ func _init_aoe_wave() -> void:
 	
 	wave.add_child(wave_mesh)
 	wave.add_child(area_collider)
-	scene_root.add_child(wave)
+	scene_root.add_child.call_deferred(wave)
 	wave.global_position = despawned_pos
 	wave.visible = false
 	
@@ -2349,7 +2353,7 @@ func _init_aoe_bubble() -> void:
 	var collider_shape := SphereShape3D.new()
 	collider_shape.radius = 0.01
 	area_collider_shape.shape = collider_shape
-	area_collider.add_child(area_collider_shape)
+	area_collider.add_child.call_deferred(area_collider_shape)
 	area_collider.collision_layer = int(pow(2, 7))
 	area_collider.collision_mask = int(pow(2, 2 - 1))
 	area_collider_shape.disabled = true
@@ -2411,12 +2415,13 @@ func _on_chiptopede_death_exploding_state_entered() -> void:
 				segment.visible = false
 				segment.process_mode = PROCESS_MODE_DISABLED
 				# If the segment is below the waterline just free it and move on
-				if segment.global_position.y < -20.0:
+				if segment.global_position.y < -30.0:
 					continue
-				var explosion_inst = explosion_scene.instantiate()
-				scene_root.add_child(explosion_inst)
-				explosion_inst.global_position = segment.global_position
-				explosion_inst.change_mesh_scale(2.0)
+				
+				var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+				explosion_inst.init(0)
+				explosion_inst.set_damage_radius(12.0)
+				explosion_inst.activate(segment.global_position)
 				await get_tree().create_timer(chiptopede_explosion_delay).timeout
 
 	state_chart.send_event("end_exploding")

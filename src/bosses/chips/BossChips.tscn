@@ -1,8 +1,7 @@
-[gd_scene load_steps=97 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=96 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="3_7sirk"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_hbmr3"]
 [ext_resource type="Texture2D" uid="uid://wtny7hmnvya0" path="res://assets/sprite/aoe_markers/aoe_cracks.png" id="3_vww1n"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
@@ -281,7 +280,6 @@ collision_mask = 11
 script = ExtResource("2_2er6y")
 phase_2_health_percentage_trigger = 0.5
 slam_aoe_decal = ExtResource("3_vww1n")
-explosion_scene = ExtResource("3_7sirk")
 pushback_force = 20.0
 sfx_jump = Array[AudioStream]([ExtResource("5_ausvj"), ExtResource("6_x0ywq"), ExtResource("7_updhw")])
 sfx_hurt_scream = Array[AudioStream]([ExtResource("8_wp740"), ExtResource("9_70hjw"), ExtResource("10_bvqns")])
