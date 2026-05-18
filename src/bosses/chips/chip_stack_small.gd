@@ -25,6 +25,7 @@ var center_pos: Vector3
 @export var chip_shots_per_burst: int = 4
 @export var num_bursts: int = 1
 @export var delay_between_burst: float = 0.6
+var chip_projectile_pool: Array = []
 # SFX
 @export var sfx_shoot_telegraph: Array[AudioStream]
 @export var sfx_shoot: Array[AudioStream]
@@ -95,7 +96,6 @@ var nav_agent_rid: RID
 
 func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
-
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
@@ -105,8 +105,9 @@ func _ready() -> void:
 	#debug_trajectory_mesh.mesh = ImmediateMesh.new()
 	#get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
 	
+	_init_chip_projectiles()
 	_init_swipe_projectiles()
-
+	
 	if GameManager.boss_ante >= 1:
 		pass
 	if GameManager.boss_ante >= 2:
@@ -275,8 +276,19 @@ func _on_attack_telegraph_state_exited() -> void:
 
 ## SMALL BLIND PROJECTILES
 
+func _init_chip_projectiles() -> void:
+	chip_projectile_pool.clear()
+	for i in range(chip_shots_per_burst * num_bursts):
+		var _proj = chip_projectile.instantiate()
+		scene_root.add_child.call_deferred(_proj)
+		#await get_tree().physics_frame
+		#_proj.deactivate()
+		chip_projectile_pool.push_back(_proj)
+
+
 func _on_small_blind_targeting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Targeting"
+	desired_distance = DESIRED_DISTANCE * 2
 	navigation_component.enable()
 
 	anim_player.play("substack/idle")
@@ -340,7 +352,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 			sfx_player.stream = sfx_shoot.pick_random()
 			sfx_player.play()
 			#
-			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
+			fire_projectile_pooled(chip_projectile_pool, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
 
@@ -361,6 +373,7 @@ func _on_small_blind_recover_state_entered() -> void:
 
 func _recover_state_entered() -> void:
 	anim_player.play("substack/RESET")
+	desired_distance = DESIRED_DISTANCE
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
 	state_chart.send_event("end_recovery")
@@ -373,6 +386,7 @@ func _init_swipe_projectiles() -> void:
 	for i in range(num_swipes * 4):
 		var _proj = swipe_prefab.instantiate()
 		scene_root.add_child.call_deferred(_proj)
+		await get_tree().physics_frame
 		_proj.deactivate()
 		swipe_proj_pool.push_back(_proj)
 
@@ -508,12 +522,16 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 	if not projectile:
 		return
 	
+	projectile.activate()
 	projectile.global_position = spawn_pos
-	projectile.finished.connect(func(): proj_pool.push_back(projectile))
+	projectile.finished.connect(func(): 
+		projectile.deactivate()
+		proj_pool.push_back(projectile)
+	)
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
 	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
-	projectile.activate()
+	
 	return projectile
 
 

@@ -26,7 +26,7 @@ point_count = 2
 
 [node name="BalllProjectile" type="Area3D"]
 collision_layer = 8
-collision_mask = 7
+collision_mask = 67
 script = ExtResource("1_jebwo")
 projectile_damage = 5.0
 
@@ -50,7 +50,7 @@ cast_shadow = 0
 mesh = SubResource("ImmediateMesh_80j66")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("3_5ggf0")
-segments = 10
+segments = 3
 base_width = 0.1
 width_profile = SubResource("Curve_bpr7s")
 
