@@ -2046,7 +2046,7 @@ func _create_segment_cache() -> Node3D:
 		segment_hit_area.add_child(shape)
 		_segment_col_shapes.append(shape)
 		
-		cache_segment(segment)
+		cache_segment.call_deferred(segment)
 	
 	# Setup sfx player at head segment
 	var chiptopede_head = segment_cache_parent.get_child(0)
@@ -2139,7 +2139,7 @@ func move_segments_along_path(
 				segment_callback.call(path_follow)
 			if free_segment_when_finished:
 				var segment = path_follow.get_child(0)
-				cache_segment(segment, path_follow)
+				cache_segment.call_deferred(segment, path_follow)
 			completed_nodes.append(i)
 
 
@@ -2152,7 +2152,7 @@ func _cleanup_segment_arrays() -> void:
 			if segment:
 				segment.splash_particles.emitting = false
 				segment.splash_ring_particles.emitting = false
-				cache_segment(segment, node)
+				cache_segment.call_deferred(segment, node)
 	follow_nodes = []
 	completed_nodes = []
 	chiptopede_head_offset = 0.0
