@@ -205,7 +205,7 @@ func _on_explode_timer_timeout() -> void:
 		await get_tree().create_timer(0.25).timeout
 		destroyed.emit(hit_boss)
 		stop_elemental_particles()
-		call_deferred("queue_free")
+		queue_free.call_deferred()
 
 
 func create_explosion() -> void:

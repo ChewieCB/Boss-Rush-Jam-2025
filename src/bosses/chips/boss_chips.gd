@@ -665,6 +665,7 @@ func hide_big_stack() -> void:
 	collider.set_deferred("disabled", true)
 	hurtbox_collider.set_deferred("disabled", true)
 	get_node("AimAssistBubble/CollisionShape3D").set_deferred("disabled", true)
+	_cleanup_sticky_bombs.call_deferred(self)
 
 ##
 func _disable_gravity() -> void:
@@ -695,6 +696,11 @@ func trigger_pushback(
 func split_stacks(spawn_func: Callable) -> void:
 	hide_big_stack()
 	await spawn_func.call()
+	
+	var stuck_shots = self.find_children("*", "StickyBombProjectile")
+	for shot in stuck_shots:
+		shot.queue_free()
+	
 	state_chart.send_event("end_attack")
 
 func _spawn_stacks_close() -> void:
@@ -1820,6 +1826,7 @@ func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
 
 
 func _deactivate_stack(stack: ChipBossSubStack) -> void:
+	# If there are any sticky bombs attached when we despawn, reparent them to the big stack
 	stack.process_mode = Node.PROCESS_MODE_DISABLED
 	stack.set_physics_process(false)
 	stack.set_process(false)
@@ -1834,8 +1841,18 @@ func _deactivate_stack(stack: ChipBossSubStack) -> void:
 	stack.collider.set_deferred("disabled", true)
 	stack.hurtbox_collider.set_deferred("disabled", true)
 	stack.get_node("AimAssistBubble/CollisionShape3D").set_deferred("disabled", true)
+	_cleanup_sticky_bombs.call_deferred(stack)
 	
 	active_stacks.erase(stack)
+
+
+func _cleanup_sticky_bombs(parent: Node3D) -> void:
+	# FIXME - prevent sticky bombs from becoming Orphan nodes
+	for node in parent.find_children("*", "StickyBombProjectile"):
+		#if node is StickyBombProjectile:
+		node.process_mode = Node.PROCESS_MODE_DISABLED
+		node.visible = false
+		node.queue_free.call_deferred()
 
 
 func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Array = []) -> Array:
