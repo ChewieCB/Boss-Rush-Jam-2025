@@ -111,6 +111,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 		impacted.emit(self , true, hitscan_col_point)
 		var calculated_damage = calculate_bullet_damage()
+		
+		if target is ChiptopedeSegmentCollision:
+			# Pass any damage on to the actual boss
+			target = target.parent
+		
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self )
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect

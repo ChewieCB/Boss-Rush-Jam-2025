@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=97 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -79,6 +79,7 @@
 [ext_resource type="PackedScene" uid="uid://eclk54je77sy" path="res://src/bosses/bartender/area_effects/SlowHazardArea.tscn" id="56_sg4b6"]
 [ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="65_1jthq"]
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="65_skpgp"]
+[ext_resource type="Script" path="res://src/bosses/chips/chiptopede_segment_hit_area.gd" id="66_8jaam"]
 [ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="66_ih6eo"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
@@ -411,6 +412,7 @@ enabled = false
 [node name="ChiptopedeSegmentHitArea" type="Area3D" parent="." index="6"]
 collision_layer = 4
 collision_mask = 8
+script = ExtResource("66_8jaam")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
