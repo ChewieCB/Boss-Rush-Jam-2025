@@ -37,6 +37,14 @@ func _input(event: InputEvent) -> void:
 				contextual_cancel(null)
 			input_prompt_cancel.animate()
 
+		# Consume ui_page_up and ui_page_down to prevent focus lost
+		if event.is_action_pressed("ui_page_up"):
+			# Move focus to whatever makes sense — previous group, first item, etc.
+			get_viewport().set_input_as_handled()
+
+		elif event.is_action_pressed("ui_page_down"):
+			get_viewport().set_input_as_handled()
+
 
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = false):
 	if not visible and not forced:
