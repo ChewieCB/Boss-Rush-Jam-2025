@@ -32,7 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://ccfs3efw1odv5" path="res://assets/sprite/effect_icons/38.png" id="31_ur0iu"]
 [ext_resource type="PackedScene" uid="uid://dahoxrm1s8qfl" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExecutionerRound.tscn" id="32_x0brv"]
 [ext_resource type="Texture2D" uid="uid://dbtmdysh1jbr1" path="res://assets/sprite/effect_icons/22.png" id="33_l1f8b"]
-[ext_resource type="PackedScene" uid="uid://bkisa5v3ge283" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExplosiveBulletEffect.tscn" id="34_kdh61"]
+[ext_resource type="PackedScene" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExplosiveBulletEffect.tscn" id="34_kdh61"]
 [ext_resource type="Texture2D" uid="uid://c2n6l8vsjkhsm" path="res://assets/sprite/effect_icons/23.png" id="35_r0kbw"]
 [ext_resource type="PackedScene" uid="uid://ds18irkd5edof" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExtendedDrumEffect.tscn" id="36_dxq6d"]
 [ext_resource type="PackedScene" uid="uid://ycywyugxki3g" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelFireInfusion.tscn" id="37_6qlrs"]
@@ -105,7 +105,7 @@
 [ext_resource type="PackedScene" uid="uid://nisaioekixfh" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelTriggerLeg.tscn" id="104_rmo11"]
 [ext_resource type="Texture2D" uid="uid://koqvlgq85ryq" path="res://assets/sprite/effect_icons/6.png" id="105_pkc18"]
 [ext_resource type="PackedScene" uid="uid://dy8gopfkjkfe0" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelVector.tscn" id="106_k1ql0"]
-[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/Shop.tscn" id="107_3lf8f"]
+[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/ShopUI.tscn" id="107_3lf8f"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_am2uw"]
 _surfaces = [{

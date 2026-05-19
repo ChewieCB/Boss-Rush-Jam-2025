@@ -2,7 +2,7 @@ extends Control
 class_name BarrelInfoRegion
 
 @export var barrel_info_icon_prefab: PackedScene
-@export var rotation_speed: float = 0.2  # Radians per second
+@export var rotation_speed: float = 0.2 # Radians per second
 
 @export var info_panel: ColorRect
 
@@ -54,7 +54,7 @@ var active_effect_detail_idx: int = 0
 
 func _ready() -> void:
 	circle_ring_center_pos = circle_ring_centerpoint.position
-	circle_ring_radius = -(circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
+	circle_ring_radius = - (circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
 	
 	_init_barrel_effect_ui()
 	show_barrel_overview(false)
@@ -186,7 +186,7 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 			continue
 		
 		var barrel_roll_data: Dictionary = barrel_inst.get_barrel_effect_data_at(i)
-		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(PI/2 + (rotation_step * i))
+		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(PI / 2 + (rotation_step * i))
 		ui.set_barrel_roll_data(barrel_roll_data)
 		ui.visible = true
 	
@@ -202,8 +202,8 @@ func cycle_effect_detail(hide_line: bool = false) -> void:
 		active_detail_icon = null
 	
 	active_effect_detail_idx = wrapi(
-		active_effect_detail_idx - 1, 
-		0, 
+		active_effect_detail_idx - 1,
+		0,
 		current_effect_count
 	)
 	
@@ -220,15 +220,15 @@ func rotate_circle_one_slot() -> void:
 	var rotation_step = 2 * PI / current_effect_count
 	
 	spin_tween = get_tree().create_tween()
-	spin_tween.set_parallel(true)#.set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
+	spin_tween.set_parallel(true) # .set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
 	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
-	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2*PI, 0.23).set_ease(Tween.EASE_OUT)
+	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2 * PI, 0.23).set_ease(Tween.EASE_OUT)
 	
 	var scale_tween = self.create_tween()
 	scale_tween.set_parallel(false)
-	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(0.8, 0.8), 0.1)
-	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(1.1, 1.1), 0.12).set_ease(Tween.EASE_IN)
-	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(1.0, 1.0), 0.16).set_ease(Tween.EASE_OUT)
+	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(0.8, 0.8), 0.1)
+	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(1.1, 1.1), 0.12).set_ease(Tween.EASE_IN)
+	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(1.0, 1.0), 0.16).set_ease(Tween.EASE_OUT)
 	
 	for i in range(MAX_EFFECT_COUNT):
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
