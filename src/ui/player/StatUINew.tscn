@@ -224,7 +224,7 @@ theme_override_constants/margin_left = 8
 script = ExtResource("2_5adv1")
 timer = NodePath("HealthBar/Timer")
 health_bar = NodePath("HealthBar")
-damage_bar = NodePath("HealthBar/DamageBar")
+damage_bar = NodePath("DamageBar")
 health_label = NodePath("Label")
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer"]
