@@ -176,6 +176,7 @@ var persist_segements: bool = false
 @export_subgroup("Attributes")
 @export var chiptopede_max_health: float = 6000
 @export var chiptopede_segments: int = 24
+var chiptopede_last_hit_segment: ChiptopedeSegment
 @export var segment_separation: float = 2.0
 @export var min_spawn_distance: float = 36.0
 @export var chiptopede_explosion_delay: float = 0.07
@@ -2557,11 +2558,12 @@ func _on_chiptopede_segment_hit_area_area_entered(area: Area3D) -> void:
 
 func _on_chiptopede_segment_hit_area_area_shape_entered(area_rid: RID, area: Area3D, area_shape_idx: int, local_shape_idx: int) -> void:
 	var _parent = area.get_parent()
+	var _segment = follow_nodes[local_shape_idx].get_child(0)
+	chiptopede_last_hit_segment = _segment
 	if _parent is StickyBombProjectile:
 		if _parent.sticked:
 			return
 		# Get the segment node and stick the bullet to that
-		var _segment = follow_nodes[local_shape_idx].get_child(0)
 		_parent.damage_body(self)
 		_parent.stick_bullet(_segment)
 		_parent.exploded.connect(_on_sticky_bomb_detonate_segment.bind(local_shape_idx))
@@ -2573,4 +2575,28 @@ func _on_sticky_bomb_detonate_segment(explosion_inst: ExplosionDamageArea, segme
 	# If the segment is off screen the explosion should still do damage
 	if segment_col.disabled:
 		explosion_inst._on_body_entered(self, false)
-		
+
+
+func _spawn_chip() -> void:
+	if _chip_spawn_pool.size() == 0:
+		_init_chip_pool()
+		for i in range(10):
+			_init_chip_pool.call_deferred()
+	
+	var chip = _chip_spawn_pool.pop_front()
+	chip.activate()
+	chip.randomise_chip_value()
+	active_chips.append(chip)
+	if chiptopede_last_hit_segment:
+		chip.global_position = chiptopede_last_hit_segment.global_position
+		chiptopede_last_hit_segment = null
+		chip.rotate_y(randf_range(0, 2 * PI))
+		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+		chip.apply_central_force(Vector3.UP * chip_spawn_force)
+	else:
+		chip.global_position = self.global_position
+		chip.rotate_y(randf_range(0, 2 * PI))
+		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+		chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+	
+	chip_dropped.emit(chip.value)
