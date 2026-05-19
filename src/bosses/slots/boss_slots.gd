@@ -912,7 +912,8 @@ func _on_cherry_bombs_targeting_state_entered() -> void:
 	state_chart.send_event("attack_buildup")
 
 
-func _on_cherry_bombs_targeting_state_physics_processing(_delta: float) -> void:
+func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
+	orbit_towards_player(delta)
 	if self.global_position.distance_to(target.global_position) <= max_drop_distance:
 		state_chart.send_event("start_dropping_bombs")
 
