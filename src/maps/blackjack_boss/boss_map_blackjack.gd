@@ -34,24 +34,14 @@ func _ready() -> void:
 			music_playback.switch_to_clip(1)
 	)
 	
-	#for stack in chip_stacks_parent.get_children():
-		#var _rotation: float = randf_range(0, 2*PI)
-		## If minimum scale is 0.5 then minimum y value is -3.25
-		#var new_y_scale: float = randf_range(min_stack_height, max_stack_height)
-		#var new_y_pos: float = remap(new_y_scale, 0.5, 1.0, -3.25, 0.0)
-		#var stack_mesh: MeshInstance3D = stack.get_child(0)
-		#var stack_collider: CollisionShape3D = stack.get_child(1)
-		#stack_mesh.scale.y = new_y_scale
-		#stack_mesh.position.y = new_y_pos
-		##stack_mesh.rotate_y(_rotation)
-		#stack_collider.scale.y = new_y_scale
-		#stack_collider.position.y = new_y_pos
-		##stack_collider.rotate_y(_rotation)
-	
 	super ()
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:
+	if body is PokerChip:
+		body.deactivate()
+		return
+	
 	if "health_component" in body:
 		if body is Player:
 			body.fall_death()
