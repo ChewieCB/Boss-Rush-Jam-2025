@@ -1207,7 +1207,8 @@ func _on_phase_2_state_entered() -> void:
 
 	# Update the center position to account for the platform
 	center_pos.y = 2.0
-
+	
+	cancel_substack_attacks()
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
 
