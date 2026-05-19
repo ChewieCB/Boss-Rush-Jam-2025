@@ -14,7 +14,6 @@ class_name PlayerUI
 func _ready() -> void:
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
 	SaveManager.finished_saving.connect(hide_saving_indicator)
-	#LuckHandler.modifier_message.connect(update_luck_modifier_text)
 	pause_ui.setting_ui.setting_changed.connect(refresh_after_setting_changed)
 	refresh_after_setting_changed()
 

@@ -2,8 +2,16 @@ extends Node
 
 signal luck_increased(value: float)
 signal luck_decreased(value: float)
-signal modifier_message(text: String, is_gain: bool)
+signal modifier_message(text: String, is_gain: bool, luck_type: LuckTriggerType)
 signal trigger_discovered()
+
+enum LuckTriggerType {
+	NONE,
+	NORMAL,
+	RARE, # Give more luck
+	NEGATIVE, # Doesn't alway mean decrease luck
+	DEVIL # Increase luck a lot, much more than Rare, but it probably cost something else...
+}
 
 # Populate a dict of luck triggers, tracking the ID, name, description, message, and is_discovered values
 @export var luck_triggers: Array[LuckTriggerInfo] = []
@@ -51,19 +59,21 @@ func reset_luck_triggers() -> void:
 
 
 ## Modify luck
-func increase_luck(amount: float, message: String = "") -> void:
+func increase_luck(amount: float, message: String = "", type = LuckTriggerType.NORMAL) -> void:
 	amount *= GameManager.get_risk_luck_buildup_mult()
 	luck_increased.emit(amount)
 	modifier_message.emit(
 		message,
-		true
+		true,
+		type
 	)
 
-func decrease_luck(amount: float, message: String = "") -> void:
+func decrease_luck(amount: float, message: String = "", type = LuckTriggerType.NORMAL) -> void:
 	luck_decreased.emit(amount)
 	modifier_message.emit(
 		message,
-		false
+		false,
+		type
 	)
 
 

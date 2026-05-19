@@ -23,7 +23,7 @@ func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = V
 	accumulated_damage += owner_barrel.owner_gun.modified_damage
 	stored_heal = round(accumulated_damage / damage_to_heal_ratio)
 
-func on_reload_start():
+func on_barrel_start_spin():
 	GameManager.player.health_component.heal(stored_heal)
 	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
 	remove_effect()
@@ -31,11 +31,11 @@ func on_reload_start():
 func on_barrel_remove():
 	remove_effect()
 
-func on_barrel_start_spin():
-	remove_effect()
-
 func on_barrel_stop_spin():
 	remove_effect()
+
+func on_player_damaged():
+	stored_heal = 0
 
 func add_buff_that_track_recover_amount():
 	# Just to display the status UI, not actually do anything
