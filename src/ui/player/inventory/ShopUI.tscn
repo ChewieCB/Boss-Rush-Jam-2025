@@ -1,49 +1,49 @@
 [gd_scene load_steps=30 format=3 uid="uid://dxui67spyijhu"]
 
-[ext_resource type="Script" path="res://src/ui/player/inventory/shop_ui.gd" id="1_g1lei"]
-[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_o6gc7"]
-[ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="2_jffbc"]
-[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_1ywl0"]
-[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="3_qq6pb"]
-[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="4_ftv6l"]
-[ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="4_rxrje"]
-[ext_resource type="PackedScene" uid="uid://3ldvxjt8q5gk" path="res://src/ui/player/inventory/ShopGunFrameItemUI.tscn" id="5_fojg4"]
-[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="5_q6fhm"]
-[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_i05nn"]
-[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_1f1kf"]
-[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="7_78f5u"]
-[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_b21fk"]
-[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_mbb0v"]
-[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="9_wboqf"]
-[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="15_ici8l"]
-[ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
-[ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
-[ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="19_p3q3v"]
-[ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="20_lp84q"]
+[ext_resource type="Script" path="res://src/ui/player/inventory/shop_ui.gd" id="1_j5xux"]
+[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="2_2niy2"]
+[ext_resource type="PackedScene" uid="uid://3ldvxjt8q5gk" path="res://src/ui/player/inventory/ShopGunFrameItemUI.tscn" id="3_6b57g"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="4_wvykx"]
+[ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="5_2txqk"]
+[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="6_laotd"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="7_ag3mq"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="8_liw3e"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="9_ajf4e"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="10_p5u2d"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="11_75vgm"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="12_yy762"]
+[ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="13_or7wt"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_onwa3"]
+[ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="15_7v2dv"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="16_kno7h"]
+[ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="17_3ru54"]
+[ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="18_ylgjj"]
+[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="19_cafxn"]
+[ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="20_0d6ii"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bfj2n"]
 random_pitch = 1.36
 streams_count = 2
-stream_0/stream = ExtResource("4_ftv6l")
-stream_1/stream = ExtResource("5_q6fhm")
+stream_0/stream = ExtResource("6_laotd")
+stream_1/stream = ExtResource("7_ag3mq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pve14"]
-shader = ExtResource("1_o6gc7")
+shader = ExtResource("12_yy762")
 shader_parameter/scroll_speed = 0.02
 shader_parameter/angle_degrees = 135.0
 shader_parameter/repeat_x = 14.2
 shader_parameter/repeat_y = 8.0
 shader_parameter/row_offset = 0.65
-shader_parameter/texture_to_scroll = ExtResource("4_rxrje")
+shader_parameter/texture_to_scroll = ExtResource("13_or7wt")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
-shader = ExtResource("1_o6gc7")
+shader = ExtResource("12_yy762")
 shader_parameter/scroll_speed = 0.02
 shader_parameter/angle_degrees = 45.0
 shader_parameter/repeat_x = 14.2
 shader_parameter/repeat_y = 8.0
 shader_parameter/row_offset = 0.65
-shader_parameter/texture_to_scroll = ExtResource("2_jffbc")
+shader_parameter/texture_to_scroll = ExtResource("15_7v2dv")
 
 [sub_resource type="Gradient" id="Gradient_gcfb7"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -98,7 +98,7 @@ _data = {
 "shopkeeper_idle": SubResource("Animation_dro8h")
 }
 
-[node name="Shop" type="Control" node_paths=PackedStringArray("scroll_container", "input_prompt_navigate", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "barrel_info_region")]
+[node name="ShopUI" type="Control" node_paths=PackedStringArray("scroll_container", "input_prompt_navigate", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -109,18 +109,18 @@ offset_right = 1.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_g1lei")
+script = ExtResource("1_j5xux")
 shop_title = "Yuya's Barrels"
-shop_barrel_item_ui_prefab = ExtResource("3_qq6pb")
-shop_gun_frame_item_ui_prefab = ExtResource("5_fojg4")
+shop_barrel_item_ui_prefab = ExtResource("2_2niy2")
+shop_gun_frame_item_ui_prefab = ExtResource("3_6b57g")
 show_shop_first = true
-barrel_item_ui_prefab = ExtResource("7_78f5u")
-gun_frame_item_ui_prefab = ExtResource("19_p3q3v")
+barrel_item_ui_prefab = ExtResource("4_wvykx")
+gun_frame_item_ui_prefab = ExtResource("5_2txqk")
 sfx_open = SubResource("AudioStreamRandomizer_bfj2n")
-sfx_click = ExtResource("6_i05nn")
-sfx_purchase = ExtResource("7_1f1kf")
-sfx_too_expensive = ExtResource("8_b21fk")
-sfx_barrel_equip = ExtResource("9_mbb0v")
+sfx_click = ExtResource("8_liw3e")
+sfx_purchase = ExtResource("9_ajf4e")
+sfx_too_expensive = ExtResource("10_p5u2d")
+sfx_barrel_equip = ExtResource("11_75vgm")
 scroll_container = NodePath("MainRegion/BarrelShopUI/LeftRegion/ScrollContainer")
 input_prompt_navigate = NodePath("ControlHelp/HBoxContainer/InputPrompt1")
 input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
@@ -136,7 +136,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_1ywl0")
+texture = ExtResource("14_onwa3")
 
 [node name="ModifyBG" type="TextureRect" parent="."]
 visible = false
@@ -147,7 +147,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_1ywl0")
+texture = ExtResource("14_onwa3")
 
 [node name="DarkenOverlay" type="TextureRect" parent="."]
 self_modulate = Color(0, 0, 0, 0.708)
@@ -157,7 +157,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_1ywl0")
+texture = ExtResource("14_onwa3")
 
 [node name="FadeDarkBG" type="TextureRect" parent="."]
 layout_mode = 1
@@ -237,7 +237,7 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 2
 
-[node name="ShopGunFrameItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("5_fojg4")]
+[node name="ShopGunFrameItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("3_6b57g")]
 layout_mode = 2
 
 [node name="Spacer" type="Control" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
@@ -266,37 +266,37 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 6
 
-[node name="ShopItemContainer6" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer6" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer7" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer7" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer8" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer8" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer9" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer9" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer10" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer10" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer11" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer11" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer12" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer12" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer13" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer13" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer14" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer14" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="ShopItemContainer15" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopItemContainer15" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
 layout_mode = 2
 
-[node name="CurrencyUI" parent="MainRegion/BarrelShopUI/LeftRegion" instance=ExtResource("15_ici8l")]
+[node name="CurrencyUI" parent="MainRegion/BarrelShopUI/LeftRegion" instance=ExtResource("16_kno7h")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -335,7 +335,7 @@ offset_left = 16.0
 offset_top = 16.0
 offset_right = 733.0
 offset_bottom = 224.0
-texture = ExtResource("16_1lncy")
+texture = ExtResource("17_3ru54")
 expand_mode = 1
 
 [node name="Shopkeeper" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
@@ -344,7 +344,7 @@ offset_left = 208.0
 offset_top = -80.0
 offset_right = 536.0
 offset_bottom = 248.0
-texture = ExtResource("17_l7b4t")
+texture = ExtResource("18_ylgjj")
 expand_mode = 3
 
 [node name="Chatbox" type="Panel" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
@@ -382,7 +382,7 @@ libraries = {
 autoplay = "shopkeeper_idle"
 speed_scale = 0.5
 
-[node name="BarrelInfoRegion" parent="MainRegion/BarrelShopUI/RightRegion" instance=ExtResource("9_wboqf")]
+[node name="BarrelInfoRegion" parent="MainRegion/BarrelShopUI/RightRegion" instance=ExtResource("19_cafxn")]
 custom_minimum_size = Vector2(902, 364)
 layout_mode = 1
 anchors_preset = 3
@@ -425,22 +425,22 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="InputPrompt1" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
+[node name="InputPrompt1" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
 layout_mode = 2
 input_action = "move_generic"
 prompt_text = "Navigate"
 
-[node name="InputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
+[node name="InputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
 layout_mode = 2
 input_action = "ui_accept"
 prompt_text = "Select"
 
-[node name="InputPrompt3" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
+[node name="InputPrompt3" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
 layout_mode = 2
 input_action = "ui_cancel"
 prompt_text = "Exit"
 
-[node name="InputPrompt4" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
+[node name="InputPrompt4" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
 layout_mode = 2
 input_action = "inv_show_barrel_detail"
 prompt_text = "Detail"

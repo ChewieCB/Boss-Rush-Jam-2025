@@ -160,17 +160,19 @@ func get_inventory_focus(focus_idx: int = 0) -> Control:
 	current_focus_area = shop_barrel_container
 	# Update focus area modes
 	var inventory_barrel_items = shop_barrel_container.get_children()
+	var gun_frame_items = shop_gun_frame_container.get_children()
 	for slot in shop_gun_frame_container.get_children():
-		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
+		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for slot in inventory_barrel_items:
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for item in barrel_info_region.circle_ring.get_children():
 		item.focus_mode = FocusMode.FOCUS_NONE
 
-	# Fallback when no barrels in inventory
-	if inventory_barrel_items:
-		return inventory_barrel_items[focus_idx].button
-	#TODO
+	if inventory_barrel_items.size() > 0:
+		# Return item at focus_idx if exist, if not return at index 0
+		return inventory_barrel_items[min(focus_idx, inventory_barrel_items.size() - 1)].button
+	if gun_frame_items.size() > 0:
+		return gun_frame_items[min(focus_idx, gun_frame_items.size() - 1)].button
 	else:
 		return
 

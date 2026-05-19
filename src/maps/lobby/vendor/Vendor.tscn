@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_xd7ad"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_q1oya"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="2_ut4j6"]
-[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/Shop.tscn" id="5_68842"]
+[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/ShopUI.tscn" id="5_68842"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dp6qw"]
 size = Vector3(2.5, 3.1, 2.3)
