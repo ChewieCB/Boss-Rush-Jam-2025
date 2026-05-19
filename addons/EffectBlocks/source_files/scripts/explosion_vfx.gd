@@ -54,10 +54,10 @@ func reset_color() -> void:
 	elem[1].process_material.color_ramp.gradient.set_color(1, Color("#ffff00"))
 
 
-func explode():
+func explode(scale_factor: float = 1.0):
 	for elem in gpu_particles_arr:
-		elem.process_material.scale_min = min_scale
-		elem.process_material.scale_max = max_scale
+		elem.process_material.scale_min = min_scale * scale_factor
+		elem.process_material.scale_max = max_scale * scale_factor
 		elem.process_material.emission_sphere_radius = emission_radius
 		elem.restart()
 		elem.emitting = true

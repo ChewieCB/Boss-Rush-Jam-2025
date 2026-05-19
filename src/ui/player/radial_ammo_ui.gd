@@ -23,25 +23,6 @@ func _draw() -> void:
 	_draw_radial_segments(active_radial_segment_count, max_radial_segment_count, 18.0, PI / 92, Color("#C11E1E"), Color("#C1BEBE"))
 	# Icons
 	#_draw_radial_icons(active_radial_segment_count, max_radial_segment_count, 16.0, PI / 42)
-	
-
-func _process(_delta: float) -> void:
-	queue_redraw()
-	# FIXME FIXME FIXME FIXME - remove this when done testing
-	#if Input.is_action_just_pressed("ui_cancel"):
-		#get_tree().quit()
-	#elif Input.is_action_just_pressed("input_1"):
-		#if Input.is_action_pressed("dash"):
-			#max_radial_segment_count -= 1
-			#active_radial_segment_count -= 1
-		#else:
-			#active_radial_segment_count += 1
-	#elif Input.is_action_just_pressed("input_2"):
-		#if Input.is_action_pressed("dash"):
-			#max_radial_segment_count += 1
-			#active_radial_segment_count += 1
-		#else:
-			#active_radial_segment_count -= 1
 
 
 func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness: float, segment_padding: float, colour: Color, alternating_colour: Color = Color(), is_ccw: bool = false) -> void:
@@ -101,6 +82,7 @@ func update(new_active_count: int, new_max_count: int) -> void:
 	
 	max_radial_segment_count = new_max_count
 	active_radial_segment_count = new_active_count
+	queue_redraw()
 
 
 func animate_full_reload(reload_time: float) -> void:
@@ -116,10 +98,12 @@ func animate_full_reload(reload_time: float) -> void:
 	for i in range(segments_to_unload):
 		active_radial_segment_count -= 1
 		await get_tree().create_timer(reload_time_per_segment, false).timeout
+		queue_redraw()
 	
 	for i in range(segments_to_reload):
 		active_radial_segment_count += 1
 		await get_tree().create_timer(reload_time_per_segment, false).timeout
+		queue_redraw()
 	
 	await get_tree().create_timer(reload_time_padding / 2, false).timeout
 	

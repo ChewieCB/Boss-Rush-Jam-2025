@@ -4,6 +4,8 @@ class_name NavigationComponent
 signal pathfinding_ready
 signal destination_reached
 
+@export var use_legacy_nav: bool = false
+
 @export_category("Components")
 #@export var attack_component: AttackComponent
 @export var nav_agent: NavigationAgent3D
@@ -32,6 +34,14 @@ var query: PhysicsShapeQueryParameters3D
 @onready var entity: CharacterBody3D = get_parent()
 var movement_delta: float
 
+# For staggering group nav calculations across frames
+var group_size: int = -1  
+var group_idx: int = -1
+
+const TARGET_POS_UPDATE_THRESHOLD: float = 0.25
+
+var _is_initialized: bool = false
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -39,6 +49,10 @@ func _ready() -> void:
 
 
 func _wait_for_navigation_setup() -> void:
+	if not use_legacy_nav:
+		if _is_initialized:
+			return
+		_is_initialized = true
 	# Build the target query
 	query = PhysicsShapeQueryParameters3D.new()
 	query.collide_with_bodies = true
@@ -55,7 +69,8 @@ func _wait_for_navigation_setup() -> void:
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
 	NavigationServer3D.agent_set_avoidance_enabled(nav_agent_rid, true)
 	NavigationServer3D.agent_set_radius(nav_agent_rid, avoid_radius)
-	NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, self._on_velocity_computed)
+	if use_legacy_nav:
+		NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, self._on_velocity_computed)
 	nav_agent.velocity_computed.connect(self._on_velocity_computed)
 	#NavigationServer3D.map_changed.connect(_on_map_changed)
 	
@@ -65,6 +80,12 @@ func _wait_for_navigation_setup() -> void:
 
 func _physics_process(_delta) -> void:
 	if is_enabled():
+		if not use_legacy_nav:
+			# Stagger group navigation updates by group pozsition
+			if group_size != -1 and group_idx != -1:
+				if Engine.get_physics_frames() % group_size != group_idx:
+					return
+		
 		# Do not query when the map has never synchronized and is empty.
 		if NavigationServer3D.map_get_iteration_id(nav_agent.get_navigation_map()) == 0:
 			return
@@ -74,7 +95,16 @@ func _physics_process(_delta) -> void:
 		if follow_target:
 			if not target:
 				return
-			set_nav_target_position(target.global_position)
+			
+			if use_legacy_nav:
+				set_nav_target_position(target.global_position)
+			else:
+				# Only update if target has moved more than a minimum threshold
+				var target_pos: Vector3 = target.global_position
+				if nav_agent.target_position == Vector3.ZERO or \
+				target_pos.distance_squared_to(nav_agent.target_position) > TARGET_POS_UPDATE_THRESHOLD:
+					set_nav_target_position(target_pos)
+		
 		var new_velocity = get_new_nav_agent_velocity()
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(new_velocity)
@@ -87,7 +117,8 @@ func set_nav_target_position(pos: Vector3) -> void:
 		return
 	if pos != nav_agent.target_position:
 		nav_agent.target_position = pos
-		await nav_agent.path_changed
+		if use_legacy_nav:
+			await nav_agent.path_changed
 
 
 func get_new_nav_agent_velocity() -> Vector3:
@@ -105,6 +136,15 @@ func get_new_nav_agent_velocity() -> Vector3:
 
 func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	if is_enabled():
-		entity.velocity = safe_velocity
+		if use_legacy_nav:
+			entity.velocity = safe_velocity
 		entity.velocity = entity.velocity.move_toward(safe_velocity, 0.25)
 		entity.move_and_slide()
+
+
+func disable_for_pool() -> void:
+	process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func enable_for_pool() -> void:
+	process_mode = Node.PROCESS_MODE_INHERIT

@@ -80,10 +80,13 @@ uv1_scale = Vector3(0.505, 0.505, 0.505)
 uv1_offset = Vector3(0, 0.505, 0.3)
 uv1_triplanar = true
 
-[node name="ArcProjectile" type="Area3D"]
+[node name="ArcProjectile" type="Area3D" node_paths=PackedStringArray("timer", "mesh", "col")]
 collision_layer = 8
 collision_mask = 3
 script = ExtResource("1_5kt6y")
+timer = NodePath("Timer")
+mesh = NodePath("Mesh")
+col = NodePath("CollisionShape3D")
 projectile_damage = 7.0
 projectile_speed = 1.0
 rotation_speed = 10.0

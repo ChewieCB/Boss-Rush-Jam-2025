@@ -5,6 +5,7 @@ signal gun_shot
 signal reload_anim_end
 signal post_reload_anim_end
 signal spin_anim_trigger
+signal magazine_size_changed(current_ammo: int, new_mag_size: int)
 signal full_clip_reload_started
 signal gun_reloaded
 
@@ -164,7 +165,10 @@ var n_shot_repeat = 1
 var modified_damage
 var modified_projectile_amount
 var modified_firerate
-var modified_magazine_size
+var modified_magazine_size: int:
+	set(value):
+		modified_magazine_size = value
+		magazine_size_changed.emit(magazine_ammo_left, modified_magazine_size)
 var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
