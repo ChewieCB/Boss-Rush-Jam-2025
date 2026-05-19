@@ -33,6 +33,8 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("ui_cancel"):
 			if focused_ui:
 				contextual_cancel(focused_ui.item_ui)
+			else:
+				contextual_cancel(null)
 			input_prompt_cancel.animate()
 
 
@@ -117,6 +119,8 @@ func contextual_cancel(focused_ui: Control) -> void:
 		# Hovered Inventory UI -> Active Inventory Slot
 		else:
 			close()
+	elif focused_ui == null:
+		close()
 
 	input_prompt_cancel.update_text("Exit")
 	input_prompt_detail.update_text("Detail")
