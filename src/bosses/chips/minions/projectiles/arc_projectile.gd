@@ -80,6 +80,9 @@ func get_arc_vector(goal_pos: Vector3, debug: bool = false) -> Vector3:
 
 
 func _on_body_entered(body: Node3D) -> void:
+	if not monitoring or process_mode == Node.PROCESS_MODE_DISABLED:
+		return
+	
 	spark()
 	if body is Player:
 		body.health_component.damage(projectile_damage)
@@ -102,12 +105,16 @@ func _on_timer_timeout() -> void:
 
 
 func activate() -> void:
-	col.disabled = false
+	col.set_deferred("disabled", false)
+	self.monitoring = true
+	self.monitorable = true
 	self.visible = true
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 
 
 func deactivate() -> void:
-	col.disabled = true
+	col.set_deferred("disabled", true)
+	self.monitoring = false
+	self.monitorable = false
 	self.visible = false
 	self.process_mode = Node.PROCESS_MODE_DISABLED

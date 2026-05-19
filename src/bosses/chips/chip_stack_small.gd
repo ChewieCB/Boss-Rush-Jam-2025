@@ -355,7 +355,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 			fire_projectile_pooled(chip_projectile_pool, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
-
+		
 		await get_tree().create_timer(delay_between_burst).timeout
 
 	state_chart.send_event("stop_shooting")
@@ -506,7 +506,6 @@ func _spawn_arc_proj() -> void:
 	sfx_player.play()
 	#
 	var arc_proj := fire_projectile_pooled(swipe_proj_pool, projectile_spawn_marker.global_position)
-	#var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
 	arc_proj.rotation_degrees.z += randf_range(-10, 10)
 	arc_proj.velocity = (
 		arc_proj.get_arc_vector(target.global_position)
@@ -522,17 +521,19 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 	if not projectile:
 		return
 	
+	projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
 	projectile.activate()
 	projectile.global_position = spawn_pos
-	projectile.finished.connect(func(): 
-		projectile.deactivate()
-		proj_pool.push_back(projectile)
-	)
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
 	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
 	
 	return projectile
+
+
+func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
+	proj.deactivate()
+	proj_pool.push_back(proj)
 
 
 func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:

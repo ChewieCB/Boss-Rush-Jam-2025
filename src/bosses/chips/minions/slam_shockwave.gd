@@ -79,6 +79,5 @@ func _on_body_entered(body: Node3D) -> void:
 			
 			var angle_threshold: float = cos(deg_to_rad(arc_angle / 2))
 			var dot_product: float = arc_facing_dir.dot(to_body_dir)
-			
 			if dot_product > angle_threshold:
 				body.health_component.damage(damage)

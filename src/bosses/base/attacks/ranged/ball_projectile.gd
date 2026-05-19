@@ -16,14 +16,20 @@ func init(_damage: float):
 
 func activate() -> void:
 	col.set_deferred("disabled", false)
+	self.monitoring = true
+	self.monitorable = true
 	self.visible = true
-	set_deferred("process_mode", Node.PROCESS_MODE_INHERIT)
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	timer.start()
 
 
 func deactivate() -> void:
 	col.set_deferred("disabled", true)
+	self.monitoring = false
+	self.monitorable = false
 	self.visible = false
-	set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+	timer.stop()
 
 
 func _physics_process(delta: float) -> void:
@@ -32,6 +38,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
+	if not monitoring or process_mode == Node.PROCESS_MODE_DISABLED:
+		return
+	
 	if body is CharacterBody3D:
 		if body is Player:
 			body.health_component.damage(projectile_damage)
