@@ -3943,7 +3943,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_oc1xa")
 
-[node name="BlankGun" type="Node3D" node_paths=PackedStringArray("shotgun_flare_sprite", "shotgun_flash_sprite", "shotgun_shell_particles", "smg_flare_sprite", "smg_flash_sprite", "smg_shell_particles", "rifle_flare_sprite", "rifle_flash_sprite")]
+[node name="PlayerGunNew" type="Node3D" node_paths=PackedStringArray("shotgun_flare_sprite", "shotgun_flash_sprite", "shotgun_shell_particles", "smg_flare_sprite", "smg_flash_sprite", "smg_shell_particles", "rifle_flare_sprite", "rifle_flash_sprite")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926e-09)
 script = ExtResource("1_ferpt")
 gun_name = "Blank gun"

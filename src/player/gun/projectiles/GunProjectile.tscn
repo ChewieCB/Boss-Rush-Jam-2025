@@ -59,12 +59,11 @@ shader_parameter/noise_texture = SubResource("NoiseTexture2D_55m6u")
 [sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
 radius = 1.0
 
-[node name="GunProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
+[node name="GunProjectile" type="Node3D"]
 script = ExtResource("1_x0ax1")
 spark_effect = ExtResource("2_bxb8l")
 generic_blood_splatter = ExtResource("3_7tm1i")
 bullet_decal_prefab = ExtResource("4_5dvet")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), NodePath("ElementalVFX/ProjectilePoisonEmit"), NodePath("ElementalVFX/ProjectileFreezeEmit"), NodePath("ElementalVFX/ProjectileShockEmit"), NodePath("ElementalVFX/ProjectileBleedEmit")]
 elemental_impact_vfx = Array[PackedScene]([ExtResource("5_h0gas"), ExtResource("6_uupf0"), ExtResource("7_fmptl"), ExtResource("7_2wwsd"), ExtResource("9_h2ggk")])
 sfx_crit = Array[AudioStream]([ExtResource("10_fmarf")])
 
@@ -134,12 +133,14 @@ time_until_queue_free = 1.0
 
 [node name="ProjectileFreezeEmit" parent="ElementalVFX" instance=ExtResource("12_hmgch")]
 visible = false
+time_until_queue_free = 1.0
 
 [node name="ProjectileShockEmit" parent="ElementalVFX" instance=ExtResource("10_1hvph")]
 visible = false
 
 [node name="ProjectileBleedEmit" parent="ElementalVFX" instance=ExtResource("14_kna87")]
 visible = false
+time_until_queue_free = 1.0
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

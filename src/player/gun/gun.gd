@@ -196,6 +196,7 @@ func _ready() -> void:
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
 	
+	# We have 1 more just in case
 	for i in range(max_barrels + 1):
 		var _null_barrel: NullBarrel = null_barrel_prefab.instantiate()
 		null_barrel_pool.push_back(_null_barrel)
@@ -1127,14 +1128,15 @@ func recheck_installed_barrels():
 
 func reinstall_barrels():
 	# Clear old barrels
-	for i in range(max_barrels):
-		var barrel = barrel_container.get_child(i)
-		if barrel:
-			if barrel is NullBarrel:
-				continue
-			else:
-				barrel.queue_free()
-		barrel_unequipped.emit(null, i)
+	if barrel_container.get_child_count() > 0:
+		for i in range(max_barrels):
+			var barrel = barrel_container.get_child(i)
+			if barrel:
+				if barrel is NullBarrel:
+					continue
+				else:
+					barrel.queue_free()
+			barrel_unequipped.emit(null, i)
 
 	# Instantiate barrels onto gun
 	for i in range(GameManager.equipped_barrels.size()):
