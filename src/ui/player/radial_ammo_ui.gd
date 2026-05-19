@@ -21,8 +21,6 @@ func _draw() -> void:
 	_draw_radial_segments(max_radial_segment_count, max_radial_segment_count, 12.0, PI / 64, Color("#2a2a2a"))
 	# Active
 	_draw_radial_segments(active_radial_segment_count, max_radial_segment_count, 18.0, PI / 92, Color("#C11E1E"), Color("#C1BEBE"))
-	# Icons
-	#_draw_radial_icons(active_radial_segment_count, max_radial_segment_count, 16.0, PI / 42)
 
 
 func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness: float, segment_padding: float, colour: Color, alternating_colour: Color = Color(), is_ccw: bool = false) -> void:

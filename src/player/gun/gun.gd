@@ -60,6 +60,7 @@ var muzzle_flash_sprite: Sprite3D
 var barrel_cached_materials: Array[StandardMaterial3D] = []
 
 
+var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -201,6 +202,8 @@ func _ready() -> void:
 		var _null_barrel: NullBarrel = null_barrel_prefab.instantiate()
 		null_barrel_pool.push_back(_null_barrel)
 	
+	_init_barrel_materials()
+	
 	reset_modifier(true)
 	idle_frame_state.start("RESET")
 
@@ -210,6 +213,14 @@ func _ready() -> void:
 		await reinstall_barrels()
 	
 	is_jammed = false
+
+
+func _init_barrel_materials() -> void:
+	for i in range(max_barrels):
+		var _mat := default_barrel_icon_mat.duplicate() as StandardMaterial3D
+		_barrel_materials.append(_mat)
+		if barrel_icon_meshes[i]:
+			barrel_icon_meshes[i].set_surface_override_material(0, _mat)
 
 
 func equip_active() -> void:
@@ -687,53 +698,63 @@ func _spin_barrel(barrel_idx: int) -> void:
 
 func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	reset_modifier(true)
-	# FIXME
+	
+	var tween := get_tree().create_tween()
 	for i in installed_barrels.size():
-		var barrel = installed_barrels[i]
-		if barrel == null:
+		if installed_barrels[i] == null:
 			continue
-		_stop_barrel(i)
-		await get_tree().create_timer(delay_offset).timeout
-	is_spinning = false
-	can_fire = true
+		tween.tween_callback(_stop_barrel.bind(i)).set_delay(delay_offset * i)
+	tween.tween_callback(func():
+		is_spinning = false
+		can_fire = true
+	)
 
 
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	if barrel == null:
 		return
-	barrel.stop_spin()
-	# Update barrel icon
-	set_barrel_icon(barrel_idx, barrel.get_active_effect().icon_id)
-	barrel.get_active_effect().on_barrel_stop_spin()
+		
+	var _effect: BaseBarrelEffect = barrel.stop_spin()
+	# Update barrel icon - FIXME: optimise this
+	set_barrel_icon.call_deferred(barrel_idx, _effect.icon_id)
+	
+	barrel.get_active_effect().on_barrel_stop_spin.call_deferred()
+	
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
-
 	SoundManager.stop_sound(TEMP_sfx_spin)
-	barrel.get_active_effect().on_effect_set()
+	
+	barrel.get_active_effect().on_effect_set.call_deferred()
+	
 	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
+	
+	# Seeded spin stuff - deprecate?
+	#var barrel_label: Label3D = barrel_labels[barrel_idx]
+	#barrel_label.text = "[%s]" % [
+		#barrel.reloads_before_spin - barrel.reload_count
+	#]
 
-	var barrel_label: Label3D = barrel_labels[barrel_idx]
-	barrel_label.text = "[%s]" % [
-		barrel.reloads_before_spin - barrel.reload_count
-	]
+
+func _get_icon_texture(icon_id: int) -> CompressedTexture2D:
+	var _texture_cache: Dictionary = GameManager.effect_icon_texture_cache
+	if icon_id in _texture_cache:
+		return _texture_cache[icon_id]
+	
+	var path := "res://assets/sprite/effect_icons/%s.png" % icon_id
+	var texture := load(path) as CompressedTexture2D
+	_texture_cache[icon_id] = texture
+	
+	return texture
 
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
-
-	var mat: StandardMaterial3D = barrel_mesh.get_surface_override_material(0)
-	if mat == null:
-		mat = default_barrel_icon_mat
-	var new_mat: StandardMaterial3D = mat.duplicate()
-
-	var icon_sprite_path := "res://assets/sprite/effect_icons/%s.png" % [icon_id]
-	var icon_texture: CompressedTexture2D = load(icon_sprite_path)
-
-	new_mat.albedo_color = Color.WHITE
-	new_mat.albedo_texture = icon_texture
-	barrel_mesh.set_surface_override_material(0, new_mat)
+	
+	var mat: StandardMaterial3D = _barrel_materials[barrel_idx]
+	mat.albedo_color = Color.WHITE
+	mat.albedo_texture = _get_icon_texture(icon_id)
 
 
 func cancel_reload() -> void:
@@ -847,7 +868,7 @@ func reload(_already_spin_barrel = false):
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
-		barrel.get_active_effect().on_reload_end()
+		barrel.get_active_effect().on_reload_end.call_deferred()
 
 	match GameManager.CHEAT_spin_mode:
 		GameManager.DebugSpinMode.SEEDED_AUTO_SPIN:

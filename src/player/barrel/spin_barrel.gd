@@ -14,7 +14,7 @@ var is_spinning = false
 var chosen_id: int:
 	set(value):
 		chosen_id = value
-		barrel_effect_changed.emit(self, effect_list[chosen_id])
+		barrel_effect_changed.emit.call_deferred(self, effect_list[chosen_id])
 var force_next_spin_id: int = -1
 var is_equipped = false
 var last_chosen_set: Dictionary = {}  # effect_idx -> true/false
@@ -54,7 +54,7 @@ func start_spin():
 	is_spinning = true
 
 
-func stop_spin():
+func stop_spin() -> BaseBarrelEffect:
 	is_spinning = false
 	
 	if force_next_spin_id >= 0:
@@ -64,6 +64,8 @@ func stop_spin():
 		chosen_id = get_less_used_effects()
 	
 	_record_chosen(chosen_id)
+	
+	return get_active_effect()
 
 
 func _process(delta: float) -> void:
