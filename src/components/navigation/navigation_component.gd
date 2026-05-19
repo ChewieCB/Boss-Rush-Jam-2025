@@ -66,6 +66,7 @@ func _wait_for_navigation_setup() -> void:
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
 	NavigationServer3D.agent_set_avoidance_enabled(nav_agent_rid, true)
 	NavigationServer3D.agent_set_radius(nav_agent_rid, avoid_radius)
+	NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, self._on_velocity_computed)
 	nav_agent.velocity_computed.connect(self._on_velocity_computed)
 	#NavigationServer3D.map_changed.connect(_on_map_changed)
 	
@@ -74,26 +75,27 @@ func _wait_for_navigation_setup() -> void:
 
 
 func _physics_process(_delta) -> void:
-	# Stagger group navigation updates by group position
-	if group_size != -1 and group_idx != -1:
-		if Engine.get_physics_frames() % group_size != group_idx:
-			return
-	
 	if is_enabled():
+		# Stagger group navigation updates by group position
+		if group_size != -1 and group_idx != -1:
+			if Engine.get_physics_frames() % group_size != group_idx:
+				return
+		
 		# Do not query when the map has never synchronized and is empty.
 		if NavigationServer3D.map_get_iteration_id(nav_agent.get_navigation_map()) == 0:
 			return
-		
 		if nav_agent.is_navigation_finished():
 			return
 		
 		if follow_target:
 			if not target:
 				return
+			
 			# Only update if target has moved more than a minimum threshold
 			var target_pos: Vector3 = target.global_position
-			if target_pos.distance_squared_to(nav_agent.global_position) > TARGET_POS_UPDATE_THRESHOLD:
-				set_nav_target_position(target.global_position)
+			if nav_agent.target_position == Vector3.ZERO or \
+			target_pos.distance_squared_to(nav_agent.target_position) > TARGET_POS_UPDATE_THRESHOLD:
+				set_nav_target_position(target_pos)
 		
 		var new_velocity = get_new_nav_agent_velocity()
 		if nav_agent.avoidance_enabled:
@@ -105,7 +107,6 @@ func _physics_process(_delta) -> void:
 func set_nav_target_position(pos: Vector3) -> void:
 	if not enabled:
 		return
-	
 	if pos != nav_agent.target_position:
 		nav_agent.target_position = pos
 
@@ -125,6 +126,7 @@ func get_new_nav_agent_velocity() -> Vector3:
 
 func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	if is_enabled():
+		entity.velocity = safe_velocity
 		entity.velocity = entity.velocity.move_toward(safe_velocity, 0.25)
 		entity.move_and_slide()
 
