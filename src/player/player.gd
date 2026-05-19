@@ -536,8 +536,6 @@ func hide_barrel_effect_ui() -> void:
 	if not barrel_ui_active:
 		return
 	
-	barrel_detail_ui.process_mode = Node.PROCESS_MODE_DISABLED
-	
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
@@ -554,9 +552,13 @@ func hide_barrel_effect_ui() -> void:
 		else:
 			# Fallback
 			effect_ui.modulate.a = 0.0
-	# FIXME - replace this with a last_tween pattern
-	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
-	await barrel_ui_tween.finished
+	barrel_ui_tween.tween_callback(_disable_barrel_effect_ui)
+
+
+func _disable_barrel_effect_ui() -> void:
+	barrel_ui_active = false
+	barrel_detail_ui.queue_redraw()
+	barrel_detail_ui.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func update_barrel_effect_ui() -> void:
