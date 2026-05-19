@@ -755,6 +755,7 @@ func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	var mat: StandardMaterial3D = _barrel_materials[barrel_idx]
 	mat.albedo_color = Color.WHITE
 	mat.albedo_texture = _get_icon_texture(icon_id)
+	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, mat)
 
 
 func cancel_reload() -> void:
