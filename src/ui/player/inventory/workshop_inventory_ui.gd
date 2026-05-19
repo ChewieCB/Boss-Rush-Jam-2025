@@ -27,7 +27,6 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	super (event)
-
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		var equipped_ui: BarrelEquipSlotUI = null
@@ -89,6 +88,8 @@ func close() -> void:
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced: bool = false):
 	if not visible and not forced:
 		return
+
+	barrel_info_region.show_barrel_overview(false)
 
 	# Instead of removing and re-instancing each equipped barrel,
 	# we clear and set the properties
@@ -173,6 +174,8 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 		# Hovered Equip Slot -> Close UI
 		else:
 			close()
+	elif focused_ui == null:
+		close()
 
 	input_prompt_detail.update_text("Detail")
 	input_prompt_tab_right.update_text("Change Frame")

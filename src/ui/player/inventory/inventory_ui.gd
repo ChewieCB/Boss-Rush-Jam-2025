@@ -58,7 +58,7 @@ func _input(event: InputEvent) -> void:
 	
 	if visible:
 		var focused_ui: Control = null
-		if active_focus_idx >= 0 and current_focus_area:
+		if active_focus_idx >= 0 and current_focus_area and current_focus_area.get_child_count() > 0:
 			focused_ui = current_focus_area.get_child(active_focus_idx)
 		
 		if event.is_action_pressed("interact"):
@@ -358,6 +358,37 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	else:
 		input_prompt_accept.update_text("Equip")
 
+func _on_item_ui_button_focus_lost(button: Button) -> void:
+	var lost_focus_parent: Control = button.get_parent()
+	# When the mouse leaves an ItemUI:
+	#  - if nothing is currently selected in the equip or inventory areas, 
+	#      show an empty barrel overview.
+	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
+		if lost_focus_parent is BarrelItemUI:
+			# TODO - track last detail/overview toggle state so we can keep on the detail view between items
+			barrel_info_region.show_barrel_overview(false)
+		elif lost_focus_parent is GunFrameItemUI:
+			barrel_info_region.show_barrel_overview(false)
+	#  - if an ItemUI is selected and not empty, change the data to the 
+	#       ItemUI barrel and keep showing either the overview or the effect detail
+	#       - whichever is already open.
+	elif not current_selected_item_ui.is_empty:
+		# FIXME - add better handling for BarrelItemUI vs GunFrameItemUI overview display
+		if lost_focus_parent is BarrelItemUI and current_selected_item_ui is not GunFrameItemUI:
+			barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
+			barrel_info_region.set_effect_detail_data(0)
+			barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
+			barrel_info_region.locked_barrel_overlay.visible = current_selected_item_ui.is_locked
+		elif lost_focus_parent is GunFrameItemUI:
+			# TODO - gun frame overview
+			pass
+	
+	toggle_ui_focus_neighbors(button, true)
+	input_prompt_accept.modulate = Color("#ffffff")
+	if input_prompt_tab_right:
+		input_prompt_tab_right.update_text("Change Frame")
+
+
 func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
 	return ui.get_index()
 
@@ -389,38 +420,6 @@ func update_gun_frame_info(data: GunFrameResource = null, is_locked: bool = fals
 		if current_selected_item_ui:
 			return
 		barrel_info_region.show_barrel_overview(false, is_locked)
-
-
-func _on_item_ui_button_focus_lost(button: Button) -> void:
-	var lost_focus_parent: Control = button.get_parent()
-	# When the mouse leaves an ItemUI:
-	#  - if nothing is currently selected in the equip or inventory areas, 
-	#      show an empty barrel overview.
-	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
-		if lost_focus_parent is BarrelItemUI:
-			# TODO - track last detail/overview toggle state so we can keep on the detail view between items
-			barrel_info_region.show_barrel_overview(false)
-		elif lost_focus_parent is GunFrameItemUI:
-			barrel_info_region.show_barrel_overview(false)
-	#  - if an ItemUI is selected and not empty, change the data to the 
-	#       ItemUI barrel and keep showing either the overview or the effect detail
-	#       - whichever is already open.
-	elif not current_selected_item_ui.is_empty:
-		# FIXME - add better handling for BarrelItemUI vs GunFrameItemUI overview display
-		if lost_focus_parent is BarrelItemUI and current_selected_item_ui is not GunFrameItemUI:
-			barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
-			barrel_info_region.set_effect_detail_data(0)
-			barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
-			barrel_info_region.locked_barrel_overlay.visible = current_selected_item_ui.is_locked
-		elif lost_focus_parent is GunFrameItemUI:
-			# TODO - gun frame overview
-			pass
-	
-	toggle_ui_focus_neighbors(button, true)
-	input_prompt_accept.modulate = Color("#ffffff")
-	if input_prompt_tab_right:
-		input_prompt_tab_right.update_text("Change Frame")
-
 
 func _on_item_ui_interact(item_ui: ItemUI, _data: BarrelDataResource) -> void:
 	current_selected_item_ui = null
