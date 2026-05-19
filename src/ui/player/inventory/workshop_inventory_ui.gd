@@ -90,6 +90,8 @@ func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced: b
 	if not visible and not forced:
 		return
 
+	barrel_info_region.show_barrel_overview(false)
+
 	# Instead of removing and re-instancing each equipped barrel,
 	# we clear and set the properties
 	# EQUIPPED BARRELS

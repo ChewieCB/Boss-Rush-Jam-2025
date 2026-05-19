@@ -258,6 +258,14 @@ texture_albedo = ExtResource("3_tgexf")
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("41_63osp")
 
+[node name="CustomEffectShader" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
 

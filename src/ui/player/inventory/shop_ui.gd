@@ -28,7 +28,7 @@ func _input(event: InputEvent) -> void:
 	super (event)
 	if visible:
 		var focused_ui: Control = null
-		if active_focus_idx >= 0 and current_focus_area:
+		if active_focus_idx >= 0 and current_focus_area and current_focus_area.get_child_count() > 0:
 			focused_ui = current_focus_area.get_child(active_focus_idx)
 		if event.is_action_pressed("ui_cancel"):
 			if focused_ui:
@@ -39,6 +39,8 @@ func _input(event: InputEvent) -> void:
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = false):
 	if not visible and not forced:
 		return
+
+	barrel_info_region.show_barrel_overview(false)
 
 	for child in shop_gun_frame_container.get_children():
 		shop_gun_frame_container.remove_child(child)
