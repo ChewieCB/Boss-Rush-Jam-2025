@@ -83,6 +83,7 @@ var _barrel_materials: Array[StandardMaterial3D] = []
 @export var sfx_gp_jam: Array[AudioStream]
 @export var sfx_gp_clear: Array[AudioStream]
 @export var sfx_gp_crit: Array[AudioStream]
+@export var sfx_gp_steam: Array[AudioStream]
 @export_subgroup("Explosive Shot")
 #@export var sfx_es_boom: Array[AudioStream]  - this is handled in the explosion area scene
 #
@@ -1282,6 +1283,7 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 	jam_dust_particles.emitting = true
 	jam_spring_particles.restart()
 	set_barrels_jammed()
+	SoundManager.play_sound(sfx_gp_steam.pick_random(), "Gun")
 
 	await get_tree().create_timer(pre_anim_delay, false).timeout
 
