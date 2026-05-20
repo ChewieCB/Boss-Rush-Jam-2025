@@ -194,6 +194,15 @@ var absorb_chip_enabled = false
 
 @onready var floor_raycast: RayCast3D = $FloorRaycast
 
+# Death anim
+@onready var death_torso_rigid: RigidBody3D = $MarkerPivot/SlottyDeathTorso
+@onready var death_gun_rigid: RigidBody3D = $MarkerPivot/SlottyDeathGun
+@onready var death_coin_rigid: RigidBody3D = $MarkerPivot/SlottyDeathCoin
+@onready var death_explosion_1: ExplosionParticles = $MarkerPivot/ExplosionPoly
+@onready var death_explosion_2: ExplosionParticles = $MarkerPivot/ExplosionPoly2
+@onready var death_explosion_3: ExplosionParticles = $MarkerPivot/ExplosionPoly3
+
+
 func _ready() -> void:
 	super()
 	if GameManager.boss_ante >= 1:
@@ -332,28 +341,70 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super (new_health, prev_health)
+	super(new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
 
 func _on_died() -> void:
 	_cleanup_bombs()
-
+	
 	anim_player.stop()
-	set_physics_process(false)
-	var tween = get_tree().create_tween()
-	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
-
-	await tween.finished
-
+	
 	died.emit()
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+	sprite.visible = false
+	#set_physics_process(false)
+	hurtbox.set_deferred("monitoring", false)
+	hurtbox_collider.set_deferred("disabled", true)
+	phase_2_smoke_effect.reparent(death_torso_rigid)
+	phase_2_smoke_effect.emitting = true
+	
+	# TODO - play explosions
+	
+	var _parent = get_parent()
+	for rigid_body in [death_torso_rigid, death_coin_rigid, death_gun_rigid]:
+		rigid_body.reparent(_parent)
+		rigid_body.get_node("CollisionShape3D").disabled = false
+		rigid_body.process_mode = Node.PROCESS_MODE_PAUSABLE
+		rigid_body.sleeping = false
+		rigid_body.freeze = false
+	
+	await get_tree().physics_frame
+	
+	_death_explosion()
+	death_coin_rigid.visible = true
+	#death_coin_rigid.rotate_y(randf_range(-PI/4, PI/4))
+	death_coin_rigid.apply_central_impulse(-death_coin_rigid.global_basis.z * 40.0)
+	death_coin_rigid.apply_central_impulse(-death_torso_rigid.global_basis.x * 30.0)
+	death_coin_rigid.apply_central_impulse(Vector3.UP * 65)
+	death_gun_rigid.visible = true
+	death_gun_rigid.apply_central_impulse(death_torso_rigid.global_basis.x * 40.0)
+	death_gun_rigid.apply_central_impulse(Vector3.UP * 40)
+	death_torso_rigid.visible = true
+	death_torso_rigid.apply_central_impulse(Vector3.DOWN * 15.0)
+	
 	drop_barrel()
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 
+	await death_anim_finished
+	await get_tree().create_timer(10.0, false).timeout
 	await boss_death_slow_mo()
+
+
+func _death_explosion() -> void:
+	var explosions_arr: Array = [death_explosion_1, death_explosion_2, death_explosion_3]
+	for i in range(3):
+		explosions_arr.shuffle()
+		for explosion in [death_explosion_1, death_explosion_2, death_explosion_3]:
+			explosion.process_mode = Node.AUTO_TRANSLATE_MODE_INHERIT
+			explosion.visible = true
+			explosion.explode()
+			await get_tree().create_timer(0.1).timeout
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
@@ -499,6 +550,9 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	state_chart.send_event("attack_start")
 
 	for i in coin_burst_repeat:
+		# HACK - break out of this loop if we've exited the state
+		if not $StateChart/Root/Phase/Phase1/CoinProjectiles.active and not $StateChart/Root/Phase/Phase2/CoinProjectiles.active:
+			return
 		explode_vfx.explode()
 		play_positional_sound(sfx_coin_gun_blast.pick_random())
 		for j in coin_shots_per_burst:
@@ -638,13 +692,16 @@ func _on_bell_drop_dropping_state_entered() -> void:
 		bells_to_spawn,
 	)
 	bell_spawn_points.insert(0, Vector2(target.global_position.x, target.global_position.z))
-
+	
 	for point in bell_spawn_points:
+		# HACK - break out of this loop if we've exited the state
+		if not $StateChart/Root/Phase/Phase1/BellDrop.active and not $StateChart/Root/Phase/Phase2/BellDrop.active:
+			return
 		var spawn := Vector3(point.x, 0, point.y)
 		anim_player.play("summon_bell_shoot")
 		shoot_bell_flare(spawn)
 		await anim_player.animation_finished
-
+	
 	anim_player.play("RESET")
 	state_chart.send_event("finish_drop")
 
@@ -687,8 +744,15 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Swipe"
 
 	state_chart.send_event("attack_start")
-	sprite.modulate = Color.ORANGE
+	#sprite.modulate = Color.ORANGE
+	anim_player.play("melee_swipe")
+	
+	await anim_player.animation_finished
+	
+	state_chart.send_event("end_swipe")
 
+
+func melee_swipe() -> void:
 	sfx_player.stream = sfx_lever_swipe.pick_random()
 	sfx_player.play()
 
@@ -736,11 +800,6 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 		self.velocity.x = dodge_vector.x
 		self.velocity.z = dodge_vector.z
 
-	await get_tree().create_timer(0.2, false).timeout
-	sprite.modulate = Color.WHITE
-
-	state_chart.send_event("end_swipe")
-
 
 func _on_lever_swipe_recover_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Recovery"
@@ -773,7 +832,7 @@ func _on_homing_projectiles_state_physics_processing(delta: float) -> void:
 
 func _on_homing_projectiles_targeting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Targeting"
-
+	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	# await get_tree().create_timer(0.8, false).timeout
@@ -789,6 +848,9 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 	explode_vfx.explode()
 	play_positional_sound(sfx_diamond_gun_blast.pick_random())
 	for i in range(diamond_shots_per_attack):
+		# HACK - break out of this loop if we've exited the state
+		if not $StateChart/Root/Phase/Phase2/HomingProjectiles.active:
+			return
 		# await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
 		# FIXME - replace with pooled
 		var projectile: DiamondProjectile = fire_projectile_pooled(diamond_proj_pool, projectile_spawn_marker.global_position, diamond_spread, sfx_diamond_shot)
@@ -829,6 +891,9 @@ func _on_pinball_projectiles_shooting_state_entered() -> void:
 	# Fire out projctiles in a spiral, each projectile can ricochet
 	for i in range(pinball_shots_per_attack):
 		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack, false).timeout
+		# HACK - break out of this loop if we've exited the state
+		if not $StateChart/Root/Phase/Phase2/PinballProjectiles.active:
+			return
 		# FIXME - replace with pooled
 		var projectile = fire_projectile_pooled(pinball_proj_pool, projectile_spawn_marker.global_position, 0, sfx_coin_shot)
 		#var projectile = fire_projectile(pinball_projectile, projectile_spawn_marker.global_position, 0, sfx_coin_shot)
@@ -916,6 +981,7 @@ func _on_charge_charging_state_entered() -> void:
 func _on_charge_collision(body: Node3D) -> void:
 	const CHARGE_TREMOR_INTENSITY = 0.5
 	const CHARGE_PUSH_FORCE_MULT = 3.0
+	anim_player.play("face_slam")
 	if body == target:
 		velocity = Vector3.ZERO
 		body.health_component.damage(charge_damage * GameManager.get_risk_dmg_mult())
@@ -946,19 +1012,23 @@ func _on_charge_charging_state_physics_processing(delta: float) -> void:
 func _on_charge_recover_state_entered() -> void:
 	anim_player.play("RESET")
 	debug_state_label.text = "Charge | Recovering"
+	if anim_player.is_playing():
+		await anim_player.animation_finished
+	anim_player.play("charge_recover")
+	await anim_player.animation_finished
 	state_chart.send_event("attack_end")
 	navigation_component.enable()
-
+	
 	desired_distance = DESIRED_DISTANCE
 	desired_height = DESIRED_HEIGHT
 	drop_factor = DROP_FACTOR
-
+	
 	hurtbox.set_deferred("monitoring", true)
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)
-
+	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-
+	
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")

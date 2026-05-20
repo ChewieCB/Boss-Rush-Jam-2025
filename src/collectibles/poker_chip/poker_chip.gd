@@ -110,7 +110,7 @@ func _on_pickup_area_body_entered(body: Node3D) -> void:
 
 
 func activate() -> void:
-	col.disabled = false
+	col.set_deferred("disabled", false)
 	await get_tree().physics_frame
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	self.freeze = false
@@ -121,7 +121,7 @@ func deactivate(disable_process: bool = true, hide_sprite: bool = true) -> void:
 	if hide_sprite:
 		self.visible = false
 	self.freeze = true
-	col.disabled = true
+	col.set_deferred("disabled", true)
 	if disable_process:
 		self.process_mode = Node.PROCESS_MODE_DISABLED
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=155 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -83,9 +83,26 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 [ext_resource type="Texture2D" uid="uid://c40sn6u84htf2" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_No_Gun.png" id="74_lmlvi"]
+[ext_resource type="PackedScene" uid="uid://mcpnb5i47ns6" path="res://src/bosses/slots/death_rigid_bodies/SlottyDeathTorso.tscn" id="77_f2kfk"]
+[ext_resource type="PackedScene" uid="uid://4oxspbiiuf3p" path="res://src/bosses/slots/death_rigid_bodies/SlottyDeathCoin.tscn" id="78_i4mws"]
+[ext_resource type="PackedScene" uid="uid://cgu7u4xfa2mfy" path="res://src/bosses/slots/death_rigid_bodies/SlottyDeathGun.tscn" id="79_x7qgj"]
 [ext_resource type="Texture2D" uid="uid://c3hh12ccy487b" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_1.png" id="83_kw510"]
 [ext_resource type="PackedScene" uid="uid://cscttl1c3m6e1" path="res://src/bosses/slots/SlotDustHover.tscn" id="84_3o44s"]
 [ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="84_4w3pm"]
+[ext_resource type="Texture2D" uid="uid://1nbmmdl2pdtv" path="res://src/bosses/slots/assets/Slotty_Death.png" id="86_g6u6s"]
+[ext_resource type="Texture2D" uid="uid://cmuo1vcqhtik8" path="res://src/bosses/slots/assets/Slotty_punch0.png" id="87_egfcc"]
+[ext_resource type="Texture2D" uid="uid://cnxv2qcukvjv7" path="res://src/bosses/slots/assets/Slotty_punch1.png" id="88_lt407"]
+[ext_resource type="Texture2D" uid="uid://dij0gdxugwndw" path="res://src/bosses/slots/assets/Slotty_punch2.png" id="89_7q71m"]
+[ext_resource type="Texture2D" uid="uid://bqwugk57ipbpq" path="res://src/bosses/slots/assets/Slotty_punch3.png" id="90_3mnyf"]
+[ext_resource type="Texture2D" uid="uid://3gpk5rkw8g8f" path="res://src/bosses/slots/assets/Slotty_punch4.png" id="91_qtki8"]
+[ext_resource type="Texture2D" uid="uid://dqer4yqqkip27" path="res://src/bosses/slots/assets/Slotty_slam1.png" id="92_dlso3"]
+[ext_resource type="Texture2D" uid="uid://cc607fb86wfar" path="res://src/bosses/slots/assets/Slotty_slam2.png" id="93_xcmif"]
+[ext_resource type="Texture2D" uid="uid://dyxkxtkrccymw" path="res://src/bosses/slots/assets/Slotty_slam3.png" id="94_vraer"]
+[ext_resource type="Texture2D" uid="uid://ct26dslqvpk5u" path="res://src/bosses/slots/assets/Slotty_slam4.png" id="95_a83x0"]
+[ext_resource type="Texture2D" uid="uid://cueoyec2hfn60" path="res://src/bosses/slots/assets/Slotty_slam5.png" id="96_5rkvy"]
+[ext_resource type="Texture2D" uid="uid://7dy5rrohaetu" path="res://src/bosses/slots/assets/Slotty_slam6.png" id="97_qpg7b"]
+[ext_resource type="Texture2D" uid="uid://da771r002ouif" path="res://src/bosses/slots/assets/Slotty_slam7.png" id="98_ar463"]
+[ext_resource type="Texture2D" uid="uid://bxe66n0melgli" path="res://src/bosses/slots/assets/Slotty_slam8.png" id="99_jx245"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -297,6 +314,42 @@ tracks/7/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sprite3D/GunOnlySprite:texture")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("66_h52w4")]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SlotDustHover:emitting")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Phase2Smoke:emitting")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_m1stq"]
 resource_name = "charge_telegraph"
@@ -445,7 +498,55 @@ tracks/6/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_mppog"]
-length = 0.1
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("86_g6u6s")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/GunOnlySprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("66_h52w4")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SlotDustHover:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Phase2Smoke:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_gp6ku"]
 resource_name = "diamond_shot_telegraph"
@@ -878,13 +979,116 @@ tracks/6/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_mqga3"]
+resource_name = "melee_swipe"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("87_egfcc"), ExtResource("88_lt407"), ExtResource("89_7q71m"), ExtResource("90_3mnyf"), ExtResource("91_qtki8"), ExtResource("87_egfcc"), ExtResource("5_wqq5t")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"melee_swipe"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_4fh2k"]
+resource_name = "charge_recover"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("84_4w3pm"), ExtResource("83_kw510")]
+}
+
+[sub_resource type="Animation" id="Animation_2xbf5"]
+resource_name = "face_slam"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.25, 0.3, 0.4, 0.45, 0.55, 0.65, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("92_dlso3"), ExtResource("93_xcmif"), ExtResource("94_vraer"), ExtResource("95_a83x0"), ExtResource("96_5rkvy"), ExtResource("97_qpg7b"), ExtResource("98_ar463"), ExtResource("99_jx245"), ExtResource("98_ar463"), ExtResource("97_qpg7b"), ExtResource("92_dlso3")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
 _data = {
 "RESET": SubResource("Animation_1pgvl"),
+"charge_recover": SubResource("Animation_4fh2k"),
 "charge_telegraph": SubResource("Animation_m1stq"),
 "coin_shot_telegraph": SubResource("Animation_5n3pr"),
 "death": SubResource("Animation_mppog"),
 "diamond_shot_telegraph": SubResource("Animation_gp6ku"),
+"face_slam": SubResource("Animation_2xbf5"),
+"melee_swipe": SubResource("Animation_mqga3"),
 "quick_bomb_shot": SubResource("Animation_kh5dm"),
 "quick_coin_shot": SubResource("Animation_cf6fg"),
 "summon_bell_raise_gun": SubResource("Animation_600pn"),
@@ -1137,8 +1341,50 @@ mesh = SubResource("SphereMesh_lr0sl")
 [node name="ExplosionPoly" parent="MarkerPivot/ProjectileSpawnMarker" index="1" instance=ExtResource("65_q3x8w")]
 free_on_finished = false
 
+[node name="SlottyDeathTorso" parent="MarkerPivot" index="1" instance=ExtResource("77_f2kfk")]
+visible = false
+
+[node name="SlottyDeathCoin" parent="MarkerPivot" index="2" instance=ExtResource("78_i4mws")]
+visible = false
+
+[node name="SlottyDeathGun" parent="MarkerPivot" index="3" instance=ExtResource("79_x7qgj")]
+visible = false
+
+[node name="ExplosionPoly" parent="MarkerPivot" index="4" instance=ExtResource("65_q3x8w")]
+process_mode = 4
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.765265, -1.24026, 0)
+visible = false
+scale_factor = 2.0
+min_scale = 2.0
+max_scale = 3.0
+emission_radius = 2.0
+free_on_finished = false
+
+[node name="ExplosionPoly2" parent="MarkerPivot" index="5" instance=ExtResource("65_q3x8w")]
+process_mode = 4
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.897206, -0.34305, 0)
+visible = false
+scale_factor = 2.0
+min_scale = 2.0
+max_scale = 3.0
+emission_radius = 2.0
+free_on_finished = false
+
+[node name="ExplosionPoly3" parent="MarkerPivot" index="6" instance=ExtResource("65_q3x8w")]
+process_mode = 4
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131944, 0.369438, 0)
+visible = false
+scale_factor = 2.0
+min_scale = 2.0
+max_scale = 3.0
+emission_radius = 2.0
+free_on_finished = false
+
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 3.3235, -2)
 
 [node name="HealthComponent" parent="." index="5"]
 max_health = 4000.0

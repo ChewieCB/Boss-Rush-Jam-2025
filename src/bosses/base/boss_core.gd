@@ -236,11 +236,6 @@ func _ready() -> void:
 	for elem in elemental_emitting_vfx:
 		if elem:
 			elem.visible = false
-
-	# Cheat/debug flags
-	if GameManager.CHEAT_oneshot:
-		health_component.max_health = 1
-		health_component.current_health = 1
 	
 	for i in range(50):
 		_init_chip_pool.call_deferred()
@@ -250,6 +245,14 @@ func _ready() -> void:
 
 	if owner:
 		await owner.ready
+	
+	# Cheat/debug flags
+	if GameManager.CHEAT_oneshot:
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		health_component.max_health = 1
+		health_component.current_health = 1
+		
 	print_debug("BossCore ready end")
 
 
@@ -755,7 +758,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _init_chip_pool() -> void:
 	var chip = chip_scene.instantiate() as RigidBody3D
 	chip.collected.connect(_on_chip_collected)
-	scene_root.add_child(chip)
+	scene_root.add_child.call_deferred(chip)
+	await get_tree().physics_frame
 	chip.deactivate()
 	chip.global_position = Vector3.ZERO
 	_chip_spawn_pool.push_back(chip)
