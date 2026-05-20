@@ -176,7 +176,6 @@ func ricochet():
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
-	print("test")
 	play_ricochet_sfx()
 	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
 	get_tree().get_root().add_child(new_inst)

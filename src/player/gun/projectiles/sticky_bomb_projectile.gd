@@ -16,6 +16,7 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
+@onready var ricochet_sfx_player: AudioStreamPlayer3D = $RiochetSFXPlayer
 
 const CONTACT_DAMAGE = 1
 
@@ -103,11 +104,31 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			await anim_countdown_tick(duration, i * 0.55, start_colour.lerp(end_colour, i / tick_durations.size()))
 			tick_sfx_player.volume_db += 4
 
+var last_ricochet_sfx_time = 0
+const RICOCHET_SFX_COOLDOWN_MS = 100
+
+func play_ricochet_sfx():
+	var current_time = Time.get_ticks_msec()
+	if current_time - last_ricochet_sfx_time < RICOCHET_SFX_COOLDOWN_MS:
+		return
+	last_ricochet_sfx_time = current_time
+	var sfx = AudioStreamPlayer3D.new()
+	sfx.stream = ricochet_sfx_player.stream
+	sfx.unit_size = ricochet_sfx_player.unit_size
+	sfx.max_distance = ricochet_sfx_player.max_distance
+	sfx.volume_db = ricochet_sfx_player.volume_db
+	sfx.attenuation_model = ricochet_sfx_player.attenuation_model
+	get_tree().root.add_child(sfx)
+	sfx.global_position = global_position
+	sfx.play()
+	sfx.finished.connect(sfx.queue_free)
 
 func ricochet():
 	super()
 	found_hitscal_col = false
 	is_ricochet_shot = true
+	print("test")
+	play_ricochet_sfx()
 	
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
@@ -121,6 +142,13 @@ func ricochet():
 	
 	init(global_position, bounce_dir, explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
 
+func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+	# Run the base_bullet.gd split() code first
+	super(split_count, split_spread_radius, _has_pos, _pos)
+	# Play our sound
+	print("test")
+	play_ricochet_sfx()  # Pick a random sound from our array of audio files declared above
+	# Do any tweaks to the player here before you trigger it
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit(false)
