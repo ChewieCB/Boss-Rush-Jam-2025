@@ -33,12 +33,16 @@ func on_damage_applied(damage: float, has_pos: bool = false, pos: Vector3 = Vect
 		inst.homing_target = GameManager.player
 
 
+func on_reload_start():
+	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
+
 func on_barrel_start_spin():
 	if stored_heal == MAX_STORED_HP:
 		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.MEDICAL_PAYOUT__PAYDAY)
 		LuckHandler.increase_luck(12, "+12 Payday!")
-	GameManager.player.health_component.heal(stored_heal)
-	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
+	if stored_heal > 0:
+		GameManager.player.health_component.heal(stored_heal)
+		GameManager.player.player_ui.start_heal_flash()
 	remove_effect()
 
 func on_barrel_remove():
