@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=22 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_xa5jf"]
@@ -10,6 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://dmrsj5hmyumwf" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmit.tscn" id="14_kna87"]
 [ext_resource type="AudioStream" uid="uid://nsevw0dctc7c" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 1.mp3" id="20_31gvv"]
 [ext_resource type="AudioStream" uid="uid://bp0ai5js54012" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 2.mp3" id="21_wcewm"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_jb2pd"]
+random_pitch = 1.56
+streams_count = 2
+stream_0/stream = ExtResource("20_31gvv")
+stream_1/stream = ExtResource("21_wcewm")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7eax"]
 resource_local_to_scene = true
@@ -60,6 +66,7 @@ stream_1/stream = ExtResource("21_wcewm")
 
 [node name="GunProjectile" type="Node3D"]
 script = ExtResource("1_x0ax1")
+sfx_split = Array[AudioStream]([SubResource("AudioStreamRandomizer_jb2pd")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0

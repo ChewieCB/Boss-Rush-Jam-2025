@@ -15,6 +15,7 @@ class_name GunProjectile
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
 @onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+@export var sfx_split: Array[AudioStream]  
 
 
 # Gravity stuff
@@ -100,9 +101,15 @@ func _on_life_timer_timeout() -> void:
 		stop_elemental_particles()
 		call_deferred("queue_free")
 
+var last_ricochet_sfx_time = 0
+const RICOCHET_SFX_COOLDOWN_MS = 100
+
 func play_ricochet_sfx():
+	var current_time = Time.get_ticks_msec()
+	if current_time - last_ricochet_sfx_time < RICOCHET_SFX_COOLDOWN_MS:
+		return
+	last_ricochet_sfx_time = current_time
 	var sfx = AudioStreamPlayer3D.new()
-	sfx.stream = ricochet_sfx.stream
 	sfx.stream = ricochet_sfx.stream
 	sfx.unit_size = ricochet_sfx.unit_size
 	sfx.max_distance = ricochet_sfx.max_distance
@@ -181,6 +188,14 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			stop_elemental_particles()
 			destroyed.emit(hit_boss)
 			call_deferred("queue_free")
+
+func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+	# Run the base_bullet.gd split() code first
+	super(split_count, split_spread_radius, _has_pos, _pos)
+	# Play our sound
+	play_ricochet_sfx()  # Pick a random sound from our array of audio files declared above
+	# Do any tweaks to the player here before you trigger it
+	
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
