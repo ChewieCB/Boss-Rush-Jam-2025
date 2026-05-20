@@ -47,6 +47,8 @@ var cached_target: Node3D
 @export var chip_spawn_force: float = 700.0
 @export var chip_spawn_dps_threshold: float = 25.0
 @export var chip_spawn_mult_cap: int = 3
+var _chip_spawn_pool: Array = []
+var active_chips: Array = []
 
 @export_subgroup("Resistance")
 @onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
@@ -183,6 +185,7 @@ var spawned_area_objects = []
 
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
+@onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @onready var health_ui: BossHealthBar = $UI/HealthUI/BossHealthContainer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
@@ -238,6 +241,9 @@ func _ready() -> void:
 	if GameManager.CHEAT_oneshot:
 		health_component.max_health = 1
 		health_component.current_health = 1
+	
+	for i in range(50):
+		_init_chip_pool.call_deferred()
 
 	health_ui.clear_sub_health_bars()
 	health_ui.init_boss_health_ui(int(health_component.max_health), 1)
@@ -542,6 +548,7 @@ func _exit_tree() -> void:
 			if is_instance_valid(node):
 				node.queue_free()
 
+
 func boss_death_slow_mo() -> bool:
 	SoundManager.play_sound(sfx_slowmo, "SFX")
 	var original_time_scale = Engine.time_scale
@@ -710,20 +717,48 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
 			chip_mult = chip_mult * GameManager.get_boss_chip_amount_drop_multiplier()
 			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
-			if chip_scene:
-				for i in chip_mult:
-					if randf() < chip_spawn_chance:
-						continue
-					var chip = chip_scene.instantiate() as RigidBody3D
-					scene_root.add_child(chip)
-					chip.global_position = self.global_position
-					chip.rotate_y(randf_range(0, 2 * PI))
-					chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-					chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
-					chip_dropped.emit(chip.value)
+			
+			for i in chip_mult:
+				if randf() < chip_spawn_chance:
+					continue
+				_spawn_chip()
 			# Stop the dps timer and set the accumulated dps to 0
 			dps_dealt_window_timer.stop()
 			dps_accumulated_in_window = 0.0
+
+
+func _init_chip_pool() -> void:
+	var chip = chip_scene.instantiate() as RigidBody3D
+	chip.collected.connect(_on_chip_collected)
+	scene_root.add_child(chip)
+	chip.deactivate()
+	chip.global_position = Vector3.ZERO
+	_chip_spawn_pool.push_back(chip)
+
+
+func _spawn_chip() -> void:
+	if _chip_spawn_pool.size() == 0:
+		_init_chip_pool()
+		for i in range(10):
+			_init_chip_pool.call_deferred()
+	
+	var chip = _chip_spawn_pool.pop_front()
+	chip.activate()
+	chip.randomise_chip_value()
+	active_chips.append(chip)
+	chip.global_position = self.global_position
+	chip.rotate_y(randf_range(0, 2 * PI))
+	chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+	chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+	
+	chip_dropped.emit(chip.value)
+
+
+func _on_chip_collected(chip: PokerChip, _value: int) -> void:
+	# Deactivate and currency update is handled in the chip collect code,
+	# we just want to re-fill our pool of chip instances
+	active_chips.erase(chip)
+	_chip_spawn_pool.push_back(chip)
 
 
 func _on_died() -> void:

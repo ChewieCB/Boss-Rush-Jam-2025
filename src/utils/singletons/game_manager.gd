@@ -56,6 +56,10 @@ var equipped_barrels: Array[Resource] = [null, null, null]
 var inventory_barrels: Array[Resource] = []
 var shop_barrels: Array[Resource] = []
 
+var effect_icon_texture_cache: Dictionary = {}  # icon_id -> CompressedTexture2D
+@export var _effect_icon_texture_fallback: CompressedTexture2D
+
+
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
@@ -210,6 +214,9 @@ func _ready() -> void:
 			scaling_3d = 90.0
 			get_viewport().set_scaling_3d_scale(90 / 100.0)
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME
+	
+	for i in range(63):
+		effect_icon_texture_cache[i] = load("res://assets/sprite/effect_icons/%s.png" % [i])
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):

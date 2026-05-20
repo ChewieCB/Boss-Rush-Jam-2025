@@ -1,6 +1,8 @@
 extends BaseBullet
 class_name StickyBombProjectile
 
+signal exploded(explosion_inst: ExplosionDamageArea)
+
 @export var delay_explosion_time = 3
 @export var delay_randomness = 0.22
 @export var explosion_prefab: PackedScene
@@ -103,7 +105,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func ricochet():
-	super ()
+	super()
 	found_hitscal_col = false
 	is_ricochet_shot = true
 	
@@ -125,17 +127,17 @@ func _on_life_timer_timeout() -> void:
 	stop_elemental_particles()
 	call_deferred("queue_free")
 
+
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
+	
 	var calculated_damage = calculate_bullet_damage()
+	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self )
-			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
-			apply_damage_to_health_component(body.health_component, calculated_damage)
-			damage_applied.emit(damage, true, global_position)
-			hit_boss = true
+			damage_body(body, calculated_damage)
+			stick_bullet(body)
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
@@ -144,11 +146,33 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		elif "health_component" in body:
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			hit_boss = true
-	self.reparent.call_deferred(body)
-	sticked = true
+		stick_bullet(body)
+	
+	start_countdown()
+
+
+func start_countdown() -> void:
 	life_timer.stop()
 	explode_timer.start()
 	impacted.emit(self , true, global_position)
+
+
+func damage_body(body: Node3D, damage: int = 0) -> void:
+	if damage == 0:
+		damage = calculate_bullet_damage()
+		
+	before_damage_applied.emit(body, self )
+	damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
+	apply_damage_to_health_component(body.health_component, damage)
+	damage_applied.emit(damage, true, global_position)
+	hit_boss = true
+
+
+func stick_bullet(body: Node3D) -> void:
+	#$Area3D/CollisionShape3D.disabled = true
+	#$HomingArea3D/CollisionShape3D.disabled = true
+	self.reparent.call_deferred(body)
+	sticked = true
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -159,6 +183,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_explode_timer_timeout() -> void:
+	# FIXME - stop this carrying over between levels and erroring
 	if not is_instance_valid(explosion_inst):
 		return
 	var calculated_explosion_damage = calculate_explosion_damage()
@@ -168,8 +193,22 @@ func _on_explode_timer_timeout() -> void:
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
 			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
-	explosion_inst.activate(global_position)
+	explosion_inst.call_deferred("activate", global_position)
+	exploded.emit(explosion_inst)
+	call_deferred("create_explosion")
 
+	if ricochet_count_left > 0 and found_hitscal_col:
+		sticked = false
+		self.reparent.call_deferred(get_tree().get_root())
+		ricochet()
+	else:
+		await get_tree().create_timer(0.25).timeout
+		destroyed.emit(hit_boss)
+		stop_elemental_particles()
+		queue_free.call_deferred()
+
+
+func create_explosion() -> void:
 	var vfx = explosion_vfx.instantiate()
 	var vfx_color: Color = Color.ORANGE
 	var most_recent_status: int = -1
@@ -191,16 +230,6 @@ func _on_explode_timer_timeout() -> void:
 	vfx.global_position = global_position
 	vfx.set_colour(vfx_color)
 
-	if ricochet_count_left > 0 and found_hitscal_col:
-		sticked = false
-		self.reparent.call_deferred(get_tree().get_root())
-		ricochet()
-	else:
-		await get_tree().create_timer(0.25).timeout
-		destroyed.emit(hit_boss)
-		stop_elemental_particles()
-		call_deferred("queue_free")
-
 
 func change_bullet_color(_new_color: Color):
 	super(_new_color)
@@ -217,6 +246,8 @@ func change_bullet_color(_new_color: Color):
 
 
 func calculate_explosion_damage():
+	if not is_instance_valid(owner_gun):
+		return
 	var rand_damage_mod = get_damage_variance_modifier(explosion_damage)
 	var calculated_damage = explosion_damage + rand_damage_mod
 	# Crit

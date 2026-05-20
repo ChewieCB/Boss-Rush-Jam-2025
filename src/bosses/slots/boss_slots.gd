@@ -211,7 +211,7 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super (delta)
+	super(delta)
 
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
@@ -329,11 +329,11 @@ func orbit_towards_player(
 	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
 ) -> void:
 	orbit_angle += angle_speed * delta
-
+	
 	orbit_radius -= approach_speed * delta
 	if min_radius:
 		orbit_radius = max(orbit_radius, min_radius)
-
+	
 	# offset in XZ-plane
 	var offset_x = cos(orbit_angle) * orbit_radius
 	var offset_z = sin(orbit_angle) * orbit_radius
@@ -912,7 +912,8 @@ func _on_cherry_bombs_targeting_state_entered() -> void:
 	state_chart.send_event("attack_buildup")
 
 
-func _on_cherry_bombs_targeting_state_physics_processing(_delta: float) -> void:
+func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
+	orbit_towards_player(delta)
 	if self.global_position.distance_to(target.global_position) <= max_drop_distance:
 		state_chart.send_event("start_dropping_bombs")
 

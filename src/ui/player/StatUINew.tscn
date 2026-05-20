@@ -216,14 +216,14 @@ layout_mode = 2
 texture = ExtResource("3_khwir")
 expand_mode = 3
 
-[node name="HealthBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow" node_paths=PackedStringArray("timer", "heath_bar", "damage_bar", "health_label")]
+[node name="HealthBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow" node_paths=PackedStringArray("timer", "health_bar", "damage_bar", "health_label")]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/margin_left = 8
 script = ExtResource("2_5adv1")
 timer = NodePath("HealthBar/Timer")
-heath_bar = NodePath("HealthBar")
+health_bar = NodePath("HealthBar")
 damage_bar = NodePath("DamageBar")
 health_label = NodePath("Label")
 

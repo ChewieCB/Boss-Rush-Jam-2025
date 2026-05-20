@@ -66,7 +66,6 @@ var prev_attack: String = ""
 @export var sfx_intro_land: Array[AudioStream]
 
 @export_group("Attacks")
-@onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
 @export var hurtbox_range_far: float = 3.8
 @export var hurtbox_range_tutorial: float = 5.0
