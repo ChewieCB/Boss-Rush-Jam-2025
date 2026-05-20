@@ -66,7 +66,8 @@ func _physics_process(delta: float) -> void:
 				
 				if global_position.distance_to(target_pos) <= MIN_DIST_TO_REACH_TARGET:
 					SoundManager.play_sound_with_pitch(orb_consume_sfx, randf_range(0.8, 1.2), "SFX")
-					queue_free()
+					finished.emit()
+					deactivate.call_deferred()
 
 
 func _transition_to(new_state: OrbState) -> void:
@@ -92,11 +93,13 @@ func set_orb_color(color: Color) -> void:
 
 
 func _on_lifetimer_timeout() -> void:
-	deactivate()
+	finished.emit()
+	deactivate.call_deferred()
 
 
 func activate() -> void:
 	self.process_mode == Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
 	self.visible = true
 	# Pick a random direction for the initial flight
 	_random_direction = Vector3(
@@ -114,3 +117,4 @@ func deactivate() -> void:
 	timer.stop()
 	self.visible = false
 	self.process_mode == Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
