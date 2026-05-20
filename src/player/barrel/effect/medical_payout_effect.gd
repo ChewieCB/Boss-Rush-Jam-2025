@@ -2,6 +2,8 @@ extends BaseBarrelEffect
 
 @export var damage_to_heal_ratio: float = 100.0
 
+const MAX_STORED_HP = 100
+
 var accumulated_damage = 0
 var stored_heal = 0:
 	set(value):
@@ -21,9 +23,12 @@ func remove_effect():
 func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	super (_damage, _has_pos, _pos)
 	accumulated_damage += owner_barrel.owner_gun.modified_damage
-	stored_heal = round(accumulated_damage / damage_to_heal_ratio)
+	stored_heal = min(round(accumulated_damage / damage_to_heal_ratio), MAX_STORED_HP)
 
 func on_barrel_start_spin():
+	if stored_heal == MAX_STORED_HP:
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.MEDICAL_PAYOUT__PAYDAY)
+		LuckHandler.increase_luck(12, "+12 Payday!")
 	GameManager.player.health_component.heal(stored_heal)
 	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
 	remove_effect()
@@ -35,6 +40,7 @@ func on_barrel_stop_spin():
 	remove_effect()
 
 func on_player_damaged():
+	accumulated_damage = 0
 	stored_heal = 0
 
 func add_buff_that_track_recover_amount():

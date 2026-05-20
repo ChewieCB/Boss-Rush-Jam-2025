@@ -19,7 +19,6 @@ var dps_accumulated_in_window: float = 0.0:
 			dps_dealt_window_timer.start(dps_dealt_window)
 
 
-
 func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	if (_has_pos):
 		create_explosion(_pos, _projectile.infused_status_effect)
@@ -53,14 +52,7 @@ func accumulate_dps_dealt(damage: float) -> void:
 
 func _on_dps_dealt_window_timer_timeout() -> void:
 	if dps_accumulated_in_window > luck_trigger_indirect_damage_threshold:
-		# Mark the luck trigger as discovered if we haven't triggered it before
-		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
-			LuckTriggerInfo.LuckTriggerIdEnum.EXPLOSIVE_BULLET__BADA_BING_BADA_BOOM
-		]
-		if LuckHandler.luck_trigger_dict[enum_str] == false:
-			LuckHandler.luck_trigger_dict[enum_str] = true
-			LuckHandler.trigger_discovered.emit()
-		
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.EXPLOSIVE_BULLET__BADA_BING_BADA_BOOM)
 		LuckHandler.increase_luck(luck_gain_indirect_damage, "+20 Bada Bing, Bada Boom!")
 	
 	dps_accumulated_in_window = 0.0

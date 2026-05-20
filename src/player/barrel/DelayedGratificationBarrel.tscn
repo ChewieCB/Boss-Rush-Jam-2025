@@ -77,8 +77,10 @@ script = ExtResource("8_0by4g")
 damage_to_heal_ratio = 20.0
 display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"
+display_text_desc = "Stored heal when dealing damage, spin to recover health. Don't get hit."
 positive_desc = Array[String](["Store 5 HP every 100 damage dealt", "Recover stored HP on spin"])
 negative_desc = Array[String](["Reload cost chip based on your current health", "Take damage lose all stored HP"])
 icon_id = 20
+luck_triggers = Array[int]([9])
 
 [connection signal="timeout" from="EffectContainer/StickyBomb/DPSWindowTImer" to="EffectContainer/StickyBomb" method="_on_dps_dealt_window_timer_timeout"]
