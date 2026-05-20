@@ -2,6 +2,7 @@ extends Area3D
 class_name ExplosionDamageArea
 
 signal explosive_damage(damage: float, target: CharacterBody3D)
+signal finished
 
 @onready var explosion_vfx: ExplosionParticles = $ExplosionVFX
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -18,21 +19,11 @@ var infused_status_effects: Array[BossCore.BossStatusEffect] = []
 
 
 func _ready():
-	explosion_vfx.finished.connect(deactivate)
+	explosion_vfx.finished.connect(finished.emit)
 	
 
 func init(_damage: int):
 	damage = _damage
-
-
-func activate(start_pos: Vector3) -> void:
-	damage_disabled = false
-	global_position = start_pos
-	active = true
-	visible = true
-	collision_shape.call_deferred("set_disabled", false)
-	explode()
-	process_mode = PROCESS_MODE_INHERIT
 
 
 func set_damage_radius(radius: float) -> void:
@@ -45,19 +36,6 @@ func set_damage_radius(radius: float) -> void:
 func add_status_effect(status_effect: BossCore.BossStatusEffect) -> void:
 	if not status_effect in infused_status_effects:
 		infused_status_effects.append(status_effect)
-
-
-func deactivate() -> void:
-	if sfx_player.is_playing():
-		await sfx_player.finished
-	
-	infused_status_effects = []
-	explosion_vfx.reset_color()
-	visible = false
-	active = false
-	damage_disabled = true
-	collision_shape.call_deferred("set_disabled", true)
-	process_mode = PROCESS_MODE_DISABLED
 
 
 func explode():
@@ -119,4 +97,31 @@ func _on_area_entered(area: Area3D) -> void:
 	var _parent = area.get_parent()
 	if _parent is CharacterBody3D:
 		_on_body_entered(_parent)
-		
+
+
+func activate() -> void:
+	damage_disabled = false
+	active = true
+	
+	self.set_deferred("monitoring", true)
+	self.set_deferred("monitorable", true)
+	collision_shape.disabled = false
+	self.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	explode.call_deferred()
+
+
+func deactivate() -> void:
+	if sfx_player.is_playing():
+		await sfx_player.finished
+	
+	damage_disabled = true
+	infused_status_effects = []
+	explosion_vfx.reset_color()
+	self.visible = false
+	active = false
+	
+	self.set_deferred("monitoring", true)
+	self.set_deferred("monitorable", true)
+	collision_shape.disabled = false
+	self.process_mode = Node.PROCESS_MODE_DISABLED

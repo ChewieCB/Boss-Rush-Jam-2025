@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func explode() -> void:
-	self.process_mode = Node.PROCESS_MODE_INHERIT
+	activate()
 	smoke.emitting = true
 	fire.emitting = true
 
@@ -45,4 +45,15 @@ func check_count():
 	count += 1
 	if count >= 2:
 		finished.emit()
-		self.process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func activate() -> void:
+	self.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func deactivate() -> void:
+	smoke.emitting = false
+	fire.emitting = false
+	self.visible = false
+	self.process_mode = Node.PROCESS_MODE_DISABLED

@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c70h2xecs66jh"]
+[gd_scene load_steps=5 format=3 uid="uid://c70h2xecs66jh"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/object_pooling_manager.gd" id="1_ddkpc"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_nk1ge"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="3_0fdra"]
 [ext_resource type="PackedScene" uid="uid://bpfgkk1ymtl18" path="res://src/player/gun/projectiles/GelProjectile.tscn" id="3_5llqh"]
 
 [node name="ObjectPoolingManager" type="Node3D"]
 script = ExtResource("1_ddkpc")
-pooled_object_prefabs = Array[PackedScene]([ExtResource("2_nk1ge"), ExtResource("3_5llqh")])
-pooled_object_init_arr_size = Array[int]([1, 150])
+pooled_object_prefabs = Array[PackedScene]([ExtResource("2_nk1ge"), ExtResource("3_0fdra"), ExtResource("3_5llqh")])
+pooled_object_init_arr_size = Array[int]([100, 100, 1])

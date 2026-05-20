@@ -21,7 +21,6 @@ const CONTACT_DAMAGE = 1
 
 var sticked = false
 var explosion_damage = 0
-var explosion_inst: ExplosionDamageArea
 
 func _ready() -> void:
 	super()
@@ -30,7 +29,6 @@ func _ready() -> void:
 	explode_timer.wait_time = delay_explosion_time
 	life_timer.wait_time = delay_explosion_time
 	mesh.mesh.material = mesh.mesh.material.duplicate(true)
-	explosion_inst = explosion_prefab.instantiate()
 
 func _process(delta: float) -> void:
 	super (delta)
@@ -183,17 +181,18 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_explode_timer_timeout() -> void:
-	# FIXME - stop this carrying over between levels and erroring
-	if not is_instance_valid(explosion_inst):
-		return
 	var calculated_explosion_damage = calculate_explosion_damage()
+	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(
+		ObjectPoolingManager.PooledObjectEnum.EXPLOSION
+	)
 	explosion_inst.init(calculated_explosion_damage)
-	get_parent().add_child(explosion_inst)
+	explosion_inst.global_position = self.global_position
 
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
 			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
-	explosion_inst.call_deferred("activate", global_position)
+	
+	explosion_inst.call_deferred("activate")
 	exploded.emit(explosion_inst)
 	call_deferred("create_explosion")
 

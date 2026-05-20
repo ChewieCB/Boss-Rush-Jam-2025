@@ -37,7 +37,8 @@ func create_explosion(pos: Vector3, status_effects: Array):
 		explosion_inst.explosive_damage.connect(_on_explosive_damage)
 	
 	explosion_inst.set_damage_radius(range)
-	explosion_inst.activate(pos)
+	explosion_inst.global_position = pos
+	explosion_inst.activate()
 
 
 func _on_explosive_damage(damage: float, body: CharacterBody3D) -> void:
