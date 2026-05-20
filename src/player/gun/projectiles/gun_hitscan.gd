@@ -13,6 +13,8 @@ signal end_pos_set(pos: Vector3)
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 
+@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+
 var alpha = 1.0
 var end_pos
 
@@ -156,16 +158,31 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		mesh.mesh.material.set_shader_parameter("origin_position", start_pos)
 	visible = true
 
+func play_ricochet_sfx():
+	var sfx = AudioStreamPlayer3D.new()
+	sfx.stream = ricochet_sfx.stream
+	sfx.stream = ricochet_sfx.stream
+	sfx.unit_size = ricochet_sfx.unit_size
+	sfx.max_distance = ricochet_sfx.max_distance
+	sfx.volume_db = ricochet_sfx.volume_db
+	sfx.attenuation_model = ricochet_sfx.attenuation_model
+	get_tree().root.add_child(sfx)
+	sfx.global_position = global_position
+	sfx.play()
+	sfx.finished.connect(sfx.queue_free)
 
 func ricochet():
 	super ()
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
+	print("test")
+	play_ricochet_sfx()
 	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
 	get_tree().get_root().add_child(new_inst)
 	new_inst.mesh.mesh.material = mesh.mesh.material.duplicate()
 	var new_dir = current_dir.bounce(hitscan_col_normal)
+	
 	
 	# Add slight homing toward last look enemy target if available
 	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
