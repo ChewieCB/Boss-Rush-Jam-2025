@@ -1,9 +1,10 @@
 extends CanvasLayer
 class_name PlayerUI
 
+@export var heal_flash_sfx: AudioStream
+
 @onready var saving_indicator: Label = $SavingIndicator
 @onready var pause_ui: PauseUI = $PauseUI
-
 @onready var stat_ui: StatUI = $StatUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
@@ -50,3 +51,4 @@ func start_heal_flash() -> void:
 	heal_flash_overlay.color = start_color
 	var tween = create_tween()
 	tween.tween_property(heal_flash_overlay, "color:a", 0.0, DURATION)
+	SoundManager.play_sound(heal_flash_sfx)
