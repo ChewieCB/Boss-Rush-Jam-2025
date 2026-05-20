@@ -53,7 +53,7 @@ random_pitch = 1.02
 streams_count = 1
 stream_0/stream = ExtResource("4_uf018")
 
-[node name="StickyBombProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
+[node name="StickyBombProjectile" type="Node3D"]
 script = ExtResource("1_oktax")
 explosion_prefab = ExtResource("2_c01wk")
 explosion_vfx = ExtResource("3_h00rf")

@@ -1,6 +1,7 @@
 extends BaseBarrelEffect
 
 @export var damage_to_heal_ratio: float = 100.0
+@export var vfx_heal_orb_prefab: PackedScene
 
 const MAX_STORED_HP = 100
 
@@ -20,10 +21,17 @@ func remove_effect():
 	stored_heal = 0
 	GameManager.player.remove_status_effect_by_name("medical_payout_stored_heal")
 
-func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super (_damage, _has_pos, _pos)
-	accumulated_damage += owner_barrel.owner_gun.modified_damage
+func on_damage_applied(damage: float, has_pos: bool = false, pos: Vector3 = Vector3.ZERO):
+	super (damage, has_pos, pos)
+	accumulated_damage += damage
 	stored_heal = min(round(accumulated_damage / damage_to_heal_ratio), MAX_STORED_HP)
+	if has_pos:
+		var inst: ColoredOrb = vfx_heal_orb_prefab.instantiate()
+		get_tree().get_root().add_child(inst)
+		inst.set_orb_color(Color(0.3, 0.7, 0))
+		inst.global_position = pos
+		inst.homing_target = GameManager.player
+
 
 func on_barrel_start_spin():
 	if stored_heal == MAX_STORED_HP:

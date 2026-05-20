@@ -45,7 +45,7 @@ point_count = 3
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_obng1"]
 noise_type = 0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_55m6u"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_whhfj"]
 noise = SubResource("FastNoiseLite_obng1")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_msj7r"]
@@ -54,7 +54,7 @@ shader = ExtResource("11_nltpd")
 shader_parameter/distortion_strength = 0.05
 shader_parameter/trail_opacity = 0.6
 shader_parameter/time_offset = 0.0
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_55m6u")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_whhfj")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
 radius = 1.0
