@@ -126,6 +126,9 @@ var bell_spawn_points: Array = []
 @export var swipe_damage: float = 5.0
 @export var swipe_knockback: float = 50.0
 @export var swipe_dodge_speed: float = 10.0
+@export var swipe_cooldown: float = 5.0
+@onready var swipe_cooldown_timer: Timer = $SwipeCooldown
+var interrupted_state: String
 # SFX
 @export var sfx_lever_swipe: Array[AudioStream]
 
@@ -176,6 +179,7 @@ var bomb_proj_pool: Array = []
 @export var max_drop_distance: float = 20.0
 @export var bomb_drop_delay: float = 0.4
 var active_bombs: Array = []
+var bomb_dir_counter: int = -1
 # SFX
 # Moved to the bomb objects
 @export var sfx_bomb_launch: Array[AudioStream]
@@ -287,12 +291,11 @@ func _physics_process(delta: float) -> void:
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
 		slot_icons_parent.look_at(target.global_position)
-
+	
 	if hurtbox.monitoring:
-		if target in hurtbox.get_overlapping_bodies():
-			# TODO - add cooldown
-			state_chart.send_event("start_lever_attack")
-
+		if target in hurtbox.get_overlapping_bodies() and swipe_cooldown_timer.is_stopped():
+			_on_hurtbox_body_entered(target)
+	
 	if self.global_position.y > desired_height:
 		self.global_position.y -= delta * drop_factor
 	elif self.global_position.y < desired_height:
@@ -350,6 +353,7 @@ func _on_died() -> void:
 	_cleanup_bombs()
 	
 	anim_player.stop()
+	sprite.texture = hurt_sprite
 	
 	died.emit()
 	state_chart.send_event("death")
@@ -410,7 +414,12 @@ func _death_explosion() -> void:
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
-	pass
+	if $StateChart/Root/Phase/Phase1/Charge.active or \
+	$StateChart/Root/Phase/Phase2/Charge.active or \
+	$StateChart/Root/Phase/Phase2/CherryBombs.active:
+		return
+	if swipe_cooldown_timer.is_stopped():
+		state_chart.send_event("start_lever_attack")
 
 
 ### ATTACK PHASES --------------------------------
@@ -534,9 +543,13 @@ func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
 
 func _on_coin_projectiles_targeting_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Targeting"
-
+	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
+	
+	anim_player.play("ranged_shot_spin_start")
+	anim_player.queue("ranged_shot_spin")
+	
 	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("start_shooting")
 
@@ -546,9 +559,9 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 
 	state_chart.send_event("attack_telegraph")
 	# await get_tree().create_timer(0.4, false).timeout
-	anim_player.play("coin_shot_telegraph")
-	await anim_player.animation_finished
-	anim_player.play("RESET")
+	#anim_player.play("coin_shot_telegraph")
+	#await anim_player.animation_finished
+	#anim_player.play("RESET")
 	state_chart.send_event("attack_start")
 
 	for i in coin_burst_repeat:
@@ -559,21 +572,23 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 		play_positional_sound(sfx_coin_gun_blast.pick_random())
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(1.0 / coin_firerate, false).timeout
-			# FIXME - replace with pooled
 			var proj: BaseBossProjectile = fire_projectile_pooled(coin_proj_pool, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			#var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
+			anim_player.play("ranged_shot_spin_shoot")
+			await anim_player.animation_finished
+			anim_player.play("ranged_shot_spin")
 		# Dont play animation for the last one (since boss no longer actually shoot)
 		if i < coin_burst_repeat - 1:
-			anim_player.play("quick_coin_shot")
-			await anim_player.animation_finished
-			anim_player.play("RESET")
+			anim_player.play("ranged_shot_spin")
 	state_chart.send_event("stop_shooting")
 
 
 func _on_coin_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Recovering"
-
+	
+	anim_player.play("ranged_shot_spin_end")
+	await anim_player.animation_finished
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
@@ -734,12 +749,22 @@ func _on_bell_drop_recover_state_entered() -> void:
 # Whacks player with slot level arm if they get too close
 func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
-
+	
+	desired_distance = 2.4
+	desired_height = 0.5
+	if floor_raycast.is_colliding():
+		desired_height += floor_raycast.get_collision_point().y
+	
+	drop_factor = 20.0
 	state_chart.send_event("start_targeting")
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time, false).timeout
-	hurtbox.set_deferred("monitoring", true)
-	state_chart.send_event("start_swipe")
+
+
+func _on_targeting_state_physics_processing(delta: float) -> void:
+	if self.global_position.distance_to(target.global_position) <= 3.0:
+		state_chart.send_event("attack_telegraph")
+		hurtbox.set_deferred("monitoring", true)
+		await get_tree().create_timer(telegraph_time, false).timeout
+		state_chart.send_event("start_swipe")
 
 
 func _on_lever_swipe_swipe_state_entered() -> void:
@@ -747,7 +772,8 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 
 	state_chart.send_event("attack_start")
 	#sprite.modulate = Color.ORANGE
-	anim_player.play("melee_swipe")
+	#anim_player.play("melee_swipe")
+	anim_player.play("face_slam")
 	
 	await anim_player.animation_finished
 	
@@ -805,14 +831,24 @@ func melee_swipe() -> void:
 
 func _on_lever_swipe_recover_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Recovery"
+	
+	desired_distance = DESIRED_DISTANCE
+	desired_height = DESIRED_HEIGHT
+	drop_factor = DROP_FACTOR
+	
 	hurtbox.set_deferred("monitoring", true)
 	sfx_player.stream = null
-
+	
+	swipe_cooldown_timer.start(swipe_cooldown)
+	
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
-
-	select_attack()
+	
+	# Return to previous state if valid
+	state_chart.send_event(next_attack)
+	# Rr select new attack if not
+	#select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -837,33 +873,53 @@ func _on_homing_projectiles_targeting_state_entered() -> void:
 	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
+	desired_distance = 8.0
 	# await get_tree().create_timer(0.8, false).timeout
-	anim_player.play("diamond_shot_telegraph")
-	await anim_player.animation_finished
-	anim_player.play("RESET")
-	state_chart.send_event("start_shooting")
+	#anim_player.play("diamond_shot_telegraph")
+	#await anim_player.animation_finished
+	#anim_player.play("RESET")
+
+
+func _on_homing_projectiles_targeting_state_physics_processing(delta: float) -> void:
+	if self.global_position.distance_to(target.global_position) <= 10.0:
+		state_chart.send_event("start_shooting")
 
 
 func _on_homing_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Shooting"
+	anim_player.play("diamond_shot")
+	await anim_player.animation_finished
 	# Fire out projctiles in a spiral, each projectile homes in on the player
+	#explode_vfx.explode()
+	#play_positional_sound(sfx_diamond_gun_blast.pick_random())
+	#for i in range(diamond_shots_per_attack):
+		## HACK - break out of this loop if we've exited the state
+		#if not $StateChart/Root/Phase/Phase2/HomingProjectiles.active:
+			#return
+		#var projectile: DiamondProjectile = fire_projectile_pooled(diamond_proj_pool, projectile_spawn_marker.global_position, diamond_spread, sfx_diamond_shot)
+		#projectile.target = target
+		#projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
+		#projectile.diamond_homing_speed = diamond_homing_speed
+	state_chart.send_event("stop_shooting")
+
+
+func fire_homing_shot() -> void:
 	explode_vfx.explode()
 	play_positional_sound(sfx_diamond_gun_blast.pick_random())
 	for i in range(diamond_shots_per_attack):
 		# HACK - break out of this loop if we've exited the state
 		if not $StateChart/Root/Phase/Phase2/HomingProjectiles.active:
 			return
-		# await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
-		# FIXME - replace with pooled
 		var projectile: DiamondProjectile = fire_projectile_pooled(diamond_proj_pool, projectile_spawn_marker.global_position, diamond_spread, sfx_diamond_shot)
-		#var projectile: DiamondProjectile = fire_projectile(diamond_projectile, projectile_spawn_marker.global_position, diamond_spread, sfx_diamond_shot)
 		projectile.target = target
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		projectile.diamond_homing_speed = diamond_homing_speed
-	state_chart.send_event("stop_shooting")
+
 
 func _on_homing_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Recovering"
+	
+	desired_distance = DESIRED_DISTANCE
 
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
@@ -958,7 +1014,9 @@ func _on_charge_charging_state_entered() -> void:
 	state_chart.send_event("attack_start")
 
 	MAX_SPEED /= 1.6
-	desired_height = 0.2
+	desired_height = 0.5
+	if floor_raycast.is_colliding():
+		desired_height += floor_raycast.get_collision_point().y
 	drop_factor = 12.0
 	charge_crack_interval_timer = 0
 	spawn_charge_crack()
@@ -983,9 +1041,9 @@ func _on_charge_charging_state_entered() -> void:
 func _on_charge_collision(body: Node3D) -> void:
 	const CHARGE_TREMOR_INTENSITY = 0.5
 	const CHARGE_PUSH_FORCE_MULT = 3.0
-	anim_player.play("face_slam")
 	if body == target:
 		velocity = Vector3.ZERO
+		anim_player.play("melee_swipe")
 		body.health_component.damage(charge_damage * GameManager.get_risk_dmg_mult())
 		if body is Player:
 			body.player_camera.add_trauma(CHARGE_TREMOR_INTENSITY)
@@ -1012,12 +1070,12 @@ func _on_charge_charging_state_physics_processing(delta: float) -> void:
 
 
 func _on_charge_recover_state_entered() -> void:
-	anim_player.play("RESET")
+	#anim_player.play("RESET")
 	debug_state_label.text = "Charge | Recovering"
-	if anim_player.is_playing():
-		await anim_player.animation_finished
-	anim_player.play("charge_recover")
+	if not anim_player.is_playing():
+		anim_player.play("charge_recover")
 	await anim_player.animation_finished
+	
 	state_chart.send_event("attack_end")
 	navigation_component.enable()
 	
@@ -1062,39 +1120,46 @@ func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Dropping"
-	desired_height = 4.3
+	desired_height = 5.8
+	if floor_raycast.is_colliding():
+		desired_height += floor_raycast.get_collision_point().y
 	drop_factor = 3.0
 	MAX_SPEED *= 1.6
 	navigation_component.follow_target = true
 
 	state_chart.send_event("start_targeting")
+	anim_player.play("big_ranged_shot_telegraph")
 	await desired_height_reached
+	if anim_player.is_playing():
+		await anim_player.animation_finished
 
 	state_chart.send_event("attack_start")
 
-	var dir_counter: int = -1
+	bomb_dir_counter = -1
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
 		if $StateChart/Root/Health/Dead.active:
 			break
-		anim_player.play("quick_bomb_shot")
+		anim_player.play("big_ranged_shot")
 		await anim_player.animation_finished
-		anim_player.play("RESET")
-		sfx_player.stream = sfx_bomb_launch.pick_random()
-		sfx_player.play()
-		var projectile = bomb_proj_pool.pop_front() as RigidBody3D
-		#var projectile := bomb_projectile.instantiate() as RigidBody3D
-		projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time)
-		projectile.global_position = projectile_spawn_marker.global_position
-		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)
-		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
-		active_bombs.append(projectile)
-
-		dir_counter += 1
-		dir_counter = wrapi(dir_counter, -1, 2)
-
+		bomb_dir_counter += 1
+		bomb_dir_counter = wrapi(bomb_dir_counter, -1, 2)
+	
+	anim_player.play("big_ranged_shot_finish")
 	sfx_player.volume_db = 0.0
 	state_chart.send_event("stop_dropping_bombs")
+
+
+func fire_bomb() -> void:
+	sfx_player.stream = sfx_bomb_launch.pick_random()
+	sfx_player.play()
+	var projectile = bomb_proj_pool.pop_front() as RigidBody3D
+	#var projectile := bomb_projectile.instantiate() as RigidBody3D
+	projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time)
+	projectile.global_position = projectile_spawn_marker.global_position
+	projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * bomb_dir_counter)
+	projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
+	active_bombs.append(projectile)
 
 
 func _on_cherry_bombs_recover_state_entered() -> void:
@@ -1149,3 +1214,7 @@ func boss_suck_chip() -> void:
 
 func _on_absorb_chip_timer_timeout() -> void:
 	boss_suck_chip()
+
+
+func _on_cherry_bombs_state_exited() -> void:
+	_cleanup_bombs()

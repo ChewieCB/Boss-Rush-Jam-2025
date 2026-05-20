@@ -708,7 +708,8 @@ func _on_health_idle_state_entered() -> void:
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
-	sprite.modulate = Color.CYAN
+	pass
+	#sprite.modulate = Color.CYAN
 
 
 func _on_attack_telegraph_state_exited() -> void:

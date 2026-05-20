@@ -1,4 +1,4 @@
-[gd_scene load_steps=155 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=217 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -91,18 +91,71 @@
 [ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="84_4w3pm"]
 [ext_resource type="Texture2D" uid="uid://1nbmmdl2pdtv" path="res://src/bosses/slots/assets/Slotty_Death.png" id="86_g6u6s"]
 [ext_resource type="Texture2D" uid="uid://cmuo1vcqhtik8" path="res://src/bosses/slots/assets/Slotty_punch0.png" id="87_egfcc"]
+[ext_resource type="Texture2D" uid="uid://bis8d0nvclhde" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_34.png" id="87_kp542"]
+[ext_resource type="Texture2D" uid="uid://copqh37jk00" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_35.png" id="88_43hjv"]
 [ext_resource type="Texture2D" uid="uid://cnxv2qcukvjv7" path="res://src/bosses/slots/assets/Slotty_punch1.png" id="88_lt407"]
 [ext_resource type="Texture2D" uid="uid://dij0gdxugwndw" path="res://src/bosses/slots/assets/Slotty_punch2.png" id="89_7q71m"]
+[ext_resource type="Texture2D" uid="uid://b7vqfkn0amrkc" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_36.png" id="89_i7nas"]
 [ext_resource type="Texture2D" uid="uid://bqwugk57ipbpq" path="res://src/bosses/slots/assets/Slotty_punch3.png" id="90_3mnyf"]
+[ext_resource type="Texture2D" uid="uid://csxtbu7nfkopg" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_37.png" id="90_6yv32"]
 [ext_resource type="Texture2D" uid="uid://3gpk5rkw8g8f" path="res://src/bosses/slots/assets/Slotty_punch4.png" id="91_qtki8"]
+[ext_resource type="Texture2D" uid="uid://c3metg2a87o4f" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_38.png" id="91_xxjtj"]
 [ext_resource type="Texture2D" uid="uid://dqer4yqqkip27" path="res://src/bosses/slots/assets/Slotty_slam1.png" id="92_dlso3"]
+[ext_resource type="Texture2D" uid="uid://dlhsqmp7n3rnx" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_39.png" id="92_vrcu0"]
+[ext_resource type="Texture2D" uid="uid://c3a0n4is2wtfu" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_40.png" id="93_m2nov"]
 [ext_resource type="Texture2D" uid="uid://cc607fb86wfar" path="res://src/bosses/slots/assets/Slotty_slam2.png" id="93_xcmif"]
+[ext_resource type="Texture2D" uid="uid://c2rm4mkc0n2d7" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_41.png" id="94_cscjv"]
 [ext_resource type="Texture2D" uid="uid://dyxkxtkrccymw" path="res://src/bosses/slots/assets/Slotty_slam3.png" id="94_vraer"]
 [ext_resource type="Texture2D" uid="uid://ct26dslqvpk5u" path="res://src/bosses/slots/assets/Slotty_slam4.png" id="95_a83x0"]
+[ext_resource type="Texture2D" uid="uid://cgi32knlagulb" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_42.png" id="95_eflol"]
 [ext_resource type="Texture2D" uid="uid://cueoyec2hfn60" path="res://src/bosses/slots/assets/Slotty_slam5.png" id="96_5rkvy"]
+[ext_resource type="Texture2D" uid="uid://bvbvedd5chukm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_43.png" id="96_yeuq1"]
+[ext_resource type="Texture2D" uid="uid://h754cqw8eqh" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_44.png" id="97_hor7w"]
 [ext_resource type="Texture2D" uid="uid://7dy5rrohaetu" path="res://src/bosses/slots/assets/Slotty_slam6.png" id="97_qpg7b"]
 [ext_resource type="Texture2D" uid="uid://da771r002ouif" path="res://src/bosses/slots/assets/Slotty_slam7.png" id="98_ar463"]
+[ext_resource type="Texture2D" uid="uid://cx0uuiuv2cae" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_45.png" id="98_fy5i8"]
 [ext_resource type="Texture2D" uid="uid://bxe66n0melgli" path="res://src/bosses/slots/assets/Slotty_slam8.png" id="99_jx245"]
+[ext_resource type="Texture2D" uid="uid://d1d28vgyjdrwa" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_46.png" id="99_nalbk"]
+[ext_resource type="Texture2D" uid="uid://dmqofxib41pby" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_47.png" id="100_g2cjr"]
+[ext_resource type="Texture2D" uid="uid://dx32t17hk801o" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_48.png" id="101_tvuck"]
+[ext_resource type="Texture2D" uid="uid://d20rb3wvefvnn" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_49.png" id="102_1v1lh"]
+[ext_resource type="Texture2D" uid="uid://dw5ett22l44nm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_0.png" id="103_naqto"]
+[ext_resource type="Texture2D" uid="uid://fa1lxv82nsha" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_50.png" id="103_twfeq"]
+[ext_resource type="Texture2D" uid="uid://b7m1xexdw2cgj" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_51.png" id="104_7bgoi"]
+[ext_resource type="Texture2D" uid="uid://y67y6ye2aeqe" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_1.png" id="104_u6104"]
+[ext_resource type="Texture2D" uid="uid://dmxecjuj03gft" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_2.png" id="105_0rl30"]
+[ext_resource type="Texture2D" uid="uid://bwauh0g1xwdft" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_52.png" id="105_rl4oe"]
+[ext_resource type="Texture2D" uid="uid://bqbqv2ww1i4mk" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_3.png" id="106_kv25w"]
+[ext_resource type="Texture2D" uid="uid://pllhy13a4nim" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_4.png" id="107_u8gmc"]
+[ext_resource type="Texture2D" uid="uid://cv66mxn256i0i" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_5.png" id="108_aypgx"]
+[ext_resource type="Texture2D" uid="uid://dqv18mue1iua6" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_6.png" id="109_8vsai"]
+[ext_resource type="Texture2D" uid="uid://b7l5355dxrt82" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_7.png" id="110_iq20f"]
+[ext_resource type="Texture2D" uid="uid://cypuqqc35bfa7" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_8.png" id="111_7cpys"]
+[ext_resource type="Texture2D" uid="uid://cpgv088ikowkr" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_9.png" id="112_wqg1y"]
+[ext_resource type="Texture2D" uid="uid://cskshdpdevivg" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_10.png" id="113_v0xl8"]
+[ext_resource type="Texture2D" uid="uid://c6whcdp6lmvhq" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_11.png" id="114_qeerp"]
+[ext_resource type="Texture2D" uid="uid://b26kvcq1kmdg0" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_12.png" id="115_qv1d8"]
+[ext_resource type="Texture2D" uid="uid://bgphvv0tthsbp" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_13.png" id="116_cpcw7"]
+[ext_resource type="Texture2D" uid="uid://oc5218b2tdy" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_14.png" id="117_0c1p3"]
+[ext_resource type="Texture2D" uid="uid://kqt8042avxkj" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_15.png" id="118_errug"]
+[ext_resource type="Texture2D" uid="uid://wd4plwy28gq7" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_16.png" id="119_umxby"]
+[ext_resource type="Texture2D" uid="uid://bq1j7lv1if6fj" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_17.png" id="120_8e37a"]
+[ext_resource type="Texture2D" uid="uid://ck83k68ecouyy" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_18.png" id="121_duldb"]
+[ext_resource type="Texture2D" uid="uid://ca6gartyly3i5" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_19.png" id="122_c3c31"]
+[ext_resource type="Texture2D" uid="uid://d2c35a7tn4f6t" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_20.png" id="123_w4u7b"]
+[ext_resource type="Texture2D" uid="uid://tfpta8vs7pe0" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_21.png" id="124_1txb1"]
+[ext_resource type="Texture2D" uid="uid://cl4cfajxcacmm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_22.png" id="125_kxf5w"]
+[ext_resource type="Texture2D" uid="uid://lyy7gjlpvdvv" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_23.png" id="126_80lcg"]
+[ext_resource type="Texture2D" uid="uid://c8lsupaf1mlam" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_24.png" id="127_4w6vg"]
+[ext_resource type="Texture2D" uid="uid://5b5lmaftrfcr" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_25.png" id="128_7uapc"]
+[ext_resource type="Texture2D" uid="uid://bon7tgnk6f0jq" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_26.png" id="129_dihp4"]
+[ext_resource type="Texture2D" uid="uid://f3q4yv2wtl3e" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_27.png" id="130_pqla6"]
+[ext_resource type="Texture2D" uid="uid://brcliq4gq6xca" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_28.png" id="131_4w4x2"]
+[ext_resource type="Texture2D" uid="uid://yffyv2fsd01x" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_29.png" id="132_66vxs"]
+[ext_resource type="Texture2D" uid="uid://c4vsh3p6rhd6y" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_30.png" id="133_q6jup"]
+[ext_resource type="Texture2D" uid="uid://crpid0gtchyc0" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_31.png" id="134_6q1jv"]
+[ext_resource type="Texture2D" uid="uid://dbxjhjb86bh74" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_32.png" id="135_mkglq"]
+[ext_resource type="Texture2D" uid="uid://dopxmvfff58bm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_33.png" id="136_omfb6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -129,6 +182,9 @@ albedo_color = Color(1, 0, 0, 1)
 material = SubResource("StandardMaterial3D_7kkon")
 radius = 0.35
 height = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oavlp"]
+size = Vector3(7, 15, 10)
 
 [sub_resource type="Resource" id="Resource_7mlln"]
 script = ExtResource("66_4ktje")
@@ -349,6 +405,154 @@ tracks/10/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.7, 0.7, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_flixy"]
+resource_name = "big_ranged_shot"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("87_kp542"), ExtResource("88_43hjv"), ExtResource("89_i7nas")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"fire_bomb"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.7, 0.7, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vk2fa"]
+resource_name = "big_ranged_shot_telegraph"
+length = 1.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("103_naqto"), ExtResource("104_u6104"), ExtResource("105_0rl30"), ExtResource("106_kv25w"), ExtResource("107_u8gmc"), ExtResource("108_aypgx"), ExtResource("109_8vsai"), ExtResource("110_iq20f"), ExtResource("111_7cpys"), ExtResource("112_wqg1y"), ExtResource("113_v0xl8"), ExtResource("114_qeerp"), ExtResource("115_qv1d8"), ExtResource("116_cpcw7"), ExtResource("117_0c1p3"), ExtResource("118_errug"), ExtResource("119_umxby"), ExtResource("120_8e37a"), ExtResource("121_duldb"), ExtResource("122_c3c31"), ExtResource("123_w4u7b"), ExtResource("124_1txb1"), ExtResource("125_kxf5w"), ExtResource("126_80lcg"), ExtResource("127_4w6vg"), ExtResource("128_7uapc"), ExtResource("129_dihp4"), ExtResource("130_pqla6"), ExtResource("131_4w4x2"), ExtResource("132_66vxs"), ExtResource("133_q6jup"), ExtResource("134_6q1jv"), ExtResource("135_mkglq"), ExtResource("136_omfb6")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4fh2k"]
+resource_name = "charge_recover"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("84_4w3pm"), ExtResource("83_kw510")]
 }
 
 [sub_resource type="Animation" id="Animation_m1stq"]
@@ -639,6 +843,92 @@ tracks/6/keys = {
 "values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_2xbf5"]
+resource_name = "face_slam"
+length = 0.7
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.125, 0.175, 0.275, 0.325, 0.425, 0.525, 0.675),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("92_dlso3"), ExtResource("93_xcmif"), ExtResource("94_vraer"), ExtResource("95_a83x0"), ExtResource("96_5rkvy"), ExtResource("97_qpg7b"), ExtResource("98_ar463"), ExtResource("99_jx245"), ExtResource("98_ar463"), ExtResource("97_qpg7b"), ExtResource("92_dlso3")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.325),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"melee_swipe"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_mqga3"]
+resource_name = "melee_swipe"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("88_lt407"), ExtResource("89_7q71m"), ExtResource("90_3mnyf"), ExtResource("91_qtki8"), ExtResource("87_egfcc")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"melee_swipe"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="Animation" id="Animation_kh5dm"]
 resource_name = "quick_bomb_shot"
 length = 0.5
@@ -795,6 +1085,227 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_mhk11"]
+resource_name = "ranged_shot_spin"
+length = 0.1
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("111_7cpys"), ExtResource("112_wqg1y")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rbi6q"]
+resource_name = "ranged_shot_spin_end"
+length = 0.45
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("112_wqg1y"), ExtResource("111_7cpys"), ExtResource("110_iq20f"), ExtResource("109_8vsai"), ExtResource("108_aypgx"), ExtResource("107_u8gmc"), ExtResource("106_kv25w"), ExtResource("105_0rl30"), ExtResource("104_u6104"), ExtResource("103_naqto")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_l7mgo"]
+resource_name = "ranged_shot_spin_shoot"
+length = 0.05
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("103_naqto"), ExtResource("110_iq20f")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.34629, -0.231234, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_d44sc"]
+resource_name = "ranged_shot_spin_start"
+length = 0.45
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("103_naqto"), ExtResource("104_u6104"), ExtResource("105_0rl30"), ExtResource("106_kv25w"), ExtResource("107_u8gmc"), ExtResource("108_aypgx"), ExtResource("109_8vsai"), ExtResource("110_iq20f"), ExtResource("111_7cpys"), ExtResource("112_wqg1y")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_600pn"]
@@ -979,9 +1490,9 @@ tracks/6/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_mqga3"]
-resource_name = "melee_swipe"
-length = 0.5
+[sub_resource type="Animation" id="Animation_tgidw"]
+resource_name = "big_ranged_shot_finish"
+length = 0.75
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -990,70 +1501,10 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("87_egfcc"), ExtResource("88_lt407"), ExtResource("89_7q71m"), ExtResource("90_3mnyf"), ExtResource("91_qtki8"), ExtResource("87_egfcc"), ExtResource("5_wqq5t")]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"melee_swipe"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_4fh2k"]
-resource_name = "charge_recover"
-length = 0.2
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [ExtResource("84_4w3pm"), ExtResource("83_kw510")]
-}
-
-[sub_resource type="Animation" id="Animation_2xbf5"]
-resource_name = "face_slam"
-length = 0.8
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.25, 0.3, 0.4, 0.45, 0.55, 0.65, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("92_dlso3"), ExtResource("93_xcmif"), ExtResource("94_vraer"), ExtResource("95_a83x0"), ExtResource("96_5rkvy"), ExtResource("97_qpg7b"), ExtResource("98_ar463"), ExtResource("99_jx245"), ExtResource("98_ar463"), ExtResource("97_qpg7b"), ExtResource("92_dlso3")]
+"values": [ExtResource("90_6yv32"), ExtResource("91_xxjtj"), ExtResource("92_vrcu0"), ExtResource("93_m2nov"), ExtResource("94_cscjv"), ExtResource("95_eflol"), ExtResource("96_yeuq1"), ExtResource("97_hor7w"), ExtResource("98_fy5i8"), ExtResource("99_nalbk"), ExtResource("100_g2cjr"), ExtResource("101_tvuck"), ExtResource("102_1v1lh"), ExtResource("103_twfeq"), ExtResource("104_7bgoi"), ExtResource("105_rl4oe")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -1078,19 +1529,130 @@ tracks/2/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6l8s8"]
+resource_name = "diamond_shot"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("103_naqto"), ExtResource("104_u6104"), ExtResource("105_0rl30"), ExtResource("106_kv25w"), ExtResource("107_u8gmc"), ExtResource("108_aypgx"), ExtResource("109_8vsai"), ExtResource("103_naqto"), ExtResource("110_iq20f"), ExtResource("104_u6104"), ExtResource("103_naqto")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"fire_homing_shot"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.3, 0.4, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
 _data = {
 "RESET": SubResource("Animation_1pgvl"),
+"big_ranged_shot": SubResource("Animation_flixy"),
+"big_ranged_shot_finish": SubResource("Animation_tgidw"),
+"big_ranged_shot_telegraph": SubResource("Animation_vk2fa"),
 "charge_recover": SubResource("Animation_4fh2k"),
 "charge_telegraph": SubResource("Animation_m1stq"),
 "coin_shot_telegraph": SubResource("Animation_5n3pr"),
 "death": SubResource("Animation_mppog"),
+"diamond_shot": SubResource("Animation_6l8s8"),
 "diamond_shot_telegraph": SubResource("Animation_gp6ku"),
 "face_slam": SubResource("Animation_2xbf5"),
 "melee_swipe": SubResource("Animation_mqga3"),
 "quick_bomb_shot": SubResource("Animation_kh5dm"),
 "quick_coin_shot": SubResource("Animation_cf6fg"),
+"ranged_shot_spin": SubResource("Animation_mhk11"),
+"ranged_shot_spin_end": SubResource("Animation_rbi6q"),
+"ranged_shot_spin_shoot": SubResource("Animation_l7mgo"),
+"ranged_shot_spin_start": SubResource("Animation_d44sc"),
 "summon_bell_raise_gun": SubResource("Animation_600pn"),
 "summon_bell_shoot": SubResource("Animation_lvnig")
 }
@@ -1226,6 +1788,7 @@ sfx_bell_impact = Array[AudioStream]([ExtResource("29_757fw"), ExtResource("30_a
 swipe_damage = 5.0
 swipe_knockback = 50.0
 swipe_dodge_speed = 10.0
+swipe_cooldown = 5.0
 sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_31vh7"), ExtResource("34_otbm5")])
 charge_damage = 10.0
 charge_knockback = 50.0
@@ -1332,7 +1895,7 @@ mesh = SubResource("SphereMesh_unuxb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
 
 [node name="ProjectileSpawnMarker" type="Marker3D" parent="MarkerPivot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.7, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/ProjectileSpawnMarker" index="0"]
 visible = false
@@ -1346,6 +1909,7 @@ visible = false
 
 [node name="SlottyDeathCoin" parent="MarkerPivot" index="2" instance=ExtResource("78_i4mws")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.392, 0)
+visible = false
 
 [node name="SlottyDeathGun" parent="MarkerPivot" index="3" instance=ExtResource("79_x7qgj")]
 visible = false
@@ -1384,7 +1948,8 @@ free_on_finished = false
 monitoring = true
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 3.3235, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 3.3235, -4.85)
+shape = SubResource("BoxShape3D_oavlp")
 
 [node name="HealthComponent" parent="." index="5"]
 max_health = 4000.0
@@ -2273,6 +2838,20 @@ event = &"start_bomb_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
+[node name="toCoinProjectiles" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="8"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../CoinProjectiles")
+event = &"start_coin_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="9"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Charge")
+event = &"start_charge_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase2" index="9"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Phase1")
@@ -2393,6 +2972,9 @@ draw_pass_1 = SubResource("ArrayMesh_t626q")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 script = null
 
+[node name="SwipeCooldown" type="Timer" parent="." index="29"]
+one_shot = true
+
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/SpinSlots" to="." method="_on_spin_slots_state_physics_processing"]
@@ -2416,6 +2998,7 @@ script = null
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/Charge/Charging" to="." method="_on_charge_charging_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Charge/Recover" to="." method="_on_charge_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LeverSwipe/Targeting" to="." method="_on_lever_swipe_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LeverSwipe/Targeting" to="." method="_on_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LeverSwipe/Swipe" to="." method="_on_lever_swipe_swipe_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LeverSwipe/Recover" to="." method="_on_lever_swipe_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
@@ -2429,12 +3012,14 @@ script = null
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/CoinProjectiles/Recover" to="." method="_on_coin_projectiles_recover_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/HomingProjectiles" to="." method="_on_homing_projectiles_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Targeting" to="." method="_on_homing_projectiles_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Targeting" to="." method="_on_homing_projectiles_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Shooting" to="." method="_on_homing_projectiles_shooting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Recover" to="." method="_on_homing_projectiles_recover_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/PinballProjectiles" to="." method="_on_pinball_projectiles_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PinballProjectiles/Targeting" to="." method="_on_pinball_projectiles_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PinballProjectiles/Shooting" to="." method="_on_pinball_projectiles_shooting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PinballProjectiles/Recover" to="." method="_on_pinball_projectiles_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/CherryBombs" to="." method="_on_cherry_bombs_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/CherryBombs/Targeting" to="." method="_on_cherry_bombs_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/CherryBombs/Targeting" to="." method="_on_cherry_bombs_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs" to="." method="_on_cherry_bombs_dropping_bombs_state_entered"]
@@ -2452,6 +3037,7 @@ script = null
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/Charge/Charging" to="." method="_on_charge_charging_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Charge/Recover" to="." method="_on_charge_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LeverSwipe/Targeting" to="." method="_on_lever_swipe_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/LeverSwipe/Targeting" to="." method="_on_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LeverSwipe/Swipe" to="." method="_on_lever_swipe_swipe_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LeverSwipe/Recover" to="." method="_on_lever_swipe_recover_state_entered"]
 [connection signal="timeout" from="AbsorbChipTimer" to="." method="_on_absorb_chip_timer_timeout"]
