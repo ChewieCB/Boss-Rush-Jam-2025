@@ -101,15 +101,15 @@ func _on_timer_timeout() -> void:
 
 func activate() -> void:
 	col.set_deferred("disabled", false)
-	self.monitoring = true
-	self.monitorable = true
+	set_deferred("monitoring", true)
+	set_deferred("monitorable", true)
 	self.visible = true
-	self.process_mode = Node.PROCESS_MODE_INHERIT
+	set_deferred("process_mode", Node.PROCESS_MODE_INHERIT)
 
 
 func deactivate() -> void:
 	col.set_deferred("disabled", true)
-	self.monitoring = false
-	self.monitorable = false
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 	self.visible = false
-	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)

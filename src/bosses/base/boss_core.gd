@@ -348,7 +348,8 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 	if not projectile:
 		return
 	
-	projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
+	if not projectile.finished.is_connected(_cleanup_proj):
+		projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
 	projectile.global_position = spawn_pos
 	projectile.activate()
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
