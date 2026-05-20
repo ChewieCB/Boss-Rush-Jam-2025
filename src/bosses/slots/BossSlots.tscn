@@ -1345,7 +1345,7 @@ free_on_finished = false
 visible = false
 
 [node name="SlottyDeathCoin" parent="MarkerPivot" index="2" instance=ExtResource("78_i4mws")]
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.392, 0)
 
 [node name="SlottyDeathGun" parent="MarkerPivot" index="3" instance=ExtResource("79_x7qgj")]
 visible = false

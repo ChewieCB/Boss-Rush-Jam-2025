@@ -378,8 +378,10 @@ func _on_died() -> void:
 	death_coin_rigid.visible = true
 	#death_coin_rigid.rotate_y(randf_range(-PI/4, PI/4))
 	death_coin_rigid.apply_central_impulse(-death_coin_rigid.global_basis.z * 40.0)
-	death_coin_rigid.apply_central_impulse(-death_torso_rigid.global_basis.x * 30.0)
+	death_coin_rigid.apply_central_impulse(-death_torso_rigid.global_basis.x * 60.0)
 	death_coin_rigid.apply_central_impulse(Vector3.UP * 65)
+	death_coin_rigid.apply_torque_impulse(-death_torso_rigid.global_basis.x * 400000.0)
+	death_coin_rigid.angular_velocity.z = 20.0
 	death_gun_rigid.visible = true
 	death_gun_rigid.apply_central_impulse(death_torso_rigid.global_basis.x * 40.0)
 	death_gun_rigid.apply_central_impulse(Vector3.UP * 40)
