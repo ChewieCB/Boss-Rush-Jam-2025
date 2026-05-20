@@ -773,6 +773,9 @@ func _spawn_chip() -> void:
 			_init_chip_pool.call_deferred()
 	
 	var chip = _chip_spawn_pool.pop_front()
+	# FIXME - resize pool
+	if not chip:
+		return
 	chip.activate()
 	chip.randomise_chip_value()
 	active_chips.append(chip)

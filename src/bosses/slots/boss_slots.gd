@@ -655,9 +655,8 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var result = space_state.intersect_ray(query)
 	pos.y = result.position.y if result else 50.0
 	
-	# FIXME - replace with pool call
-	var bell: Bell = bell_scene.instantiate()
-	get_tree().root.get_child(7).add_child(bell)
+	var bell: Bell = bell_pool.pop_front()
+	bell.activate()
 	bell.global_position = pos
 	bell.init(bell_damage * GameManager.get_risk_dmg_mult(), size)
 	bell.mesh.scale *= size
