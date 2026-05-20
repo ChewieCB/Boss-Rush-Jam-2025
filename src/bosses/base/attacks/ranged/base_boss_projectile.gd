@@ -2,10 +2,13 @@ extends Area3D
 class_name BaseBossProjectile
 # Should remove this and use BaseBullet instead, like Bartender's shotgun proj
 
+signal finished
+
 @export var projectile_damage: float = 10.0
 @export var projectile_speed: float = 50.0
 @export var spark_effect: PackedScene
 
+@onready var col: CollisionShape3D = $CollisionShape3D
 @onready var timer: Timer = $Timer
 @onready var raycast: RayCast3D = $RayCast3D
 
@@ -84,10 +87,29 @@ func _on_body_entered(body: Node3D) -> void:
 		if ricochet_count_left > 0 and found_hitscal_col:
 			ricochet()
 		else:
-			queue_free()
+			finished.emit()
+
+
 
 func destroy() -> void:
 	queue_free()
 
+
 func _on_timer_timeout() -> void:
-	destroy()
+	finished.emit()
+
+
+func activate() -> void:
+	col.set_deferred("disabled", false)
+	self.monitoring = true
+	self.monitorable = true
+	self.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func deactivate() -> void:
+	col.set_deferred("disabled", true)
+	self.monitoring = false
+	self.monitorable = false
+	self.visible = false
+	self.process_mode = Node.PROCESS_MODE_DISABLED

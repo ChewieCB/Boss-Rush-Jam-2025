@@ -229,6 +229,7 @@ var emerge_distance: float
 @export var max_projectile_spawn_distance: float = 36.0
 @export var chiptopede_targeting_speed: float = 3.0
 @export var chiptopede_projectile: PackedScene
+var chiptopede_projectile_pool: Array = []
 @export var chiptopede_projectile_bursts: int = 2
 @export var chiptopede_shots_per_burst: int = 20
 @export var chiptopede_delay_per_projectile: float = 0.05
@@ -294,6 +295,8 @@ func _ready() -> void:
 	for i in range(chiptopede_segments):
 		_init_splash_particle()
 		_init_chip_particle()
+	for i in range(chiptopede_shots_per_burst * chiptopede_projectile_bursts):
+		_init_chiptopede_projectile()
 	
 	# Stack pool init
 	var _parent = get_parent()
@@ -1470,6 +1473,16 @@ func _init_chip_particle() -> void:
 	chip_particles_pool.push_back(chip_particles)
 
 
+func _init_chiptopede_projectile() -> void:
+	var proj = chiptopede_projectile.instantiate()
+	proj.init(chiptopede_projectile_damage * GameManager.get_risk_dmg_mult(), chiptopede_projectile_speed)
+	scene_root.add_child.call_deferred(proj)
+	await get_tree().physics_frame
+	proj.deactivate()
+	proj.global_position = despawned_pos
+	chiptopede_projectile_pool.push_back(proj)
+
+
 #
 func _on_chiptopede_leap_targeting_state_entered() -> void:
 	# Move chiptopede to new spawn location
@@ -1740,9 +1753,9 @@ func _on_chiptopede_shoot_shooting_state_entered() -> void:
 			#
 			chiptopede_sfx_player.stream = sfx_chiptopede_shoot.pick_random()
 			chiptopede_sfx_player.play()
-			#
-			var proj_inst = fire_projectile(chiptopede_projectile, follow_nodes[0].global_position)
-			proj_inst.init(chiptopede_projectile_damage * GameManager.get_risk_dmg_mult(), chiptopede_projectile_speed)
+			var _spawn_pos: Vector3 = follow_nodes[0].global_position
+			var proj_inst = fire_projectile_pooled(chiptopede_projectile_pool, _spawn_pos)
+			#var proj_inst = fire_projectile(chiptopede_projectile, _spawn_pos)
 		await get_tree().create_timer(delay_between_burst).timeout
 
 	state_chart.send_event("stop_shooting")
