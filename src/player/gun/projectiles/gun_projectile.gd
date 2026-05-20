@@ -24,7 +24,7 @@ var gravity_accel = 0
 var gravity_free_timer = 0.2
 
 func _ready() -> void:
-	super()
+	super ()
 	slowmo_trail.visible = false
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 
@@ -122,10 +122,11 @@ func ricochet():
 	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
-	if body is Player and time_ricochetted == 0:
-		on_player_contact.emit(self)
-		return
-	
+	if body is Player:
+		on_player_contact.emit(self )
+		if time_ricochetted == 0:
+			return
+
 	var calculated_damage = calculate_bullet_damage()
 	
 	if body is CharacterBody3D:
@@ -173,7 +174,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_area.set_deferred("monitoring", false)
 
 func change_bullet_color(_new_color: Color):
-	super(_new_color)
+	super (_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
@@ -196,7 +197,7 @@ func redshift_bullet():
 	change_bullet_color(redshifted_color)
 
 func switch_to_slowmo_bullet_trail():
-	super()
+	super ()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
 	trail.process_mode = Node.PROCESS_MODE_DISABLED

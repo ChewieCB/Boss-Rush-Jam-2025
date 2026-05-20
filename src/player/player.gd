@@ -58,7 +58,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 # UI
 
-@onready var ui_parent = $UI
+@onready var player_ui: PlayerUI = $UI
 @export var _fallback_effect_icon_texture: CompressedTexture2D
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
@@ -605,8 +605,8 @@ func _update_effect_ui(idx: int) -> void:
 		effect_ui.tag_label.text = ""
 
 
-func toggle_anim_reticle(is_visible: bool) -> void:
-	ui_parent.toggle_aim_reticle(is_visible)
+func toggle_anim_reticle(_is_visible: bool) -> void:
+	player_ui.toggle_aim_reticle(_is_visible)
 
 
 func show_debug_label():

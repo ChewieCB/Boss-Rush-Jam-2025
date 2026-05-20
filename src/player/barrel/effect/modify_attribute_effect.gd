@@ -117,9 +117,15 @@ func on_reload_end():
 				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
 
 
-func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
-	super (_enemy, projectile)
-	const LUCK_ON_RICOCHET = 3
-	if projectile.is_ricochet_shot and !(_enemy is Player):
+func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
+	super (enemy, projectile)
+	if projectile.is_ricochet_shot and !(enemy is Player):
 		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.RICOCHET__RICOSHOT)
-		LuckHandler.increase_luck(LUCK_ON_RICOCHET, "+3 Ricoshot!")
+		if projectile.time_ricochetted >= 10:
+			LuckHandler.increase_luck(20, "+100 Ultra Ricoshot?", LuckHandler.LuckTriggerType.DEVIL)
+		elif projectile.time_ricochetted >= 5:
+			LuckHandler.increase_luck(20, "+20 Mega Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
+		elif projectile.time_ricochetted >= 3:
+			LuckHandler.increase_luck(10, "+10 Super Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
+		else:
+			LuckHandler.increase_luck(3, "+3 Ricoshot!")

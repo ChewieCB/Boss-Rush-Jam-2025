@@ -178,6 +178,9 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.life_time = life_time
 	new_inst.travelled_distance = travelled_distance
 	new_inst.time_ricochetted = time_ricochetted
+	if is_ricochet:
+		new_inst.time_ricochetted += 1
+	new_inst.misc_data = misc_data
 	new_inst.on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
 	new_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
 	new_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
