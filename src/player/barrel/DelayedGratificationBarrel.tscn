@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c7jc72exa8eg2"]
+[gd_scene load_steps=12 format=3 uid="uid://c7jc72exa8eg2"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2a2qf"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_q7s8s"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://35lbaqwytewn" path="res://src/player/gun/projectiles/StickyBombProjectile.tscn" id="7_2jtxl"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/medical_payout_effect.gd" id="8_0by4g"]
 [ext_resource type="PackedScene" uid="uid://dmwu7p20d2nwd" path="res://src/player/barrel/misc/ColoredOrb.tscn" id="10_25wgd"]
+[ext_resource type="PackedScene" uid="uid://c4p2faplbsqt6" path="res://src/player/misc/HealCloudVFX.tscn" id="11_oae4v"]
 
 [node name="DelayedGratificationBarrel" type="Node3D"]
 script = ExtResource("1_2a2qf")
@@ -77,6 +78,7 @@ is_perc = true
 script = ExtResource("8_0by4g")
 damage_to_heal_ratio = 20.0
 vfx_heal_orb_prefab = ExtResource("10_25wgd")
+heal_cloud_vfx = ExtResource("11_oae4v")
 display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"
 display_text_desc = "Stored heal when dealing damage, spin to recover health. Don't get hit."

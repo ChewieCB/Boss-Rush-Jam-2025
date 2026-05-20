@@ -2,6 +2,8 @@ extends BaseBarrelEffect
 
 @export var damage_to_heal_ratio: float = 100.0
 @export var vfx_heal_orb_prefab: PackedScene
+@export var heal_cloud_vfx: PackedScene
+
 
 const MAX_STORED_HP = 100
 
@@ -43,6 +45,9 @@ func on_barrel_start_spin():
 	if stored_heal > 0:
 		GameManager.player.health_component.heal(stored_heal)
 		GameManager.player.player_ui.start_heal_flash()
+		var inst = heal_cloud_vfx.instantiate()
+		get_tree().get_root().add_child(inst)
+		inst.global_position = GameManager.player.global_position
 	remove_effect()
 
 func on_barrel_remove():
