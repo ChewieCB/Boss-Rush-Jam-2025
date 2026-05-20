@@ -2,7 +2,9 @@ extends BaseBarrelEffect
 
 @export var damage_to_heal_ratio: float = 100.0
 @export var vfx_heal_orb_prefab: PackedScene
+var heal_orb_pool: Array = []
 @export var heal_cloud_vfx: PackedScene
+var heal_cloud_pool: Array = []
 
 
 const MAX_STORED_HP = 100
@@ -18,25 +20,60 @@ var stored_heal = 0:
 
 var heal_icon = preload("res://assets/sprite/status_icon/medical_payout.png")
 
+
+func _ready() -> void:
+	for i in range(2):
+		_init_heal_cloud()
+	for i in range(20):
+		_init_heal_orb()
+
+
+func _init_heal_cloud() -> void:
+	var cloud = heal_cloud_vfx.instantiate()
+	cloud.finished.connect(_on_heal_cloud_finished.bind(cloud))
+	get_tree().get_root().add_child(cloud)
+	cloud.deactivate()
+	heal_cloud_pool.push_back(cloud)
+
+
+func _on_heal_cloud_finished(cloud: GPUParticles3D) -> void:
+	heal_cloud_pool.push_back(cloud)
+
+
+func _init_heal_orb() -> void:
+	var orb: ColoredOrb = vfx_heal_orb_prefab.instantiate()
+	orb.finished.connect(_on_orb_finished.bind(orb))
+	get_tree().get_root().add_child(orb)
+	orb.set_orb_color(Color(0.3, 0.7, 0))
+	orb.deactivate()
+	heal_orb_pool.push_back(orb)
+
+
+func _on_orb_finished(orb: ColoredOrb) -> void:
+	heal_orb_pool.push_back(orb)
+
+
 func remove_effect():
 	accumulated_damage = 0
 	stored_heal = 0
 	GameManager.player.remove_status_effect_by_name("medical_payout_stored_heal")
+
 
 func on_damage_applied(damage: float, has_pos: bool = false, pos: Vector3 = Vector3.ZERO):
 	super (damage, has_pos, pos)
 	accumulated_damage += damage
 	stored_heal = min(round(accumulated_damage / damage_to_heal_ratio), MAX_STORED_HP)
 	if has_pos:
-		var inst: ColoredOrb = vfx_heal_orb_prefab.instantiate()
-		get_tree().get_root().add_child(inst)
-		inst.set_orb_color(Color(0.3, 0.7, 0))
-		inst.global_position = pos
-		inst.homing_target = GameManager.player
+		var inst: ColoredOrb = heal_orb_pool.pop_front()
+		if inst:
+			inst.global_position = pos
+			inst.homing_target = GameManager.player
+			inst.activate()
 
 
 func on_reload_start():
 	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
+
 
 func on_barrel_start_spin():
 	if stored_heal == MAX_STORED_HP:
@@ -45,9 +82,9 @@ func on_barrel_start_spin():
 	if stored_heal > 0:
 		GameManager.player.health_component.heal(stored_heal)
 		GameManager.player.player_ui.start_heal_flash()
-		var inst = heal_cloud_vfx.instantiate()
-		get_tree().get_root().add_child(inst)
+		var inst = heal_cloud_pool.pop_front()
 		inst.global_position = GameManager.player.global_position
+		inst.activate()
 	remove_effect()
 
 func on_barrel_remove():
