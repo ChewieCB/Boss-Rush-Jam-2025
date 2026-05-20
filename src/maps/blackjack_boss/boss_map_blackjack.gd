@@ -34,7 +34,7 @@ func _ready() -> void:
 			music_playback.switch_to_clip(1)
 	)
 	
-	super ()
+	super()
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:

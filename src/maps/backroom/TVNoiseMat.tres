@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://c46b408vkdl3k"]
+
+[ext_resource type="Shader" path="res://src/maps/backroom/tv_static.gdshader" id="1_ekdrd"]
+[ext_resource type="Texture2D" uid="uid://co50sp40pnebg" path="res://assets/textures/misc/tv_noise.png" id="2_ocwbg"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ekdrd")
+shader_parameter/texture_scale = 0.25
+shader_parameter/global_offset = Vector2(0, 0)
+shader_parameter/emission_color = Color(1, 1, 1, 1)
+shader_parameter/emission_intensity = 1.0
+shader_parameter/albedo_texture = ExtResource("2_ocwbg")

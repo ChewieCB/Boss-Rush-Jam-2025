@@ -236,11 +236,6 @@ func _ready() -> void:
 	for elem in elemental_emitting_vfx:
 		if elem:
 			elem.visible = false
-
-	# Cheat/debug flags
-	if GameManager.CHEAT_oneshot:
-		health_component.max_health = 1
-		health_component.current_health = 1
 	
 	for i in range(50):
 		_init_chip_pool.call_deferred()
@@ -250,6 +245,14 @@ func _ready() -> void:
 
 	if owner:
 		await owner.ready
+	
+	# Cheat/debug flags
+	if GameManager.CHEAT_oneshot:
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		health_component.max_health = 1
+		health_component.current_health = 1
+		
 	print_debug("BossCore ready end")
 
 
@@ -326,6 +329,7 @@ func orbit_towards_player(
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
+
 func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	if len(sfx_arr) > 0:
 		play_positional_sound(sfx_arr.pick_random())
@@ -337,6 +341,30 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
 	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
 	return projectile
+
+
+func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
+	if len(sfx_arr) > 0:
+		play_positional_sound(sfx_arr.pick_random())
+
+	var projectile = proj_pool.pop_front()
+	if not projectile:
+		return
+	
+	if not projectile.finished.is_connected(_cleanup_proj):
+		projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
+	projectile.global_position = spawn_pos
+	projectile.activate()
+	var dir_to_target = spawn_pos.direction_to(target.global_position)
+	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
+	
+	return projectile
+
+
+func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
+	proj.deactivate()
+	proj_pool.push_back(proj)
 
 
 func activate() -> void:
@@ -680,7 +708,8 @@ func _on_health_idle_state_entered() -> void:
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
-	sprite.modulate = Color.CYAN
+	pass
+	#sprite.modulate = Color.CYAN
 
 
 func _on_attack_telegraph_state_exited() -> void:
@@ -730,7 +759,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _init_chip_pool() -> void:
 	var chip = chip_scene.instantiate() as RigidBody3D
 	chip.collected.connect(_on_chip_collected)
-	scene_root.add_child(chip)
+	scene_root.add_child.call_deferred(chip)
+	await get_tree().physics_frame
 	chip.deactivate()
 	chip.global_position = Vector3.ZERO
 	_chip_spawn_pool.push_back(chip)
