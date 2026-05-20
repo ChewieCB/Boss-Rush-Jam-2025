@@ -31,15 +31,11 @@ func _ready() -> void:
 		#init_health_ui(health_component.current_health)
 		health_component.health_changed.connect(_on_health_changed)
 		health_component.max_health_changed.connect(_on_max_health_changed)
+	
 	await get_tree().process_frame
 	await get_tree().process_frame
 	GameManager.setting_ui.setting_changed.connect(check_after_setting_changed)
 	check_after_setting_changed()
-
-
-func _process(_delta: float) -> void:
-	for child in sub_health_bars_container.get_children():
-		child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
 
 
 func init_boss_health_ui(max_health: int, sub_health_bars: int) -> void:
@@ -77,6 +73,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		for child in health_bars:
 			if child == null:
 				continue
+			child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
 			# If we have health left on the bar
 			if child.health_bar.value > 0:
 				# Figure out how much health we can take
@@ -108,6 +105,9 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		for child in health_bars:
 			if child == null:
 				continue
+			if not child is BossSubHealthBar:
+				continue
+			child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
 			# If we have health left on the bar, update it
 			if child.health_bar.value > 0:
 				if child.health_bar.value >= int(new_health):
@@ -117,10 +117,12 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				if child == null:
 					continue
 				if "health_bar" in child:
+					if child.health_bar == null:
+						continue
 					var tween: Tween = get_tree().create_tween()
-					tween.tween_property(child.heath_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+					tween.tween_property(child.health_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 					await tween.finished
-					child.heath_bar.value = int(new_health)
+					child.health_bar.value = int(new_health)
 			else:
 				child.damage_bar.value = child.health_bar.value
 

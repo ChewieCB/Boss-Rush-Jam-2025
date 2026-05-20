@@ -2,12 +2,11 @@
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]
-[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bqde1"]
-[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="2_nh8tt"]
-[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_ajvft"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
+[ext_resource type="AudioStream" uid="uid://nsevw0dctc7c" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 1.mp3" id="10_vce0s"]
+[ext_resource type="AudioStream" uid="uid://bp0ai5js54012" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 2.mp3" id="11_8xeeu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_voy5t"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_1gwnq")
@@ -23,16 +22,19 @@ shader_parameter/emission_intensity = 1.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
 resource_local_to_scene = true
-material = SubResource("ShaderMaterial_3ch4f")
+material = SubResource("ShaderMaterial_voy5t")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_kk8sx"]
 radius = 500.0
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_850h7"]
+random_pitch = 1.6
+streams_count = 2
+stream_0/stream = ExtResource("10_vce0s")
+stream_1/stream = ExtResource("11_8xeeu")
+
 [node name="GunHitscan" type="Node3D"]
 script = ExtResource("1_uqjuh")
-spark_effect = ExtResource("2_bqde1")
-generic_blood_splatter = ExtResource("3_ajvft")
-bullet_decal_prefab = ExtResource("2_nh8tt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
@@ -60,6 +62,13 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NearbyEnemyCheckArea3D"]
 shape = SubResource("SphereShape3D_kk8sx")
+
+[node name="Ricochet3dAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_850h7")
+volume_db = 60.9
+unit_size = 92.61
+max_db = 6.0
+bus = &"SFX"
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="NearbyEnemyCheckArea3D" to="." method="_on_nearby_enemy_check_area_3d_body_entered"]

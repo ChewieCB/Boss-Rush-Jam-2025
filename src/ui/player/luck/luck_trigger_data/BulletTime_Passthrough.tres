@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://d3xsfyynx6fm8"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_s2abh"]
+
+[resource]
+script = ExtResource("1_s2abh")
+id = 4
+name = "Pass Through"
+desc = "+3 luck on passing through your own bullets"
+message = ""

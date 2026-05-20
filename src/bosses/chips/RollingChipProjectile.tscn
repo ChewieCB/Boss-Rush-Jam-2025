@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://cxg3ytjd4ybu0"]
+[gd_scene load_steps=11 format=3 uid="uid://cxg3ytjd4ybu0"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/rolling_chip_projectile.gd" id="1_7jhjc"]
-[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_6corf"]
 [ext_resource type="AudioStream" uid="uid://jkyya4te2uwq" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack.mp3" id="2_dsg1u"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="2_vsv6d"]
 [ext_resource type="AudioStream" uid="uid://4sbfi7dje4wy" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack 2.mp3" id="3_0vlx7"]
@@ -30,11 +29,10 @@ radius = 2.0
 height = 0.5
 radius = 2.0
 
-[node name="RollingChipProjectile" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
+[node name="RollingChipProjectile" type="CharacterBody3D"]
 collision_layer = 0
 collision_mask = 9
 script = ExtResource("1_7jhjc")
-health_component = NodePath("HealthComponent")
 sfx_rolling = Array[AudioStream]([ExtResource("2_dsg1u"), ExtResource("3_0vlx7")])
 sfx_impact = Array[AudioStream]([ExtResource("4_6uie8"), ExtResource("5_koeqd")])
 
@@ -60,9 +58,6 @@ shape = SubResource("CylinderShape3D_73q4i")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -500)
-
-[node name="HealthComponent" parent="." instance=ExtResource("2_6corf")]
-is_invincible = true
 
 [node name="Node3D" type="Node3D" parent="."]
 

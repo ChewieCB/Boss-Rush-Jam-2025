@@ -85,6 +85,7 @@ func heal(health: float, color: Color = Color.GREEN, text_scale_pop: float = 1.3
 func initialize_health() -> void:
 	current_health = max_health
 
+
 func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, text_scale_pop: float = 1.3, text_size: float = 92.0) -> void:
 	if GameManager.hide_damage_number:
 		return

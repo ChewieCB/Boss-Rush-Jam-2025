@@ -3,15 +3,11 @@ class_name EffectInfoUI
 
 @onready var icon_rect: TextureRect = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer/TextureRect
 @onready var name_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TitleContainer/RichTextLabel
-@onready var desc_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer/RichTextLabel
-@onready var positives_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer
-@onready var negatives_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer
+@onready var tag_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer/RichTextLabel
+@onready var effect_description_label: RichTextLabel = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/EffectDescriptionLabel
 @onready var luck_trigger_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/LuckTriggersContainer
-
-@export var positive_icon: Texture2D
-@export var negative_icon: Texture2D
-@export var effect_info_textbox: PackedScene
-@export var luck_trigger_info: PackedScene
+@onready var luck_trigger_1: LuckTriggerInfoUI = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/LuckTriggersContainer/LuckTriggerInfoUI
+@onready var luck_trigger_2: LuckTriggerInfoUI = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/LuckTriggersContainer/LuckTriggerInfoUI2
 
 
 # Called when the node enters the scene tree for the first time.
@@ -19,35 +15,20 @@ func _ready() -> void:
 	self.modulate.a = 0.0
 
 
-func add_neutral(text: String) -> void:
-	var textbox = effect_info_textbox.instantiate()
-	positives_container.add_child(textbox)
-	textbox.icon.texture = null
-	textbox.label.text = text
-
-
-func add_positive(text: String) -> void:
-	var textbox = effect_info_textbox.instantiate()
-	positives_container.add_child(textbox)
-	textbox.icon.texture = positive_icon
-	textbox.icon.modulate = Color.WEB_GREEN
-	textbox.label.text = text
-
-
-func add_negative(text: String) -> void:
-	var textbox = effect_info_textbox.instantiate()
-	negatives_container.add_child(textbox)
-	textbox.icon.texture = negative_icon
-	textbox.icon.modulate = Color.RED
-	textbox.label.text = text
-
-
-func add_luck_trigger(trigger_name: String, trigger_desc: String, trigger_discovered: bool) -> void:
-	var infobox = luck_trigger_info.instantiate()
-	luck_trigger_container.add_child(infobox)
-	infobox.set_info(trigger_name, trigger_desc, trigger_discovered)
+func update_luck_trigger(idx: int, trigger_name: String, trigger_desc: String, trigger_discovered: bool, show: bool = true) -> void:
+	var luck_trigger_ui: LuckTriggerInfoUI
+	match idx:
+		0:
+			luck_trigger_ui = luck_trigger_1
+		1:
+			luck_trigger_ui = luck_trigger_2
+		_:
+			push_error("Invalid luck trigger index, limit is 2 | idx = %s" % [idx])
+	
+	luck_trigger_ui.set_info(trigger_name, trigger_desc, trigger_discovered)
+	luck_trigger_ui.visible = show
 
 
 func clear_luck_triggers() -> void:
-	for trigger_info in luck_trigger_container.get_children():
-		trigger_info.queue_free()
+	for i in range(2):
+		update_luck_trigger(i, "", "", false, false)

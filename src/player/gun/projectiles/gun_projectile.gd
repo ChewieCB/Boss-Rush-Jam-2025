@@ -8,9 +8,13 @@ class_name GunProjectile
 @onready var life_timer: Timer = $LifeTimer
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var trail: Trail3D = $Trail/Trail3D
+@onready var slowmo_trail: Trail3D = $Trail/Trail3DBulletTime
+
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+
+@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
 
 
 # Gravity stuff
@@ -22,7 +26,9 @@ var gravity_accel = 0
 var gravity_free_timer = 0.2
 
 func _ready() -> void:
-	super ()
+	super()
+	slowmo_trail.visible = false
+	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 
 func _process(delta: float) -> void:
 	super (delta)
@@ -36,7 +42,7 @@ func _physics_process(delta: float) -> void:
 		if not homing_target:
 			return
 		var target_pos = homing_target.global_position
-		if homing_target.get_node("BodyCenter"):
+		if homing_target.has_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
@@ -94,20 +100,54 @@ func _on_life_timer_timeout() -> void:
 		stop_elemental_particles()
 		call_deferred("queue_free")
 
+func play_ricochet_sfx():
+	var sfx = AudioStreamPlayer3D.new()
+	sfx.stream = ricochet_sfx.stream
+	sfx.stream = ricochet_sfx.stream
+	sfx.unit_size = ricochet_sfx.unit_size
+	sfx.max_distance = ricochet_sfx.max_distance
+	sfx.volume_db = ricochet_sfx.volume_db
+	sfx.attenuation_model = ricochet_sfx.attenuation_model
+	get_tree().root.add_child(sfx)
+	sfx.global_position = global_position
+	sfx.play()
+	sfx.finished.connect(sfx.queue_free)
+
 func ricochet():
 	super ()
 	gravity_free_timer = 0
 	found_hitscal_col = false
-	is_ricochet_shot = true
-	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
+	# Redshift the bullet color after ricochet. Only do it once.
+	if is_ricochet_shot == false:
+		redshift_bullet()
+		is_ricochet_shot = true
+		
+	play_ricochet_sfx()
+	
+	# Calculate bounce direction
+	var bounce_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor)
+		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
+	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	if body is Player and time_ricochetted == 0:
+		on_player_contact.emit(self)
+		return
+	
 	var calculated_damage = calculate_bullet_damage()
+	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self)
+			before_damage_applied.emit(body, self )
 			#calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
@@ -127,12 +167,12 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			damage_applied.emit(calculated_damage, true, global_position)
 			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
-			create_spark(hitscan_col_point, hitscan_col_normal)
-			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_spark", hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_bullet_decal", hitscan_col_point, hitscan_col_normal)
 		else:
-			create_spark(global_position, Vector3.UP)
-			create_bullet_decal(global_position, Vector3.UP)
-	impacted.emit(self, true, global_position)
+			call_deferred("create_spark", global_position, Vector3.UP)
+			call_deferred("create_bullet_decal", global_position, Vector3.UP)
+	impacted.emit(self , true, global_position)
 
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
@@ -150,7 +190,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_area.set_deferred("monitoring", false)
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
@@ -161,3 +201,21 @@ func change_bullet_color(_new_color: Color):
 		mesh.mesh.material.emission = _new_color
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
 		trail.material_override.emission = _new_color
+
+func redshift_bullet():
+	var current_color = mesh.mesh.material.albedo_color
+	var redshifted_color = Color(
+		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
+		current_color.g * 0.7, # Reduce green
+		current_color.b * 0.3, # Reduce blue significantly
+		current_color.a
+	)
+	change_bullet_color(redshifted_color)
+
+func switch_to_slowmo_bullet_trail():
+	super()
+	# Better optimization is instantiate and add the slowmo later?
+	trail.visible = false
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
+	slowmo_trail.visible = true
+	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT

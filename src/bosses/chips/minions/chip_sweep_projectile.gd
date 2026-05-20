@@ -15,6 +15,22 @@ var spawned_chips := []
 @export var sweep_damage: float = 10.0
 
 
+func _ready() -> void:
+	deactivate()
+
+
+func activate() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	collider.disabled = false
+	self.visible = true
+
+
+func deactivate() -> void:
+	self.visible = false
+	collider.disabled = true
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+
+
 func init(_damage: float) -> void:
 	sweep_damage = _damage
 
@@ -24,7 +40,6 @@ func add_chips(chip_count: int) -> void:
 		var chip_tuple: Array = await _add_chip()
 		spawned_chips.append(chip_tuple)
 	chips_placed.emit()
-	self.set_deferred("monitoring", false)
 
 
 func remove_chips() -> void:
@@ -34,14 +49,15 @@ func remove_chips() -> void:
 		var _collider = chip_tuple[1]
 		var tween: Tween = get_tree().create_tween()
 		tween.tween_property(_mesh, "global_position", _mesh.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(_mesh, "global_position", _collider.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(_collider, "scale", Vector3.ZERO, anim_time).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(_collider, "global_position", _collider.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
+		#tween.parallel().tween_property(_collider, "scale", Vector3.ZERO, anim_time).set_ease(Tween.EASE_OUT)
 
 		await tween.finished
 
 		_mesh.queue_free()
 		_collider.queue_free()
-
+	
+	last_chip_pos = Vector3.ZERO
 	chips_removed.emit()
 
 
@@ -53,6 +69,7 @@ func _add_chip() -> Array:
 	new_collider.disabled = false
 	new_mesh.visible = true
 	new_mesh.scale = Vector3.ZERO
+	new_collider.scale = Vector3.ONE
 
 	var new_pos := Vector3(0, 0.3, -sweep_offset)
 	if last_chip_pos:

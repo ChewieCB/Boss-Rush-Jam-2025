@@ -1,0 +1,233 @@
+[gd_scene load_steps=8 format=3 uid="uid://bagau1537wut2"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/equipped_frame_side_view.gd" id="1_liic0"]
+[ext_resource type="Shader" path="res://src/ui/player/inventory/double_sided_transparent_fade.gdshader" id="1_o44u6"]
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="1_x84nb"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="3_dh61e"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_hvmym"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6g0p"]
+shader = ExtResource("1_o44u6")
+shader_parameter/divide = 0.12
+shader_parameter/blur = 0.295
+shader_parameter/fade_width = 0.665
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ys12d"]
+viewport_path = NodePath("SubViewport")
+
+[node name="EquippedFrameSideView" type="Control" node_paths=PackedStringArray("frame_carousel", "frame_ui_center", "frame_ui_left", "frame_ui_right", "current_frame_label", "current_frame_panel", "input_prompt_left", "input_prompt_right")]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 225.0
+grow_horizontal = 2
+script = ExtResource("1_liic0")
+frame_carousel = NodePath("TextureRect")
+frame_ui_center = NodePath("SubViewport/HBoxContainer/GunSideview2")
+frame_ui_left = NodePath("SubViewport/HBoxContainer/GunSideview")
+frame_ui_right = NodePath("SubViewport/HBoxContainer/GunSideview3")
+current_frame_label = NodePath("CurrentGunFrame")
+current_frame_panel = NodePath("SubViewport/CenterContainer/PanelDescription")
+input_prompt_left = NodePath("TextureRect/MarginContainer2/DeviceInputPrompt")
+input_prompt_right = NodePath("TextureRect/MarginContainer/DeviceInputPrompt")
+
+[node name="CurrentGunFrame" type="Label" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -52.0
+offset_right = 52.0
+offset_bottom = 44.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "Shotgun"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_d6g0p")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -19.0
+offset_top = 72.0
+offset_right = 19.0
+offset_bottom = 292.0
+grow_horizontal = 2
+texture = SubResource("ViewportTexture_ys12d")
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="TextureRect"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -178.0
+offset_top = -64.0
+offset_right = 2.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 96
+
+[node name="DeviceInputPrompt" parent="TextureRect/MarginContainer" instance=ExtResource("3_dh61e")]
+z_index = 2
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 2
+stretch_mode = 0
+assigned_action = "inv_ui_tab_right"
+
+[node name="PanelDescription" type="ColorRect" parent="TextureRect/MarginContainer/DeviceInputPrompt"]
+z_index = -1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="TextureRect/MarginContainer/DeviceInputPrompt/PanelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_hvmym")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer2" type="MarginContainer" parent="TextureRect"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -64.0
+offset_right = 226.0
+offset_bottom = 64.0
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+
+[node name="DeviceInputPrompt" parent="TextureRect/MarginContainer2" instance=ExtResource("3_dh61e")]
+z_index = 2
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 2
+stretch_mode = 0
+assigned_action = "inv_ui_tab_left"
+
+[node name="PanelDescription" type="ColorRect" parent="TextureRect/MarginContainer2/DeviceInputPrompt"]
+z_index = -1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="TextureRect/MarginContainer2/DeviceInputPrompt/PanelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_hvmym")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1958, 220)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="GunSideview" type="TextureRect" parent="SubViewport/HBoxContainer"]
+modulate = Color(0.5, 0.5, 0.5, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")
+
+[node name="GunSideview2" type="TextureRect" parent="SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")
+
+[node name="GunSideview3" type="TextureRect" parent="SubViewport/HBoxContainer"]
+modulate = Color(0.5, 0.5, 0.5, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")
+
+[node name="CenterContainer" type="CenterContainer" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelDescription" type="ColorRect" parent="SubViewport/CenterContainer"]
+z_index = -1
+custom_minimum_size = Vector2(640, 364)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="SubViewport/CenterContainer/PanelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+custom_minimum_size = Vector2(650, 220)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_hvmym")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20

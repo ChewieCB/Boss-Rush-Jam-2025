@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://dqsisn61sa5ei"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_2xgjn"]
+
+[resource]
+script = ExtResource("1_2xgjn")
+id = 5
+name = "Foresight"
+desc = "+10 luck on hitting enemies with bullets after travelled for more than 2 seconds."
+message = ""

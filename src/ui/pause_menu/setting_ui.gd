@@ -61,6 +61,7 @@ signal setting_back_button_pressed
 # DEBUG
 @export var sfx_free_money: AudioStream
 @onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
+@onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle
 @onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
 @onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
@@ -93,6 +94,7 @@ var action_to_remap = null
 var remapping_button: KeybindButton = null
 var keybind_timer_timeleft = 0
 
+
 func _ready() -> void:
 	GameManager.setting_ui = self
 	refresh_setting_value()
@@ -103,6 +105,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_on_controller_connection(0, GameManager.is_controller_connected)
+
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -397,11 +400,10 @@ func refresh_setting_value():
 	scaling_3d_slider.value = GameManager.scaling_3d
 	scaling_3d_value.text = "{0}%".format([GameManager.scaling_3d])
 
-	# TODO - update these to use the more recent SoundManager version (or downgrade SoundManager)
-	#SoundManager.set_master_volume(GameManager.master_audio / 100.0)
-	#SoundManager.set_music_volume(GameManager.bgm_audio / 100.0)
-	#SoundManager.set_sound_volume(GameManager.sfx_audio / 100.0)
-	#SoundManager.set_ui_sound_volume(GameManager.ui_audio / 100.0)
+	_on_master_slider_value_changed(GameManager.master_audio)
+	_on_bgm_slider_value_changed(GameManager.bgm_audio)
+	_on_sfx_slider_value_changed(GameManager.sfx_audio)
+	_on_ui_slider_value_changed(GameManager.ui_audio)
 	master_slider.value = GameManager.master_audio
 	master_value.text = "{0}".format([GameManager.master_audio])
 	bgm_slider.value = GameManager.bgm_audio
@@ -413,6 +415,7 @@ func refresh_setting_value():
 
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
+	skip_tutorial_toggle.set_pressed_no_signal(GameManager.CHEAT_skip_tutorial_on_new_game)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
 	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
@@ -526,5 +529,11 @@ func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
 func _on_demo_timeout_value_changed(value: float) -> void:
 	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60 * 5)
 
+
 func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
 	GameManager.CHEAT_spin_mode = index
+
+
+func _on_skip_tutorial_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_skip_tutorial_on_new_game = toggled_on

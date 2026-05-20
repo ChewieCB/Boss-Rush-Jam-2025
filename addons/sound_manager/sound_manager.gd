@@ -48,7 +48,7 @@ var music_process_mode: ProcessMode:
 
 
 func _init() -> void:
-	Engine.register_singleton("SoundManager", self)
+	Engine.register_singleton("SoundManager", self )
 
 	add_child(sound_effects)
 	add_child(ui_sound_effects)
@@ -86,6 +86,10 @@ func play_sound_with_pitch(resource: AudioStream, pitch: float = 1.0, override_b
 	var player = sound_effects.play(resource, override_bus)
 	player.pitch_scale = pitch
 	return player
+
+
+func play_sound_3d(resource: AudioStream, position: Vector3, pitch: float = 1.0, override_bus: String = "") -> AudioStreamPlayer3D:
+	return sound_effects.play_3d(resource, position, override_bus)
 
 
 func stop_sound(resource: AudioStream) -> void:

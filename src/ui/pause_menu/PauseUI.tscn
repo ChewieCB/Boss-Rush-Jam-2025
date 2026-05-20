@@ -83,7 +83,6 @@ mouse_filter = 2
 texture = ExtResource("3_fbfq4")
 
 [node name="BlurShader" type="TextureRect" parent="."]
-visible = false
 z_index = -1
 material = SubResource("ShaderMaterial_hhcs4")
 layout_mode = 1

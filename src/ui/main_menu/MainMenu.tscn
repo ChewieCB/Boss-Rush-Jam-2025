@@ -226,7 +226,7 @@ offset_bottom = -115.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 20
-text = "v0.10.2 (Backroom collision rework)"
+text = "v0.10.3"
 horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -784,11 +784,6 @@ slot_id = 2
 layout_mode = 2
 slot_id = 3
 
-[node name="GrabFocusTimer" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-autostart = true
-
 [connection signal="focus_entered" from="TitleColumn/VBoxContainer/StartButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="focus_entered" from="TitleColumn/VBoxContainer/OptionButton" to="." method="play_button_hover_sfx"]
@@ -798,4 +793,3 @@ autostart = true
 [connection signal="focus_entered" from="TitleColumn/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="setting_back_button_pressed" from="SettingUI" to="." method="_on_setting_ui_setting_back_button_pressed"]
-[connection signal="timeout" from="GrabFocusTimer" to="." method="_on_grab_focus_timer_timeout"]
