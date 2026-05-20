@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bqfqrd484avs2"]
+
+[ext_resource type="Texture2D" uid="uid://cafj60566pdvc" path="res://assets/textures/posters/workshop-sign.png" id="1_s1udi"]
+
+[resource]
+albedo_texture = ExtResource("1_s1udi")
+metallic_specular = 0.0
+texture_filter = 2
