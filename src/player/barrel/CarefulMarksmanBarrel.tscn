@@ -15,7 +15,7 @@ script = ExtResource("1_7j35g")
 [node name="GuidedHand" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_o0oe4")
 display_text_title = "Guided Hand"
-display_text_tag = "Keep aiming at the target"
+display_text_tag = "Keep aiming at the target."
 positive_desc = Array[String](["Bullet homing to aimed location"])
 negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 57
@@ -33,7 +33,7 @@ is_perc = true
 [node name="SafetyFold" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_o0oe4")
 display_text_title = "Safety Fold"
-display_text_tag = "..know when to fold 'em"
+display_text_tag = "... know when to fold 'em."
 positive_desc = Array[String](["Gain 50% damage resistance during reload"])
 negative_desc = Array[String](["-50% reload speed"])
 icon_id = 59

@@ -8,7 +8,7 @@
 script = ExtResource("3_ekiv5")
 barrel_id = 13
 barrel_name = "Delayed Gratification"
-barrel_desc = "It reward user who has patience. Or elaborated setup."
+barrel_desc = "It reward users with patience... or an elaborate setup."
 barrel_info_summary = "Be patient for some big returns."
 barrel_image = ExtResource("1_4n2ic")
 barrel_cost = 1230

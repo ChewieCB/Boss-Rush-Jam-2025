@@ -35,7 +35,7 @@ is_perc = true
 [node name="PoisonInfusion" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_ycsp2")
 display_text_title = "Poison Infusion"
-display_text_tag = "With Iocane powder"
+display_text_tag = "With Iocane powder."
 display_text_desc = "-20% fire rate
 Bullets build up Poison effect"
 positive_desc = Array[String](["Applies poison status"])

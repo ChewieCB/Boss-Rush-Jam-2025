@@ -50,8 +50,8 @@ script = ExtResource("5_fl357")
 [node name="StickyBomb" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("explosive_dps_dealt_window_timer")]
 script = ExtResource("5_qwmr5")
 explosive_dps_dealt_window_timer = NodePath("DPSWindowTImer")
-display_text_title = "Sticky Bomb"
-display_text_tag = "Keep Your Distance!"
+display_text_title = "Sticky bombs. "
+display_text_tag = "Keep your distance!"
 display_text_desc = "Bullets stick to enemies, then detonate after 2 seconds."
 icon_id = 21
 luck_triggers = Array[int]([7, 8])
