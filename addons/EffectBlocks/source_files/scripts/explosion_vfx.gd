@@ -23,6 +23,7 @@ signal finished
 		emitting = false
 
 @export var time_until_queue_free: float = 2.0
+@onready var _root = get_tree().get_root()
 
 
 func set_colour(colour: Color) -> void:
@@ -77,4 +78,9 @@ func deactivate() -> void:
 	self.visible = false
 	for elem in gpu_particles_arr:
 		elem.emitting = false
+	
+	if get_parent() != _root:
+		self.reparent(_root)
+	
+	reset_color()
 	self.process_mode = Node.PROCESS_MODE_DISABLED

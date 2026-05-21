@@ -42,7 +42,7 @@ func explode():
 	if explosion_vfx.time_until_queue_free < LINGERING_DURATION:
 		push_warning("Explosion VFX visible duration is less than damage hitbox duration!")
 	
-	sfx_player.play()
+	SoundManager.play_sfx_guarded(sfx_player)
 	if infused_status_effects:
 		match infused_status_effects[-1]:
 			BossCore.BossStatusEffect.BURNING:
@@ -106,6 +106,7 @@ func activate() -> void:
 	self.set_deferred("monitoring", true)
 	self.set_deferred("monitorable", true)
 	collision_shape.disabled = false
+	self.collision_mask = pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
 	self.visible = true
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	explode.call_deferred()
@@ -123,5 +124,6 @@ func deactivate() -> void:
 	
 	self.set_deferred("monitoring", true)
 	self.set_deferred("monitorable", true)
-	collision_shape.disabled = false
+	self.collision_mask = 0
+	collision_shape.set_deferred("disabled", false)
 	self.process_mode = Node.PROCESS_MODE_DISABLED

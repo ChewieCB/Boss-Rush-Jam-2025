@@ -82,6 +82,16 @@ func play_sound(resource: AudioStream, override_bus: String = "") -> AudioStream
 	return sound_effects.play(resource, override_bus)
 
 
+var _last_sfx_time: float = 0.0
+
+func play_sfx_guarded(player: AudioStreamPlayer3D, cooldown: float = 0.05) -> void:
+	var now = Time.get_ticks_msec() / 1000.0
+	if _last_sfx_time + cooldown > now:
+		return
+	_last_sfx_time = now
+	player.play()
+
+
 func play_sound_with_pitch(resource: AudioStream, pitch: float = 1.0, override_bus: String = "") -> AudioStreamPlayer:
 	var player = sound_effects.play(resource, override_bus)
 	player.pitch_scale = pitch

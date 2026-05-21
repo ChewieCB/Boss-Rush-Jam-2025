@@ -15,18 +15,12 @@
 [ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="9_ttjlc"]
 [ext_resource type="PackedScene" uid="uid://b52c6uqlwvbfp" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitSmall.tscn" id="9_wt430"]
 [ext_resource type="PackedScene" uid="uid://cj4t17atvmu7v" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitSmall.tscn" id="10_m0cuo"]
+[ext_resource type="Material" uid="uid://dnlcf8g207lx8" path="res://src/player/gun/projectiles/StickyBombProjectile.tres" id="10_ov5a0"]
 [ext_resource type="PackedScene" uid="uid://vpa0pjfgcoxj" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmitSmall.tscn" id="14_k6cjs"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch7l"]
-resource_local_to_scene = true
-albedo_color = Color(0.860888, 0.539123, 3.85046e-07, 1)
-emission_enabled = true
-emission = Color(0.862745, 0.537255, 0, 1)
-rim_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_ynnlg"]
 resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_hch7l")
+material = ExtResource("10_ov5a0")
 radius = 0.1
 height = 0.2
 
@@ -34,7 +28,9 @@ height = 0.2
 radius = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pphwl"]
-transparency = 1
+transparency = 2
+alpha_scissor_threshold = 0.1
+alpha_antialiasing_mode = 0
 albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
@@ -85,7 +81,7 @@ top_level = true
 material_override = SubResource("StandardMaterial3D_pphwl")
 mesh = SubResource("ImmediateMesh_hlqus")
 script = ExtResource("4_qa43f")
-segments = 10
+segments = 3
 base_width = 0.1
 width_profile = SubResource("Curve_inxyf")
 

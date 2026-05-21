@@ -59,6 +59,7 @@ luck_triggers = Array[int]([7, 8])
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("6_j8ucp")
 new_prefab = ExtResource("7_2jtxl")
+prefab_can_be_pooled = true
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("5_307l2")

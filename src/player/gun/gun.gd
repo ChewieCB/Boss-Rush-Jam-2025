@@ -510,9 +510,10 @@ func play_post_shot_anim() -> bool:
 
 func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
 	var bullet_inst: BaseBullet = null
+	var is_pooled: bool = false
 	if projectile_prefab_can_be_pooled:
-		bullet_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
-		bullet_inst.activate(start_pos, direction)
+		bullet_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.STICKY_BOMB_PROJECTILE)
+		is_pooled = true
 	else:
 		bullet_inst = bullet_prefab.instantiate()
 		get_tree().get_root().add_child(bullet_inst)
@@ -539,8 +540,19 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
+	
+	if is_pooled:
+		_init_bullet.call_deferred(bullet_inst, start_pos, direction, damage, proj_speed, max_range)
+	else:
+		bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
-	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
+
+
+func _init_bullet(_bullet: BaseBullet, start_pos, direction, damage, proj_speed, max_range) -> void:
+	if _bullet.has_method("activate"):
+		_bullet.activate()
+	_bullet.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
+
 
 func check_barrel_effect_on_player_contact(_projectile: BaseBullet):
 	for barrel in installed_barrels:
