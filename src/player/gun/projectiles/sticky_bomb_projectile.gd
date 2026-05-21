@@ -117,6 +117,10 @@ func _run_countdown_anim() -> void:
 	var start_colour := Color("#f70000")
 	var end_colour := Color("#ba2f20")
 	for i in range(tick_durations.size()):
+		# Exit if deactivated mid-countdown
+		if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED \
+		or not self.is_inside_tree():
+			return
 		var duration = tick_durations[i]
 		if i == tick_durations.size() - 1:
 			await anim_countdown_final_tick(duration, i * 0.55, start_colour.lerp(end_colour, i / tick_durations.size()))
@@ -145,7 +149,6 @@ func ricochet():
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit(false)
-	stop_elemental_particles()
 	finished.emit()
 
 
@@ -154,6 +157,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		return
 	
 	var calculated_damage = calculate_bullet_damage()
+	if not calculated_damage:
+		return
 	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
@@ -226,7 +231,6 @@ func _on_explode_timer_timeout() -> void:
 	else:
 		#await get_tree().create_timer(0.25).timeout
 		destroyed.emit(hit_boss)
-		stop_elemental_particles()
 		finished.emit()
 
 
@@ -284,6 +288,8 @@ func calculate_explosion_damage():
 
 
 func anim_countdown_tick(tick_time: float, scale_mod: float, colour: Color) -> void:
+	if not self.is_inside_tree():
+		return
 	var tween := get_tree().create_tween()
 	_active_tweens.append(tween)
 	var reset_scale: float = 0.6
@@ -304,6 +310,8 @@ func anim_countdown_tick(tick_time: float, scale_mod: float, colour: Color) -> v
 
 
 func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color) -> void:
+	if not self.is_inside_tree():
+		return
 	var tween := get_tree().create_tween()
 	_active_tweens.append(tween)
 	var reset_scale: float = 0.6
@@ -322,16 +330,25 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 
 
 func activate() -> void:
-	#global_position = Vector3.ZERO
-	#global_rotation = Vector3.ZERO
+	if get_parent() != _root:
+		self.reparent.call_deferred(_root)
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	hit_boss = false
+	travelled_distance = 0
+	life_time = 0
+	
 	scale = Vector3.ONE
-	mesh.mesh.material.albedo_color = Color.WHITE
-	mesh.mesh.material.emission = Color.WHITE
-	mesh.mesh.material.emission_energy_multiplier = 1.0
 	mesh.scale = Vector3.ONE
+	#mesh.mesh.material.albedo_color = Color.WHITE
+	#mesh.mesh.material.emission = Color.WHITE
+	#mesh.mesh.material.emission_energy_multiplier = 1.0
 	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
-	raycast.set_deferred("enabled", true)
+	raycast.enabled = true
 	area_col.disabled = false
 	homing_collision_shape.disabled = false
 	area.monitoring = true
@@ -348,18 +365,24 @@ func activate() -> void:
 func deactivate() -> void:
 	self.visible = false
 	
+	trail.emit = false
+	trail.clear_points()
+	
 	for tween in _active_tweens:
 		if tween and tween.is_valid():
 			tween.kill()
 	_active_tweens.clear()
 	
 	sticked = false
-	
-	if get_parent() != _root:
-		self.reparent.call_deferred(_root)
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
 	
 	life_timer.stop()
 	explode_timer.stop()
+	tick_sfx_player.stop()
+	
+	stop_elemental_particles()
 	
 	area.collision_layer = 0
 	area.collision_mask = 0

@@ -25,6 +25,7 @@ func _ready() -> void:
 
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await get_tree().process_frame
 	
 	for pool in object_pool:
 		for obj in pool:
@@ -32,6 +33,7 @@ func _ready() -> void:
 				obj.activate()
 
 	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw  # depth pre pass
 
 	for pool in object_pool:
 		for obj in pool:
@@ -41,20 +43,33 @@ func _ready() -> void:
 
 func create_new_pooled_object(object_enum: PooledObjectEnum):
 	var inst = pooled_object_prefabs[int(object_enum)].instantiate()
-	_root.add_child.call_deferred(inst)
-	_setup_pool_callback.call_deferred(inst, object_enum)
-	inst.deactivate.call_deferred()
 	object_pool[int(object_enum)].push_back(inst)
-	
-	if inst is StickyBombProjectile:
-		inst.make_material_unique.call_deferred()
+	_root.add_child.call_deferred(inst)
+	# FIXME - is the lanbda useful here over the dedicated method?
+	(func():
+		if inst is StickyBombProjectile:
+			inst.make_material_unique()
+		inst.finished.connect(_on_inst_finished.bind(inst, object_pool[int(object_enum)]))
+		inst.deactivate()
+	).call_deferred()
 
 	return inst
 
 
-func _setup_pool_callback(inst: Node, object_enum: PooledObjectEnum) -> void:
-	inst.finished.connect(_on_inst_finished.bind(inst, object_pool[int(object_enum)]))
+func create_new_pooled_object_sync(object_enum: PooledObjectEnum):
+	var inst = pooled_object_prefabs[int(object_enum)].instantiate()
+	object_pool[int(object_enum)].push_back(inst)
+	_root.add_child(inst)
+	_setup_pool_callback(inst, object_enum)
 	
+	return inst
+
+
+func _setup_pool_callback(inst: Node, object_enum: PooledObjectEnum) -> void:
+	if inst is StickyBombProjectile:
+		inst.make_material_unique()
+	inst.finished.connect(_on_inst_finished.bind(inst, object_pool[int(object_enum)]))
+	inst.deactivate()
 
 
 func _on_inst_finished(object, object_pool) -> void:
@@ -65,6 +80,6 @@ func _on_inst_finished(object, object_pool) -> void:
 func get_pooled_object(object_enum: PooledObjectEnum):
 	var obj = object_pool[object_enum].pop_front()
 	if not obj:
-		return create_new_pooled_object(object_enum)
+		return create_new_pooled_object_sync(object_enum)
 	else:
 		return obj

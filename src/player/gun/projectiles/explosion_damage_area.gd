@@ -113,17 +113,15 @@ func activate() -> void:
 
 
 func deactivate() -> void:
-	if sfx_player.is_playing():
-		await sfx_player.finished
-	
 	damage_disabled = true
 	infused_status_effects = []
 	explosion_vfx.reset_color()
 	self.visible = false
 	active = false
 	
-	self.set_deferred("monitoring", true)
-	self.set_deferred("monitorable", true)
+	self.set_deferred("monitoring", false)
+	self.set_deferred("monitorable", false)
 	self.collision_mask = 0
 	collision_shape.set_deferred("disabled", false)
+	sfx_player.stop()
 	self.process_mode = Node.PROCESS_MODE_DISABLED

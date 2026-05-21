@@ -19,7 +19,9 @@ height = 0.8
 [sub_resource type="SphereShape3D" id="SphereShape3D_6o3jq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5q8h"]
-transparency = 1
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 albedo_color = Color(1, 0.995527, 0.960938, 0.713726)
 emission = Color(1, 0.731834, 0.032858, 1)
 

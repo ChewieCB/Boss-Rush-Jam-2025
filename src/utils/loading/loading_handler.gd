@@ -228,15 +228,13 @@ func get_filepaths_from_nested_directory(dir_path: String, incl_files_from_given
 
 
 func compile_materials() -> void:
-	var count: int = 0
-	for scene_path in scenes_to_compile:
+	var to_process: Array = scenes_to_compile.slice(0, max_materials_compiled_per_frame)
+	scenes_to_compile = scenes_to_compile.slice(max_materials_compiled_per_frame)
+	
+	for scene_path in to_process:
 		_compile_scene(scene_path)
-		count += 1
-		scenes_to_compile.pop_front()
-		if count == max_materials_compiled_per_frame:
-			break
 
-	if scenes_to_compile.size() == 0 and compiling_materials_count == 0:
+	if scenes_to_compile.is_empty() and compiling_materials_count == 0:
 		print("All scenes compiled.")
 		is_materials_compiled = true
 		is_compiling = false
@@ -253,6 +251,13 @@ func _compile_scene(scene_path: String) -> void:
 	if scene_resource is PackedScene:
 		var scene = scene_resource.instantiate()
 		_compile_node_recursive(scene)
+		
+		# Special case: Trail3D assigns material_override at runtime
+		for trail in scene.find_children("*", "MeshInstance3D", true):
+			if trail.get_script() and trail.get_script().resource_path.contains("Trail3D"):
+				if trail.material_override:
+					_compile_material_resource(trail.material_override)
+		
 		scene.queue_free()
 
 	elif scene_resource is Material:
@@ -297,14 +302,16 @@ func _compile_material_resource(mat: Material) -> void:
 	node.set_surface_override_material(0, mat)
 	#node.mesh.material = mat
 	compile_parent.add_child(node)
-	
-	await RenderingServer.frame_post_draw
 
 	if path:
 		compiled_material_paths.append(path)
 		print("Caching %s" % path)
 	
-	await get_tree().create_timer(0.5).timeout
+	# Main pass
+	await RenderingServer.frame_post_draw
+	# Depth pre-pass
+	await RenderingServer.frame_post_draw
+	
 	compiling_materials_count -= 1
 	if is_instance_valid(node):
 		node.queue_free()

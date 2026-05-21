@@ -26,7 +26,9 @@ radius = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pphwl"]
 resource_local_to_scene = true
-transparency = 1
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
