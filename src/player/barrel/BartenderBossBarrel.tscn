@@ -18,7 +18,7 @@ script = ExtResource("3_vhyyg")
 trigger_action = 1
 prefab = ExtResource("4_2fxr8")
 display_text_title = "Molotov Dash"
-display_text_tag = "A burning gift"
+display_text_tag = "A burning gift."
 display_text_desc = "Create a burning puddle after dash"
 positive_desc = Array[String](["Drop a fiery puddle when dashing "])
 negative_desc = Array[String](["Burning puddle hurts you too"])
@@ -40,7 +40,7 @@ icon_id = 18
 [node name="CognacReload" type="Node3D" parent="EffectContainer"]
 script = ExtResource("5_ntkq2")
 display_text_title = "Cognac Reload"
-display_text_tag = "Take a break, take a sip"
+display_text_tag = "Take a break, take a sip."
 display_text_desc = "Recover HP on reload
 +200% reload time"
 positive_desc = Array[String](["Recover health on reload"])
