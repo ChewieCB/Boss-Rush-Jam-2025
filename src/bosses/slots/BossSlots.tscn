@@ -1052,12 +1052,9 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.05),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"melee_swipe"
-}]
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1744,7 +1741,7 @@ motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
 pulled_lever_sprite = ExtResource("3_dsptn")
-DESIRED_HEIGHT = 3.1
+DESIRED_HEIGHT = 2.6
 DROP_FACTOR = 1.0
 SLOT_TICKS = 20
 sfx_slot_roll_long = ExtResource("3_o5exi")
@@ -1902,7 +1899,6 @@ visible = false
 mesh = SubResource("SphereMesh_lr0sl")
 
 [node name="ExplosionPoly" parent="MarkerPivot/ProjectileSpawnMarker" index="1" instance=ExtResource("65_q3x8w")]
-free_on_finished = false
 
 [node name="SlottyDeathTorso" parent="MarkerPivot" index="1" instance=ExtResource("77_f2kfk")]
 visible = false
@@ -1922,7 +1918,6 @@ scale_factor = 2.0
 min_scale = 2.0
 max_scale = 3.0
 emission_radius = 2.0
-free_on_finished = false
 
 [node name="ExplosionPoly2" parent="MarkerPivot" index="5" instance=ExtResource("65_q3x8w")]
 process_mode = 4
@@ -1932,7 +1927,6 @@ scale_factor = 2.0
 min_scale = 2.0
 max_scale = 3.0
 emission_radius = 2.0
-free_on_finished = false
 
 [node name="ExplosionPoly3" parent="MarkerPivot" index="6" instance=ExtResource("65_q3x8w")]
 process_mode = 4
@@ -1942,7 +1936,6 @@ scale_factor = 2.0
 min_scale = 2.0
 max_scale = 3.0
 emission_radius = 2.0
-free_on_finished = false
 
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true
@@ -2260,6 +2253,12 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Swipe")
 event = &"start_swipe"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/LeverSwipe/Targeting" index="1"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Recover")
+event = &"end_swipe"
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase1/LeverSwipe" index="1"]
@@ -2783,6 +2782,12 @@ script = ExtResource("5_lu46i")
 to = NodePath("../../Swipe")
 event = &"start_swipe"
 guard = SubResource("Resource_joexq")
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe/Targeting" index="1"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Recover")
+event = &"end_swipe"
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="1"]

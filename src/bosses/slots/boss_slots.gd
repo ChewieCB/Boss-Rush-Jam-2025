@@ -41,7 +41,7 @@ var prev_phase
 @export var pulled_lever_sprite: CompressedTexture2D
 
 @export_group("Movement")
-@export var DESIRED_HEIGHT: float = 3.1
+@export var DESIRED_HEIGHT: float = 2.6
 var desired_height: float = DESIRED_HEIGHT
 @export var DROP_FACTOR: float = 1.0
 var drop_factor: float = DROP_FACTOR
@@ -750,7 +750,7 @@ func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
 	
 	desired_distance = 2.4
-	desired_height = 0.5
+	desired_height = 1.5
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	
@@ -759,11 +759,14 @@ func _on_lever_swipe_targeting_state_entered() -> void:
 
 
 func _on_targeting_state_physics_processing(delta: float) -> void:
+	orbit_towards_player(delta, 2.0)
 	if self.global_position.distance_to(target.global_position) <= 3.0:
 		state_chart.send_event("attack_telegraph")
 		hurtbox.set_deferred("monitoring", true)
 		await get_tree().create_timer(telegraph_time, false).timeout
 		state_chart.send_event("start_swipe")
+	elif self.global_position.distance_to(target.global_position) >= 10.0:
+		state_chart.send_event("end_swipe")
 
 
 func _on_lever_swipe_swipe_state_entered() -> void:
@@ -1013,7 +1016,7 @@ func _on_charge_charging_state_entered() -> void:
 	state_chart.send_event("attack_start")
 
 	MAX_SPEED /= 1.6
-	desired_height = 0.5
+	desired_height = 1.6
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	drop_factor = 12.0
@@ -1119,10 +1122,10 @@ func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Dropping"
-	desired_height = 5.8
+	desired_height = 10.0
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
-	drop_factor = 3.0
+	drop_factor = 20.0
 	MAX_SPEED *= 1.6
 	navigation_component.follow_target = true
 
@@ -1166,11 +1169,13 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 
 	navigation_component.follow_target = false
-	drop_factor = DROP_FACTOR
+	drop_factor = 12.0
 	desired_height = DESIRED_HEIGHT
 	MAX_SPEED /= 2.0
 
 	await desired_height_reached
+	
+	drop_factor = DROP_FACTOR
 
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 

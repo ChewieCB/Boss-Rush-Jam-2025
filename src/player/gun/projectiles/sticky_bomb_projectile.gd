@@ -325,9 +325,9 @@ func activate() -> void:
 	#global_position = Vector3.ZERO
 	#global_rotation = Vector3.ZERO
 	scale = Vector3.ONE
-	#mesh.mesh.material.albedo_color = Color.WHITE
-	#mesh.mesh.material.emission = Color.WHITE
-	#mesh.mesh.material.emission_energy_multiplier = 1.0
+	mesh.mesh.material.albedo_color = Color.WHITE
+	mesh.mesh.material.emission = Color.WHITE
+	mesh.mesh.material.emission_energy_multiplier = 1.0
 	mesh.scale = Vector3.ONE
 	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
