@@ -8,7 +8,7 @@
 script = ExtResource("3_pahdn")
 barrel_id = 4
 barrel_name = "Fool Roller"
-barrel_desc = "A simple barrel with risky effect, but also potentially great reward for skillfully use of it."
+barrel_desc = "A simple barrel with risky effects, but great rewards for skilful use."
 barrel_info_summary = "High risk, high reward."
 barrel_image = ExtResource("1_0ubde")
 barrel_cost = 650
