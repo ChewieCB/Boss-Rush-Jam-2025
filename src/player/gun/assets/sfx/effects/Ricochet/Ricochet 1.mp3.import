@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nsevw0dctc7c"
+path="res://.godot/imported/Ricochet 1.mp3-c7ba80f86e154063bc9d948cdcd558a9.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 1.mp3"
+dest_files=["res://.godot/imported/Ricochet 1.mp3-c7ba80f86e154063bc9d948cdcd558a9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

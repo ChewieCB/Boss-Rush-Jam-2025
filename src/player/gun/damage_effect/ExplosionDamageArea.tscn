@@ -14,15 +14,15 @@
 radius = 1.2
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_d0cx6"]
-random_pitch = 1.1
+random_pitch = 1.39
 streams_count = 7
-stream_0/stream = ExtResource("2_dnucp")
-stream_1/stream = ExtResource("3_glxr0")
-stream_2/stream = ExtResource("4_20mqh")
-stream_3/stream = ExtResource("5_mw3t5")
-stream_4/stream = ExtResource("6_rr7oi")
-stream_5/stream = ExtResource("7_lf2li")
-stream_6/stream = ExtResource("8_f756v")
+stream_0/stream = ExtResource("8_f756v")
+stream_1/stream = ExtResource("5_mw3t5")
+stream_2/stream = ExtResource("6_rr7oi")
+stream_3/stream = ExtResource("7_lf2li")
+stream_4/stream = ExtResource("2_dnucp")
+stream_5/stream = ExtResource("3_glxr0")
+stream_6/stream = ExtResource("4_20mqh")
 
 [node name="ExplosionDamageArea" type="Area3D"]
 collision_layer = 0
@@ -38,13 +38,15 @@ shape = SubResource("SphereShape3D_e5ac2")
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
 stream = SubResource("AudioStreamRandomizer_d0cx6")
 volume_db = -3.0
-unit_size = 50.0
+unit_size = 11.0
+max_db = -4.0
 bus = &"SFX"
 
 [node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="."]
 stream = SubResource("AudioStreamRandomizer_d0cx6")
 volume_db = -3.0
-unit_size = 50.0
+unit_size = 11.0
+max_db = -4.0
 bus = &"SFX"
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
