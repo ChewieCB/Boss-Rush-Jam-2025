@@ -16,7 +16,7 @@ script = ExtResource("1_7qs68")
 script = ExtResource("3_1gkh4")
 display_text_title = "Glass Cannon
 "
-display_text_tag = "Deal and take more damage"
+display_text_tag = "Deal and take more damage."
 display_text_desc = "+30% damage
 +30% damage taken
 "
@@ -42,7 +42,7 @@ is_infinite_duration = true
 script = ExtResource("5_83dk4")
 enemy_hp_threshold_perc = 50
 display_text_title = "Executioner Round"
-display_text_tag = "Finish them"
+display_text_tag = "Finish them!"
 display_text_desc = "+25% damage when enemy is less than 50% hp
 -25% damage otherwise"
 positive_desc = Array[String](["+25% damage when enemy is less than 50% hp"])
@@ -53,6 +53,6 @@ icon_id = 38
 script = ExtResource("6_tghp2")
 display_text_title = "Reactive Shot"
 display_text_tag = "Payback time!"
-display_text_desc = "+100% damage for 1s after get hit"
+display_text_desc = "+100% damage for 1s after getting hit"
 positive_desc = Array[String](["+100% damage for 1s after get hit"])
 icon_id = 40

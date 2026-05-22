@@ -49,7 +49,6 @@ width_profile = SubResource("Curve_t2y1b")
 [node name="Lifetimer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
-autostart = true
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.322799, 0.944641, 0.22617, 1)

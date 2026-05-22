@@ -14,6 +14,8 @@ class_name GunProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
+@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+
 
 # Gravity stuff
 const MAX_GRAVITY_PITCH = deg_to_rad(90.0)
@@ -98,6 +100,19 @@ func _on_life_timer_timeout() -> void:
 		stop_elemental_particles()
 		call_deferred("queue_free")
 
+func play_ricochet_sfx():
+	var sfx = AudioStreamPlayer3D.new()
+	sfx.stream = ricochet_sfx.stream
+	sfx.stream = ricochet_sfx.stream
+	sfx.unit_size = ricochet_sfx.unit_size
+	sfx.max_distance = ricochet_sfx.max_distance
+	sfx.volume_db = ricochet_sfx.volume_db
+	sfx.attenuation_model = ricochet_sfx.attenuation_model
+	get_tree().root.add_child(sfx)
+	sfx.global_position = global_position
+	sfx.play()
+	sfx.finished.connect(sfx.queue_free)
+
 func ricochet():
 	super ()
 	gravity_free_timer = 0
@@ -106,6 +121,8 @@ func ricochet():
 	if is_ricochet_shot == false:
 		redshift_bullet()
 		is_ricochet_shot = true
+		
+	play_ricochet_sfx()
 	
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)

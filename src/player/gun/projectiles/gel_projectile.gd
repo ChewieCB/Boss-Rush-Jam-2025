@@ -90,17 +90,17 @@ func ricochet():
 	area.set_collision_mask_value(2, true)
 	found_hitscal_col = false
 	is_ricochet_shot = true
-	
+
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
-	
+
 	# Add slight homing toward last look enemy target if available
 	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
 		var target = GameManager.player.last_look_enemy_target
 		var dir_to_target = global_position.direction_to(target.global_position)
 		# Blend bounce direction with target direction (small homing factor)
 		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
-	
+
 	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
@@ -117,9 +117,10 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 	for i in range(split_count):
 		if not is_instance_valid(self ):
 			return
-		var new_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
+		var new_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
 		# Splitted bullet CAN NOT ricochet or split again
+		# explosion_inst.global_position = segment.global_position
 		new_inst.activate(new_pos, new_dir)
 		new_inst.splitted = true
 		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
@@ -175,7 +176,7 @@ func _on_stick_timer_timeout() -> void:
 		life_timer.start()
 	if ricochet_count_left > 0 and found_hitscal_col:
 		sticked = false
-		self.reparent.call_deferred(GameManager.object_pooling_manager)
+		reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
 		stop_elemental_particles()
@@ -222,10 +223,9 @@ func activate(start_pos: Vector3, dir: Vector3) -> void:
 	raycast.set_deferred("enabled", false)
 	set_process(true)
 	set_physics_process(true)
-	
+
 func deactivate() -> void:
-	if GameManager.object_pooling_manager and self.get_parent() and not self.get_parent() is ObjectPoolingManager:
-		self.reparent.call_deferred(GameManager.object_pooling_manager)
+	reparent.call_deferred(get_tree().get_root())
 	visible = false
 	active = false
 	ricochet_count_left = 0

@@ -1,7 +1,15 @@
 extends GPUParticles3D
 
-func _ready():
-	emitting = true
 
 func _on_finished():
-	call_deferred("queue_free")
+	deactivate()
+
+
+func activate() -> void:
+	restart()
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func deactivate() -> void:
+	emitting = false
+	self.process_mode = Node.PROCESS_MODE_DISABLED

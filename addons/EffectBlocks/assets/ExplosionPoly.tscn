@@ -239,7 +239,6 @@ shadow_mesh = SubResource("ArrayMesh_iu3uw")
 [node name="ExplosionPoly" type="Node3D" node_paths=PackedStringArray("gpu_particles_arr")]
 script = ExtResource("1_jvvc4")
 gpu_particles_arr = [NodePath("Fire"), NodePath("Sparks"), NodePath("Smoke")]
-explode_on_spawn = false
 
 [node name="Fire" type="GPUParticles3D" parent="."]
 layers = 2

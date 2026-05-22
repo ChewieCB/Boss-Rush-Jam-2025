@@ -91,6 +91,8 @@ func create_spark(pos: Vector3, normal: Vector3):
 		spark_inst.rotation_degrees.x = 90
 	else:
 		spark_inst.look_at(pos + normal, Vector3.UP)
+	
+	spark_inst.activate()
 
 func create_blood_splatter(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)

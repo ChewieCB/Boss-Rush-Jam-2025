@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbi8u205vyo5w"
+path="res://.godot/imported/Gun Jam - Just Steam.mp3-d14ce552970e96ab70736a737098f973.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun Jam - Just Steam.mp3"
+dest_files=["res://.godot/imported/Gun Jam - Just Steam.mp3-d14ce552970e96ab70736a737098f973.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

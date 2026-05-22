@@ -2,6 +2,8 @@ extends Node3D
 class_name ColoredOrb
 # This orb mostly for visual feedback. Itself dont really do anything
 
+signal finished
+
 enum OrbState {
 	FLY_RANDOM,
 	PAUSE,
@@ -17,6 +19,7 @@ enum OrbState {
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var trail: Trail3D = $Trail/Trail3D
 @onready var light: OmniLight3D = $OmniLight3D
+@onready var timer: Timer = $Lifetimer
 
 const MIN_DIST_TO_REACH_TARGET = 1
 
@@ -27,19 +30,10 @@ var _state_timer: float = 0.0
 var _random_direction: Vector3
 
 
-func _ready() -> void:
-	# Pick a random direction for the initial flight
-	_random_direction = Vector3(
-		randf_range(-1.0, 1.0),
-		randf_range(-0.5, 1.0),
-		randf_range(-1.0, 1.0)
-	).normalized()
-	
-	# Face the random direction
-	look_at(global_position + _random_direction)
-
-
 func _physics_process(delta: float) -> void:
+	if self.process_mode == Node.PROCESS_MODE_DISABLED:
+		return
+		
 	_state_timer += delta
 	
 	match _state:
@@ -72,7 +66,8 @@ func _physics_process(delta: float) -> void:
 				
 				if global_position.distance_to(target_pos) <= MIN_DIST_TO_REACH_TARGET:
 					SoundManager.play_sound_with_pitch(orb_consume_sfx, randf_range(0.8, 1.2), "SFX")
-					queue_free()
+					finished.emit()
+					deactivate.call_deferred()
 
 
 func _transition_to(new_state: OrbState) -> void:
@@ -98,4 +93,28 @@ func set_orb_color(color: Color) -> void:
 
 
 func _on_lifetimer_timeout() -> void:
-	queue_free()
+	finished.emit()
+	deactivate.call_deferred()
+
+
+func activate() -> void:
+	self.process_mode == Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+	self.visible = true
+	# Pick a random direction for the initial flight
+	_random_direction = Vector3(
+		randf_range(-1.0, 1.0),
+		randf_range(-0.5, 1.0),
+		randf_range(-1.0, 1.0)
+	).normalized()
+	
+	# Face the random direction
+	look_at(global_position + _random_direction)
+	timer.start()
+
+
+func deactivate() -> void:
+	timer.stop()
+	self.visible = false
+	self.process_mode == Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c5dsw08uaje3n"
+path="res://.godot/imported/GP Crit 3.mp3-9223ed63a62d53cda2006becc912ba95.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/gamblers_precision/crit/GP Crit 3.mp3"
+dest_files=["res://.godot/imported/GP Crit 3.mp3-9223ed63a62d53cda2006becc912ba95.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

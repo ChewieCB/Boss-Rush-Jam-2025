@@ -761,7 +761,7 @@ func _init_chip_pool() -> void:
 	chip.collected.connect(_on_chip_collected)
 	scene_root.add_child.call_deferred(chip)
 	await get_tree().physics_frame
-	chip.deactivate()
+	chip.deactivate.call_deferred()
 	chip.global_position = Vector3.ZERO
 	_chip_spawn_pool.push_back(chip)
 
@@ -773,6 +773,9 @@ func _spawn_chip() -> void:
 			_init_chip_pool.call_deferred()
 	
 	var chip = _chip_spawn_pool.pop_front()
+	# FIXME - resize pool
+	if not chip:
+		return
 	chip.activate()
 	chip.randomise_chip_value()
 	active_chips.append(chip)

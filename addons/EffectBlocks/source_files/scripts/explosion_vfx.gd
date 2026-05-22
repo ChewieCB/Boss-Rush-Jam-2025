@@ -2,6 +2,8 @@
 extends Node3D
 class_name ExplosionParticles
 
+signal finished
+
 @export var gpu_particles_arr: Array[GPUParticles3D] = []
 @export var scale_factor: float = 1.0:
 	set(value):
@@ -12,8 +14,8 @@ class_name ExplosionParticles
 @export var min_scale: float = 1.0
 @export var max_scale: float = 1.5
 @export var emission_radius: float = 1.0
-@export var explode_on_spawn: bool = true
-@export var free_on_finished: bool = true
+@export var explode_on_spawn: bool = false
+@export var free_on_finished: bool = false
 @export var emitting: bool = false:
 	set(value):
 		emitting = value
@@ -21,12 +23,7 @@ class_name ExplosionParticles
 		emitting = false
 
 @export var time_until_queue_free: float = 2.0
-signal finished
-
-
-func _ready() -> void:
-	if explode_on_spawn:
-		explode()
+@onready var _root = get_tree().get_root()
 
 
 func set_colour(colour: Color) -> void:
@@ -64,7 +61,26 @@ func explode(scale_factor: float = 1.0):
 	
 	if free_on_finished:
 		await get_tree().create_timer(time_until_queue_free).timeout
+		finished.emit()
 		queue_free()
 	else:
 		await get_tree().create_timer(time_until_queue_free).timeout
 		finished.emit()
+
+
+func activate() -> void:
+	self.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	explode()
+
+
+func deactivate() -> void:
+	self.visible = false
+	for elem in gpu_particles_arr:
+		elem.emitting = false
+	
+	if get_parent() != _root:
+		self.reparent(_root)
+	
+	reset_color()
+	self.process_mode = Node.PROCESS_MODE_DISABLED

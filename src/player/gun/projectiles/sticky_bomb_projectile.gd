@@ -1,6 +1,7 @@
 extends BaseBullet
 class_name StickyBombProjectile
 
+signal finished
 signal exploded(explosion_inst: ExplosionDamageArea)
 
 @export var delay_explosion_time = 3
@@ -11,33 +12,54 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var explode_timer: Timer = $ExplodeTimer
+@onready var area: Area3D = $Area3D
+@onready var area_col: CollisionShape3D = $Area3D/CollisionShape3D
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
+@onready var _root = get_tree().get_root()
+
+var _active_tweens: Array[Tween] = []
 
 const CONTACT_DAMAGE = 1
 
 var sticked = false
 var explosion_damage = 0
-var explosion_inst: ExplosionDamageArea
+
+var _init_dir: Vector3
+var _init_start_pos: Vector3
+
 
 func _ready() -> void:
+	await get_parent().ready
 	super()
 	randomize()
 	delay_explosion_time += randf_range(-delay_randomness, delay_randomness)
 	explode_timer.wait_time = delay_explosion_time
 	life_timer.wait_time = delay_explosion_time
+
+
+func make_material_unique() -> void:
 	mesh.mesh.material = mesh.mesh.material.duplicate(true)
-	explosion_inst = explosion_prefab.instantiate()
+
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
+
 
 func _physics_process(delta: float) -> void:
+	if self.process_mode == Node.PROCESS_MODE_DISABLED:
+		return
+	
 	if sticked:
 		return
+	
+	if raycast.is_colliding():
+		hitscan_col_point = raycast.get_collision_point()
+		hitscan_col_normal = raycast.get_collision_normal()
+		found_hitscal_col = true
 
 	if homing_locked_in and homing_target:
 		var target_pos = homing_target.global_position
@@ -50,8 +72,8 @@ func _physics_process(delta: float) -> void:
 		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
 
-	velocity = - transform.basis.z * projectile_speed * delta
-	global_position += velocity
+	velocity = - transform.basis.z * projectile_speed
+	global_position += velocity * delta
 	travelled_distance += projectile_speed * delta
 
 
@@ -67,35 +89,38 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	explosion_damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
+	
 	look_at_from_position(start_pos, start_pos + dir)
+	_start_countdown_anim()
 
-	await get_tree().physics_frame
-	await get_tree().physics_frame
 
-	if raycast.is_colliding():
-		hitscan_col_point = raycast.get_collision_point()
-		hitscan_col_normal = raycast.get_collision_normal()
-		found_hitscal_col = true
+func _start_countdown_anim() -> void:
+	_run_countdown_anim.call_deferred()
 
-	# We want each tick to get faster
+
+func _run_countdown_anim() -> void:
 	var ticks: int = 6
 	var tick_times: Array[float] = []
 	var k: float = 2.5  # Acceleration intensity
-
+	
 	for i in range(ticks):
 		var x = float(i) / float(ticks - 1)
 		var t = (delay_explosion_time) * ((exp(k * x) - 1.0) / (exp(k) - 1.0))
 		tick_times.append(t)
-
+	
 	var tick_durations: Array[float] = []
 	for i in range(ticks - 1):
 		tick_durations.append(tick_times[i + 1] - tick_times[i])
 	tick_durations.reverse()
-
+	
 	tick_sfx_player.volume_db = -6
 	var start_colour := Color("#f70000")
 	var end_colour := Color("#ba2f20")
 	for i in range(tick_durations.size()):
+		# Exit if deactivated mid-countdown
+		if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED \
+		or not self.is_inside_tree():
+			return
 		var duration = tick_durations[i]
 		if i == tick_durations.size() - 1:
 			await anim_countdown_final_tick(duration, i * 0.55, start_colour.lerp(end_colour, i / tick_durations.size()))
@@ -124,8 +149,7 @@ func ricochet():
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit(false)
-	stop_elemental_particles()
-	call_deferred("queue_free")
+	finished.emit()
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
@@ -133,6 +157,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		return
 	
 	var calculated_damage = calculate_bullet_damage()
+	if not calculated_damage:
+		return
 	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
@@ -183,17 +209,18 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_explode_timer_timeout() -> void:
-	# FIXME - stop this carrying over between levels and erroring
-	if not is_instance_valid(explosion_inst):
-		return
 	var calculated_explosion_damage = calculate_explosion_damage()
+	var explosion_inst = ObjectPoolingManager.get_pooled_object(
+		ObjectPoolingManager.PooledObjectEnum.EXPLOSION
+	)
 	explosion_inst.init(calculated_explosion_damage)
-	get_parent().add_child(explosion_inst)
+	explosion_inst.global_position = self.global_position
 
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
 			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
-	explosion_inst.call_deferred("activate", global_position)
+	
+	explosion_inst.call_deferred("activate")
 	exploded.emit(explosion_inst)
 	call_deferred("create_explosion")
 
@@ -202,14 +229,16 @@ func _on_explode_timer_timeout() -> void:
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
-		await get_tree().create_timer(0.25).timeout
+		#await get_tree().create_timer(0.25).timeout
 		destroyed.emit(hit_boss)
-		stop_elemental_particles()
-		queue_free.call_deferred()
+		finished.emit()
 
 
 func create_explosion() -> void:
-	var vfx = explosion_vfx.instantiate()
+	var vfx = ObjectPoolingManager.get_pooled_object(
+		ObjectPoolingManager.PooledObjectEnum.EXPLOSION_OLD
+	)
+	vfx.activate()
 	var vfx_color: Color = Color.ORANGE
 	var most_recent_status: int = -1
 	for i in range(infused_status_effect.size()):
@@ -226,9 +255,8 @@ func create_explosion() -> void:
 			vfx_color = Color.LIGHT_GOLDENROD
 		BossCore.BossStatusEffect.BLEEDING:
 			vfx_color = Color.DARK_RED
-	get_parent().add_child(vfx)
 	vfx.global_position = global_position
-	vfx.set_colour(vfx_color)
+	vfx.set_colour.call_deferred(vfx_color)
 
 
 func change_bullet_color(_new_color: Color):
@@ -260,7 +288,10 @@ func calculate_explosion_damage():
 
 
 func anim_countdown_tick(tick_time: float, scale_mod: float, colour: Color) -> void:
+	if not self.is_inside_tree():
+		return
 	var tween := get_tree().create_tween()
+	_active_tweens.append(tween)
 	var reset_scale: float = 0.6
 	var max_scale: float = 1.2 + scale_mod
 	tween.set_parallel(false)
@@ -273,12 +304,16 @@ func anim_countdown_tick(tick_time: float, scale_mod: float, colour: Color) -> v
 	tween.parallel().tween_property(mesh.mesh.material, "albedo_color", colour, tick_time * 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 	await tween.finished
-
+	
+	_active_tweens.erase(tween)
 	return
 
 
 func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color) -> void:
+	if not self.is_inside_tree():
+		return
 	var tween := get_tree().create_tween()
+	_active_tweens.append(tween)
 	var reset_scale: float = 0.6
 	var max_scale: float = 1.2 + scale_mod
 	tween.set_parallel(false)
@@ -289,5 +324,81 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 	tween.tween_property(mesh, "scale", Vector3(0.1, 0.1, 0.1), tick_time * 0.5).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
-
+	
+	_active_tweens.erase(tween)
 	return
+
+
+func activate() -> void:
+	if get_parent() != _root:
+		self.reparent.call_deferred(_root)
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	hit_boss = false
+	travelled_distance = 0
+	life_time = 0
+	
+	scale = Vector3.ONE
+	mesh.scale = Vector3.ONE
+	#mesh.mesh.material.albedo_color = Color.WHITE
+	#mesh.mesh.material.emission = Color.WHITE
+	#mesh.mesh.material.emission_energy_multiplier = 1.0
+	
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	raycast.enabled = true
+	area_col.disabled = false
+	homing_collision_shape.disabled = false
+	area.monitoring = true
+	area.monitorable = true
+	homing_area.monitoring = true
+	homing_area.monitorable = true
+	area.collision_layer = pow(2, 4-1)
+	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
+	self.visible = true
+
+
+func deactivate() -> void:
+	self.visible = false
+	
+	trail.emit = false
+	trail.clear_points()
+	
+	for tween in _active_tweens:
+		if tween and tween.is_valid():
+			tween.kill()
+	_active_tweens.clear()
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	
+	life_timer.stop()
+	explode_timer.stop()
+	tick_sfx_player.stop()
+	
+	stop_elemental_particles()
+	
+	area.collision_layer = 0
+	area.collision_mask = 0
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = 0
+	
+	raycast.enabled = false
+	area_col.disabled = true
+	homing_collision_shape.disabled = true
+	
+	area.monitoring = false
+	area.monitorable = false
+	homing_area.monitoring = false
+	homing_area.monitorable = false
+	
+	#if tick_sfx_player.playing:
+		#await tick_sfx_player.finished
+	
+	self.process_mode = Node.PROCESS_MODE_DISABLED

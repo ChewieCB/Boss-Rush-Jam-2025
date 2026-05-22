@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bts86xaas3n3i"]
+[gd_scene load_steps=33 format=3 uid="uid://bts86xaas3n3i"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_0n66a"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_bc4lk"]
@@ -6,15 +6,21 @@
 [ext_resource type="AudioStream" uid="uid://d1ho6twusx65t" path="res://src/player/gun/assets/sfx/temp/Shotgun_Load_Shell.mp3" id="4_wvohi"]
 [ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_3gru0"]
 [ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_v0i03"]
-[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_je6wd"]
-[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="8_kxnf5"]
-[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_hndtc"]
+[ext_resource type="AudioStream" uid="uid://c5bh7cg8un161" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/crit/GP Crit.mp3" id="7_qfuvp"]
+[ext_resource type="AudioStream" uid="uid://cy6pblxt361sc" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/crit/GP Crit 2.mp3" id="8_r1fxi"]
+[ext_resource type="AudioStream" uid="uid://c5dsw08uaje3n" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/crit/GP Crit 3.mp3" id="9_ujgku"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_j7b0c"]
 [ext_resource type="PackedScene" uid="uid://d1r8em3of5o8n" path="res://src/player/barrel/ArchetypeBarrel.tscn" id="11_ydgr1"]
 [ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="12_0rhql"]
 [ext_resource type="PackedScene" uid="uid://dy7nqvo7uq1ti" path="res://src/player/barrel/DynamicAdvantageBarrel.tscn" id="13_rysq0"]
 [ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="14_xud8m"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="15_ljrm7"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_0proj"]
+streams_count = 3
+stream_0/stream = ExtResource("7_qfuvp")
+stream_1/stream = ExtResource("8_r1fxi")
+stream_2/stream = ExtResource("9_ujgku")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_id0bl"]
 albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
@@ -81,11 +87,7 @@ TEMP_sfx_dry = ExtResource("3_gbwla")
 TEMP_sfx_reload = ExtResource("4_wvohi")
 TEMP_sfx_click = ExtResource("5_3gru0")
 TEMP_regain_ammo = ExtResource("6_v0i03")
-TEMP_crit = ExtResource("7_je6wd")
-base_spread_angle = 1
-base_projectile_speed = 50.0
-aim_ray_prefab = ExtResource("8_kxnf5")
-hiscan_prefab = ExtResource("9_hndtc")
+TEMP_crit = SubResource("AudioStreamRandomizer_0proj")
 projectile_prefab = ExtResource("10_j7b0c")
 
 [node name="BaseGunModel" type="Node3D" parent="."]

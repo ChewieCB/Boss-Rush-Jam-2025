@@ -47,6 +47,7 @@ ScreenTransition="*res://src/ui/common/screen_transition/ScreenTransitionUI.tscn
 LoadingHandler="*res://src/utils/loading/LoadingHandler.tscn"
 LuckHandler="*res://src/player/LuckHandler.tscn"
 FmodManager="*res://addons/fmod/FmodManager.gd"
+ObjectPoolingManager="*res://src/utils/singletons/ObjectPoolingManager.tscn"
 
 [debug]
 

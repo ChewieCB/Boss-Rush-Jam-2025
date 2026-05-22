@@ -9966,7 +9966,7 @@ entProperties = {
 "angle": "225",
 "boss_name": "The Mechanic",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/tutorial/TutorialBoss.tscn",
+"linked_level": "res://src/maps/tutorial/TutorialBossNew.tscn",
 "origin": "-472.075 -292.151 33"
 }
 boss_id = 6

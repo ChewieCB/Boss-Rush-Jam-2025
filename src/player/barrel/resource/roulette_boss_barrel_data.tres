@@ -8,7 +8,7 @@
 script = ExtResource("3_fs5il")
 barrel_id = 8
 barrel_name = "Roulette Lady"
-barrel_desc = "Grant you effect similar to its owner, Roulette Lady."
+barrel_desc = "Grant you effects similar to its owner, Roulette Lady."
 barrel_info_summary = "Barrel collected from the Roulette Boss. Grants you abilities similar to its owner."
 barrel_image = ExtResource("1_lmo6o")
 barrel_cost = 200

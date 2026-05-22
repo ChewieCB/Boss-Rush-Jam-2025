@@ -1,6 +1,5 @@
 extends CompoundEffect
 
-
 @export_group("Luck Triggers")
 @export_subgroup("Cluster Bomb")
 @export var luck_trigger_sticky_threshold: int = 20
@@ -24,7 +23,7 @@ var explosive_dps_accumulated_in_window: float = 0.0:
 
 
 func on_projectile_spawn(_projectile: BaseBullet):
-	super (_projectile)
+	super(_projectile)
 	await get_tree().physics_frame
 	_projectile.before_damage_applied.connect(_update_sticky_hit_tracker)
 	if "explosion_inst" in _projectile:
