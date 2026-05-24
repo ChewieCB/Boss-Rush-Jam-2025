@@ -180,6 +180,7 @@ var modified_spin_time
 var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
+var modified_projectile_pool: ObjectPoolingManager.PooledObjectEnum = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
 var projectile_prefab_can_be_pooled = false
 var modified_recoil
 var modified_screenshake
@@ -395,12 +396,13 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		for j in range(modified_projectile_amount):
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
 			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle, modified_spread_horizontal_bias)
+			var bullet_pool = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
 			if modified_projectile_prefab:
-				create_gun_attack(modified_projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
+				bullet_pool = modified_projectile_pool
 			elif modified_is_hitscan:
-				create_gun_attack(hitscan_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
-			else:
-				create_gun_attack(projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
+				bullet_pool = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_HITSCAN
+			
+			create_gun_attack(bullet_pool, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
 		time_since_last_shot = 0
 		GameManager.player.player_camera.recoil_fire()
@@ -509,15 +511,18 @@ func play_post_shot_anim() -> bool:
 	return true
 
 
-func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
+func create_gun_attack(bullet_pool: ObjectPoolingManager.PooledObjectEnum , start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
 	var bullet_inst: BaseBullet = null
 	var is_pooled: bool = false
-	if projectile_prefab_can_be_pooled:
-		bullet_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.STICKY_BOMB_PROJECTILE)
-		is_pooled = true
-	else:
-		bullet_inst = bullet_prefab.instantiate()
-		get_tree().get_root().add_child(bullet_inst)
+	
+	bullet_inst = ObjectPoolingManager.get_pooled_object(bullet_pool)
+	
+	#if projectile_prefab_can_be_pooled:
+		#bullet_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.STICKY_BOMB_PROJECTILE)
+		#is_pooled = true
+	#else:
+		#bullet_inst = bullet_prefab.instantiate()
+		#get_tree().get_root().add_child(bullet_inst)
 
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
@@ -542,14 +547,15 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 			continue
 		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
 	
-	if is_pooled:
-		_init_bullet.call_deferred(bullet_inst, start_pos, direction, damage, proj_speed, max_range)
-	else:
-		bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
+	#if is_pooled:
+	_init_bullet(bullet_inst, start_pos, direction, damage, proj_speed, max_range)
+	#else:
+		#bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 
 
 func _init_bullet(_bullet: BaseBullet, start_pos, direction, damage, proj_speed, max_range) -> void:
+	_bullet.global_position = start_pos
 	if _bullet.has_method("activate"):
 		_bullet.activate()
 	_bullet.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
@@ -981,6 +987,7 @@ func reset_modifier(reload_reset = false):
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
 		modified_projectile_prefab = base_custom_projectile_prefab
+		modified_projectile_pool = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
 		projectile_prefab_can_be_pooled = false
 
 

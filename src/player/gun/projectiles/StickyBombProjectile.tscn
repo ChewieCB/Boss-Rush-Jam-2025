@@ -106,7 +106,6 @@ collision_mask = 29
 
 [node name="ProjectileBurnEmitSmall" parent="ElementalVFX" instance=ExtResource("6_quv1y")]
 visible = false
-time_until_queue_free = 1.0
 
 [node name="ProjectilePoisonEmitSmall" parent="ElementalVFX" instance=ExtResource("7_udfh0")]
 visible = false

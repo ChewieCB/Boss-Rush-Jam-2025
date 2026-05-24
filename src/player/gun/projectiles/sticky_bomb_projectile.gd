@@ -1,7 +1,6 @@
 extends BaseBullet
 class_name StickyBombProjectile
 
-signal finished
 signal exploded(explosion_inst: ExplosionDamageArea)
 
 @export var delay_explosion_time = 3
@@ -33,12 +32,86 @@ var _init_start_pos: Vector3
 
 
 func _ready() -> void:
-	await get_parent().ready
+	#await get_parent().ready
 	super()
 	randomize()
 	delay_explosion_time += randf_range(-delay_randomness, delay_randomness)
 	explode_timer.wait_time = delay_explosion_time
 	life_timer.wait_time = delay_explosion_time
+
+
+func _activate_visuals() -> void:
+	scale = Vector3.ONE
+	mesh.scale = Vector3.ONE
+	self.visible = true
+
+func _activate_physics() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+	
+	if get_parent() != _root:
+		self.reparent.call_deferred(_root)
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	hit_boss = false
+	travelled_distance = 0
+	life_time = 0
+	
+	raycast.enabled = true
+	area_col.disabled = false
+	homing_collision_shape.disabled = false
+	area.monitoring = true
+	area.monitorable = true
+	homing_area.monitoring = true
+	homing_area.monitorable = true
+	area.collision_layer = pow(2, 4-1)
+	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
+
+
+func _deactivate_visuals() -> void:
+	self.visible = false
+	trail.emit = false
+	trail.clear_points()
+	
+	for tween in _active_tweens:
+		if tween and tween.is_valid():
+			tween.kill()
+	_active_tweens.clear()
+	
+	stop_elemental_particles()
+
+
+func _deactivate_physics() -> void:
+	area.collision_layer = 0
+	area.collision_mask = 0
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = 0
+	
+	raycast.enabled = false
+	area_col.disabled = true
+	homing_collision_shape.disabled = true
+	
+	area.monitoring = false
+	area.monitorable = false
+	homing_area.monitoring = false
+	homing_area.monitorable = false
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	
+	life_timer.stop()
+	explode_timer.stop()
+	tick_sfx_player.stop()
+	
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
 
 
 func make_material_unique() -> void:
@@ -63,7 +136,7 @@ func _physics_process(delta: float) -> void:
 
 	if homing_locked_in and homing_target:
 		var target_pos = homing_target.global_position
-		if homing_target.get_node("BodyCenter"):
+		if homing_target.has_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
@@ -145,6 +218,7 @@ func ricochet():
 		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
 	
 	init(global_position, bounce_dir, explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
+
 
 
 func _on_life_timer_timeout() -> void:
@@ -327,78 +401,3 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 	
 	_active_tweens.erase(tween)
 	return
-
-
-func activate() -> void:
-	if get_parent() != _root:
-		self.reparent.call_deferred(_root)
-	
-	sticked = false
-	found_hitscal_col = false
-	homing_locked_in = false
-	homing_target = null
-	hit_boss = false
-	travelled_distance = 0
-	life_time = 0
-	
-	scale = Vector3.ONE
-	mesh.scale = Vector3.ONE
-	#mesh.mesh.material.albedo_color = Color.WHITE
-	#mesh.mesh.material.emission = Color.WHITE
-	#mesh.mesh.material.emission_energy_multiplier = 1.0
-	
-	self.process_mode = Node.PROCESS_MODE_INHERIT
-	raycast.enabled = true
-	area_col.disabled = false
-	homing_collision_shape.disabled = false
-	area.monitoring = true
-	area.monitorable = true
-	homing_area.monitoring = true
-	homing_area.monitorable = true
-	area.collision_layer = pow(2, 4-1)
-	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
-	self.visible = true
-
-
-func deactivate() -> void:
-	self.visible = false
-	
-	trail.emit = false
-	trail.clear_points()
-	
-	for tween in _active_tweens:
-		if tween and tween.is_valid():
-			tween.kill()
-	_active_tweens.clear()
-	
-	sticked = false
-	found_hitscal_col = false
-	homing_locked_in = false
-	homing_target = null
-	
-	life_timer.stop()
-	explode_timer.stop()
-	tick_sfx_player.stop()
-	
-	stop_elemental_particles()
-	
-	area.collision_layer = 0
-	area.collision_mask = 0
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = 0
-	
-	raycast.enabled = false
-	area_col.disabled = true
-	homing_collision_shape.disabled = true
-	
-	area.monitoring = false
-	area.monitorable = false
-	homing_area.monitoring = false
-	homing_area.monitorable = false
-	
-	#if tick_sfx_player.playing:
-		#await tick_sfx_player.finished
-	
-	self.process_mode = Node.PROCESS_MODE_DISABLED

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
 [ext_resource type="LightmapGIData" uid="uid://bwbog4mdr3cqx" path="res://src/maps/backroom/Backroom.lmbake" id="3_qbe7n"]
-[ext_resource type="PackedScene" uid="uid://c70h2xecs66jh" path="res://src/utils/singletons/ObjectPoolingManager.tscn" id="4_e5uty"]
+[ext_resource type="PackedScene" uid="uid://c70h2xecs66jh" path="res://src/utils/pooling/ObjectPoolingManager.tscn" id="4_e5uty"]
 [ext_resource type="PackedScene" uid="uid://dfpynfqwpew5x" path="res://src/ui/common/info_text/InfoBoxUI.tscn" id="6_e5lbx"]
 [ext_resource type="PackedScene" uid="uid://bcwjmyo4msefk" path="res://src/maps/lobby/ui/GameWinUI.tscn" id="7_7vejp"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="8_0ncek"]

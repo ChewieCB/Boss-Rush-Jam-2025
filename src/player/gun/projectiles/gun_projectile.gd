@@ -3,16 +3,16 @@ class_name GunProjectile
 
 @export var gravity_modifier = 0.0
 
-@onready var collider: Area3D = $Area3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var area: Area3D = $Area3D
+@onready var area_col: CollisionShape3D = $Area3D/CollisionShape3D
 @onready var trail: Trail3D = $Trail/Trail3D
 @onready var slowmo_trail: Trail3D = $Trail/Trail3DBulletTime
 
-
 @onready var homing_area: Area3D = $HomingArea3D
-@onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+@onready var homing_area_col: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
 @onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
 
@@ -25,10 +25,48 @@ const GRAVITY_IGNORE_AFTER_RICO_TIME = 0.2
 var gravity_accel = 0
 var gravity_free_timer = 0.2
 
-func _ready() -> void:
-	super ()
+
+func _activate_visuals() -> void:
+	self.visible = true
+
+func _activate_physics() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+	
+	area_col.disabled = false
+	area.monitoring = true
+	area.monitorable = true
+	
+	raycast.enabled = true
+	
+	trail.clear_points()
+	trail.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _deactivate_visuals() -> void:
+	self.visible = false
+	trail.visible = false
 	slowmo_trail.visible = false
+
+func _deactivate_physics() -> void:
+	trail.clear_points()
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
+	
+	life_timer.stop()
+	
+	area_col.disabled = true
+	area.monitoring = false
+	area.monitorable = false
+	
+	raycast.enabled = false
+	
+	homing_area_col.disabled = true
+	homing_area.monitoring = false
+	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
+
 
 func _process(delta: float) -> void:
 	super (delta)
@@ -75,9 +113,15 @@ func _physics_process(delta: float) -> void:
 			found_hitscal_col = false
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	trail.visible = false
+	
+	look_at_from_position(start_pos, start_pos + dir)
+	
 	if homing_strength > 0:
 		homing_area.monitoring = true
-		homing_collision_shape.shape.radius = homing_strength
+		homing_area_col.disabled = false
+		homing_area_col.shape.radius = homing_strength
+	
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
@@ -85,20 +129,21 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
-
-	await get_tree().physics_frame
-	await get_tree().physics_frame
-
+	
+	#await get_tree().physics_frame
+	#await get_tree().physics_frame
+	
+	trail.visible = true
+	
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
 
+
 func _on_life_timer_timeout() -> void:
-	if not keep_alive:
-		destroyed.emit(hit_boss)
-		stop_elemental_particles()
-		call_deferred("queue_free")
+	destroyed.emit(hit_boss)
+	finished.emit()
 
 func play_ricochet_sfx():
 	var sfx = AudioStreamPlayer3D.new()
@@ -138,12 +183,16 @@ func ricochet():
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
 
+
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	if not is_instance_valid(owner_gun):
+		return
+	
 	if body is Player:
 		on_player_contact.emit(self )
 		if time_ricochetted == 0:
 			return
-
+	
 	var calculated_damage = calculate_bullet_damage()
 	
 	if body is CharacterBody3D:
@@ -178,10 +227,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		if not keep_alive:
-			stop_elemental_particles()
-			destroyed.emit(hit_boss)
-			call_deferred("queue_free")
+		destroyed.emit()
+		finished.emit()
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -189,6 +236,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_locked_in = true
 		homing_target = body
 		homing_area.set_deferred("monitoring", false)
+
 
 func change_bullet_color(_new_color: Color):
 	super (_new_color)
@@ -203,6 +251,7 @@ func change_bullet_color(_new_color: Color):
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
 		trail.material_override.emission = _new_color
 
+
 func redshift_bullet():
 	var current_color = mesh.mesh.material.albedo_color
 	var redshifted_color = Color(
@@ -213,10 +262,12 @@ func redshift_bullet():
 	)
 	change_bullet_color(redshifted_color)
 
+
 func switch_to_slowmo_bullet_trail():
 	super ()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
+	trail.clear_points()
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	slowmo_trail.visible = true
 	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT

@@ -1,5 +1,7 @@
-extends Node3D
+extends PoolableObject
 class_name BaseBullet
+
+signal finished
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
@@ -46,8 +48,6 @@ var infused_status_effect = [false, false, false, false, false]
 var can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
 var min_lifetime_before_can_be_aim_guided = 0.2
 
-var keep_alive: bool = false
-
 # Statistics tracking for barrel effect
 var color_changed_count = 0
 var life_time = 0
@@ -66,12 +66,35 @@ func _ready() -> void:
 			elem.visible = false
 
 
+func activate() -> void:
+	_activate_visuals.call_deferred()
+	_activate_physics.call_deferred()
+
+func _activate_visuals() -> void:
+	push_error("BaseBullet sub-class does not have an _activate_visuals method set.")
+
+func _activate_physics() -> void:
+	push_error("BaseBullet sub-class does not have an _activate_physics method set.")
+
+
+func deactivate() -> void:
+	_deactivate_visuals.call_deferred()
+	_deactivate_physics.call_deferred()
+
+func _deactivate_visuals() -> void:
+	push_error("BaseBullet sub-class does not have an _deactivate_visuals method set.")
+
+func _deactivate_physics() -> void:
+	push_error("BaseBullet sub-class does not have an _deactivate_physics method set.")
+
+
 func init(_start_pos: Vector3, _dir: Vector3, _damage: int, _ricochet_count: int, _speed: float, _max_range: float) -> void:
 	push_error("BaseBullet sub-class does not have an init method set.")
 
 
 func _process(delta: float) -> void:
 	life_time += delta
+
 
 func create_spark(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
@@ -81,8 +104,11 @@ func create_spark(pos: Vector3, normal: Vector3):
 		pos = global_position
 		normal = Vector3.UP
 
-	var spark_inst = spark_effect.instantiate()
-	get_parent().add_child(spark_inst)
+	var spark_inst = ObjectPoolingManager.get_pooled_object(
+		ObjectPoolingManager.PooledObjectEnum.GUN_SPARK
+	)
+	#var spark_inst = spark_effect.instantiate()
+	#get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
 
 	if normal.is_equal_approx(Vector3.DOWN):
@@ -93,6 +119,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 		spark_inst.look_at(pos + normal, Vector3.UP)
 	
 	spark_inst.activate()
+
 
 func create_blood_splatter(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
@@ -113,6 +140,7 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 	else:
 		blood_inst.look_at(pos + normal, Vector3.UP)
 
+
 func create_bullet_decal(pos: Vector3, normal: Vector3):
 	if bullet_decal_prefab == null:
 		return
@@ -131,6 +159,7 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 	# Rotate the decal a bit for variety
 	decal_inst.rotate_object_local(Vector3(0, 1, 0), randf_range(0.0, 360.0))
 
+
 func create_status_effect_impact(pos: Vector3, normal: Vector3):
 	var impact_effect = null
 	for i in range(len(infused_status_effect)):
@@ -143,6 +172,7 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 			if abs(normal.dot(Vector3.UP)) < 0.999:
 				impact_inst.look_at(pos + normal, Vector3.UP)
 				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
+
 
 func calculate_bullet_damage(reroll_crit = true):
 	# FIXME - this resets crit damage 
@@ -160,15 +190,18 @@ func calculate_bullet_damage(reroll_crit = true):
 			is_crit = true
 	return calculated_damage
 
+
 func ricochet():
 	time_ricochetted += 1
 	return
+
 
 ## This will be added to normal damage
 func get_damage_variance_modifier(_damage: int) -> int:
 	var min_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE]
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE]
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
+
 
 ## Avoid using this unless last resort, very laggy
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
@@ -204,7 +237,8 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		center_dir = hitscan_col_normal
 	if _has_pos:
 		new_pos = _pos
-
+	
+	# FIXME - move to pooling manager!!!
 	for i in range(split_count):
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
@@ -225,7 +259,7 @@ func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
 func stop_elemental_particles():
 	for elem in elemental_emitting_vfx:
 		if is_instance_valid(elem):
-			elem.queue_free_after_time()
+			elem.deactivate()
 
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	# Wait a bit to make the effect look better

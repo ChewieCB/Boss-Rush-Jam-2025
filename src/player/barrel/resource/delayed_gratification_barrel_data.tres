@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bms2may2rm1q3"]
 
 [ext_resource type="Texture2D" uid="uid://b7lfoadkca1t" path="res://src/player/barrel/resource/sprite/delayed_gratification.png" id="1_4n2ic"]
-[ext_resource type="PackedScene" uid="uid://c7jc72exa8eg2" path="res://src/player/barrel/DelayedGratificationBarrel.tscn" id="1_i2um6"]
+[ext_resource type="PackedScene" uid="uid://c7jc72exa8eg2" path="res://src/player/gun/projectiles/DelayedGratificationBarrel.tscn" id="1_i2um6"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_ekiv5"]
 
 [resource]

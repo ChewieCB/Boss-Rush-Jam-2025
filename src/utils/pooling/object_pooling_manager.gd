@@ -4,25 +4,33 @@ extends Node3D
 enum PooledObjectEnum {
 	EXPLOSION,
 	EXPLOSION_OLD,
-	#GEL_STREAM_PROJECTILE,
-	STICKY_BOMB_PROJECTILE
+	PLAYER_GUN_PROJECTILE,
+	PLAYER_GUN_HITSCAN,
+	PLAYER_STICKY_BOMB_PROJECTILE,
+	GUN_SPARK,
 }
 
 @export var pooled_object_prefabs: Array[PackedScene] = []
 @export var pooled_object_init_arr_size: Array[int] = []
+@export var pooled_object_max_arr_size: Array[int] = []
 
 var object_pool: Array[Array] = []
+var in_use_pool: Array[Array] = []
 @onready var _root = get_tree().get_root()
 
 func _ready() -> void:
 	assert(len(PooledObjectEnum.values()) == len(pooled_object_prefabs))
-	# Pooled object should have activate() and deactivate() funcs
-	# Pre-instantiate
+	
 	for object_enum in PooledObjectEnum.values():
 		object_pool.append([])
+		in_use_pool.append([])
+
+
+func init_object_pools() -> void:
+	for object_enum in PooledObjectEnum.values():
 		for i in range(pooled_object_init_arr_size[int(object_enum as PooledObjectEnum)]):
 			create_new_pooled_object.call_deferred(object_enum as PooledObjectEnum)
-
+	
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -31,10 +39,10 @@ func _ready() -> void:
 		for obj in pool:
 			if obj.has_method("activate"):
 				obj.activate()
-
+	
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw  # depth pre pass
-
+	
 	for pool in object_pool:
 		for obj in pool:
 			if obj.has_method("deactivate"):
@@ -78,8 +86,19 @@ func _on_inst_finished(object, object_pool) -> void:
 
 
 func get_pooled_object(object_enum: PooledObjectEnum):
+	print("%s: %s/%s" % [PooledObjectEnum.keys()[object_enum], in_use_pool[int(object_enum)].size(), object_pool[int(object_enum)].size()])
 	var obj = object_pool[object_enum].pop_front()
 	if not obj:
-		return create_new_pooled_object_sync(object_enum)
+		if in_use_pool[int(object_enum)].size() < pooled_object_max_arr_size[int(object_enum)]:
+			return create_new_pooled_object_sync(object_enum)
+		else:
+			return recycle_in_use_object(object_enum)
 	else:
+		in_use_pool[object_enum].push_back(obj)
 		return obj
+
+
+func recycle_in_use_object(object_enum: PooledObjectEnum):
+	var oldest_obj = in_use_pool[object_enum].pop_front()
+	oldest_obj.deactivate()
+	return oldest_obj
