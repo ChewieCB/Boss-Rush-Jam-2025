@@ -1,7 +1,19 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://xk3ab4luhvq"]
 
-[ext_resource type="Shader" path="res://src/ui/player/stat_ui_bar_skewed.gdshader" id="1_8xc5k"]
+[sub_resource type="Shader" id="Shader_a8e7g"]
+code = "shader_type canvas_item;
+uniform float skew_factor = 0.0; // Adjust this value
+uniform float skew_cutoff = 1.0;
+
+void vertex() {
+	if (VERTEX.x < skew_cutoff) {
+    	VERTEX.x -= skew_factor * VERTEX.y; // Skews the bar
+	}
+}
+"
 
 [resource]
-shader = ExtResource("1_8xc5k")
+resource_local_to_scene = true
+shader = SubResource("Shader_a8e7g")
 shader_parameter/skew_factor = 0.5
+shader_parameter/skew_cutoff = 319.0
