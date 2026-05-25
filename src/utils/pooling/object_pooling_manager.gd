@@ -24,6 +24,8 @@ func _ready() -> void:
 	for object_enum in PooledObjectEnum.values():
 		active_object_pool.append([])
 		available_object_pool.append([])
+	
+	init_object_pools()
 
 
 func init_object_pools() -> void:

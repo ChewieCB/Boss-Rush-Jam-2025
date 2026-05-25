@@ -187,7 +187,6 @@ var freecam: FreeCam
 func _ready():
 	GameManager.change_fmod_bgm_player_is_dead(false)
 	GameManager.player = self
-	ObjectPoolingManager.init_object_pools()
 	
 	for mesh in debug_meshes.get_children():
 		mesh.visible = false
