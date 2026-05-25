@@ -11,7 +11,7 @@ Description: Advanced 2D/3D Trail system.
 enum {VIEW, NORMAL, OBJECT}
 enum {X, Y, Z}
 
-@export var emit: bool = true
+@export var emit: bool = false
 @export var distance: float = 0.1
 @export_range(0, 99999) var segments: int = 20
 @export var lifetime: float = 0.5
@@ -34,6 +34,8 @@ var _B: Point
 var _C: Point
 var _temp_segment := []
 var _points := []
+var _point_pool: Array = []
+const POINT_POOL_SIZE: int = 64
 
 var _cached_cam_pos: Vector3
 var _cached_cam_valid: bool = false
@@ -64,8 +66,54 @@ func add_point(_transform: Transform3D) -> void:
 	points.push_back(point)
 
 
+func _get_point(_transform: Transform3D, age: float) -> Point:
+	if _point_pool.is_empty():
+		return Point.new(_transform, age)
+	var p: Point = _point_pool.pop_back()
+	p.transform = _transform
+	p.age = age
+	return p
+
+func _return_point(p: Point) -> void:
+	_point_pool.push_back(p)
+
+
+func _update_points_pool(delta: float) -> void:
+	var i: int = _points.size() - 1
+	while i >= 0:
+		var p: Point = _points[i]
+		p.age -= delta
+		if p.age <= 0:
+			_points.remove_at(i)
+			_return_point(p)
+		i -= 1
+
+
+func _update_points(delta: float) -> void:
+	_A.update(delta, _points)
+	_B.update(delta, _points)
+	_C.update(delta, _points)
+	_update_points_pool(delta)
+
+	var size_multiplier = [1, 2, 4, 6][smoothing_iterations]
+	var max_points_count: int = segments * size_multiplier
+	if _points.size() > max_points_count:
+		_points = _points.slice(_points.size() - max_points_count)
+
+
 func clear_points() -> void:
 	points.clear()
+
+
+func full_reset() -> void:
+	points.clear()
+	_points.clear()
+	_temp_segment.clear()
+	_A = null
+	_B = null
+	_C = null
+	emit = false
+	mesh.clear_surfaces()
 
 
 func _prepare_geometry(point_prev: Point, point: Point, half_width: float, factor: float) -> Array:
@@ -164,21 +212,6 @@ func _render_geometry(source: Array) -> void:
 	_array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, _mesh_arrays)
 
 
-func _update_points() -> void:
-	var delta = get_process_delta_time()
-		
-	_A.update(delta, _points)
-	_B.update(delta, _points)
-	_C.update(delta, _points)
-	for point in _points:
-		point.update(delta, _points)
-
-	var size_multiplier = [1, 2, 4, 6][smoothing_iterations]
-	var max_points_count: int = segments * size_multiplier
-	if _points.size() > max_points_count:
-		_points = _points.slice(_points.size() - max_points_count)
-
-
 func smooth() -> void:
 	if points.size() < 3:
 		return
@@ -247,7 +280,7 @@ func _chaikin(A, B, C) -> Array:
 func _emit(delta) -> void:
 	var _transform: Transform3D = _target.global_transform
 
-	var point = Point.new(_transform, lifetime)
+	var point = _get_point(_transform, lifetime)
 	if not _A:
 		_A = point
 		return
@@ -262,8 +295,8 @@ func _emit(delta) -> void:
 		_points += _temp_segment
 		
 	_C = point
-
-	_update_points()
+	
+	_update_points(delta)
 	_temp_segment = _chaikin(_A, _B, _C)
 	_render_realtime()
 

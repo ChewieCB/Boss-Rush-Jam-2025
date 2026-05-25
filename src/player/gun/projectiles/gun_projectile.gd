@@ -28,19 +28,19 @@ var gravity_free_timer = 0.2
 
 func _activate_visuals() -> void:
 	self.visible = true
+	trail.visible = true
+	trail.emit = true
 
 func _activate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
+	trail.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 	
-	area_col.disabled = false
-	area.monitoring = true
-	area.monitorable = true
+	area_col.set_deferred("disabled", false)
+	area.set_deferred("monitoring", true)
+	area.set_deferred("monitorable", true)
 	
-	raycast.enabled = true
-	
-	trail.clear_points()
-	trail.process_mode = Node.PROCESS_MODE_INHERIT
+	raycast.set_deferred("enabled", true)
 
 
 func _deactivate_visuals() -> void:
@@ -49,19 +49,21 @@ func _deactivate_visuals() -> void:
 	slowmo_trail.visible = false
 
 func _deactivate_physics() -> void:
-	trail.clear_points()
+	splitted = false
+	
+	trail.full_reset()
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	life_timer.stop()
 	
-	area_col.disabled = true
-	area.monitoring = false
-	area.monitorable = false
+	area_col.set_deferred("disabled", true)
+	area.set_deferred("monitoring", false)
+	area.set_deferred("monitorable", false)
 	
-	raycast.enabled = false
+	raycast.set_deferred("enabled", false)
 	
-	homing_area_col.disabled = true
-	homing_area.monitoring = false
+	homing_area_col.set_deferred("disabled", true)
+	homing_area.set_deferred("monitoring", false)
 	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 	self.process_mode = Node.PROCESS_MODE_DISABLED
@@ -69,7 +71,7 @@ func _deactivate_physics() -> void:
 
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
@@ -113,9 +115,8 @@ func _physics_process(delta: float) -> void:
 			found_hitscal_col = false
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	activate()
 	trail.visible = false
-	
-	look_at_from_position(start_pos, start_pos + dir)
 	
 	if homing_strength > 0:
 		homing_area.monitoring = true
@@ -143,7 +144,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit(hit_boss)
-	finished.emit()
+	finished.emit.call_deferred()
 
 func play_ricochet_sfx():
 	var sfx = AudioStreamPlayer3D.new()
@@ -227,8 +228,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit()
-		finished.emit()
+		destroyed.emit(hit_boss)
+		finished.emit.call_deferred()
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:

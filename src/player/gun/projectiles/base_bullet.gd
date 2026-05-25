@@ -3,6 +3,7 @@ class_name BaseBullet
 
 signal finished
 
+@export var pool_idx: ObjectPoolingManager.PooledObjectEnum = 2
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
@@ -29,7 +30,10 @@ var damage = 1
 var crit_chance = 0
 var ricochet_count_left = 0
 var time_ricochetted = 0
-var owner_gun: Gun
+var owner_gun: Gun:
+	set(value):
+		owner_gun = value
+		_connect_callbacks()
 var is_ricochet_shot = false
 var homing_strength = 0 # radius to search for enemy
 var homing_locked_in = false
@@ -61,14 +65,15 @@ func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
 	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	
 	for elem in elemental_emitting_vfx:
 		if elem:
 			elem.visible = false
 
 
 func activate() -> void:
-	_activate_visuals.call_deferred()
-	_activate_physics.call_deferred()
+	_activate_physics()
+	_activate_visuals()
 
 func _activate_visuals() -> void:
 	push_error("BaseBullet sub-class does not have an _activate_visuals method set.")
@@ -78,14 +83,29 @@ func _activate_physics() -> void:
 
 
 func deactivate() -> void:
-	_deactivate_visuals.call_deferred()
-	_deactivate_physics.call_deferred()
+	_deactivate_visuals()
+	_deactivate_physics()
 
 func _deactivate_visuals() -> void:
 	push_error("BaseBullet sub-class does not have an _deactivate_visuals method set.")
 
 func _deactivate_physics() -> void:
-	push_error("BaseBullet sub-class does not have an _deactivate_physics method set.")
+	push_error("BaseBullwet sub-class does not have an _deactivate_physics method set.")
+
+
+func _connect_callbacks() -> void:
+	if not on_player_contact.is_connected(owner_gun.check_barrel_effect_on_player_contact):
+		on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
+	if not before_damage_applied.is_connected(owner_gun.check_barrel_effect_on_before_damage_applied):
+		before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
+	if not damage_applied.is_connected(owner_gun.check_barrel_effect_on_damage_applied):
+		damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
+	if not damage_applied.is_connected(LuckHandler.accumulate_dps_dealt):
+		damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
+	if not impacted.is_connected(owner_gun.check_barrel_effect_on_projectile_impact):
+		impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
+	if not destroyed.is_connected(owner_gun.check_barrel_effect_on_projectile_destroyed):
+		destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
 
 
 func init(_start_pos: Vector3, _dir: Vector3, _damage: int, _ricochet_count: int, _speed: float, _max_range: float) -> void:
@@ -205,7 +225,8 @@ func get_damage_variance_modifier(_damage: int) -> int:
 
 ## Avoid using this unless last resort, very laggy
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
-	var new_inst: BaseBullet = self.duplicate()
+	var new_inst: BaseBullet = ObjectPoolingManager.get_pooled_object(pool_idx)
+	
 	new_inst.owner_gun = owner_gun
 	new_inst.is_ricochet_shot = is_ricochet
 	new_inst.homing_strength = homing_strength
@@ -213,15 +234,18 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.life_time = life_time
 	new_inst.travelled_distance = travelled_distance
 	new_inst.time_ricochetted = time_ricochetted
+	
 	if is_ricochet:
 		new_inst.time_ricochetted += 1
+	
 	new_inst.misc_data = misc_data
-	new_inst.on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
-	new_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
-	new_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
-	new_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
-	new_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
-	new_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
+	#new_inst.on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
+	#new_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
+	#new_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
+	#new_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
+	#new_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
+	#new_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
+	
 	return new_inst
 
 
@@ -241,7 +265,6 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 	# FIXME - move to pooling manager!!!
 	for i in range(split_count):
 		var new_inst = create_duplication()
-		get_tree().get_root().add_child(new_inst)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
 		# Splitted bullet CAN NOT ricochet or split again
 		new_inst.splitted = true
