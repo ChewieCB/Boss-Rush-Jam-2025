@@ -239,12 +239,6 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 		new_inst.time_ricochetted += 1
 	
 	new_inst.misc_data = misc_data
-	#new_inst.on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
-	#new_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
-	#new_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
-	#new_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
-	#new_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
-	#new_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
 	
 	return new_inst
 
@@ -252,7 +246,7 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
 		return
-	if not is_instance_valid(self ):
+	if not is_instance_valid(self):
 		return
 
 	var center_dir = - current_dir
@@ -262,7 +256,6 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 	if _has_pos:
 		new_pos = _pos
 	
-	# FIXME - move to pooling manager!!!
 	for i in range(split_count):
 		var new_inst = create_duplication()
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)

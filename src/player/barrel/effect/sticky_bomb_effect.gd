@@ -25,7 +25,8 @@ var explosive_dps_accumulated_in_window: float = 0.0:
 func on_projectile_spawn(_projectile: BaseBullet):
 	super(_projectile)
 	await get_tree().physics_frame
-	_projectile.before_damage_applied.connect(_update_sticky_hit_tracker)
+	if not _projectile.before_damage_applied.is_connected(_update_sticky_hit_tracker):
+		_projectile.before_damage_applied.connect(_update_sticky_hit_tracker)
 	if "explosion_inst" in _projectile:
 		_projectile.explosion_inst.explosive_damage.connect(_on_explosive_damage.bind(_projectile))
 

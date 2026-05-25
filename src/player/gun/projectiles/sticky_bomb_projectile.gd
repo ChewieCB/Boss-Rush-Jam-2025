@@ -16,7 +16,8 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
-@onready var trail: Trail3D = $Trail/Trail3D
+@onready var light: OmniLight3D = $OmniLight3D
+#@onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
 @onready var _root = get_tree().get_root()
 
@@ -32,86 +33,12 @@ var _init_start_pos: Vector3
 
 
 func _ready() -> void:
-	#await get_parent().ready
+	await get_parent().ready
 	super()
 	randomize()
 	delay_explosion_time += randf_range(-delay_randomness, delay_randomness)
 	explode_timer.wait_time = delay_explosion_time
 	life_timer.wait_time = delay_explosion_time
-
-
-func _activate_visuals() -> void:
-	scale = Vector3.ONE
-	mesh.scale = Vector3.ONE
-	self.visible = true
-
-func _activate_physics() -> void:
-	self.process_mode = Node.PROCESS_MODE_INHERIT
-	set_physics_process(true)
-	
-	if get_parent() != _root:
-		self.reparent.call_deferred(_root)
-	
-	sticked = false
-	found_hitscal_col = false
-	homing_locked_in = false
-	homing_target = null
-	hit_boss = false
-	travelled_distance = 0
-	life_time = 0
-	
-	raycast.enabled = true
-	area_col.disabled = false
-	homing_collision_shape.disabled = false
-	area.monitoring = true
-	area.monitorable = true
-	homing_area.monitoring = true
-	homing_area.monitorable = true
-	area.collision_layer = pow(2, 4-1)
-	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
-
-
-func _deactivate_visuals() -> void:
-	self.visible = false
-	trail.emit = false
-	trail.clear_points()
-	
-	for tween in _active_tweens:
-		if tween and tween.is_valid():
-			tween.kill()
-	_active_tweens.clear()
-	
-	stop_elemental_particles()
-
-
-func _deactivate_physics() -> void:
-	area.collision_layer = 0
-	area.collision_mask = 0
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = 0
-	
-	raycast.enabled = false
-	area_col.disabled = true
-	homing_collision_shape.disabled = true
-	
-	area.monitoring = false
-	area.monitorable = false
-	homing_area.monitoring = false
-	homing_area.monitorable = false
-	
-	sticked = false
-	found_hitscal_col = false
-	homing_locked_in = false
-	homing_target = null
-	
-	life_timer.stop()
-	explode_timer.stop()
-	tick_sfx_player.stop()
-	
-	self.process_mode = Node.PROCESS_MODE_DISABLED
-	set_physics_process(false)
 
 
 func make_material_unique() -> void:
@@ -151,6 +78,8 @@ func _physics_process(delta: float) -> void:
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	activate()
+	sticked = false
 	if homing_strength > 0:
 		homing_area.monitoring = true
 		homing_collision_shape.shape.radius = homing_strength
@@ -218,7 +147,6 @@ func ricochet():
 		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
 	
 	init(global_position, bounce_dir, explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
-
 
 
 func _on_life_timer_timeout() -> void:
@@ -338,13 +266,13 @@ func change_bullet_color(_new_color: Color):
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
-		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
-		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+		#trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		#trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
 	else:
 		mesh.mesh.material.albedo_color = _new_color
 		mesh.mesh.material.emission = _new_color
-		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
-		trail.material_override.emission = _new_color
+		#trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+		#trail.material_override.emission = _new_color
 
 
 func calculate_explosion_damage():
@@ -401,3 +329,81 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 	
 	_active_tweens.erase(tween)
 	return
+
+
+func _activate_visuals() -> void:
+	scale = Vector3.ONE
+	mesh.scale = Vector3.ONE
+	light.visible = true
+	self.visible = true
+
+func _activate_physics() -> void:
+	if get_parent() != _root:
+		self.reparent.call_deferred(_root)
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	hit_boss = false
+	travelled_distance = 0
+	life_time = 0
+	
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	light.process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+	
+	area.collision_layer = pow(2, 4-1)
+	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
+	area_col.set_deferred("disabled", false)
+	area.set_deferred("monitoring", true)
+	area.set_deferred("monitorable", true)
+	homing_collision_shape.set_deferred("disabled", false)
+	homing_area.set_deferred("monitoring", true)
+	homing_area.set_deferred("monitorable", true)
+	raycast.set_deferred("enabled", true)
+
+
+func _deactivate_visuals() -> void:
+	self.visible = false
+	light.visible = false
+
+func _deactivate_physics() -> void:
+	if get_parent() != _root:
+		self.reparent.call_deferred(_root)
+	
+	light.process_mode = Node.PROCESS_MODE_DISABLED
+	
+	for tween in _active_tweens:
+		if tween and tween.is_valid():
+			tween.kill()
+	_active_tweens.clear()
+	
+	sticked = false
+	found_hitscal_col = false
+	homing_locked_in = false
+	homing_target = null
+	
+	life_timer.stop()
+	explode_timer.stop()
+	tick_sfx_player.stop()
+	
+	stop_elemental_particles()
+	
+	area.collision_layer = 0
+	area.collision_mask = 0
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = 0
+	
+	area_col.set_deferred("disabled", true)
+	area.set_deferred("monitoring", false)
+	area.set_deferred("monitorable", false)
+	homing_collision_shape.set_deferred("disabled", true)
+	homing_area.set_deferred("monitoring", false)
+	homing_area.set_deferred("monitorable", false)
+	raycast.set_deferred("enabled", false)
+	
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
