@@ -88,6 +88,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	projectile_speed = _speed
 	max_range = _max_range
 	damage = CONTACT_DAMAGE
+	if GameManager.player:
+		crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	else:
+		crit_chance = GameManager.player_base_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
 	explosion_damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count

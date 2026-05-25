@@ -64,7 +64,6 @@ var misc_data = {}
 func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
-	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
 	
 	for elem in elemental_emitting_vfx:
 		if elem:

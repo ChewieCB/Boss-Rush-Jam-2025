@@ -127,6 +127,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	projectile_speed = _speed
 	max_range = _max_range
 	damage = _damage
+	if GameManager.player:
+		crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	else:
+		crit_chance = GameManager.player_base_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
@@ -160,7 +165,7 @@ func play_ricochet_sfx():
 	sfx.finished.connect(sfx.queue_free)
 
 func ricochet():
-	super ()
+	super()
 	gravity_free_timer = 0
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
