@@ -239,6 +239,8 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	
 	new_inst.misc_data = misc_data
 	
+	new_inst.activate()
+	
 	return new_inst
 
 
