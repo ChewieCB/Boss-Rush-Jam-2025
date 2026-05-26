@@ -12,5 +12,3 @@
 process_mode = 3
 script = ExtResource("1_ddkpc")
 pooled_object_prefabs = Array[PackedScene]([ExtResource("2_nk1ge"), ExtResource("3_0fdra"), ExtResource("4_caf0f"), ExtResource("5_gbjg7"), ExtResource("5_nb5g3"), ExtResource("7_lwu1t")])
-pooled_object_init_arr_size = Array[int]([200, 200, 100, 30, 200, 200])
-pooled_object_max_arr_size = Array[int]([200, 200, 200, 30, 200, 200])

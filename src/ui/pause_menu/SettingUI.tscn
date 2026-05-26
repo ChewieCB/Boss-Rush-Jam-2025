@@ -569,6 +569,44 @@ popup/item_4/id = 4
 popup/item_5/text = "1024x768"
 popup/item_5/id = 5
 
+[node name="MaxPoolSize" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/MaxPoolSize"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Maximum Objects Rendered"
+
+[node name="MaxPoolSizeSlider" type="HSlider" parent="TabContainer/Graphic/VBoxContainer/MaxPoolSize"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
+min_value = 20.0
+max_value = 500.0
+value = 250.0
+
+[node name="Value" type="Label" parent="TabContainer/Graphic/VBoxContainer/MaxPoolSize"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -11.0
+offset_bottom = 28.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Scaling3D" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -600,11 +638,12 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -80.0
 offset_top = -12.0
-offset_bottom = 11.0
+offset_bottom = 28.0
 grow_horizontal = 0
 grow_vertical = 2
 text = "100%"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HideUI" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
@@ -1206,6 +1245,8 @@ text = "Back"
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/WindowMode/WindowModeOptionButton" to="." method="play_button_hover_sfx"]
 [connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton" to="." method="_on_resolution_option_button_item_selected"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton" to="." method="play_button_hover_sfx"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/MaxPoolSize/MaxPoolSizeSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/MaxPoolSize/MaxPoolSizeSlider" to="." method="_on_max_pool_size_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="_on_scaling_3d_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle" to="." method="play_button_hover_sfx"]

@@ -11,8 +11,22 @@ enum PooledObjectEnum {
 }
 
 @export var pooled_object_prefabs: Array[PackedScene] = []
-@export var pooled_object_init_arr_size: Array[int] = []
-@export var pooled_object_max_arr_size: Array[int] = []
+#@export var pooled_object_init_arr_size: Array[int] = []
+@export var MAX_POOL_SIZE: int = 200:
+	set(value):
+		MAX_POOL_SIZE = value
+		# Resize pools - remove any objects that no longer fit into the pool
+		for _pool_arr in [active_object_pool, available_object_pool]:
+			for object_enum in PooledObjectEnum.values():
+				var pool = _pool_arr[object_enum]
+				if pool.size() > MAX_POOL_SIZE:
+					# If we reduce size, queue free any unused instances
+					var _overflow = pool.slice(MAX_POOL_SIZE)
+					for obj in _overflow:
+						obj.queue_free()
+					# Resize the pool to the new size
+					pool.resize(MAX_POOL_SIZE)
+
 
 var active_object_pool: Array[Array] = []
 var available_object_pool: Array[Array] = []
@@ -30,7 +44,7 @@ func _ready() -> void:
 
 func init_object_pools() -> void:
 	for object_enum in PooledObjectEnum.values():
-		for i in range(pooled_object_init_arr_size[int(object_enum as PooledObjectEnum)]):
+		for i in range(MAX_POOL_SIZE):
 			create_new_pooled_object.call_deferred(object_enum as PooledObjectEnum)
 	
 	await get_tree().process_frame
@@ -98,7 +112,7 @@ func get_pooled_object(object_enum: PooledObjectEnum):
 		obj = _available_pool.pop_back()
 		_active_pool.push_front(obj)
 	else:
-		if _active_pool.size() < pooled_object_max_arr_size[object_enum]:
+		if _active_pool.size() < MAX_POOL_SIZE:
 			obj = create_new_pooled_object_sync(object_enum)
 		else:
 			obj = recycle_in_use_object(object_enum)
