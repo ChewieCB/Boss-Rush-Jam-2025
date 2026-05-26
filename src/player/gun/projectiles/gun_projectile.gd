@@ -51,6 +51,8 @@ func _deactivate_visuals() -> void:
 func _deactivate_physics() -> void:
 	splitted = false
 	is_ricochet_shot = false
+	homing_locked_in = false
+	homing_target = null
 	
 	trail.full_reset()
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
