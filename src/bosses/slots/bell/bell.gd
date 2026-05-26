@@ -26,6 +26,7 @@ const CLOSE_TREMOR_INTENSITY = 0.6
 
 var size: float = 1
 var floor_y: float = 0.0
+var _init_mesh_scale := Vector3(312, 312, 312)
 
 
 func init(_damage: float, _size: float):
@@ -33,7 +34,6 @@ func init(_damage: float, _size: float):
 	size = _size
 
 func drop() -> void:
-	activate()
 	if raycast.is_colliding():
 		floor_y = raycast.get_collision_point().y
 	
@@ -94,6 +94,7 @@ func activate() -> void:
 	hurtbox.monitorable = true
 	raycast.enabled = true
 	self.visible = true
+	mesh.scale = _init_mesh_scale
 	mesh.mesh.surface_get_material(0).albedo_color.a = 1.0
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 
