@@ -1,4 +1,4 @@
-[gd_scene load_steps=217 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=219 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -156,6 +156,7 @@
 [ext_resource type="Texture2D" uid="uid://crpid0gtchyc0" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_31.png" id="134_6q1jv"]
 [ext_resource type="Texture2D" uid="uid://dbxjhjb86bh74" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_32.png" id="135_mkglq"]
 [ext_resource type="Texture2D" uid="uid://dopxmvfff58bm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_33.png" id="136_omfb6"]
+[ext_resource type="Texture2D" uid="uid://dx8m3mdoyrffw" path="res://src/bosses/slots/assets/Slotty_bellSummon.png" id="156_0718p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -417,6 +418,18 @@ tracks/11/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0.7, 0.7, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Sprite3D:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.5, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_flixy"]
@@ -1448,8 +1461,8 @@ tracks/3/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_600pn"]
-resource_name = "summon_bell_raise_gun"
+[sub_resource type="Animation" id="Animation_o5il5"]
+resource_name = "summon_bell_lower_gun"
 length = 0.6
 step = 0.1
 tracks/0/type = "value"
@@ -1459,10 +1472,10 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("74_lmlvi")]
+"values": [ExtResource("156_0718p"), ExtResource("5_wqq5t")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -1488,7 +1501,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -1538,10 +1551,22 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector3(1, 1, 1)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.7, 0.7, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_lvnig"]
-resource_name = "summon_bell_shoot"
-length = 0.3
+[sub_resource type="Animation" id="Animation_600pn"]
+resource_name = "summon_bell_raise_gun"
+length = 0.6
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1550,10 +1575,10 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("74_lmlvi")]
+"values": [ExtResource("5_wqq5t"), ExtResource("156_0718p")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -1579,7 +1604,110 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/GunOnlySprite:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.9, -0.28, -0.1), Vector3(1.9, 0.2, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.9, 2.2, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lvnig"]
+resource_name = "summon_bell_shoot"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("156_0718p")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -1624,10 +1752,22 @@ tracks/6/path = NodePath("Sprite3D:scale")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(1, 1, 1)]
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.1, 1.1, 1.1), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 2.5, 0), Vector3(0, 2, 0), Vector3(0, 2.5, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
@@ -1650,6 +1790,7 @@ _data = {
 "ranged_shot_spin_end": SubResource("Animation_rbi6q"),
 "ranged_shot_spin_shoot": SubResource("Animation_l7mgo"),
 "ranged_shot_spin_start": SubResource("Animation_d44sc"),
+"summon_bell_lower_gun": SubResource("Animation_o5il5"),
 "summon_bell_raise_gun": SubResource("Animation_600pn"),
 "summon_bell_shoot": SubResource("Animation_lvnig")
 }
@@ -1853,7 +1994,6 @@ TURN_SPEED_SLOW = 10.0
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 texture = ExtResource("5_wqq5t")
 
 [node name="SlotIcons" type="Node3D" parent="Sprite3D" index="0"]
