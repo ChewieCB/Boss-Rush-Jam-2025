@@ -385,6 +385,8 @@ func _deactivate_physics() -> void:
 			tween.kill()
 	_active_tweens.clear()
 	
+	splitted = false
+	is_ricochet_shot = false
 	sticked = false
 	found_hitscal_col = false
 	homing_locked_in = false
