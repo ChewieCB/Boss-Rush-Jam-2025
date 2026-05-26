@@ -43,6 +43,7 @@ elemental_impact_vfx = Array[PackedScene]([ExtResource("4_mp8wv"), ExtResource("
 sfx_crit = Array[AudioStream]([ExtResource("9_ttjlc")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("SphereMesh_ynnlg")
 
 [node name="Area3D" type="Area3D" parent="."]
@@ -70,6 +71,8 @@ monitorable = false
 shape = SubResource("SphereShape3D_m0ts0")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
+process_mode = 4
+visible = false
 light_color = Color(0.862745, 0.537255, 0, 1)
 light_bake_mode = 0
 

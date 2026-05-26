@@ -16,7 +16,6 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
-@onready var light: OmniLight3D = $OmniLight3D
 #@onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
 @onready var _root = get_tree().get_root()
@@ -235,7 +234,6 @@ func _on_explode_timer_timeout() -> void:
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
-		#await get_tree().create_timer(0.25).timeout
 		destroyed.emit(hit_boss)
 		finished.emit()
 
@@ -338,7 +336,7 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 func _activate_visuals() -> void:
 	scale = Vector3.ONE
 	mesh.scale = Vector3.ONE
-	light.visible = true
+	#light.visible = true
 	self.visible = true
 
 func _activate_physics() -> void:
@@ -354,7 +352,6 @@ func _activate_physics() -> void:
 	life_time = 0
 	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
-	light.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 	
 	area.collision_layer = pow(2, 4-1)
@@ -372,13 +369,10 @@ func _activate_physics() -> void:
 
 func _deactivate_visuals() -> void:
 	self.visible = false
-	light.visible = false
 
 func _deactivate_physics() -> void:
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
-	
-	light.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	for tween in _active_tweens:
 		if tween and tween.is_valid():
