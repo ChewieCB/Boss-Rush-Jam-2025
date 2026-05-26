@@ -35,6 +35,10 @@ var available_object_pool: Array[Array] = []
 func _ready() -> void:
 	assert(len(PooledObjectEnum.values()) == len(pooled_object_prefabs))
 	
+	if InputHelper.device == InputHelper.DEVICE_STEAMDECK_CONTROLLER:
+		if MAX_POOL_SIZE > 150.0:  # TODO - find a good default value for this
+			MAX_POOL_SIZE = 150.0
+	
 	for object_enum in PooledObjectEnum.values():
 		active_object_pool.append([])
 		available_object_pool.append([])

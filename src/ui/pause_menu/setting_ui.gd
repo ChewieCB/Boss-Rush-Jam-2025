@@ -312,7 +312,6 @@ func _on_scaling_3d_slider_value_changed(value: float) -> void:
 	scaling_3d_value.text = "{0}%".format([value])
 
 
-
 func _on_max_pool_size_slider_value_changed(value: float) -> void:
 	ObjectPoolingManager.MAX_POOL_SIZE = value
 	max_pool_size_value.text = "{0}".format([value])
