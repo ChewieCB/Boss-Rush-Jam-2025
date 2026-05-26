@@ -689,7 +689,6 @@ func _on_bell_drop_targeting_state_entered() -> void:
 	await get_tree().create_timer(0.5, false).timeout
 	anim_player.play("summon_bell_raise_gun")
 	await anim_player.animation_finished
-	anim_player.play("RESET")
 	state_chart.send_event("attack_start")
 	state_chart.send_event("start_drop")
 
@@ -718,7 +717,6 @@ func _on_bell_drop_dropping_state_entered() -> void:
 		shoot_bell_flare(spawn)
 		await anim_player.animation_finished
 	
-	anim_player.play("RESET")
 	state_chart.send_event("finish_drop")
 
 
@@ -733,9 +731,10 @@ func _on_bell_drop_dropping_state_exited() -> void:
 
 
 func _on_bell_drop_recover_state_entered() -> void:
-	anim_player.play("RESET")
 	debug_state_label.text = "Bell Drop | Recovering"
-
+	
+	anim_player.play("summon_bell_lower_gun")
+	await anim_player.animation_finished
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")

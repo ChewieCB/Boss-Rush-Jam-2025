@@ -171,23 +171,7 @@ var is_in_menu = false:
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
-var base_stats = {
-	StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER: 1,
-	StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER: 1,
-	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
-	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
-	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
-	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
-	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
-	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
-	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
-	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0.05, # In decimal, so 0.5 = 50%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
-	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
-	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
-}
-var current_stats = base_stats.duplicate(true)
+var current_stats = GameManager.player_base_stats.duplicate(true)
 
 var dash_iframe_icon = preload("res://assets/sprite/status_icon/invincible.png")
 var cheat_death_icon = preload("res://assets/sprite/skilltree_icon/cheat_death.png")
@@ -203,6 +187,7 @@ var freecam: FreeCam
 func _ready():
 	GameManager.change_fmod_bgm_player_is_dead(false)
 	GameManager.player = self
+	
 	for mesh in debug_meshes.get_children():
 		mesh.visible = false
 	player_camera.set_fov(GameManager.camera_fov)
@@ -926,7 +911,7 @@ func check_if_has_status_effect_by_name(find_name: String):
 
 func apply_status_effects():
 	# Reset current stats to base stats.
-	current_stats = base_stats.duplicate(true)
+	current_stats = GameManager.player_base_stats.duplicate(true)
 
 	# Temporary storage for stacking.
 	var flat_modifiers = {}

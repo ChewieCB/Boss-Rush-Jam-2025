@@ -1,0 +1,14 @@
+[gd_scene load_steps=8 format=3 uid="uid://c70h2xecs66jh"]
+
+[ext_resource type="Script" path="res://src/utils/pooling/object_pooling_manager.gd" id="1_ddkpc"]
+[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_nk1ge"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="3_0fdra"]
+[ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="4_caf0f"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="5_gbjg7"]
+[ext_resource type="PackedScene" uid="uid://35lbaqwytewn" path="res://src/player/gun/projectiles/StickyBombProjectile.tscn" id="5_nb5g3"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="7_lwu1t"]
+
+[node name="ObjectPoolingManager" type="Node3D"]
+process_mode = 3
+script = ExtResource("1_ddkpc")
+pooled_object_prefabs = Array[PackedScene]([ExtResource("2_nk1ge"), ExtResource("3_0fdra"), ExtResource("4_caf0f"), ExtResource("5_gbjg7"), ExtResource("5_nb5g3"), ExtResource("7_lwu1t")])

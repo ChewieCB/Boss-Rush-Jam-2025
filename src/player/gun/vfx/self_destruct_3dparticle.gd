@@ -6,10 +6,12 @@ func _on_finished():
 
 
 func activate() -> void:
+	self.visible = true
 	restart()
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 
 
 func deactivate() -> void:
 	emitting = false
+	self.visible = false
 	self.process_mode = Node.PROCESS_MODE_DISABLED

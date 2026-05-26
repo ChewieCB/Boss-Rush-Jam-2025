@@ -1,7 +1,6 @@
 extends BaseBullet
 class_name StickyBombProjectile
 
-signal finished
 signal exploded(explosion_inst: ExplosionDamageArea)
 
 @export var delay_explosion_time = 3
@@ -17,7 +16,7 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
-@onready var trail: Trail3D = $Trail/Trail3D
+#@onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
 @onready var _root = get_tree().get_root()
 
@@ -63,7 +62,7 @@ func _physics_process(delta: float) -> void:
 
 	if homing_locked_in and homing_target:
 		var target_pos = homing_target.global_position
-		if homing_target.get_node("BodyCenter"):
+		if homing_target.has_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
@@ -78,6 +77,8 @@ func _physics_process(delta: float) -> void:
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	activate()
+	sticked = false
 	if homing_strength > 0:
 		homing_area.monitoring = true
 		homing_collision_shape.shape.radius = homing_strength
@@ -86,6 +87,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	projectile_speed = _speed
 	max_range = _max_range
 	damage = CONTACT_DAMAGE
+	if GameManager.player:
+		crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	else:
+		crit_chance = GameManager.player_base_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
 	explosion_damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
@@ -229,7 +234,6 @@ func _on_explode_timer_timeout() -> void:
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
-		#await get_tree().create_timer(0.25).timeout
 		destroyed.emit(hit_boss)
 		finished.emit()
 
@@ -264,13 +268,13 @@ func change_bullet_color(_new_color: Color):
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
-		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
-		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+		#trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		#trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
 	else:
 		mesh.mesh.material.albedo_color = _new_color
 		mesh.mesh.material.emission = _new_color
-		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
-		trail.material_override.emission = _new_color
+		#trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+		#trail.material_override.emission = _new_color
 
 
 func calculate_explosion_damage():
@@ -329,7 +333,13 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 	return
 
 
-func activate() -> void:
+func _activate_visuals() -> void:
+	scale = Vector3.ONE
+	mesh.scale = Vector3.ONE
+	#light.visible = true
+	self.visible = true
+
+func _activate_physics() -> void:
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 	
@@ -341,38 +351,36 @@ func activate() -> void:
 	travelled_distance = 0
 	life_time = 0
 	
-	scale = Vector3.ONE
-	mesh.scale = Vector3.ONE
-	#mesh.mesh.material.albedo_color = Color.WHITE
-	#mesh.mesh.material.emission = Color.WHITE
-	#mesh.mesh.material.emission_energy_multiplier = 1.0
-	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
-	raycast.enabled = true
-	area_col.disabled = false
-	homing_collision_shape.disabled = false
-	area.monitoring = true
-	area.monitorable = true
-	homing_area.monitoring = true
-	homing_area.monitorable = true
+	set_physics_process(true)
+	
 	area.collision_layer = pow(2, 4-1)
 	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
 	homing_area.collision_layer = 0
 	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
-	self.visible = true
+	area_col.set_deferred("disabled", false)
+	area.set_deferred("monitoring", true)
+	area.set_deferred("monitorable", true)
+	homing_collision_shape.set_deferred("disabled", false)
+	homing_area.set_deferred("monitoring", true)
+	homing_area.set_deferred("monitorable", true)
+	raycast.set_deferred("enabled", true)
 
 
-func deactivate() -> void:
+func _deactivate_visuals() -> void:
 	self.visible = false
-	
-	trail.emit = false
-	trail.clear_points()
+
+func _deactivate_physics() -> void:
+	if get_parent() != _root:
+		self.reparent.call_deferred(_root)
 	
 	for tween in _active_tweens:
 		if tween and tween.is_valid():
 			tween.kill()
 	_active_tweens.clear()
 	
+	splitted = false
+	is_ricochet_shot = false
 	sticked = false
 	found_hitscal_col = false
 	homing_locked_in = false
@@ -389,16 +397,13 @@ func deactivate() -> void:
 	homing_area.collision_layer = 0
 	homing_area.collision_mask = 0
 	
-	raycast.enabled = false
-	area_col.disabled = true
-	homing_collision_shape.disabled = true
-	
-	area.monitoring = false
-	area.monitorable = false
-	homing_area.monitoring = false
-	homing_area.monitorable = false
-	
-	#if tick_sfx_player.playing:
-		#await tick_sfx_player.finished
+	area_col.set_deferred("disabled", true)
+	area.set_deferred("monitoring", false)
+	area.set_deferred("monitorable", false)
+	homing_collision_shape.set_deferred("disabled", true)
+	homing_area.set_deferred("monitoring", false)
+	homing_area.set_deferred("monitorable", false)
+	raycast.set_deferred("enabled", false)
 	
 	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
