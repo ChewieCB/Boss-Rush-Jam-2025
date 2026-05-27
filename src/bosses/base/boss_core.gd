@@ -343,6 +343,16 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread
 	return projectile
 
 
+func _init_pooled_spawn(prefab: PackedScene, pool: Array) -> Node3D:
+	var spawn = prefab.instantiate()
+	scene_root.add_child.call_deferred(spawn)
+	await get_tree().physics_frame
+	spawn.deactivate()
+	pool.push_back(spawn)
+	
+	return spawn
+
+
 func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	if len(sfx_arr) > 0:
 		play_positional_sound(sfx_arr.pick_random())

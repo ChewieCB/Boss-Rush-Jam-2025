@@ -111,8 +111,15 @@ var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + 
 @export var slam_damage: float = 26.0
 @export var slam_delay: float = 0.3
 @export var slam_time: float = 0.9
+var slam_wave_pool: Array = []
+@export var slam_line_prefab: PackedScene
+var slam_line_pool: Array = []
+@export var slam_particles_prefab: PackedScene
 @export var slam_particles: GPUParticles3D
+var slam_particles_pool: Array = []
+@export var slam_wall_particles_prefab: PackedScene
 @export var slam_wall_particles: GPUParticles3D
+var slam_wall_particles_pool: Array = []
 @export var line_material: Material
 @export var slam_spawn_marker: Marker3D
 @export var wave_material: Material
@@ -129,6 +136,7 @@ var aoe_tween: Tween
 
 @export_subgroup("Nailguns")
 @export var nail_projectile: PackedScene
+var nail_proj_pool: Array = []
 @export var proj_spawn_l: Marker3D
 @export var proj_spawn_r: Marker3D
 @export var num_bursts: int = 1
@@ -148,6 +156,7 @@ var aoe_tween: Tween
 
 @export_subgroup("Laser AoE")
 @export var laser_aoe: PackedScene
+var laser_aoe_pool: Array = []
 @export var laser_spawn: Marker3D
 @export var laser_damage: float = 40.0
 var aoe_warn_decal: Decal
@@ -194,12 +203,62 @@ func _ready() -> void:
 	sfx_taunt_phase_2_active.shuffle()
 	sfx_taunt_phase_3_active.shuffle()
 	#
+	for i in range((num_bursts + 1 )* shots_per_burst):
+		_init_nail_proj()
+	for i in range(3):
+		_init_aoe_line()
+	for i in range(3):
+		_init_aoe_wall()
+	
+	#
 	for i in range(3):
 		var _hazard = shock_floor_hazard_prefab.instantiate()
 		scene_root.add_child(_hazard)
+		# TODO - add activate func to hazard and move this init to the spawn code
 		_hazard.global_position = Vector3(-100, -100, -100)
 		_hazard.finished.connect(stop_floor_shock.bind(_hazard))
 		shock_hazard_pool.append(_hazard)
+	
+	for i in range(max_sequential_ranged_phases):
+		_init_laser_aoe()
+
+
+func _init_nail_proj() -> void:
+	_init_pooled_spawn(nail_projectile, nail_proj_pool)
+
+
+func _init_slam_particles() -> void:
+	var slam = slam_particles_prefab.instantiate()
+	scene_root.add_child(slam)
+	# TODO - move to slam prefab scene
+	#slam.visible = false
+	#slam.emitting = false
+	#slam.floor_ray.enabled = false
+	#slam.process_mode = Node.PROCESS_MODE_DISABLED
+	slam_particles_pool.push_front(slam)
+
+
+func _init_slam_wall_particles() -> void:
+	var slam = slam_wall_particles_prefab.instantiate()
+	slam.finished.connect(func(): slam_wall_particles_pool.push_front(slam))
+	scene_root.add_child(slam)
+	slam.deactivate()
+	# TODO - move to slam prefab scene
+	#slam.visible = false
+	#slam.emitting = false
+	#slam.floor_ray.enabled = false
+	#slam.process_mode = Node.PROCESS_MODE_DISABLED
+	slam_wall_particles_pool.push_front(slam)
+
+#func _init_aoe_wave() -> void:
+	#_init_pooled_spawn(slam, slam_wave_pool)
+
+func  _init_laser_aoe() -> void:
+	var laser = laser_aoe.instantiate()
+	laser.finished.connect(func(): laser_aoe_pool.push_front(laser))
+	scene_root.add_child(laser)
+	laser.deactivate()
+	laser_aoe_pool.push_front(laser)
 
 
 func activate() -> void:
@@ -592,7 +651,7 @@ func _on_melee_combo_backswing_state_entered() -> void:
 	#sfx_player.play()
 	anim_player.play("elevator_boss/backswipe")
 	await anim_player.animation_finished
-
+	
 	if randf() < 0.6:
 		state_chart.send_event("melee_backstep")
 	else:
@@ -766,7 +825,7 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
 			anim_player.play(anim_name)
-			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, 0, sfx_nail_shot)
+			var proj = fire_projectile_pooled(nail_proj_pool, spawn_marker.global_position, 0, sfx_nail_shot)
 			proj.projectile_speed = shot_speed
 			var sfx_player = get_available_sfx_player()
 			if sfx_player:
@@ -918,17 +977,17 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_laser_shoot.pick_random()
 		sfx_player.play()
+	
 	anim_player.play("elevator_boss/laser_fire")
 	#laser_particles.emitting = false
-	var laser_instance = laser_aoe.instantiate()
-	get_parent().add_child(laser_instance)
-	laser_instance.global_position = laser_spawn.global_position
-	laser_instance.global_position.y -= 2
+	var laser_inst: LaserAoE = laser_aoe_pool.pop_back()
+	laser_inst.global_position = laser_spawn.global_position
+	laser_inst.global_position.y -= 2
 	#laser_instance.global_position.x -= 2
-	laser_instance.global_rotation.y = self.global_rotation.y
+	laser_inst.global_rotation.y = self.global_rotation.y
+	laser_inst.activate()
 	
 	await anim_player.animation_finished
-	await get_tree().create_timer(0.5, false).timeout
 	
 	#laser_particles.visible = false
 	state_chart.send_event("stop_firing")
@@ -1165,17 +1224,49 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: floa
 	return [initial_velocity, time_up, time_down]
 
 
+## SLAM LINE
+
 func slam_line(_spawn_pos: Vector3, _range: float = 30.0, _width: float = 4.0, _height: float = 0.6, _damage: float = slam_damage, _time: float = slam_time) -> void:
 	# Spawn line aoe that grows from boss to target
 	spawn_aoe_line(
+		_width, _height, _damage,
 		self.global_position.distance_to(target.global_position) + 5.0,
-		_width, _height,
-		_damage, _time,
+		_time,
 		slam_spawn_marker.global_position,
-		0.2, false,
 		state_chart.send_event.bind("combo_end")
 	)
 
+func _init_aoe_line() -> void:
+	var slam_line = slam_line_prefab.instantiate()
+	slam_line.finished.connect(func(): slam_line_pool.push_front(slam_line))
+	scene_root.add_child(slam_line)
+	slam_line_pool.push_front(slam_line)
+
+func spawn_aoe_line(
+	width: float,
+	height: float,
+	damage: int,
+	max_range: float,
+	spawned_wave_time: float = 1.0,
+	area_pos: Vector3 = self.global_position,
+	callback: Callable = func(): pass,
+) -> void:
+	var _slam_line = slam_line_pool.pop_back()
+	_slam_line.init(width, height, damage, max_range)
+	_slam_line.global_position = area_pos
+	_slam_line.global_basis = self.global_basis
+	_slam_line.activate()
+	
+	await get_tree().physics_frame
+	
+	_slam_line.send_line()
+	
+	await _slam_line.finished
+	
+	return
+
+
+## SLAM WALL
 
 func slam_wall(max_range: float, speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
 	# Spawn wave aoe
@@ -1187,105 +1278,8 @@ func slam_wall(max_range: float, speed: float, _width: float = 4.0, _height: flo
 		slam_spawn_marker.global_position
 	)
 
-
-func spawn_aoe_line(
-	max_range: float,
-	width: float,
-	height: float = 2.0,
-	damage: float = 10.0,
-	spawned_wave_time: float = 1.0,
-	area_pos: Vector3 = self.global_position,
-	# pushback_source: Node3D = self,
-	_spawned_wave_height: float = 0.3,
-	_telegraph: bool = false,
-	callback: Callable = func(): pass ,
-) -> void:
-	# Generate a collider
-	var area_collider := Area3D.new()
-	var area_collider_shape := CollisionShape3D.new()
-	var collider_shape := BoxShape3D.new()
-	collider_shape.size = Vector3(width, height, 0.1)
-	area_collider_shape.shape = collider_shape
-	area_collider.add_child(area_collider_shape)
-	area_collider.collision_layer = int(pow(2, 7))
-	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
-	area_collider.monitoring = true
-	
-	scene_root.add_child(area_collider)
-	
-	area_collider.global_position = area_pos
-	area_collider.global_rotation = self.global_rotation
-	area_collider.body_entered.connect(_on_wave_collision.bind(damage, area_collider, max_range))
-	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
-	
-	var debug_mesh_instance = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	
-	spawned_area_objects.append([area_collider, debug_mesh_instance])
-	
-	# Generate a visual
-	scene_root.add_child(debug_mesh_instance)
-	
-	debug_mesh_instance.mesh = mesh
-	debug_mesh_instance.cast_shadow = false
-	debug_mesh_instance.global_position = area_pos
-	debug_mesh_instance.global_rotation = self.global_rotation
-	
-	mesh.size = Vector3(width, height, 0.05)
-	mesh.material = line_material
-	
-	# Spawn moving wave particles that stay at end of line
-	slam_particles.get_parent().remove_child(slam_particles)
-	scene_root.add_child(slam_particles)
-	slam_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
-	slam_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)
-	slam_particles.visible = true
-	slam_particles.emitting = true
-	slam_particles.is_on_floor = true
-	
-	# Explode on impact
-	area_collider.body_entered.connect(
-		func(_body):
-			debug_mesh_instance.queue_free()
-			area_collider.queue_free()
-	)
-	
-	# Animate the visual
-	
-	# TODO - SFX
-	var slam_sfx_player := AudioStreamPlayer3D.new()
-	scene_root.add_child(slam_sfx_player)
-	slam_sfx_player.global_position = slam_particles.global_position
-	slam_sfx_player.stream = sfx_wave_loop.pick_random()
-	slam_sfx_player.play()
-	var tween = get_tree().create_tween()
-	var end_pos: Vector3 = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * (max_range + 0.1)
-	tween.tween_property(mesh, "size:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(debug_mesh_instance, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range / 2, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(area_collider_shape, "shape:size:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(area_collider, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range / 2, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(slam_particles, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(slam_sfx_player, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.tween_callback(debug_mesh_instance.queue_free)
-	tween.tween_callback(area_collider.queue_free)
-	tween.tween_callback(
-		func():
-			slam_sfx_player.stop()
-			slam_sfx_player.queue_free()
-			slam_particles.emitting = false
-			await slam_particles.finished
-			slam_particles.visible = false
-			slam_particles.is_on_floor = false
-			slam_spawn_marker.add_child(slam_particles)
-			slam_particles.position = Vector3.ZERO
-			slam_particles.rotation = Vector3.ZERO
-	)
-	tween.tween_callback(callback)
-	
-	await tween.finished
-	
-	return
-
+func _init_aoe_wall() -> void:
+	pass
 
 func spawn_aoe_wall(
 	max_range: float,

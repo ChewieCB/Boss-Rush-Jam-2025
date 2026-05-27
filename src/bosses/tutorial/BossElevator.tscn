@@ -1,4 +1,4 @@
-[gd_scene load_steps=281 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=271 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -101,6 +101,7 @@
 [ext_resource type="Texture2D" uid="uid://c52mo1qekknqm" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_7.png" id="38_x4twh"]
 [ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
 [ext_resource type="AudioStream" uid="uid://b5yf2b5712obg" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 2.mp3" id="39_wm3h1"]
+[ext_resource type="PackedScene" uid="uid://c1ep56bju50j3" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="40_0xhcc"]
 [ext_resource type="AudioStream" uid="uid://qg61conv8q8a" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 2.mp3" id="41_y5q8h"]
 [ext_resource type="AudioStream" uid="uid://cg2blsh10wqvv" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 1.mp3" id="42_gym33"]
@@ -127,7 +128,6 @@
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
 [ext_resource type="Material" uid="uid://dtya4iffmvt1m" path="res://src/bosses/tutorial/assets/materials/wave_wall_mat.tres" id="85_4771x"]
-[ext_resource type="QuadMesh" uid="uid://cp64o1nv3l2q6" path="res://src/player/gun/vfx/SmokeVFX3D.tres" id="126_5vgui"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -907,31 +907,31 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SmokeParticles:emitting")
+tracks/0/path = NodePath("Sprite3D:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0.0333333, 1.1, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DebugAnimPivot:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("DebugAnimPivot:visible")
+tracks/2/path = NodePath("DebugRangedPivot:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -943,34 +943,22 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("DebugRangedPivot:visible")
+tracks/3/path = NodePath(".:collision_mask")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(1.4),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:collision_mask")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [19]
 }
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:collision_layer")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:collision_layer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -2380,60 +2368,6 @@ _data = {
 "taunt": SubResource("Animation_50rbb")
 }
 
-[sub_resource type="Gradient" id="Gradient_b88qv"]
-offsets = PackedFloat32Array(0.0629139, 0.884106, 1)
-colors = PackedColorArray(0.188235, 0.188235, 0.188235, 0.87451, 0, 0, 0, 0.513726, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_57j0g"]
-gradient = SubResource("Gradient_b88qv")
-
-[sub_resource type="Curve" id="Curve_itgpy"]
-_data = [Vector2(0.210526, 0.923077), 0.0, 0.0, 0, 0, Vector2(0.368421, 0.406593), -2.63445, -2.63445, 0, 0, Vector2(0.639676, 0.307692), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_qg7q6"]
-curve_y = SubResource("Curve_itgpy")
-
-[sub_resource type="CurveTexture" id="CurveTexture_jtqpf"]
-
-[sub_resource type="Curve" id="Curve_6bect"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.222672, 0.978022), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_4hgbu"]
-curve = SubResource("Curve_6bect")
-
-[sub_resource type="Curve" id="Curve_f2y8e"]
-max_value = 3.0
-_data = [Vector2(0.00809717, 2.9011), 0.0, 0.0, 0, 0, Vector2(0.283401, 2.34066), -5.58367, -5.58367, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_fv2li"]
-curve = SubResource("Curve_f2y8e")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h7k5q"]
-emission_shape_scale = Vector3(2, 2, 2)
-emission_shape = 1
-emission_sphere_radius = 1.0
-angle_min = -80.0
-angle_max = 80.0
-direction = Vector3(0, -1, 0)
-spread = 25.0
-initial_velocity_min = -1.0
-initial_velocity_max = -1.0
-directional_velocity_min = 1.0
-directional_velocity_max = 1.0
-directional_velocity_curve = SubResource("CurveXYZTexture_qg7q6")
-gravity = Vector3(0, -1, 0)
-scale_max = 4.0
-scale_curve = SubResource("CurveTexture_4hgbu")
-scale_over_velocity_min = 1.0
-scale_over_velocity_max = 4.0
-scale_over_velocity_curve = SubResource("CurveTexture_fv2li")
-color = Color(0.999643, 0.944103, 0.863035, 1)
-color_ramp = SubResource("GradientTexture1D_57j0g")
-emission_curve = SubResource("CurveTexture_jtqpf")
-
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_wall_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_7pmj2")]
 collision_mask = 11
 script = ExtResource("2_6u4e1")
@@ -2481,7 +2415,10 @@ sfx_backswipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc
 slam_damage = 26.0
 slam_delay = 0.3
 slam_time = 0.9
+slam_line_prefab = ExtResource("39_ybm4c")
+slam_particles_prefab = ExtResource("7_2uohy")
 slam_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamParticles")
+slam_wall_particles_prefab = ExtResource("44_go0kb")
 slam_wall_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamWallParticles")
 line_material = ExtResource("18_g7ktc")
 slam_spawn_marker = NodePath("DebugAnimPivot/SlamSpawn")
@@ -2547,6 +2484,7 @@ texture = ExtResource("16_ukgug")
 
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
 transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
+visible = false
 
 [node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot" index="0"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1.9, 0.800001)
@@ -2624,6 +2562,7 @@ draw_pass_1 = SubResource("QuadMesh_mvva7")
 
 [node name="DebugRangedPivot" type="Marker3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+visible = false
 
 [node name="PivotL" type="Marker3D" parent="DebugRangedPivot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.33156, 1.9474, 0)
@@ -2661,7 +2600,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 mesh = SubResource("BoxMesh_holc6")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039917, 2.56113, -3.52168)
 
 [node name="NavigationComponent" parent="." index="9"]
 current_speed = 6.0
@@ -4530,11 +4469,6 @@ libraries = {
 autoplay = "RESET"
 
 [node name="SmokeParticles" parent="." index="25" instance=ExtResource("11_1crh5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-sorting_offset = 3.0
-amount = 24
-process_material = SubResource("ParticleProcessMaterial_h7k5q")
-draw_pass_1 = ExtResource("126_5vgui")
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="27"]
 unit_size = 35.0

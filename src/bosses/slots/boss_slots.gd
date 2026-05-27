@@ -235,15 +235,6 @@ func _ready() -> void:
 		_init_bomb_proj.call_deferred()
 
 
-func _init_pooled_spawn(prefab: PackedScene, pool: Array) -> Node3D:
-	var spawn = prefab.instantiate()
-	scene_root.add_child.call_deferred(spawn)
-	await get_tree().physics_frame
-	spawn.deactivate()
-	pool.push_back(spawn)
-	
-	return spawn
-
 func _init_coin_proj() -> void:
 	_init_pooled_spawn(coin_projectile, coin_proj_pool)
 
