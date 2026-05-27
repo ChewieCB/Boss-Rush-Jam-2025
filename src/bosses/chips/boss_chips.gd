@@ -359,6 +359,15 @@ func _tick_segments(delta: float) -> void:
 
 func _exit_tree() -> void:
 	_cleanup_segment_arrays()
+	# Cleanup spawned instances
+	for pool in [aoe_wave_pool, aoe_bubble_pool, chip_sweep_pool, small_stack_pool, rolling_chip_pool, slam_shockwave_pool, splash_particles_pool, chiptopede_projectile_pool]:
+		if pool:
+			for inst in pool:
+				if is_instance_valid(inst):
+					if inst.has_method("deactivate"):
+						inst.deactivate()
+					inst.queue_free()
+			pool.clear()
 
 
 ## HEALTH TRIGGERS

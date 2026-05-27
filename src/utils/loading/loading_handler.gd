@@ -2,6 +2,7 @@ extends Node
 
 signal materials_compiled
 signal icon_anims_compiled
+signal loading_started
 signal scene_path_loaded(scene_path: String)
 signal loading_finished(scene: PackedScene)
 signal loaded_seamless
@@ -84,6 +85,7 @@ func initial_load() -> void:
 
 
 func start_loading(scene_path: String, scene_name: String = "", transition_out: bool = true) -> void:
+	loading_started.emit()
 	ScreenTransition.set_loading_detail_text(scene_name)
 	find_and_load_scene_bgm(scene_name)
 	if transition_out:
