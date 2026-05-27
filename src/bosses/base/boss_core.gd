@@ -345,6 +345,8 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread
 
 func _init_pooled_spawn(prefab: PackedScene, pool: Array) -> Node3D:
 	var spawn = prefab.instantiate()
+	if spawn.has_signal("finished"):
+		spawn.finished.connect(func(): pool.push_front(spawn))
 	scene_root.add_child.call_deferred(spawn)
 	await get_tree().physics_frame
 	spawn.deactivate()

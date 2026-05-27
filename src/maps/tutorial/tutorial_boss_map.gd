@@ -267,8 +267,7 @@ func skip_cutscene() -> void:
 func _add_boss_to_intro_path() -> void:
 	if not is_instance_valid(intro_boss_path_follow):
 		return
-	boss.get_parent().remove_child(boss)
-	intro_boss_path_follow.add_child(boss)
+	boss.reparent(intro_boss_path_follow)
 	boss.position = Vector3.ZERO
 
 
@@ -292,12 +291,14 @@ func _remove_boss_from_intro_path() -> void:
 func _on_level_select(level_path: String, _loading_name: String = "") -> void:
 	GameManager.tutorial_completed = true
 	GameManager.player_currency = 0
-
+	
+	boss.cleanup_pools.call_deferred()
+	
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
-
-	super (level_path, "Lobby")
+	
+	super(level_path, "Lobby")
 
 
 func _on_tutorial_phase_1_started() -> void:
@@ -598,6 +599,8 @@ func play_vo_with_captions(sfx_stream: AudioStream, caption_text: String) -> voi
 
 
 func show_end_panel() -> void:
+	boss.cleanup_pools.call_deferred()
+	
 	LuckHandler.enabled = false
 	win_ui.visible = true
 	var tween = get_tree().create_tween()

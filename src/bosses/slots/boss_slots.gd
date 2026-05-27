@@ -235,6 +235,18 @@ func _ready() -> void:
 		_init_bomb_proj.call_deferred()
 
 
+func _exit_tree() -> void:
+	# Cleanup spawned instances
+	for pool in [coin_proj_pool, bell_pool, bell_flare_pool, diamond_proj_pool, pinball_proj_pool, bomb_proj_pool]:
+		if pool:
+			for inst in pool:
+				if is_instance_valid(inst):
+					if inst.has_method("deactivate"):
+						inst.deactivate()
+					inst.queue_free()
+			pool.clear()
+
+
 func _init_coin_proj() -> void:
 	_init_pooled_spawn(coin_projectile, coin_proj_pool)
 
