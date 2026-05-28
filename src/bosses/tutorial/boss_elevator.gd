@@ -62,6 +62,8 @@ var intro_drop_landed_y: float = 0.0
 
 var next_attack: String = ""
 var prev_attack: String = ""
+var TAUNT_COOLDOWN: int = 2
+var taunt_cooldown: int = TAUNT_COOLDOWN
 
 @export var sfx_intro_land: Array[AudioStream]
 
@@ -365,11 +367,12 @@ func _on_inactive_state_entered() -> void:
 
 func select_attack_phase_1_tutorial() -> void:
 	# Alternate between strafing nail gun and taunt
-	match prev_attack:
-		"strafing_nails":
-			state_chart.send_event("start_taunt_attack")
-		"taunt":
-			state_chart.send_event("start_ranged_naiils_strafe")
+	if taunt_cooldown > 0:
+		taunt_cooldown -= 1
+		state_chart.send_event("start_ranged_naiils_strafe")
+	else:
+		taunt_cooldown = TAUNT_COOLDOWN
+		state_chart.send_event("start_taunt_attack")
 
 
 func select_attack_phase_2_tutorial() -> void:
@@ -1395,12 +1398,14 @@ func _on_arena_1_cutscene_state_physics_processing(_delta: float) -> void:
 func _on_tutorial_phase_1_state_entered() -> void:
 	# Start with a ranged attack, then alternate taunt and ranged attack until a health threshold is reached
 	# TODO - update health bar/audio triggers
+	attack_interrupt = false
 	show_health()
 	tutorial_phase_1_started.emit()
 
 
 # TAUNT
 func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
+	velocity = Vector3.ZERO
 	state_chart.send_event("start_targeting")
 	prev_attack = "taunt"
 	state_chart.send_event("start_taunt")
@@ -1469,7 +1474,7 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 	await anim_player.animation_finished
 	
 	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
-	await get_tree().create_timer(1.2, false).timeout
+	await get_tree().create_timer(0.7, false).timeout
 	state_chart.send_event("start_shooting")
 
 
@@ -1503,7 +1508,7 @@ func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 ## PHASE 2 - JUMPING
 
 func _on_tutorial_phase_2_state_entered() -> void:
-	attack_interrupt = false
+	attack_interrupt = true
 	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 2
 	tutorial_phase_2_started.emit()
