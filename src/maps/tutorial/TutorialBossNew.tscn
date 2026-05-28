@@ -68,8 +68,8 @@
 [ext_resource type="Material" uid="uid://cyn8dlvnmoe00" path="res://assets/textures/posters/crapshoot_logo.tres" id="75_vc447"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="77_xj60c"]
 [ext_resource type="Material" uid="uid://cvvjnot2ikmgg" path="res://assets/textures/floor/wrad_metal1.tres" id="78_72a70"]
-[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="78_iprpn"]
 [ext_resource type="PackedScene" uid="uid://cdjkynfg25alo" path="res://src/player/gun/vfx/SmokeVFX3D.tscn" id="79_hbkuw"]
+[ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="79_j5pa6"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="79_jne3r"]
 [ext_resource type="Material" uid="uid://ddqkn38etnjr1" path="res://assets/textures/posters/bigboss.tres" id="79_qa2kr"]
 [ext_resource type="PackedScene" uid="uid://cstu4hay3iips" path="res://src/maps/tutorial/triggers/SingleEffectTrigger.tscn" id="79_wgc81"]
@@ -7580,7 +7580,7 @@ transform = Transform3D(-4.87884e-08, 0.0685851, 0.997591, -3.88497e-07, -0.9975
 arena_1_center = NodePath("../Arena1Center")
 arena_2_center = NodePath("../Arena2Center")
 target = NodePath("../entity_11_PlayerRef")
-barrel_to_drop = ExtResource("78_iprpn")
+barrel_to_drop = ExtResource("79_j5pa6")
 barrel_pickup_scene = ExtResource("79_jne3r")
 orbit_radius = 200.0
 
@@ -7616,6 +7616,7 @@ bus = &"SFX"
 bus = &"SFX"
 
 [node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="26"]
+volume_db = 3.0
 bus = &"SFX"
 
 [node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="27"]
@@ -7743,8 +7744,8 @@ unit_size = 5.0
 
 [node name="SingleEffectTrigger" parent="." index="40" node_paths=PackedStringArray("connected_object") instance=ExtResource("79_wgc81")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0, 10)
-target_effect = ExtResource("78_iprpn")
-target_effect_id = 50
+target_effect = ExtResource("79_j5pa6")
+target_effect_id = 51
 connected_object = NodePath("../FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
 active = false
 

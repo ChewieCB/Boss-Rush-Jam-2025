@@ -410,8 +410,8 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 
 	# Force effect to non-electric and 1st spin to electric
 	await player.current_gun.recheck_installed_barrels()
-	player.current_gun.set_barrel_to_effect(0, 48) # 48 = fire
-	player.current_gun.force_barrel_next_spin(0, 50) # 50 = electric
+	player.current_gun.set_barrel_to_effect(0, 27) # 27 = Gambler's Precision
+	player.current_gun.force_barrel_next_spin(0, 51) # 51 = Hyperfocus
 
 	await get_tree().create_timer(0.8, false).timeout
 
