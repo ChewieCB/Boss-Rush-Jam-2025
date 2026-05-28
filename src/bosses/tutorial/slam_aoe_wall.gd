@@ -10,7 +10,7 @@ signal finished
 @onready var slam_particles: GPUParticles3D = $SlamWallParticles
 
 @export_group("SFX")
-@export var sfx_wave_loop: Array[AudioStream]
+@export var sfx_flame_wall: Array[AudioStream]
 @export var sfx_flame_wall_dashed: Array[AudioStream]
 @export var sfx_flame_wall_hit: Array[AudioStream]
 @export var sfx_wave_impact: Array[AudioStream]
@@ -22,9 +22,14 @@ var tween: Tween
 var has_hit_player: bool = false
 
 
+func _ready() -> void:
+	mesh.mesh.material = mesh.mesh.material.duplicate(true)
+
+
 func init(_width: float, _height: float, _thickness: float, _damage: int, _max_range: float) -> void:
 	area_col.shape.size = Vector3(_width, _height, _thickness)
 	mesh.mesh.size = Vector3(_width, _height, _thickness)
+	slam_particles.position.y = -_height/2
 	damage = _damage
 	max_range = _max_range
 
@@ -44,7 +49,7 @@ func send_wall(
 	
 	# Animate the visual
 	#sfx_player.global_position = slam_particles.global_position
-	#sfx_player.stream = sfx_flame_wall.pick_random()
+	sfx_player.stream = sfx_flame_wall.pick_random()
 	sfx_player.play()
 	
 	var forward: Vector3 = -self.global_basis.z.normalized()
@@ -55,7 +60,7 @@ func send_wall(
 	tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.set_parallel(true)
 	tween.tween_property(self, "global_position", target_pos, wave_time)
-	tween.tween_property(slam_particles, "global_position", end_pos, wave_time)
+	tween.tween_property(slam_particles, "global_position", target_pos, wave_time)
 	tween.tween_callback(_end_wall).set_delay(wave_time)
 	tween.tween_callback(callback).set_delay(wave_time)
 

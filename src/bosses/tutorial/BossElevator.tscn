@@ -101,7 +101,7 @@
 [ext_resource type="AudioStream" uid="uid://b5yf2b5712obg" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 2.mp3" id="39_wm3h1"]
 [ext_resource type="PackedScene" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="40_0xhcc"]
-[ext_resource type="PackedScene" path="res://src/bosses/tutorial/SlamAoEWall.tscn" id="40_tqwob"]
+[ext_resource type="PackedScene" uid="uid://cx0o0nh68vxt5" path="res://src/bosses/tutorial/SlamAoEWall.tscn" id="40_tqwob"]
 [ext_resource type="AudioStream" uid="uid://qg61conv8q8a" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 2.mp3" id="41_y5q8h"]
 [ext_resource type="AudioStream" uid="uid://cg2blsh10wqvv" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 1.mp3" id="42_gym33"]
 [ext_resource type="AudioStream" uid="uid://0qoqwlp6f05d" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 2.mp3" id="43_04ooh"]

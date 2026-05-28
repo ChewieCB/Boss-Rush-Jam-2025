@@ -206,7 +206,7 @@ func _ready() -> void:
 		_init_nail_proj()
 	for i in range(3):
 		_init_aoe_line()
-	for i in range(3):
+	for i in range(8):
 		_init_aoe_wall()
 	
 	#
@@ -1294,7 +1294,7 @@ func spawn_aoe_line(
 func slam_wall(speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
 	# Spawn wave aoe
 	spawn_aoe_wall(
-		120.0,
+		80.0,
 		speed,
 		_width, _height, _thickness,
 		_damage,
