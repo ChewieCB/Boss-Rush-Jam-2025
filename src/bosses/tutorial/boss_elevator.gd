@@ -1605,6 +1605,7 @@ func start_floor_shock() -> void:
 	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	sfx_player.stream = sfx_electric_fadeout.pick_random()
 	sfx_player.play()
+	shock_floor_hazard_tutorial.trigger_effect()
 
 
 func end_floor_shock() -> void:
