@@ -887,6 +887,8 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	anim_player.play("elevator_boss/laser_arm")
 	
 	await anim_player.animation_finished
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
 	
 	state_chart.send_event("charge_laser")
 
@@ -993,19 +995,42 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	anim_player.play("elevator_boss/laser_disarm")
 	await anim_player.animation_finished
 	
+	health_component.is_invincible = true
+	health_component.show_damage_text = false
 	sprite.visible = false
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-	$LaserCollider.disabled = true
+	
 	anim_player.play("RESET")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 	sprite.visible = true
 	state_chart.send_event("cooldown_end")
-	
 	desired_distance = DESIRED_DISTANCE
 	
-	select_attack()
+	if ranged_phase_count >= max_sequential_ranged_phases:
+		state_chart.send_event("laser_to_melee")
+	else:
+		select_attack()
+		state_chart.send_event("end_recovery")
+
+
+func _on_laser_aoe_drop_to_melee_state_entered() -> void:
+	anim_player.play("RESET")
+	sprite.visible = true
+	anim_player.play("drop_smoke_enter")
 	
-	state_chart.send_event("end_recovery")
+	await anim_player.animation_finished
+	
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
+	select_attack()
+	state_chart.send_event("end_drop")
+
+
+func _on_laser_aoe_drop_to_melee_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
 
 
 func _intro_drop() -> void:
@@ -1069,6 +1094,9 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	
 	await get_tree().create_timer(0.6, false).timeout
 	
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
+	
 	state_chart.send_event(state_event)
 
 
@@ -1111,8 +1139,6 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 
 
 func _on_smokescreen_open_doors_state_entered() -> void:
-	health_component.is_invincible = false
-	health_component.show_damage_text = true
 	self.collision_layer = int(pow(2, 3 - 1))
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	
@@ -1243,6 +1269,8 @@ func spawn_aoe_line(
 	callback: Callable = func(): pass,
 ) -> void:
 	var _slam_line = slam_line_pool.pop_back()
+	if not _slam_line:
+		return
 	_slam_line.init(width, height, damage, max_range)
 	_slam_line.global_position = area_pos
 	_slam_line.global_basis = self.global_basis
@@ -1287,6 +1315,8 @@ func spawn_aoe_wall(
 	callback: Callable = func(): pass ,
 ) -> void:
 	var _slam_wall = slam_wall_pool.pop_back()
+	if not _slam_wall:
+		return
 	_slam_wall.init(width, height, thickness, damage, max_range)
 	_slam_wall.global_position = area_pos
 	_slam_wall.global_basis = self.global_basis
