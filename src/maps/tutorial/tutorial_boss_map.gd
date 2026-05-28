@@ -20,6 +20,7 @@ signal ui_accept
 @onready var boss_origin: Array[Node] = get_tree().get_nodes_in_group("boss_arena_origin_marker")
 @export var sub_elevator_doors: Array[SlidingDoor]
 @export var sub_elevator_lights: Array[Node3D]
+@export var player_spawn_post_tutorial: Marker3D
 
 @export var arena_2_floor_parent: Node3D
 @export var arena_2_floor_mesh: MeshInstance3D
@@ -111,6 +112,7 @@ func _ready() -> void:
 
 	if GameManager.tutorial_completed:
 		boss.current_phase = 4
+		player.global_transform = player_spawn_post_tutorial.global_transform
 
 	if boss.current_phase < 4:
 		await ScreenTransition.transition_finished
