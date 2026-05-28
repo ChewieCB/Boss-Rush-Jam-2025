@@ -2,7 +2,7 @@ extends Area3D
 
 @export var bullet_whizz_sfx: AudioStream
 
-const MIN_LIFE_TIME = 0.05 # Prevent bullet whizz sound from bullet that we shoot
+const MIN_LIFE_TIME = 0.80 # Prevent bullet whizz sound from bullet that we shoot
 
 func _on_area_entered(area: Area3D) -> void:
 	if area.get_parent() and area.get_parent() is GunProjectile:

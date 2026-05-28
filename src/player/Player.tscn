@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=87 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -67,6 +67,10 @@
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
 [ext_resource type="PackedScene" uid="uid://cu1jrlwvdnnl" path="res://src/ui/player/inventory/WorkshopInventoryUI.tscn" id="60_44qli"]
+[ext_resource type="AudioStream" uid="uid://s2gc0l4t45ar" path="res://src/player/assets/sfx/Bullet Whiz 1.mp3" id="69_7cdgm"]
+[ext_resource type="AudioStream" uid="uid://bpdnxlyoguky5" path="res://src/player/assets/sfx/Bullet Whiz 2.mp3" id="70_733vl"]
+[ext_resource type="AudioStream" uid="uid://dwriy0s2kb1i7" path="res://src/player/assets/sfx/Bullet Whiz 3.mp3" id="71_htgqk"]
+[ext_resource type="AudioStream" uid="uid://dvrx3b03s5o82" path="res://src/player/assets/sfx/Bullet Whiz 4.mp3" id="72_mj3f0"]
 [ext_resource type="Script" path="res://src/player/bullet_whizz_radius.gd" id="119_e0qef"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
@@ -119,6 +123,13 @@ shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_q6pr3"]
 radius = 5.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_x0ll1"]
+streams_count = 4
+stream_0/stream = ExtResource("69_7cdgm")
+stream_1/stream = ExtResource("70_733vl")
+stream_2/stream = ExtResource("71_htgqk")
+stream_3/stream = ExtResource("72_mj3f0")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dxvay"]
 radius = 2.0
@@ -658,6 +669,7 @@ collision_layer = 0
 collision_mask = 8
 monitorable = false
 script = ExtResource("119_e0qef")
+bullet_whizz_sfx = SubResource("AudioStreamRandomizer_x0ll1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BulletWhizzRadius"]
 shape = SubResource("SphereShape3D_dxvay")
