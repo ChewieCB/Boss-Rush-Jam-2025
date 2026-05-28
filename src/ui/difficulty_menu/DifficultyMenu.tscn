@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=41 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
@@ -36,6 +36,9 @@
 [ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
 [ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="34_xjabm"]
+[ext_resource type="Texture2D" uid="uid://cnxv2qcukvjv7" path="res://src/bosses/slots/assets/Slotty_punch1.png" id="36_rqvar"]
+[ext_resource type="Texture2D" uid="uid://cueoyec2hfn60" path="res://src/bosses/slots/assets/Slotty_slam5.png" id="37_3c3cn"]
+[ext_resource type="Texture2D" uid="uid://b7vqfkn0amrkc" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_36.png" id="38_jl7ae"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
 shader = ExtResource("8_c7hct")
@@ -55,7 +58,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5c00o")
 chip_sfx = ExtResource("2_0aqwx")
-boss_sprites = [NodePath("TitleRegion/BossSpriteContainer/Slot"), NodePath("TitleRegion/BossSpriteContainer/Roulette"), NodePath("TitleRegion/BossSpriteContainer/Bartender"), NodePath("TitleRegion/BossSpriteContainer/Pit"), NodePath("TitleRegion/BossSpriteContainer/Chip")]
+boss_sprites = [NodePath("TitleRegion/BossSpriteContainer/Slot"), NodePath("TitleRegion/BossSpriteContainer/Roulette"), NodePath("TitleRegion/BossSpriteContainer/Bartender"), NodePath("TitleRegion/BossSpriteContainer/Pit"), NodePath("TitleRegion/BossSpriteContainer/Chip"), NodePath("TitleRegion/BossSpriteContainer/Mechanic"), NodePath("TitleRegion/BossSpriteContainer/Blackjack")]
 boss_diff_profiles = Array[ExtResource("3_rlha8")]([ExtResource("4_25fox"), ExtResource("5_iim28"), ExtResource("6_atwte"), ExtResource("7_t6tx6"), ExtResource("8_mh7r4"), ExtResource("9_b2sjg"), ExtResource("10_75fix")])
 
 [node name="BG" type="TextureRect" parent="."]
@@ -137,6 +140,28 @@ mouse_filter = 2
 texture = ExtResource("7_wg0xp")
 
 [node name="Chip" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -32.0
+offset_top = -96.0
+offset_right = 480.0
+offset_bottom = 416.0
+mouse_filter = 2
+texture = ExtResource("8_bymgs")
+
+[node name="Mechanic" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -32.0
+offset_top = -96.0
+offset_right = 480.0
+offset_bottom = 416.0
+mouse_filter = 2
+texture = ExtResource("8_bymgs")
+
+[node name="Blackjack" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
 visible = false
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 0
@@ -362,6 +387,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LeftRegion" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_top = 208.0
@@ -516,170 +542,52 @@ text = "Cancel"
 
 [node name="RightRegion" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -960.0
-offset_top = 208.0
-offset_bottom = 1080.0
-grow_horizontal = 0
-
-[node name="AnteTitle" type="Label" parent="RightRegion"]
-modulate = Color(1, 0.252252, 0.162162, 1)
-layout_mode = 1
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -384.0
-offset_top = 40.0
-offset_right = 384.0
-offset_bottom = 101.0
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -332.0
+offset_right = 480.0
+offset_bottom = 540.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 50
-text = "Antes"
-horizontal_alignment = 2
-
-[node name="ColorRect" type="ColorRect" parent="RightRegion/AnteTitle"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -5.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="AnteSection" type="HBoxContainer" parent="RightRegion"]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 128.0
-offset_right = 864.0
-offset_bottom = 536.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -656.0
+offset_top = -340.0
+offset_right = 656.0
+offset_bottom = 271.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 80
 
 [node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
-modulate = Color(5, 5, 5, 1)
 layout_mode = 2
 ante_number = 1
-ante_name = "Ante I:
-Fast Firing Shotgun"
+icon_sprite = ExtResource("36_rqvar")
+locked = false
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 ante_number = 2
-ante_name = "Ante II:
-Bottle Volley"
+ante_name = "Low Roller"
+icon_sprite = ExtResource("37_3c3cn")
+locked = true
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 ante_number = 3
-ante_name = "Ante III:
-Burning Ground"
-
-[node name="AnteItem4" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
-layout_mode = 2
-ante_number = 4
-ante_name = "Ante IV:
-TBD"
-
-[node name="AnteItem5" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
-layout_mode = 2
-ante_number = 5
-ante_name = "Ante V:
-TBD"
-
-[node name="Bet" type="VBoxContainer" parent="RightRegion"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 96.0
-offset_top = -312.0
-offset_right = 448.0
-offset_bottom = -62.0
-grow_vertical = 0
-
-[node name="RewardTitle" type="Label" parent="RightRegion/Bet"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.972549, 0.0705882, 1)
-theme_override_font_sizes/font_size = 50
-text = "Bet"
-
-[node name="ColorRect" type="ColorRect" parent="RightRegion/Bet"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-color = Color(1, 0.972549, 0.0705882, 1)
-
-[node name="Spacer" type="Control" parent="RightRegion/Bet"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="BetInfo" type="HBoxContainer" parent="RightRegion/Bet"]
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="BetValue" type="Label" parent="RightRegion/Bet/BetInfo"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 60
-text = "10,000"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="RightRegion/Bet/BetInfo"]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-size_flags_vertical = 4
-texture = ExtResource("3_uirlk")
-expand_mode = 1
-
-[node name="Reward" type="VBoxContainer" parent="RightRegion"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -448.0
-offset_top = -312.0
-offset_right = -96.0
-offset_bottom = -62.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="RewardTitle" type="Label" parent="RightRegion/Reward"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.972549, 0.0705882, 1)
-theme_override_font_sizes/font_size = 50
-text = "Payout"
-horizontal_alignment = 2
-
-[node name="ColorRect" type="ColorRect" parent="RightRegion/Reward"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-color = Color(1, 0.972549, 0.0705882, 1)
-
-[node name="Spacer" type="Control" parent="RightRegion/Reward"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="RewardInfo" type="HBoxContainer" parent="RightRegion/Reward"]
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="RewardValue" type="Label" parent="RightRegion/Reward/RewardInfo"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 60
-text = "20,000"
-
-[node name="TextureRect" type="TextureRect" parent="RightRegion/Reward/RewardInfo"]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-size_flags_vertical = 4
-texture = ExtResource("3_uirlk")
-expand_mode = 1
+ante_name = "Slow Roller"
+icon_sprite = ExtResource("38_jl7ae")
+locked = true
 
 [node name="RatioLabel" type="Label" parent="RightRegion"]
 visible = false
@@ -705,18 +613,21 @@ wait_time = 3.0
 one_shot = true
 
 [node name="CurrencyUI" parent="." instance=ExtResource("34_xjabm")]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -312.0
-offset_top = -72.0
-offset_right = -7.0
+offset_left = -328.0
+offset_top = -136.0
+offset_right = -4.0
 offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
 
 [connection signal="pressed" from="LeftRegion/ResetRiskButton" to="." method="_on_reset_risk_button_pressed"]
 [connection signal="pressed" from="LeftRegion/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

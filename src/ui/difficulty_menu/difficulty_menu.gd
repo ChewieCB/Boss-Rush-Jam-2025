@@ -48,7 +48,18 @@ func _ready() -> void:
 	GameManager.risk_level_changed.connect(_on_risk_level_changed)
 	_on_risk_level_changed()
 	is_controller_connected = Input.get_connected_joypads() != []
+	
+	for ante in ante_card_container.get_children():
+		ante.ante_selected.connect(_on_ante_selected)
 
+
+func _on_ante_selected(ante_number: int) -> void:
+	GameManager.boss_ante = ante_number
+	hide_menu()
+	locked = true
+	bet_started.emit()
+	
+	# TODO - clear this to 0 when we exit a boss map
 
 func _input(event: InputEvent) -> void:
 	if visible:
@@ -64,10 +75,12 @@ func show_menu():
 	GameManager.player.is_in_menu = true
 	if not is_controller_connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-	start_button.grab_focus()
-	bet_value = GameManager.risk_level * 1000
-	update_bet_and_reward_value()
-
+	
+	var test0 = ante_card_container.get_children()
+	var test1 = ante_card_container.get_child(0)
+	
+	ante_card_container.get_child(0).button.grab_focus()
+	
 	refresh_display()
 
 
@@ -88,44 +101,47 @@ func refresh_display():
 	for i in range(ante_card_container.get_child_count()):
 		var ante_item: AnteItem = ante_card_container.get_child(i)
 		ante_item.set_ante_label(boss_profile.ante_names[i])
-
-	bet_value_label.text = format_number_with_commas(bet_value)
-	reward_label.text = format_number_with_commas(reward_value)
+#
+	#bet_value_label.text = format_number_with_commas(bet_value)
+	#reward_label.text = format_number_with_commas(reward_value)
 
 ## Max lv 15
 func set_risk_level(level: int):
-	for i in range(risk_level_container.get_child_count()):
-		if i < level:
-			risk_level_container.get_child(i).self_modulate = Color.WHITE
-			if i >= 15:
-				risk_level_container.get_child(i).visible = true
-				risk_level_container.get_child(i).get_child(0).text = str(level - 15)
-
-		else:
-			risk_level_container.get_child(i).self_modulate = Color.BLACK
-			if i >= 15:
-				risk_level_container.get_child(i).visible = false
-	play_juicy_chip_sprite_anim()
+	return
+	#for i in range(risk_level_container.get_child_count()):
+		#if i < level:
+			#risk_level_container.get_child(i).self_modulate = Color.WHITE
+			#if i >= 15:
+				#risk_level_container.get_child(i).visible = true
+				#risk_level_container.get_child(i).get_child(0).text = str(level - 15)
+#
+		#else:
+			#risk_level_container.get_child(i).self_modulate = Color.BLACK
+			#if i >= 15:
+				#risk_level_container.get_child(i).visible = false
+	#play_juicy_chip_sprite_anim()
 
 func _on_risk_level_changed():
-	update_bet_and_reward_value()
-	bet_value_label.text = format_number_with_commas(bet_value)
-	reward_label.text = format_number_with_commas(reward_value)
-	start_button.text = "Start"
-	start_button.set_text_color(Color.WHITE)
-	if GameManager.risk_level > 0:
-		reset_risk_button.visible = true
-	else:
-		reset_risk_button.visible = false
+	return
+	#update_bet_and_reward_value()
+	#bet_value_label.text = format_number_with_commas(bet_value)
+	#reward_label.text = format_number_with_commas(reward_value)
+	#start_button.text = "Start"
+	#start_button.set_text_color(Color.WHITE)
+	#if GameManager.risk_level > 0:
+		#reset_risk_button.visible = true
+	#else:
+		#reset_risk_button.visible = false
 
 func update_bet_and_reward_value():
-	bet_value = GameManager.risk_level * 1000
-	var payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * REWARD_MULT_PER_RISK)
-	if GameManager.risk_level >= HIGH_RISK_THRESHOLD:
-		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * HIGH_RISK_REWARD_MULT_PER_RISK)
-	elif GameManager.risk_level >= OVER_RISK_THRESHOLD:
-		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * OVER_RISK_REWARD_MULT_PER_RISK)
-	reward_value = int(bet_value * payout_mult * boss_diff_profiles[int(GameManager.selected_boss_id) - 1].boss_risk_reward_mult)
+	return
+	#bet_value = GameManager.risk_level * 1000
+	#var payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * REWARD_MULT_PER_RISK)
+	#if GameManager.risk_level >= HIGH_RISK_THRESHOLD:
+		#payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * HIGH_RISK_REWARD_MULT_PER_RISK)
+	#elif GameManager.risk_level >= OVER_RISK_THRESHOLD:
+		#payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * OVER_RISK_REWARD_MULT_PER_RISK)
+	#reward_value = int(bet_value * payout_mult * boss_diff_profiles[int(GameManager.selected_boss_id) - 1].boss_risk_reward_mult)
 
 func format_number_with_commas(n: int) -> String:
 	var str_n = str(n)
@@ -139,10 +155,11 @@ func format_number_with_commas(n: int) -> String:
 	return result
 
 func _on_reset_risk_button_pressed() -> void:
-	GameManager.reset_difficulty_modifier()
-	for elem in risk_item_container.get_children():
-		var risk_item = elem as RiskItem
-		risk_item.refresh_value_label()
+	return
+	#GameManager.reset_difficulty_modifier()
+	#for elem in risk_item_container.get_children():
+		#var risk_item = elem as RiskItem
+		#risk_item.refresh_value_label()
 
 func _on_start_button_pressed() -> void:
 	if GameManager.player_currency < bet_value:
@@ -164,21 +181,23 @@ func _on_cancel_button_pressed() -> void:
 
 
 func _on_not_enough_chip_timer_timeout() -> void:
-	start_button.text = "Start"
-	start_button.set_text_color(Color.WHITE)
+	return
+	#start_button.text = "Start"
+	#start_button.set_text_color(Color.WHITE)
 
 func play_juicy_chip_sprite_anim():
-	if bet_sprite_scale_tween and bet_sprite_scale_tween.is_running():
-		bet_sprite_scale_tween.stop()
-	bet_sprite_scale_tween = get_tree().create_tween()
-	bet_chip_sprite.custom_minimum_size = Vector2(96, 96) * 1.4
-	bet_sprite_scale_tween.tween_property(bet_chip_sprite, "custom_minimum_size", Vector2(96, 96), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-
-	if reward_sprite_scale_tween and reward_sprite_scale_tween.is_running():
-		reward_sprite_scale_tween.stop()
-	reward_sprite_scale_tween = get_tree().create_tween()
-	reward_chip_sprite.custom_minimum_size = Vector2(96, 96) * 1.4
-	reward_sprite_scale_tween.tween_property(reward_chip_sprite, "custom_minimum_size", Vector2(96, 96), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-
-	var pitch = randf_range(0.8, 1.2)
-	SoundManager.play_ui_sound_with_pitch(chip_sfx, pitch)
+	return	
+	#if bet_sprite_scale_tween and bet_sprite_scale_tween.is_running():
+		#bet_sprite_scale_tween.stop()
+	#bet_sprite_scale_tween = get_tree().create_tween()
+	#bet_chip_sprite.custom_minimum_size = Vector2(96, 96) * 1.4
+	#bet_sprite_scale_tween.tween_property(bet_chip_sprite, "custom_minimum_size", Vector2(96, 96), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+#
+	#if reward_sprite_scale_tween and reward_sprite_scale_tween.is_running():
+		#reward_sprite_scale_tween.stop()
+	#reward_sprite_scale_tween = get_tree().create_tween()
+	#reward_chip_sprite.custom_minimum_size = Vector2(96, 96) * 1.4
+	#reward_sprite_scale_tween.tween_property(reward_chip_sprite, "custom_minimum_size", Vector2(96, 96), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+#
+	#var pitch = randf_range(0.8, 1.2)
+	#SoundManager.play_ui_sound_with_pitch(chip_sfx, pitch)
