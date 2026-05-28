@@ -487,6 +487,8 @@ func select_attack_phase_5() -> void:
 				# We move into the melee phase, so trigger a random melee attack
 				# TODO - intro slam state to handle dropping from high up
 				previous_phase = "melee_phase"
+				health_component.is_invincible = false
+				health_component.show_damage_text = true
 				new_attack = melee_attacks.pick_random()
 	
 	state_chart.send_event(new_attack)
@@ -1141,6 +1143,8 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 func _on_smokescreen_open_doors_state_entered() -> void:
 	self.collision_layer = int(pow(2, 3 - 1))
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
