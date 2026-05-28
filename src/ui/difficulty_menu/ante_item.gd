@@ -14,6 +14,10 @@ signal ante_selected(ante_number: int)
 @onready var deselected_overlay: ColorRect = $DeselectedOverlay
 @onready var locked_overlay: ColorRect = $LockedOverlay
 @onready var button: Button = $Button
+@onready var border_selected: NinePatchRect = $BorderNormal
+
+
+@export var scale_factor: float = 1.15
 
 @export var locked: bool = false
 
@@ -61,3 +65,36 @@ func set_ante_texture(tex: Texture2D) -> void:
 
 func _on_button_pressed() -> void:
 	ante_selected.emit(ante_number)
+
+
+func play_button_hover_sfx():
+	SoundManager.play_button_hover_sfx()
+
+
+func expand_button_size():
+	#if button.disabled:
+		#return
+	pivot_offset = size / 2
+	var tween = self.create_tween()
+	tween.tween_property(self , "scale", Vector2(scale_factor, scale_factor), 0.1)
+
+
+func return_button_size():
+	pivot_offset = size / 2
+	var tween = self.create_tween()
+	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
+
+
+func _on_button_mouse_entered() -> void:
+	_on_button_focus_entered()
+
+func _on_button_mouse_exited() -> void:
+	_on_button_focus_exited()
+
+
+func _on_button_focus_entered(grab_focus: bool = true) -> void:
+	play_button_hover_sfx()
+	expand_button_size()
+
+func _on_button_focus_exited() -> void:
+	return_button_size()

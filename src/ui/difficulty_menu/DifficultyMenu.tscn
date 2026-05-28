@@ -581,6 +581,7 @@ theme_override_constants/separation = 80
 layout_mode = 2
 ante_number = 1
 icon_sprite = ExtResource("36_rqvar")
+scale_factor = 1.15
 locked = false
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
@@ -588,6 +589,7 @@ layout_mode = 2
 ante_number = 2
 ante_name = "Low Roller"
 icon_sprite = ExtResource("37_3c3cn")
+scale_factor = 1.15
 locked = true
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
@@ -595,6 +597,7 @@ layout_mode = 2
 ante_number = 3
 ante_name = "Slow Roller"
 icon_sprite = ExtResource("38_jl7ae")
+scale_factor = 1.15
 locked = true
 
 [node name="RatioLabel" type="Label" parent="RightRegion"]

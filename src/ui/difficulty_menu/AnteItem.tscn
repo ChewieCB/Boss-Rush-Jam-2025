@@ -24,6 +24,7 @@ size_flags_horizontal = 4
 texture = ExtResource("1_kqsda")
 script = ExtResource("2_a8k7o")
 ante_name = "High Roller"
+scale_factor = null
 locked = null
 
 [node name="AnteIcon" type="TextureRect" parent="."]
@@ -41,7 +42,7 @@ texture = ExtResource("1_dsftp")
 expand_mode = 3
 stretch_mode = 3
 
-[node name="Border" type="NinePatchRect" parent="."]
+[node name="BorderNormal" type="NinePatchRect" parent="."]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -153,4 +154,8 @@ texture = ExtResource("5_kdfri")
 expand_mode = 3
 stretch_mode = 5
 
+[connection signal="focus_entered" from="Button" to="." method="_on_button_focus_entered"]
+[connection signal="focus_exited" from="Button" to="." method="_on_button_focus_exited"]
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

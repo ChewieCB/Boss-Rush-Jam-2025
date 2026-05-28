@@ -2,6 +2,7 @@ extends Control
 class_name DifficultyMenu
 
 @export var chip_sfx: AudioStream
+@export var locked_sfx: AudioStream
 ## Order matter
 @export var boss_sprites: Array[TextureRect]
 @export var boss_ante_textures: Array[Array]
