@@ -1753,7 +1753,6 @@ func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 	
 	anim_player.play("elevator_boss/dash_wave")
 	await anim_player.animation_finished
-	await get_tree().create_timer(1.0, false).timeout
 	
 	state_chart.send_event("end_wave")
 
