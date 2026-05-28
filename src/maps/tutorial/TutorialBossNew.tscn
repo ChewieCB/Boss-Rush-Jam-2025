@@ -5006,7 +5006,7 @@ shader_parameter/impact_falloff_sharpness = 1.0
 material = SubResource("ShaderMaterial_e5s8d")
 size = Vector3(2.05, 1.2, 0.6)
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "arena_2_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "player_spawn_post_tutorial", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "electric_box_trigger", "spark_sfx_player", "door_spark_emitter", "door_trigger_highlight_mesh", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "arena_2_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "player_spawn_post_tutorial", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "cutscene_ui_layer", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "electric_box_trigger", "spark_sfx_player", "door_spark_emitter", "door_trigger_highlight_mesh", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
@@ -5024,6 +5024,7 @@ arena_1_floor_shock_hazard = NodePath("ElectricHazardArea")
 pipe_particle_emitters = [NodePath("SmokeParticles"), NodePath("SmokeParticles2"), NodePath("SmokeParticles3"), NodePath("SmokeParticles4"), NodePath("SmokeParticles5")]
 sfx_pipe_creak_sfx = Array[AudioStream]([ExtResource("4_8uh3f"), ExtResource("5_bhynr")])
 sfx_pipe_steam_sfx = Array[AudioStream]([ExtResource("6_wvupw")])
+cutscene_ui_layer = NodePath("IntroCutsceneLayer")
 intro_boss_path = NodePath("Path3D")
 intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
 tutorial_end_boss_marker = NodePath("TutorialEndCutscenePosMarker")
@@ -7591,6 +7592,7 @@ loop = false
 tilt_enabled = false
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="19"]
+process_mode = 4
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
 current = true
 
@@ -7616,7 +7618,7 @@ bus = &"SFX"
 bus = &"SFX"
 
 [node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="27"]
-layer = 3
+process_mode = 4
 
 [node name="Control" type="Control" parent="IntroCutsceneLayer" index="0"]
 layout_mode = 3

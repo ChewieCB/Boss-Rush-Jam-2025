@@ -4,6 +4,7 @@ class_name PauseUI
 signal pause_ui_toggled
 signal ui_accept_pressed
 
+@onready var parent_canvaslayer: CanvasLayer = get_parent()
 @onready var pause_option_list: Control = $PauseOptionBG
 @onready var setting_button: Button = $PauseOptionBG/VBoxContainer/SettingButton
 @onready var setting_ui: SettingUI = $SettingUI
@@ -52,6 +53,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func toggle_pause_menu() -> void:
 	is_paused = not is_paused
+	parent_canvaslayer.layer = 4 if is_paused else 1
 	GameManager.change_fmod_bgm_menu_is_up(is_paused)
 	
 	get_tree().paused = is_paused
@@ -91,7 +93,8 @@ func _on_setting_button_pressed() -> void:
 func _on_lobby_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.change_fmod_bgm_menu_is_up(false)
-
+	
+	parent_canvaslayer.layer = 1
 	if not GameManager.tutorial_completed:
 		LoadingHandler.start_loading(
 			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
@@ -120,6 +123,7 @@ func _on_main_menu_button_pressed() -> void:
 	SaveManager.save_data_is_loaded = false
 	
 	## TODO - background loading here
+	parent_canvaslayer.layer = 1
 	LoadingHandler.start_loading("res://src/ui/main_menu/MainMenu.tscn", "Main Menu")
 	# Toggle low pass filter for BGM
 	await ScreenTransition.transition_finished
