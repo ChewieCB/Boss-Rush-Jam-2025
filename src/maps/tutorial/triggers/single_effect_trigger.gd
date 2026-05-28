@@ -22,7 +22,7 @@ func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 				triggered.emit()
 				activate()
 				active = false
-				self.process_mode = Node.PROCESS_MODE_DISABLED
+				#self.process_mode = Node.PROCESS_MODE_DISABLED
 				self.set_deferred("monitoring", false)
 				self.set_deferred("monitorable", false)
 				$CollisionShape3D.set_deferred("disabled", true)
