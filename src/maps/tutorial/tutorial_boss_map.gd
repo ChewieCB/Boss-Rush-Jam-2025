@@ -306,6 +306,8 @@ func _on_tutorial_phase_1_started() -> void:
 
 
 func _on_tutorial_phase_2_started() -> void:
+	reload_tutorial_shown = true
+	player.current_gun.is_reload_disabled = false
 	player.max_air_jump = 1
 	show_tutorial_panel(tutorial_3_trigger_jump)
 
