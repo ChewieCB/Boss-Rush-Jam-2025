@@ -1221,7 +1221,7 @@ func slam_line(_spawn_pos: Vector3, _range: float = 30.0, _width: float = 4.0, _
 	# Spawn line aoe that grows from boss to target
 	spawn_aoe_line(
 		_width, _height, _damage,
-		self.global_position.distance_to(target.global_position) + 5.0,
+		self.global_position.distance_to(target.global_position) + 10.0,
 		_time,
 		slam_spawn_marker.global_position,
 		state_chart.send_event.bind("combo_end")
@@ -1259,10 +1259,10 @@ func spawn_aoe_line(
 
 ## SLAM WALL
 
-func slam_wall(max_range: float, speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
+func slam_wall(speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
 	# Spawn wave aoe
 	spawn_aoe_wall(
-		max_range,
+		120.0,
 		speed,
 		_width, _height, _thickness,
 		_damage,
@@ -1294,7 +1294,7 @@ func spawn_aoe_wall(
 	
 	await get_tree().physics_frame
 	
-	_slam_wall.send_wall()
+	_slam_wall.send_wall(speed)
 	
 	await _slam_wall.finished
 	
