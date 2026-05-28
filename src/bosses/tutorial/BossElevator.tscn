@@ -2513,8 +2513,9 @@ sfx_electric_slam_impact = Array[AudioStream]([ExtResource("60_uh4d7"), ExtResou
 sfx_electric_loop = Array[AudioStream]([ExtResource("62_qwveb"), ExtResource("63_vxl2l")])
 sfx_electric_fadeout = Array[AudioStream]([ExtResource("64_ys6fd"), ExtResource("65_a5wdl")])
 boss_id = 6
-chip_spawn_chance = 0.15
-chip_spawn_dps_threshold = 40.0
+chip_spawn_chance = 0.05
+chip_spawn_dps_threshold = 70.0
+chip_spawn_mult_cap = 1
 elemental_emitting_vfx = [null, null, null, null, null]
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
@@ -2655,6 +2656,7 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
+enabled = true
 metadata/_edit_group_ = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
@@ -4326,7 +4328,7 @@ delay_in_seconds = "0.0"
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DualNailsRanged" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
-event = &"start_melee_combo_attack"
+event = &"start_melee_combo"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
@@ -4420,7 +4422,7 @@ delay_in_seconds = "0.0"
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="6"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
-event = &"start_melee_combo_attack"
+event = &"start_melee_combo"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 

@@ -429,6 +429,7 @@ func select_attack_phase_4() -> void:
 		state_chart.send_event("start_dash_wave")
 	else:
 		state_chart.send_event("start_ranged_naiils_strafe")
+	state_chart.send_event("end_recovery")
 
 
 func select_attack_phase_5() -> void:
@@ -484,14 +485,29 @@ func select_attack_phase_5() -> void:
 			else:
 				# Reset the ranged attack counter
 				ranged_phase_count = 0
+				attack_interrupt = true
 				# We move into the melee phase, so trigger a random melee attack
+				# TODO - shove boss out towards middle if elevator nails attack
+				if prev_attack == "start_dual_nails_attack":
+					var tween = get_tree().create_tween()
+					var forward_dir: Vector3 = - active_sub_door.basis.z
+					var peek_pos: Vector3 = self.global_position + forward_dir * 2
+					tween.tween_property(
+						self, "global_position", peek_pos, 0.2
+					).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+					active_sub_light.yellow()
+					active_sub_door.close()
+					tween.parallel().tween_callback(active_sub_light.red).set_delay(1.2)  # door.close() anim length
+					await tween.finished
 				# TODO - intro slam state to handle dropping from high up
 				previous_phase = "melee_phase"
 				health_component.is_invincible = false
 				health_component.show_damage_text = true
-				new_attack = melee_attacks.pick_random()
+				new_attack = "start_melee_combo"
+				attack_interrupt = false
 	
 	state_chart.send_event(new_attack)
+	state_chart.send_event("end_recovery")
 
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
@@ -848,8 +864,7 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	
 	select_attack()
-	
-	state_chart.send_event("end_recovery")
+	#state_chart.send_event("end_recovery")
 
 
 ## Spartan Laser AoE
@@ -1050,6 +1065,7 @@ func _on_smokescreen_idle_state_entered() -> void:
 	
 	var ranged_attacks = [
 		"start_dual_nails_attack",
+		"start_dual_nails_attack",
 		"start_laser_aoe_attack",
 	]
 	
@@ -1157,7 +1173,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	# Move the boss out of the elevator to fire
 	var tween = get_tree().create_tween()
 	var forward_dir: Vector3 = - active_sub_door.basis.z
-	var peek_pos: Vector3 = self.global_position + forward_dir * 3
+	var peek_pos: Vector3 = self.global_position + forward_dir * 3.5
 	tween.tween_property(
 		self, "global_position", peek_pos, 0.5
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -1165,7 +1181,6 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	
 	prev_attack = next_attack
 	state_chart.send_event(next_attack)
-	state_chart.send_event("end_smoke")
 
 
 func get_furthest_laser_spawn() -> Node:
@@ -1958,7 +1973,7 @@ func _on_tutorial_phase_4_dash_wave_idle_state_physics_processing(delta: float) 
 	orbit_player(delta)
 	
 	if self.global_position.distance_to(target.global_position) > 8.0 and \
-	self.global_position.distance_to(target.global_position) < 20.0:
+	self.global_position.distance_to(target.global_position) < 50.0:
 		state_chart.send_event("start_wave")
 
 
