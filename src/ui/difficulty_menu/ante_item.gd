@@ -56,5 +56,8 @@ func set_ante_label(content: String):
 	ante_label.text += "\n{0}".format([content])
 
 
+func set_ante_texture(tex: Texture2D) -> void:
+	ante_icon.texture = tex
+
 func _on_button_pressed() -> void:
 	ante_selected.emit(ante_number)

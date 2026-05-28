@@ -4,6 +4,7 @@ class_name DifficultyMenu
 @export var chip_sfx: AudioStream
 ## Order matter
 @export var boss_sprites: Array[TextureRect]
+@export var boss_ante_textures: Array[Array]
 @export var boss_diff_profiles: Array[BossDifficultyProfile]
 
 @onready var risk_level_container: Container = $TitleRegion/HBoxContainer
@@ -96,11 +97,14 @@ func refresh_display():
 		elem.visible = false
 	var boss_profile = boss_diff_profiles[int(GameManager.selected_boss_id) - 1]
 	boss_sprites[int(GameManager.selected_boss_id) - 1].visible = true
+	var _ante_textures = boss_ante_textures[int(GameManager.selected_boss_id) - 1]
 	target_quite_label.text = boss_profile.boss_quote
 
 	for i in range(ante_card_container.get_child_count()):
 		var ante_item: AnteItem = ante_card_container.get_child(i)
 		ante_item.set_ante_label(boss_profile.ante_names[i])
+		if _ante_textures.size() > 0:
+			ante_item.set_ante_texture(_ante_textures[i])
 #
 	#bet_value_label.text = format_number_with_commas(bet_value)
 	#reward_label.text = format_number_with_commas(reward_value)
