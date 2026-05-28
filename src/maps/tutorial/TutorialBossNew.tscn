@@ -151,17 +151,17 @@ close_trigger_count = 1
 timeout = 4.0
 timeout_on_close = true
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jn3i3"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yrvi5"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_42be0"]
-sky_material = SubResource("ProceduralSkyMaterial_jn3i3")
+[sub_resource type="Sky" id="Sky_kq7gs"]
+sky_material = SubResource("ProceduralSkyMaterial_yrvi5")
 
-[sub_resource type="Environment" id="Environment_vv125"]
+[sub_resource type="Environment" id="Environment_rsgtb"]
 background_mode = 1
 background_color = Color(0.13849, 0.1342, 0.22, 1)
-sky = SubResource("Sky_42be0")
+sky = SubResource("Sky_kq7gs")
 ambient_light_source = 2
 ambient_light_color = Color(0.137255, 0.133333, 0.219608, 1)
 ambient_light_energy = 3.0
@@ -173,6 +173,7 @@ volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.85, 0.9625, 1, 1)
 volumetric_fog_emission = Color(0.85098, 0.960784, 1, 1)
 volumetric_fog_emission_energy = 0.3
+volumetric_fog_temporal_reprojection_amount = 0.7
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vb4tn"]
 resource_local_to_scene = true
@@ -182,8 +183,8 @@ size = Vector3(10.8, 10, 16)
 resource_local_to_scene = true
 size = Vector3(10, 10, 10)
 
-[sub_resource type="FogMaterial" id="FogMaterial_7oy35"]
-density = 0.015
+[sub_resource type="FogMaterial" id="FogMaterial_bgtn8"]
+density = 0.004
 
 [sub_resource type="FogMaterial" id="FogMaterial_brnbk"]
 density = 0.02
@@ -5046,7 +5047,7 @@ floor_parent = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_79
 floor_mesh = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1/entity_7_func_geo/entity_7_mesh_instance")
 
 [node name="WorldEnvironment" parent="." index="1"]
-environment = SubResource("Environment_vv125")
+environment = SubResource("Environment_rsgtb")
 
 [node name="DirectionalLight3D" parent="." index="2"]
 visible = false
@@ -5377,7 +5378,7 @@ omni_attenuation = 2.0
 [node name="FogVolume" type="FogVolume" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 5, -33.2)
 size = Vector3(50, 16, 37)
-material = SubResource("FogMaterial_7oy35")
+material = SubResource("FogMaterial_bgtn8")
 
 [node name="FogVolume2" type="FogVolume" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 3.95, 29.8)
@@ -6659,7 +6660,7 @@ entProperties = {
 transform = Transform3D(-0.743145, 0, -0.669131, 0, 1, 0, 0.669131, 0, -0.743145, -52.8081, -1.82644, -40.9906)
 
 [node name="entity_230_ElevatorLight" parent="FuncGodotMap/layer_6_collision/group_7979_BossElevatorCol/group_8054_BossElevatorSub" index="3" instance=ExtResource("92_btaog")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -53.4194, 5.34188, -41.3781)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -53.4194, 5.34188, -41.3781)
 
 [node name="entity_231_func_detail_illusionary" type="Node3D" parent="FuncGodotMap/layer_6_collision/group_7979_BossElevatorCol/group_8054_BossElevatorSub" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.0925, 5.34191, -26.5)
@@ -6899,7 +6900,7 @@ entProperties = {
 transform = Transform3D(0.743145, 0, 0.669131, 0, 1, 0, -0.669131, 0, 0.743145, -19.1919, -1.82644, -23.6344)
 
 [node name="entity_268_ElevatorLight" parent="FuncGodotMap/layer_6_collision/group_7985_BossElevatorCol/group_8052_BossElevatorSub" index="3" instance=ExtResource("92_btaog")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -18.5806, 5.34188, -23.2469)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.5806, 5.34188, -23.2469)
 
 [node name="entity_269_func_detail_illusionary" type="Node3D" parent="FuncGodotMap/layer_6_collision/group_7985_BossElevatorCol/group_8052_BossElevatorSub" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7344, 5.34191, -13.0384)
