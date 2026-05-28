@@ -5,7 +5,7 @@
 
 [sub_resource type="Resource" id="Resource_ncg3k"]
 script = ExtResource("1_1wrc2")
-state = NodePath("../../../../Health/Dead")
+state = NodePath("../../../../../Health/Dead")
 
 [resource]
 script = ExtResource("2_yrnkq")

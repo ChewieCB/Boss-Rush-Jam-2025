@@ -20,6 +20,7 @@ signal ui_accept
 @onready var boss_origin: Array[Node] = get_tree().get_nodes_in_group("boss_arena_origin_marker")
 @export var sub_elevator_doors: Array[SlidingDoor]
 @export var sub_elevator_lights: Array[Node3D]
+@export var player_spawn_post_tutorial: Marker3D
 
 @export var arena_2_floor_parent: Node3D
 @export var arena_2_floor_mesh: MeshInstance3D
@@ -38,6 +39,7 @@ var current_close_trigger_max: int = 1
 var current_close_trigger_count: int = 0
 
 # Intro cutscene
+@export var cutscene_ui_layer: CanvasLayer
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
 @export var tutorial_end_boss_marker: Marker3D
@@ -68,6 +70,7 @@ var active_tutorial_panel: Control
 
 func _ready() -> void:
 	if not GameManager.tutorial_completed:
+		player.toggle_anim_reticle(false)
 		GameManager.equipped_barrels = [null, null, null]
 		GameManager.inventory_barrels = []
 		player.gun.reinstall_barrels()
@@ -86,7 +89,7 @@ func _ready() -> void:
 	floor_parent = arena_2_floor_parent
 	floor_mesh = arena_2_floor_mesh
 
-	super ()
+	super()
 
 	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
@@ -111,6 +114,7 @@ func _ready() -> void:
 
 	if GameManager.tutorial_completed:
 		boss.current_phase = 4
+		player.global_transform = player_spawn_post_tutorial.global_transform
 
 	if boss.current_phase < 4:
 		await ScreenTransition.transition_finished
@@ -126,6 +130,9 @@ func _ready() -> void:
 		electric_box_trigger.active = true
 		electric_box_trigger.activate()
 		player._disable_cutscene_cam()
+		cutscene_ui_layer.visible = false
+		cutscene_ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
+		cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
 		#await ScreenTransition.transition_finished
 		player.stat_ui.show_all_ui()
 
@@ -306,6 +313,8 @@ func _on_tutorial_phase_1_started() -> void:
 
 
 func _on_tutorial_phase_2_started() -> void:
+	reload_tutorial_shown = true
+	player.current_gun.is_reload_disabled = false
 	player.max_air_jump = 1
 	show_tutorial_panel(tutorial_3_trigger_jump)
 
@@ -321,6 +330,9 @@ func _on_tutorial_finished() -> void:
 
 	GameManager.change_fmod_bgm_music_state("TutorialInterlude")
 	# Move cutscene camera to match player's camera
+	cutscene_ui_layer.visible = true
+	cutscene_ui_layer.process_mode = Node.PROCESS_MODE_INHERIT
+	cutscene_camera.process_mode = Node.PROCESS_MODE_INHERIT
 	cutscene_camera.global_transform = player.player_camera.global_transform
 	player._enable_cutscene_cam()
 
@@ -383,6 +395,9 @@ func _on_tutorial_finished() -> void:
 	await camera_tween.finished
 
 	player._disable_cutscene_cam()
+	cutscene_ui_layer.visible = false
+	cutscene_ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
+	cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
 	electric_box_trigger.active = true
 	boss.state_chart.send_event("start_main_fight")
 	boss.current_phase = 4
@@ -395,8 +410,8 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 
 	# Force effect to non-electric and 1st spin to electric
 	await player.current_gun.recheck_installed_barrels()
-	player.current_gun.set_barrel_to_effect(0, 48) # 48 = fire
-	player.current_gun.force_barrel_next_spin(0, 50) # 50 = electric
+	player.current_gun.set_barrel_to_effect(0, 27) # 27 = Gambler's Precision
+	player.current_gun.force_barrel_next_spin(0, 51) # 51 = Hyperfocus
 
 	await get_tree().create_timer(0.8, false).timeout
 
@@ -516,6 +531,9 @@ func _on_player_death() -> void:
 		await get_tree().create_timer(0.6, false).timeout
 
 		# Move cutscene camera to match player's camera
+		cutscene_ui_layer.visible = true
+		cutscene_ui_layer.process_mode = Node.PROCESS_MODE_INHERIT
+		cutscene_camera.process_mode = Node.PROCESS_MODE_INHERIT
 		cutscene_camera.global_transform = player.player_camera.global_transform
 		player._enable_cutscene_cam()
 
@@ -564,6 +582,9 @@ func _on_player_death() -> void:
 		$AnimationPlayer.play("cutscene_letterbox_end")
 		await camera_tween.finished
 		player._disable_cutscene_cam()
+		cutscene_ui_layer.visible = false
+		cutscene_ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
+		cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
 
 		await get_tree().create_timer(0.4, false).timeout
 

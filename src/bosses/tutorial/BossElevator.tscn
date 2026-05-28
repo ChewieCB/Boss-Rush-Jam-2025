@@ -1,4 +1,4 @@
-[gd_scene load_steps=268 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=269 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -99,9 +99,9 @@
 [ext_resource type="Texture2D" uid="uid://c52mo1qekknqm" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_7.png" id="38_x4twh"]
 [ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
 [ext_resource type="AudioStream" uid="uid://b5yf2b5712obg" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 2.mp3" id="39_wm3h1"]
-[ext_resource type="PackedScene" uid="uid://c1ep56bju50j3" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
+[ext_resource type="PackedScene" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="40_0xhcc"]
-[ext_resource type="PackedScene" uid="uid://cn3j58ot82xsl" path="res://src/bosses/tutorial/SlamAoEWall.tscn" id="40_tqwob"]
+[ext_resource type="PackedScene" uid="uid://cx0o0nh68vxt5" path="res://src/bosses/tutorial/SlamAoEWall.tscn" id="40_tqwob"]
 [ext_resource type="AudioStream" uid="uid://qg61conv8q8a" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 2.mp3" id="41_y5q8h"]
 [ext_resource type="AudioStream" uid="uid://cg2blsh10wqvv" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 1.mp3" id="42_gym33"]
 [ext_resource type="AudioStream" uid="uid://0qoqwlp6f05d" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 2.mp3" id="43_04ooh"]
@@ -840,7 +840,7 @@ tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector3(0, 27.0765, 0)]
 }
 tracks/14/type = "value"
@@ -878,6 +878,18 @@ tracks/16/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 256)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("SmokeParticles:emitting")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -961,12 +973,54 @@ tracks/4/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SmokeParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_vamcx"]
+resource_name = "drop_smoke_enter"
+length = 2.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.2, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SmokeParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
 _data = {
 "RESET": SubResource("Animation_8e3f2"),
 "death": SubResource("Animation_dshkv"),
-"drop_smoke": SubResource("Animation_ffby2")
+"drop_smoke": SubResource("Animation_ffby2"),
+"drop_smoke_enter": SubResource("Animation_vamcx")
 }
 
 [sub_resource type="Animation" id="Animation_85u7l"]
@@ -1038,7 +1092,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0.175),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [30.0, 4.0, 12.0, 8.0],
+"args": [5.0, 12.0, 8.0],
 "method": &"slam_wall"
 }]
 }
@@ -1093,7 +1147,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0.125),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [30.0, 4.0, 12.0, 8.0],
+"args": [5.0, 12.0, 8.0],
 "method": &"slam_wall"
 }]
 }
@@ -1148,7 +1202,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0.175),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [60.0, 10.0, 12.0, 8.0],
+"args": [8.0, 12.0, 8.0],
 "method": &"slam_wall"
 }]
 }
@@ -1291,7 +1345,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_ywtcr"]
 resource_name = "laser_arm"
 length = 0.4
-step = 0.5
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1395,10 +1449,10 @@ tracks/8/path = NodePath("LaserCollider:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(0.378929, 1),
-"update": 0,
-"values": [Vector3(0, 7.87825, 0), Vector3(0, -0.121747, 0)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector3(0, 3.766, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_i43i0"]
@@ -1448,10 +1502,10 @@ tracks/3/path = NodePath("CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [true, false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -1496,10 +1550,10 @@ tracks/7/path = NodePath("LaserCollider:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(2.46, 1),
-"update": 0,
-"values": [Vector3(0, -0.121747, 0), Vector3(0, 7.87825, 0)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector3(0, 27.076, 0)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -1508,10 +1562,10 @@ tracks/8/path = NodePath("LaserCollider:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.175, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, false, true]
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -2459,6 +2513,9 @@ sfx_electric_slam_impact = Array[AudioStream]([ExtResource("60_uh4d7"), ExtResou
 sfx_electric_loop = Array[AudioStream]([ExtResource("62_qwveb"), ExtResource("63_vxl2l")])
 sfx_electric_fadeout = Array[AudioStream]([ExtResource("64_ys6fd"), ExtResource("65_a5wdl")])
 boss_id = 6
+chip_spawn_chance = 0.05
+chip_spawn_dps_threshold = 70.0
+chip_spawn_mult_cap = 1
 elemental_emitting_vfx = [null, null, null, null, null]
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
@@ -2534,7 +2591,7 @@ process_material = SubResource("ParticleProcessMaterial_gphwf")
 draw_pass_1 = SubResource("ArrayMesh_arxu5")
 
 [node name="LaserSpawn" type="Marker3D" parent="." index="2"]
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 1.343, -1.8)
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0.081, -6.4, -1.8)
 
 [node name="LaserEndParticles" parent="LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.19038, 0)
@@ -2599,6 +2656,7 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
+enabled = true
 metadata/_edit_group_ = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
@@ -4270,7 +4328,7 @@ delay_in_seconds = "0.0"
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DualNailsRanged" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
-event = &"start_melee_combo_attack"
+event = &"start_melee_combo"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
@@ -4338,28 +4396,44 @@ event = &"end_recovery"
 guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
-[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="4"]
+[node name="toDropToMelee" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/Recover" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../DropToMelee")
+event = &"laser_to_melee"
+guard = SubResource("Resource_3b05m")
+delay_in_seconds = "0.0"
+
+[node name="DropToMelee" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="4"]
+script = ExtResource("4_fo57y")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/DropToMelee" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Targeting")
+event = &"end_drop"
+delay_in_seconds = "0.0"
+
+[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="5"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="5"]
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="6"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
-event = &"start_melee_combo_attack"
+event = &"start_melee_combo"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="6"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="7"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toDashWave" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="7"]
+[node name="toDashWave" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="8"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DashWave")
 event = &"start_dash_wave"
@@ -4644,6 +4718,8 @@ bus = &"SFX"
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/Charging" to="." method="_on_laser_aoe_charging_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/Firing" to="." method="_on_laser_aoe_firing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/Recover" to="." method="_on_laser_aoe_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/DropToMelee" to="." method="_on_laser_aoe_drop_to_melee_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/MainFight/Phase5/LaserAoE/DropToMelee" to="." method="_on_laser_aoe_drop_to_melee_state_physics_processing"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/MainFight/Phase5/DashWave" to="." method="_on_tutorial_phase_3_dash_wave_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/MainFight/Phase5/DashWave/Idle" to="." method="_on_tutorial_phase_4_dash_wave_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/MainFight/Phase5/DashWave/Idle" to="." method="_on_tutorial_phase_4_dash_wave_idle_state_physics_processing"]

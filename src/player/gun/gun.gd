@@ -1259,16 +1259,14 @@ func _on_archetype_unequipped(barrel: SpinBarrel, _barrel_idx: int) -> void:
 
 ## Gun JAM
 func set_barrels_jammed() -> void:
-	barrel_cached_materials = []
+	barrel_cached_materials = [null, null, null]
 	
 	var shuffled_barrel_idxs = []
 	for i in range(installed_barrels.size()):
 		var barrel = installed_barrels[i]
 		if barrel == null:
 			continue
-		barrel_cached_materials.append(
-			barrel_icon_meshes[i].get_surface_override_material(0)
-		)
+		barrel_cached_materials[i] = barrel_icon_meshes[i].get_surface_override_material(0)
 		shuffled_barrel_idxs.append(i)
 	
 	SoundManager.play_sound(sfx_gp_jam.pick_random(), "Gun")
@@ -1338,17 +1336,21 @@ func _add_icon_jam_overlay(idx: int) -> StandardMaterial3D:
 
 func _remove_icon_jam_overlay(idx: int) -> void:
 	var _cached_mat = barrel_cached_materials[idx]
-	barrel_icon_meshes[idx].set_surface_override_material(0, _cached_mat)
+	if _cached_mat:
+		_cached_mat.next_pass = null
+		barrel_icon_meshes[idx].set_surface_override_material(0, _cached_mat)
 
 
 func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:
 	for j in range(flashes):
-		barrel_cached_materials[i] = _add_icon_jam_overlay(i)
-		await get_tree().create_timer(flash_time / 2, false).timeout
-		_remove_icon_jam_overlay(i)
-		await get_tree().create_timer(flash_time / 2, false).timeout
-	if hold_on_finish:
-		barrel_cached_materials[i] = _add_icon_jam_overlay(i)
+		var _cached_mat = barrel_cached_materials[i]
+		if _cached_mat:
+			barrel_cached_materials[i] = _add_icon_jam_overlay(i)
+			await get_tree().create_timer(flash_time / 2, false).timeout
+			_remove_icon_jam_overlay(i)
+			await get_tree().create_timer(flash_time / 2, false).timeout
+		if hold_on_finish:
+			barrel_cached_materials[i] = _add_icon_jam_overlay(i)
 
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:

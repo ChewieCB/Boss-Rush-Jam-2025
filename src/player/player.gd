@@ -1163,6 +1163,7 @@ func _disable_freecam() -> void:
 
 
 func _enable_cutscene_cam() -> void:
+	toggle_anim_reticle(false)
 	controls_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
@@ -1187,6 +1188,7 @@ func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 		await camera_tween.finished
 
 	player_camera.camera.current = true
+	toggle_anim_reticle(true)
 	gun_container.visible = true
 
 
