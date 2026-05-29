@@ -20,7 +20,7 @@ signal ui_accept
 
 var display_barrels: Array = []
 
-var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
+var no_difficulty_bosses: Array[int] = []#[BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
 
 func _ready() -> void:
@@ -58,6 +58,7 @@ func _ready() -> void:
 	
 	GameManager.reset_reroll_cost()
 	GameManager.is_free_reroll = true
+	GameManager.boss_ante = 1
 	GameManager.bet_value = 0
 	GameManager.reward_value = 0
 	

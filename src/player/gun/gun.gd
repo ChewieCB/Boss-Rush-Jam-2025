@@ -327,23 +327,24 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 
 	if is_reloading or is_spinning or is_jammed:
-		if is_reloading and \
-		idle_frame_state.get_current_node().begins_with("shotgun") and \
-		reload_interrupt == false:
-			# When the player tries to shoot during a shotgun reload,
-			# finish the current shell loading anim and interrupt the reload,
-			# keeping the ammo count at whatever it is after the last shell.
-			reload_interrupt = true
-			idle_frame_state.travel("shotgun_idle")
-			await reload_anim_end
-
-			# Play the post-reload pump to chamber a round if we started reloading from empty
-			if cached_reload_start_ammo == 0:
-				idle_frame_state.travel("shotgun_pump_no_shell")
-				await post_reload_anim_end
-		else:
-			play_failed_shoot_sfx()
-			return false
+		# TODO - add toggle for tactical shotgun reload or move to sub-frame
+		#if is_reloading and \
+		#idle_frame_state.get_current_node().begins_with("shotgun") and \
+		#reload_interrupt == false:
+			## When the player tries to shoot during a shotgun reload,
+			## finish the current shell loading anim and interrupt the reload,
+			## keeping the ammo count at whatever it is after the last shell.
+			#reload_interrupt = true
+			#idle_frame_state.travel("shotgun_idle")
+			#await reload_anim_end
+#
+			## Play the post-reload pump to chamber a round if we started reloading from empty
+			#if cached_reload_start_ammo == 0:
+				#idle_frame_state.travel("shotgun_pump_no_shell")
+				#await post_reload_anim_end
+		#else:
+		play_failed_shoot_sfx()
+		return false
 
 	reload_interrupt = false
 

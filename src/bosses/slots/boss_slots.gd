@@ -87,7 +87,7 @@ var slot_ticks: int = SLOT_TICKS
 @onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
 
 @export_subgroup("Coin Burst")
-@export var coin_damage: float = 2
+@export var coin_damage: float = 8
 @export var coin_speed: float = 60
 @export var coin_projectile: PackedScene
 var coin_proj_pool: Array = []
@@ -101,7 +101,7 @@ var coin_proj_pool: Array = []
 @export var sfx_coin_shot: Array[AudioStream]
 
 @export_subgroup("Bell Drop")
-@export var bell_damage: float = 20
+@export var bell_damage: float = 35
 @export var bell_scene: PackedScene
 var bell_pool: Array = []
 @export var bell_flare_prefab: PackedScene
@@ -123,7 +123,7 @@ var bell_spawn_points: Array = []
 @export var sfx_bell_impact: Array[AudioStream]
 
 @export_subgroup("Lever Swipe")
-@export var swipe_damage: float = 5.0
+@export var swipe_damage: float = 16.0
 @export var swipe_knockback: float = 50.0
 @export var swipe_dodge_speed: float = 10.0
 @export var swipe_cooldown: float = 5.0
@@ -133,7 +133,7 @@ var interrupted_state: String
 @export var sfx_lever_swipe: Array[AudioStream]
 
 @export_subgroup("Charge")
-@export var charge_damage: float = 10.0
+@export var charge_damage: float = 32.0
 @export var charge_knockback: float = 50.0
 @export var min_charge_distance: float = 10.0
 @export var speedline_vfx_prefab: PackedScene
@@ -146,8 +146,8 @@ var charge_locked: bool = false
 @export var sfx_charge_impact: Array[AudioStream]
 
 @export_subgroup("Homing Diamonds")
-@export var diamond_damage: float = 3
-@export var diamond_speed: float = 20
+@export var diamond_damage: float = 8
+@export var diamond_speed: float = 35
 @export var diamond_homing_speed: float = 40
 @export var diamond_spread: float = 30
 @export var diamond_projectile: PackedScene
@@ -159,7 +159,7 @@ var diamond_proj_pool: Array = []
 
 @export_subgroup("Ricochet Pinball")
 var pinball_enabled = false # Based on ante 3
-@export var pinball_damage: float = 2
+@export var pinball_damage: float = 27
 @export var pinball_speed: float = 50
 @export var pinball_ricochet_count: int = 5
 @export var pinball_projectile: PackedScene
@@ -170,7 +170,7 @@ var pinball_proj_pool: Array = []
 @export var sfx_pinball_shot: Array[AudioStream]
 
 @export_subgroup("Cherry Bombs")
-@export var bomb_damage: float = 10
+@export var bomb_damage: float = 36
 @export var bomb_projectile: PackedScene
 var bomb_proj_pool: Array = []
 @export var bombs_per_attack: int = 5

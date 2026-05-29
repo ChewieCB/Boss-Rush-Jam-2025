@@ -16,13 +16,13 @@ signal end_smoke
 @export var arena_2_center: Marker3D
 
 @export_category("Health Phases")
-@export var tutorial_health: int = 3000
-@export var phase_1_health: int = 1000
-@export var phase_2_health: int = 1000
-@export var phase_3_health: int = 1000
-@export var main_health: int = 5000
-@export var phase_4_health: int = 2500
-@export var phase_5_health: int = 2500
+@export var tutorial_health: int = 5400
+@export var phase_1_health: int = 1800
+@export var phase_2_health: int = 1800
+@export var phase_3_health: int = 1800
+@export var main_health: int = 8000
+@export var phase_4_health: int = 4000
+@export var phase_5_health: int = 4000
 @onready var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
 @onready var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
 @onready var phase_5_health_threshold: int = main_health - phase_4_health
@@ -97,20 +97,20 @@ var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + 
 @export var player_defeated_taunt_captions: Array[String]
 
 @export_subgroup("Swipe")
-@export var swipe_damage: float = 14.0
+@export var swipe_damage: float = 20.0
 # SFX
 @export var sfx_swipe: Array[AudioStream]
 @export var sfx_swipe_miss: Array[AudioStream]
 @export_subgroup("Hook")
-@export var hook_damage: float = 12.0
+@export var hook_damage: float = 22.0
 # SFX
 @export var sfx_kick: Array[AudioStream]
 @export_subgroup("Backswipe")
-@export var backswipe_damage: float = 16.0
+@export var backswipe_damage: float = 24.0
 # SFX
 @export var sfx_backswipe: Array[AudioStream]
 @export_subgroup("Slam")
-@export var slam_damage: float = 26.0
+@export var slam_damage: float = 35.0
 @export var slam_delay: float = 0.3
 @export var slam_time: float = 0.9
 var slam_wave_pool: Array = []
@@ -137,7 +137,7 @@ var nail_proj_pool: Array = []
 @export var num_bursts: int = 1
 @export var shots_per_burst: int = 12
 @export var delay_between_burst: float = 0.5
-@export var nail_damage: float = 7.0
+@export var nail_damage: float = 12.0
 #
 @export var tutorial_strafe_distance: float = 9.0
 @export var tutorial_strafe_radius: float = 9.0
@@ -170,7 +170,7 @@ var laser_target_pos: Vector3
 @export_subgroup("Electrify Floor")
 # Tutorial
 @export var shock_floor_hazard_tutorial: ElevatorShockHazard
-@export var shock_damage_tutorial: float = 10.0
+@export var shock_damage_tutorial: float = 15.0
 @export var shock_duration_tutorial: float = 0.6
 # Main
 @export var shock_floor_hazard_prefab: PackedScene
@@ -864,7 +864,9 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	
 	select_attack()
-	#state_chart.send_event("end_recovery")
+	# HACK - need this call for phase 1, but need to not call it for phase 5
+	if current_phase < 4:
+		state_chart.send_event("end_recovery")
 
 
 ## Spartan Laser AoE

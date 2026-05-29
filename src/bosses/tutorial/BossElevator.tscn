@@ -99,7 +99,7 @@
 [ext_resource type="Texture2D" uid="uid://c52mo1qekknqm" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_7.png" id="38_x4twh"]
 [ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
 [ext_resource type="AudioStream" uid="uid://b5yf2b5712obg" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 2.mp3" id="39_wm3h1"]
-[ext_resource type="PackedScene" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
+[ext_resource type="PackedScene" uid="uid://c1ep56bju50j3" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="40_0xhcc"]
 [ext_resource type="PackedScene" uid="uid://cx0o0nh68vxt5" path="res://src/bosses/tutorial/SlamAoEWall.tscn" id="40_tqwob"]
 [ext_resource type="AudioStream" uid="uid://qg61conv8q8a" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 2.mp3" id="41_y5q8h"]
@@ -2426,9 +2426,9 @@ tutorial_health = 3600
 phase_1_health = 1200
 phase_2_health = 1200
 phase_3_health = 1200
-main_health = 5000
-phase_4_health = 2500
-phase_5_health = 2500
+main_health = 8000
+phase_4_health = 4000
+phase_5_health = 4000
 MOVE_SPEED = 6.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
@@ -2456,14 +2456,14 @@ sfx_taunt_phase_4 = Array[AudioStream]([ExtResource("18_ybn3j"), ExtResource("19
 sfx_taunt_phase_5 = Array[AudioStream]([ExtResource("18_ybn3j"), ExtResource("19_8hxb3"), ExtResource("20_xgklq"), ExtResource("21_u66vn"), ExtResource("22_qulmj"), ExtResource("23_17nhe"), ExtResource("24_1roa2")])
 sfx_player_defeated_taunt = Array[AudioStream]([ExtResource("25_bkqgv"), ExtResource("26_x0wxk"), ExtResource("27_beqjm"), ExtResource("28_kc6if"), ExtResource("29_0mcru"), ExtResource("30_nc3s2"), ExtResource("31_w4244")])
 player_defeated_taunt_captions = Array[String](["Pathetic.", "Not quick enough, weakling.", "I ain't done with you yet.", "You'll have to do better than that!", "Degenerates never fail to dissapoint.", "Another sore loser that can't back it up.", "Oil and ash, cheater. Just another stain on the wall."])
-swipe_damage = 14.0
+swipe_damage = 20.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])
-hook_damage = 12.0
+hook_damage = 22.0
 sfx_kick = Array[AudioStream]([ExtResource("5_fu4i0"), ExtResource("6_oht30"), ExtResource("7_ob3ew")])
-backswipe_damage = 16.0
+backswipe_damage = 24.0
 sfx_backswipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
-slam_damage = 26.0
+slam_damage = 35.0
 slam_delay = 0.3
 slam_time = 0.9
 slam_line_prefab = ExtResource("39_ybm4c")
@@ -2482,7 +2482,7 @@ proj_spawn_r = NodePath("DebugRangedPivot/PivotR/DebugGun1/ProjSpawnR")
 num_bursts = 1
 shots_per_burst = 12
 delay_between_burst = 0.5
-nail_damage = 7.0
+nail_damage = 12.0
 tutorial_strafe_distance = 9.0
 tutorial_strafe_radius = 9.0
 strafe_distance = 12.0
@@ -2501,7 +2501,7 @@ sfx_laser_arm = Array[AudioStream]([ExtResource("60_ic00a")])
 sfx_laser_charging = Array[AudioStream]([ExtResource("61_w2upm")])
 sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_upudo"), ExtResource("20_dvqnx")])
 sfx_laser_disarm = Array[AudioStream]([ExtResource("65_sxuab")])
-shock_damage_tutorial = 10.0
+shock_damage_tutorial = 15.0
 shock_duration_tutorial = 0.6
 shock_floor_hazard_prefab = ExtResource("57_j5jra")
 shock_damage = 15.0
@@ -2656,7 +2656,6 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
-enabled = true
 metadata/_edit_group_ = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]

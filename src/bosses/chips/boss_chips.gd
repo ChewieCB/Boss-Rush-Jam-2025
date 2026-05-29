@@ -64,7 +64,7 @@ var _spawn_tweens: Array[Tween] = []
 ## BIG STACK
 @export_group("Attacks | Big Stack")
 @export_subgroup("Backspin Chip")
-@export var rolling_chip_damage: float = 15
+@export var rolling_chip_damage: float = 35
 @export var rolling_chip_projectile: PackedScene
 var rolling_chip_pool: Array
 @export var n_chips_per_roll: int = 1 # Based on ante 3
@@ -76,7 +76,7 @@ var rolling_chip_spread_deg: float = 90 # Based on ante 3
 @export var sfx_chip_fire: Array[AudioStream]
 #
 @export_subgroup("Chip Sweep")
-@export var chip_sweep_damage: float = 10
+@export var chip_sweep_damage: float = 18
 @export var n_chips_per_sweep_volley: int = 1 # Based on ante 3
 @export var chip_sweep_repeat: int = 3
 @export var sweep_time: float = 0.05
@@ -90,7 +90,7 @@ var chip_sweep_pool: Array = []
 @export var slam_shockwave_prefab: PackedScene
 var slam_shockwave_pool: Array = []
 @export var slam_count: int = 3
-@export var slam_damage: float = 10.0
+@export var slam_damage: float = 24.0
 @export var slam_wave_speed: float = 2.1
 @export var slam_wave_radius: float = 35.0
 @export var slam_delay: float = 0.4
@@ -110,7 +110,7 @@ var place_your_bet_attack_enabled = false
 @export var jump_time: float = 0.8
 @export var jump_hang_time: float = 1.2
 @export var drop_time: float = 0.3
-@export var drop_damage: float = 20.0
+@export var drop_damage: float = 35.0
 @export var aoe_radius: float = 3.0
 @export var aoe_wave_time: float = 0.4
 @export var wave_material: ShaderMaterial
@@ -420,6 +420,8 @@ func _on_health_dead_state_entered() -> void:
 
 func _on_died() -> void:
 	if current_phase != 3:
+	#if true:
+	#if true:
 		SoundManager.play_sound(sfx_death, "SFX")
 		SoundManager.play_sound(sfx_hurt_scream.pick_random(), "SFX")
 		state_chart.send_event("stop_moving")
@@ -431,6 +433,7 @@ func _on_died() -> void:
 		await boss_death_slow_mo()
 		defeated.emit(self)
 		health_ui.hide_ui()
+	# TODO - enable chiptopede on higher antes
 	else:
 		SoundManager.play_sound(sfx_chiptopede_death.pick_random(), "SFX")
 		persist_segements = true

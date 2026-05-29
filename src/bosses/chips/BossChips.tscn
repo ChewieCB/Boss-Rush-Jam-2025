@@ -289,12 +289,12 @@ max_small_attacks = 2
 sfx_stack_split = Array[AudioStream]([ExtResource("8_afdun")])
 sfx_stack_merge = Array[AudioStream]([ExtResource("9_3f4p8")])
 sfx_chiptopede_awaken = ExtResource("5_nbiu6")
-rolling_chip_damage = 15.0
+rolling_chip_damage = 35.0
 rolling_chip_projectile = ExtResource("6_dth1w")
 n_chips_per_roll = 1
 rolling_chip_repeat_per_attack = 2
 sfx_chip_fire = Array[AudioStream]([ExtResource("12_u68io")])
-chip_sweep_damage = 10.0
+chip_sweep_damage = 18.0
 n_chips_per_sweep_volley = 1
 chip_sweep_repeat = 3
 sweep_time = 0.05
@@ -303,7 +303,7 @@ chip_sweep_prefab = ExtResource("5_dugfr")
 sfx_chip_sweep_out = Array[AudioStream]([ExtResource("11_exu11"), ExtResource("12_qk8ng"), ExtResource("13_hovi1")])
 slam_shockwave_prefab = ExtResource("7_s7i42")
 slam_count = 3
-slam_damage = 10.0
+slam_damage = 24.0
 slam_wave_speed = 3.0
 slam_wave_radius = 35.0
 slam_delay = 0.3
@@ -314,7 +314,7 @@ jump_height = 9.0
 jump_time = 0.8
 jump_hang_time = 1.2
 drop_time = 0.3
-drop_damage = 20.0
+drop_damage = 35.0
 aoe_radius = 3.0
 aoe_wave_time = 0.4
 wave_material = ExtResource("5_vcykk")
@@ -403,7 +403,7 @@ shape = SubResource("BoxShape3D_oomx2")
 disabled = true
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 5000.0
+max_health = 15000.0
 
 [node name="NavigationComponent" parent="." index="5"]
 follow_target = false

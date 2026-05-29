@@ -69,6 +69,7 @@ func on_barrel_stop_spin():
 func on_effect_set():
 	return
 
+
 ## Call when player start to hold or click LMB (or shoot button)
 func on_trigger_pulled():
 	return
