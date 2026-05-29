@@ -9,7 +9,7 @@ signal ante_selected(ante_number: int)
 @export_multiline var ante_name: String
 @export var icon_sprite: Texture2D
 
-@onready var ante_icon: TextureRect = $VBoxContainer/AnteItem/AnteIcon
+@onready var ante_icon: TextureRect = $VBoxContainer/AnteItem
 @onready var ante_label: Label = $VBoxContainer/AnteLabelContainer/Panel/Label
 @onready var deselected_overlay: ColorRect = $VBoxContainer/AnteItem/DeselectedOverlay
 @onready var locked_overlay: ColorRect = $VBoxContainer/AnteItem/LockedOverlay
