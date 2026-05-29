@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=83 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -49,6 +49,7 @@
 [ext_resource type="PackedScene" uid="uid://by55cbg34v6j7" path="res://src/player/misc/DustRing.tscn" id="34_ph8h0"]
 [ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/misc/HitText.tscn" id="35_uogvx"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="PackedScene" uid="uid://c4p2faplbsqt6" path="res://src/player/misc/HealCloudVFX.tscn" id="36_isl1y"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Script" path="res://src/player/aim_recticle.gd" id="42_rky08"]
@@ -148,6 +149,9 @@ jump_dust_ring_prefab = ExtResource("34_ph8h0")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
+
+[node name="HealCloudVFX" parent="." instance=ExtResource("36_isl1y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")

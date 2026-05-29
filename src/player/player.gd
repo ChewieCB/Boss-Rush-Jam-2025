@@ -88,6 +88,8 @@ var drunk_drift_timer: float = 0.0
 var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
 
+@onready var heal_vfx: GPUParticles3D = $HealCloudVFX
+
 signal movement_dashed
 signal movement_crouched
 signal new_status_effect_added(status)
@@ -239,6 +241,7 @@ func _ready():
 
 	#debug_inventory_ui.has_custom_inventory = true
 	#debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
+	heal_vfx.deactivate()
 
 
 func _unhandled_input(event):
@@ -1017,6 +1020,8 @@ func spin_barrels() -> void:
 	if GameManager.purchase_reroll():
 		cash_in_luck()
 		current_gun.spin_all_barrels()
+		GameManager.player.player_ui.start_heal_flash()
+		heal_vfx.activate()
 		# Provide small health buff (?)
 		var modified_reroll_heal_value = reroll_heal_value
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HIGH_ROLLER):
