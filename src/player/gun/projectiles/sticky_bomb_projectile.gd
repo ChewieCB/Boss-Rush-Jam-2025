@@ -80,8 +80,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	activate()
 	sticked = false
 	if homing_strength > 0:
-		homing_area.monitoring = true
-		homing_collision_shape.shape.radius = homing_strength
+		enable_homing()
 	life_timer.start()
 
 	projectile_speed = _speed
@@ -204,6 +203,15 @@ func stick_bullet(body: Node3D) -> void:
 	#$HomingArea3D/CollisionShape3D.disabled = true
 	self.reparent.call_deferred(body)
 	sticked = true
+
+
+func enable_homing() -> void:
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
+	homing_collision_shape.set_deferred("disabled", false)
+	homing_area.set_deferred("monitoring", true)
+	homing_area.set_deferred("monitorable", true)
+	homing_collision_shape.shape.radius = homing_strength
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -343,27 +351,19 @@ func _activate_physics() -> void:
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 	
-	sticked = false
-	found_hitscal_col = false
-	homing_locked_in = false
-	homing_target = null
-	hit_boss = false
-	travelled_distance = 0
-	life_time = 0
+	reset_bullet_stats()
 	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 	
 	area.collision_layer = pow(2, 4-1)
 	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
 	area_col.set_deferred("disabled", false)
 	area.set_deferred("monitoring", true)
 	area.set_deferred("monitorable", true)
-	homing_collision_shape.set_deferred("disabled", false)
-	homing_area.set_deferred("monitoring", true)
-	homing_area.set_deferred("monitorable", true)
+	#homing_collision_shape.set_deferred("disabled", false)
+	#homing_area.set_deferred("monitoring", true)
+	#homing_area.set_deferred("monitorable", true)
 	raycast.set_deferred("enabled", true)
 
 
@@ -371,6 +371,8 @@ func _deactivate_visuals() -> void:
 	self.visible = false
 
 func _deactivate_physics() -> void:
+	super()
+	
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 	
@@ -378,13 +380,6 @@ func _deactivate_physics() -> void:
 		if tween and tween.is_valid():
 			tween.kill()
 	_active_tweens.clear()
-	
-	splitted = false
-	is_ricochet_shot = false
-	sticked = false
-	found_hitscal_col = false
-	homing_locked_in = false
-	homing_target = null
 	
 	life_timer.stop()
 	explode_timer.stop()

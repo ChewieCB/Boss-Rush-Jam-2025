@@ -662,11 +662,7 @@ func spin_all_barrels() -> void:
 	# TODO - replace with a dedicated spin time value now reloading isn't directly
 	# tied to spinning
 	await get_tree().create_timer(base_spin_time).timeout
-
-	#reset_modifier(true)
-	#gun_status_label.visible = false
 	stop_all_barrels()
-
 	#reload(true)
 
 
