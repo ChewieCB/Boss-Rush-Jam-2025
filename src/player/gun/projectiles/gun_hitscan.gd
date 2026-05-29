@@ -53,6 +53,7 @@ func _deactivate_visuals() -> void:
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
 
 func _deactivate_physics() -> void:
+	super()
 	life_timer.stop()
 	
 	splitted = false
