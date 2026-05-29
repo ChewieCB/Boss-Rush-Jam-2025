@@ -65,7 +65,7 @@ prefab_can_be_pooled = true
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 30.0
+modify_value = 15.0
 is_perc = true
 
 [node name="ModifyFirerate" type="Node3D" parent="EffectContainer/StickyBomb"]
