@@ -385,10 +385,11 @@ func activate() -> void:
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
 func apply_risk_modifier():
-	health_component.max_health *= GameManager.get_risk_max_hp_mult()
-	health_component.initialize_health()
-	for key in status_resist.keys():
-		status_resist[key] *= GameManager.get_risk_status_resist_mult()
+	return
+	#health_component.max_health *= GameManager.get_risk_max_hp_mult()
+	#health_component.initialize_health()
+	#for key in status_resist.keys():
+		#status_resist[key] *= GameManager.get_risk_status_resist_mult()
 
 
 ## GENERIC STATE HELPERS
