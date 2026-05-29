@@ -864,7 +864,9 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	
 	select_attack()
-	#state_chart.send_event("end_recovery")
+	# HACK - need this call for phase 1, but need to not call it for phase 5
+	if current_phase < 4:
+		state_chart.send_event("end_recovery")
 
 
 ## Spartan Laser AoE
