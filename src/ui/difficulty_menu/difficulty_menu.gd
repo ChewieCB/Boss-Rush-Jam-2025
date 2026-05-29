@@ -78,9 +78,6 @@ func show_menu():
 	if not is_controller_connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	
-	var test0 = ante_card_container.get_children()
-	var test1 = ante_card_container.get_child(0)
-	
 	ante_card_container.get_child(0).button.grab_focus()
 	
 	refresh_display()

@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cwskh10bq3msx" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Pulled_Lever.png" id="3_otio4"]
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="3_rlha8"]
 [ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="3_uirlk"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="3_v8cf1"]
 [ext_resource type="Resource" uid="uid://bblkebtod2bhm" path="res://src/ui/difficulty_menu/boss_slot_profile.tres" id="4_25fox"]
 [ext_resource type="Resource" uid="uid://dwnejm41e6krv" path="res://src/ui/difficulty_menu/boss_roulette_profile.tres" id="5_iim28"]
 [ext_resource type="PackedScene" uid="uid://doawgaf4fslbl" path="res://src/ui/difficulty_menu/RiskItem.tscn" id="5_myk8s"]
@@ -43,7 +44,6 @@
 [ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
 [ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="34_xjabm"]
-[ext_resource type="Texture2D" uid="uid://cnxv2qcukvjv7" path="res://src/bosses/slots/assets/Slotty_punch1.png" id="36_rqvar"]
 [ext_resource type="Texture2D" uid="uid://cueoyec2hfn60" path="res://src/bosses/slots/assets/Slotty_slam5.png" id="37_3c3cn"]
 [ext_resource type="Texture2D" uid="uid://b7vqfkn0amrkc" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_36.png" id="38_jl7ae"]
 
@@ -65,6 +65,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5c00o")
 chip_sfx = ExtResource("2_0aqwx")
+locked_sfx = ExtResource("3_v8cf1")
 boss_sprites = [NodePath("TitleRegion/BossSpriteContainer/Slot"), NodePath("TitleRegion/BossSpriteContainer/Roulette"), NodePath("TitleRegion/BossSpriteContainer/Bartender"), NodePath("TitleRegion/BossSpriteContainer/Pit"), NodePath("TitleRegion/BossSpriteContainer/Chip"), NodePath("TitleRegion/BossSpriteContainer/Mechanic"), NodePath("TitleRegion/BossSpriteContainer/Blackjack")]
 boss_ante_textures = Array[Array]([[ExtResource("3_otio4"), ExtResource("37_3c3cn"), ExtResource("38_jl7ae")], [], [], [], [ExtResource("6_itua4"), ExtResource("7_tg5i5"), ExtResource("8_efahs")], [ExtResource("9_l403e"), ExtResource("10_83ec3"), ExtResource("11_inwpi")], []])
 boss_diff_profiles = Array[ExtResource("3_rlha8")]([ExtResource("4_25fox"), ExtResource("5_iim28"), ExtResource("6_atwte"), ExtResource("7_t6tx6"), ExtResource("8_mh7r4"), ExtResource("9_b2sjg"), ExtResource("10_75fix")])
@@ -570,34 +571,22 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -656.0
-offset_top = -340.0
+offset_top = -394.0
 offset_right = 656.0
-offset_bottom = 271.0
+offset_bottom = 395.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 80
 
 [node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-ante_number = 1
-icon_sprite = ExtResource("36_rqvar")
-scale_factor = 1.15
-locked = false
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-ante_number = 2
-ante_name = "Low Roller"
-icon_sprite = ExtResource("37_3c3cn")
-scale_factor = 1.15
 locked = true
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-ante_number = 3
-ante_name = "Slow Roller"
-icon_sprite = ExtResource("38_jl7ae")
-scale_factor = 1.15
 locked = true
 
 [node name="RatioLabel" type="Label" parent="RightRegion"]

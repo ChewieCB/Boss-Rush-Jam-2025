@@ -1,5 +1,5 @@
 @tool
-extends TextureRect
+extends Control
 class_name AnteItem
 
 signal ante_selected(ante_number: int)
@@ -9,12 +9,13 @@ signal ante_selected(ante_number: int)
 @export_multiline var ante_name: String
 @export var icon_sprite: Texture2D
 
-@onready var ante_icon: TextureRect = $AnteIcon
-@onready var ante_label: Label = $AnteLabelContainer/Panel/Label
-@onready var deselected_overlay: ColorRect = $DeselectedOverlay
-@onready var locked_overlay: ColorRect = $LockedOverlay
-@onready var button: Button = $Button
-@onready var border_selected: NinePatchRect = $BorderNormal
+@onready var ante_icon: TextureRect = $VBoxContainer/AnteItem/AnteIcon
+@onready var ante_label: Label = $VBoxContainer/AnteLabelContainer/Panel/Label
+@onready var deselected_overlay: ColorRect = $VBoxContainer/AnteItem/DeselectedOverlay
+@onready var locked_overlay: ColorRect = $VBoxContainer/AnteItem/LockedOverlay
+@onready var button: Button = $VBoxContainer/AnteItem/Button
+@onready var border: NinePatchRect = $VBoxContainer/AnteItem/BorderNormal
+@onready var border_selected: NinePatchRect = $VBoxContainer/AnteItem/BorderSelected
 
 
 @export var scale_factor: float = 1.15
@@ -25,6 +26,7 @@ func _ready() -> void:
 	ante_label.text = ante_name
 	ante_icon.texture = icon_sprite
 	locked_overlay.visible = locked
+	deselected_overlay.visible = true
 	button.disabled = locked
 
 	if not Engine.is_editor_hint():
@@ -65,6 +67,7 @@ func set_ante_texture(tex: Texture2D) -> void:
 
 func _on_button_pressed() -> void:
 	ante_selected.emit(ante_number)
+	_on_button_focus_exited()
 
 
 func play_button_hover_sfx():
@@ -84,6 +87,14 @@ func return_button_size():
 	var tween = self.create_tween()
 	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
 
+func anim_button_pressed():
+	pivot_offset = size / 2
+	var tween = self.create_tween()
+	tween.set_parallel(false)
+	tween.tween_property(self , "scale", Vector2(0.7, 0.7), 0.1).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self , "scale", Vector2(1.0, 1.0), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+
 
 func _on_button_mouse_entered() -> void:
 	_on_button_focus_entered()
@@ -95,6 +106,12 @@ func _on_button_mouse_exited() -> void:
 func _on_button_focus_entered(grab_focus: bool = true) -> void:
 	play_button_hover_sfx()
 	expand_button_size()
+	border.modulate = Color("#e6c600")
+	border_selected.visible = true
+	deselected_overlay.visible = false
 
 func _on_button_focus_exited() -> void:
 	return_button_size()
+	border.modulate = Color("#4f4d3f")
+	border_selected.visible = false
+	deselected_overlay.visible = true
