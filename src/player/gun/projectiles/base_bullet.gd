@@ -24,6 +24,8 @@ const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 const RICOCHET_HOMING_STRENGTH = 0.4
 
+var init_color: Color
+
 ## Base damage / initial damage
 var damage = 1
 ## In decimal

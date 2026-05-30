@@ -25,8 +25,14 @@ const GRAVITY_IGNORE_AFTER_RICO_TIME = 0.2
 var gravity_accel = 0
 var gravity_free_timer = 0.2
 
+func _ready() -> void:
+	super()
+	Mesh
+	init_color = mesh.mesh.surface_get_material(0).albedo_color
+
 
 func _activate_visuals() -> void:
+	change_bullet_color(init_color)
 	self.visible = true
 	trail.visible = true
 	trail.emit = true
@@ -99,7 +105,6 @@ func _physics_process(delta: float) -> void:
 	global_position += velocity
 	travelled_distance += projectile_speed * delta
 
-
 	if gravity_modifier > 0 and gravity_free_timer > GRAVITY_IGNORE_AFTER_RICO_TIME:
 		gravity_accel += GRAVITY_FORCE * gravity_modifier * delta
 		global_position += Vector3(0, 1, 0) * gravity_accel * delta
@@ -111,12 +116,13 @@ func _physics_process(delta: float) -> void:
 		if dot < 0.99:
 			raycast.rotate_object_local(Vector3(1, 0, 0), pitch_angle)
 
-		if raycast.is_colliding():
-			hitscan_col_point = raycast.get_collision_point()
-			hitscan_col_normal = raycast.get_collision_normal()
-			found_hitscal_col = true
-		else:
-			found_hitscal_col = false
+	if raycast.is_colliding():
+		hitscan_col_point = raycast.get_collision_point()
+		hitscan_col_normal = raycast.get_collision_normal()
+		found_hitscal_col = true
+	else:
+		found_hitscal_col = false
+
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	look_at_from_position(start_pos, start_pos + dir)
@@ -260,8 +266,6 @@ func enable_homing() -> void:
 	homing_area.set_deferred("monitoring", true)
 	homing_area.set_deferred("monitorable", true)
 	homing_collision_shape.shape.radius = homing_strength
-
-
 
 
 func change_bullet_color(_new_color: Color):

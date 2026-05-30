@@ -126,6 +126,7 @@ var recoil_amount: float = RECOIL_AMOUNT
 ## How much screenshake when player shot
 var screenshake_amount: float = SCREENSHAKE_AMOUNT
 var base_custom_projectile_prefab: PackedScene = BASE_CUSTOM_PROJECTILE_PREFAB
+var base_projectile_pool: ObjectPoolingManager.PooledObjectEnum
 
 @export_group("Prefab Scenes")
 @export var hitscan_prefab: PackedScene
@@ -181,7 +182,6 @@ var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
 var modified_projectile_pool: ObjectPoolingManager.PooledObjectEnum = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
-var projectile_prefab_can_be_pooled = false
 var modified_recoil
 var modified_screenshake
 
@@ -204,10 +204,9 @@ func _ready() -> void:
 		var _null_barrel: NullBarrel = null_barrel_prefab.instantiate()
 		null_barrel_pool.push_back(_null_barrel)
 	
-	_init_barrel_materials()
-	
 	reset_modifier(true)
 	idle_frame_state.start("RESET")
+	_init_barrel_materials()
 
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
@@ -517,14 +516,6 @@ func create_gun_attack(bullet_pool_type: ObjectPoolingManager.PooledObjectEnum, 
 	var is_pooled: bool = false
 	
 	bullet_inst = ObjectPoolingManager.get_pooled_object(bullet_pool_type)
-	
-	#if projectile_prefab_can_be_pooled:
-		#bullet_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.STICKY_BOMB_PROJECTILE)
-		#is_pooled = true
-	#else:
-		#bullet_inst = bullet_prefab.instantiate()
-		#get_tree().get_root().add_child(bullet_inst)
-
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
 
@@ -982,7 +973,6 @@ func reset_modifier(reload_reset = false):
 		modified_magazine_size = base_magazine_size
 		modified_projectile_prefab = base_custom_projectile_prefab
 		modified_projectile_pool = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
-		projectile_prefab_can_be_pooled = false
 
 
 #func jam_the_gun(duration: float = 1.0):
@@ -1087,6 +1077,7 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 
 
 func _on_barrel_effect_changed(barrel: SpinBarrel, effect: BaseBarrelEffect) -> void:
+	effect.on_effect_removed()
 	barrel_effect_set.emit(barrel, effect)
 	# Update the gun frame if we're using the archetype barrel
 	match effect.icon_id:
