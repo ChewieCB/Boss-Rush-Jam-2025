@@ -30,8 +30,7 @@ func _ready():
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
-	# if is_ricochet_shot:
-	# 	redshift_bullet()
+	init_color = get_projectile_color()
 
 func _process(delta):
 	super(delta)
@@ -286,6 +285,7 @@ func change_bullet_color(_new_color: Color):
 # 	change_bullet_color(redshifted_color)
 
 func _activate_visuals() -> void:
+	change_bullet_color(init_color)
 	self.visible = true
 	alpha = 1.0
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 1.0)

@@ -351,8 +351,6 @@ func _activate_physics() -> void:
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 	
-	reset_bullet_stats()
-	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 	

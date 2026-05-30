@@ -70,6 +70,11 @@ func on_effect_set():
 	return
 
 
+## Call when an effect is removed
+func on_effect_removed():
+	return
+
+
 ## Call when player start to hold or click LMB (or shoot button)
 func on_trigger_pulled():
 	return
