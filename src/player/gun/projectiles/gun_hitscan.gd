@@ -197,8 +197,8 @@ func ricochet():
 	super()
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
+	
 	found_hitscal_col = false
-	print("test")
 	play_ricochet_sfx()
 	# 
 	var new_inst: GunHitscan = create_duplication(true)  # Also set is_ricochet
@@ -273,16 +273,6 @@ func change_bullet_color(_new_color: Color):
 		mesh.mesh.material.set_shader_parameter("color", _new_color)
 		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
 
-
-# func redshift_bullet():
-# 	var current_color = mesh.mesh.material.get_shader_parameter("emission_color")
-# 	var redshifted_color = Color(
-# 		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
-# 		current_color.g * 0.7, # Reduce green
-# 		current_color.b * 0.3, # Reduce blue significantly
-# 		current_color.a
-# 	)
-# 	change_bullet_color(redshifted_color)
 
 func _activate_visuals() -> void:
 	change_bullet_color(init_color)

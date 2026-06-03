@@ -99,6 +99,7 @@ func reset_bullet_stats() -> void:
 	damage = 1
 	crit_chance = 0
 	ricochet_count_left = 0
+	color_changed_count = 0
 	time_ricochetted = 0
 	is_ricochet_shot = false
 	homing_strength = 0 # radius to search for enemy
