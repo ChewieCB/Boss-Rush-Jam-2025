@@ -142,9 +142,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
-
-	await get_tree().process_frame
-	await get_tree().process_frame
+	redshift_bullet()
+	look_at_from_position(start_pos, start_pos + dir)
+	
+	trail.visible = true
 	
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
@@ -178,9 +179,8 @@ func ricochet():
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
 	if is_ricochet_shot == false:
-		redshift_bullet()
 		is_ricochet_shot = true
-		
+	
 	play_ricochet_sfx()
 	
 	# Calculate bounce direction
@@ -269,7 +269,7 @@ func enable_homing() -> void:
 
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
