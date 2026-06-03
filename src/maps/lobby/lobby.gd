@@ -62,7 +62,7 @@ func _ready() -> void:
 	GameManager.bet_value = 0
 	GameManager.reward_value = 0
 	
-	if GameManager.elevator_respawn_transform:
+	if GameManager.elevator_respawn_transform != Transform3D():
 		player.global_transform = GameManager.elevator_respawn_transform
 	
 	# HACK for backroom load
