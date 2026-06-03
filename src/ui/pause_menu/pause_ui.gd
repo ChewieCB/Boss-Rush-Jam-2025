@@ -115,6 +115,7 @@ func _on_lobby_button_pressed() -> void:
 func _on_main_menu_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.change_fmod_bgm_menu_is_up(false)
+	GameManager.elevator_respawn_transform = Transform3D()
 	
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
@@ -134,6 +135,7 @@ func _on_main_menu_button_pressed() -> void:
 func _on_quit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.change_fmod_bgm_menu_is_up(false)
+	GameManager.elevator_respawn_transform = Transform3D()
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
