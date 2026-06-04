@@ -31,22 +31,26 @@ func _activate_visuals() -> void:
 	trail.visible = true
 	trail.emit = true
 
-func _activate_physics() -> void:
-	self.process_mode = Node.PROCESS_MODE_INHERIT
-	trail.process_mode = Node.PROCESS_MODE_INHERIT
-	set_physics_process(true)
-	
-	area_col.set_deferred("disabled", false)
-	area.set_deferred("monitoring", true)
-	area.set_deferred("monitorable", true)
-	
-	raycast.set_deferred("enabled", true)
-
-
 func _deactivate_visuals() -> void:
 	self.visible = false
 	trail.visible = false
+	trail.emit = false
 	slowmo_trail.visible = false
+
+func _activate_physics() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	trail.process_mode = Node.PROCESS_MODE_INHERIT
+	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+
+	life_timer.start()
+
+	raycast.enabled = true
+	raycast.force_raycast_update()
+	area_col.disabled = false
+	area.monitoring = true
+	area.monitorable = true
+	
 
 func _deactivate_physics() -> void:
 	splitted = false
@@ -55,26 +59,25 @@ func _deactivate_physics() -> void:
 	homing_target = null
 	
 	trail.full_reset()
-	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	life_timer.stop()
 	
-	area_col.set_deferred("disabled", true)
-	area.set_deferred("monitoring", false)
-	area.set_deferred("monitorable", false)
-	
-	raycast.set_deferred("enabled", false)
-	
-	homing_area_col.set_deferred("disabled", true)
-	homing_area.set_deferred("monitoring", false)
+	raycast.enabled = false
+	area_col.disabled = true
+	area.monitoring = false
+	area.monitorable = false
+
+	homing_area_col.disabled = true
+	homing_area.monitoring = false
 	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	self.process_mode = Node.PROCESS_MODE_DISABLED
 	set_physics_process(false)
 
 
 func _process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
@@ -118,8 +121,8 @@ func _physics_process(delta: float) -> void:
 			found_hitscal_col = false
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	look_at_from_position(start_pos, start_pos + dir)
 	activate()
-	trail.visible = false
 	
 	if homing_strength > 0:
 		homing_area.monitoring = true
@@ -137,12 +140,6 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
-	look_at_from_position(start_pos, start_pos + dir)
-	
-	#await get_tree().physics_frame
-	#await get_tree().physics_frame
-	
-	trail.visible = true
 	
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
@@ -168,7 +165,7 @@ func play_ricochet_sfx():
 	sfx.finished.connect(sfx.queue_free)
 
 func ricochet():
-	super()
+	super ()
 	gravity_free_timer = 0
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
