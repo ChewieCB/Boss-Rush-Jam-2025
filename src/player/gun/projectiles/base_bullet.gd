@@ -222,7 +222,6 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
 
-## Avoid using this unless last resort, very laggy
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = ObjectPoolingManager.get_pooled_object(pool_idx)
 	
@@ -247,7 +246,7 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
 		return
-	if not is_instance_valid(self):
+	if not is_instance_valid(self ):
 		return
 
 	var center_dir = - current_dir
