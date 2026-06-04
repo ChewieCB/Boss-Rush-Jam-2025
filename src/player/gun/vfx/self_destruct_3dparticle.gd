@@ -1,7 +1,12 @@
 extends GPUParticles3D
 
+@export var queue_free_on_finished = false
 
 func _on_finished():
+	if queue_free_on_finished:
+		queue_free()
+		return
+	
 	deactivate()
 
 

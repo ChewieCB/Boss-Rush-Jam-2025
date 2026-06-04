@@ -150,6 +150,7 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 
 	var blood_inst = generic_blood_splatter.instantiate()
 	get_parent().add_child(blood_inst)
+	blood_inst.activate()
 	blood_inst.global_position = pos
 
 	if normal.is_equal_approx(Vector3.DOWN):

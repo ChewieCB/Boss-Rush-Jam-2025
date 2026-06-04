@@ -105,7 +105,7 @@ material_override = SubResource("StandardMaterial3D_pphwl")
 cast_shadow = 0
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_xa5jf")
-segments = 3
+segments = 5
 base_width = 0.1
 width_profile = SubResource("Curve_inxyf")
 
