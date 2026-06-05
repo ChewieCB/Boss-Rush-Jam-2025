@@ -197,6 +197,7 @@ func ricochet():
 
 func split(split_count: int, split_spread_radius: float, has_pos: bool, pos: Vector3):
 	super (split_count, split_spread_radius, has_pos, pos)
+	# Maybe play a split SFX here
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
