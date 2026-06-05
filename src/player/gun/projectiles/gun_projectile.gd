@@ -148,6 +148,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
 
+	if splitted:
+		redshift_bullet()
+
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit(hit_boss)
@@ -190,6 +193,10 @@ func ricochet():
 	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
+
+
+func split(split_count: int, split_spread_radius: float, has_pos: bool, pos: Vector3):
+	super (split_count, split_spread_radius, has_pos, pos)
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:

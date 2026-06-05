@@ -213,6 +213,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	self.visible = true
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 1.0)
 
+	if splitted:
+		redshift_bullet()
+
 
 func play_ricochet_sfx():
 	var sfx = AudioStreamPlayer3D.new()
@@ -262,19 +265,19 @@ func _on_timer_timeout():
 	finished.emit.call_deferred()
 
 
-func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
-	var _pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
-	super (split_count, split_spread_radius, _has_pos, _pos_hitscan)
+func split(split_count: int, split_spread_radius: float, has_pos: bool, _pos: Vector3):
+	var pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
+	super (split_count, split_spread_radius, has_pos, pos_hitscan)
 	#if splitted:
 		#return
-#
+	
 	#var center_dir = - current_dir
 	#var new_pos = global_position
 	#if found_hitscal_col:
 		#center_dir = hitscan_col_normal
 	#if _has_pos:
 		#new_pos = _pos
-#
+
 	#for i in range(split_count):
 		#if not is_instance_valid(self ):
 			#return
@@ -307,14 +310,3 @@ func change_bullet_color(_new_color: Color):
 	else:
 		mesh.mesh.material.set_shader_parameter("color", _new_color)
 		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
-
-
-# func redshift_bullet():
-# 	var current_color = mesh.mesh.material.get_shader_parameter("emission_color")
-# 	var redshifted_color = Color(
-# 		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
-# 		current_color.g * 0.7, # Reduce green
-# 		current_color.b * 0.3, # Reduce blue significantly
-# 		current_color.a
-# 	)
-# 	change_bullet_color(redshifted_color)
