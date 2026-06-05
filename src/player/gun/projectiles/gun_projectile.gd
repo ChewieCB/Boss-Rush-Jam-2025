@@ -45,11 +45,11 @@ func _activate_physics() -> void:
 
 	life_timer.start()
 
-	raycast.enabled = true
-	raycast.force_raycast_update()
-	area_col.disabled = false
-	area.monitoring = true
-	area.monitorable = true
+	raycast.set_deferred("enabled", true)
+	raycast.call_deferred("force_raycast_update")
+	area_col.set_deferred("disabled", false)
+	area.set_deferred("monitoring", true)
+	area.set_deferred("monitorable", true)
 	
 
 func _deactivate_physics() -> void:
@@ -59,16 +59,15 @@ func _deactivate_physics() -> void:
 	homing_target = null
 	
 	trail.full_reset()
-	
 	life_timer.stop()
 	
-	raycast.enabled = false
-	area_col.disabled = true
-	area.monitoring = false
-	area.monitorable = false
+	raycast.set_deferred("enabled", false)
+	area_col.set_deferred("disabled", true)
+	area.set_deferred("monitoring", false)
+	area.set_deferred("monitorable", false)
 
-	homing_area_col.disabled = true
-	homing_area.monitoring = false
+	homing_area_col.set_deferred("disabled", true)
+	homing_area.set_deferred("monitoring", false)
 	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
@@ -140,6 +139,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
+
+	await get_tree().process_frame
+	await get_tree().process_frame
 	
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
