@@ -16,13 +16,13 @@ signal end_smoke
 @export var arena_2_center: Marker3D
 
 @export_category("Health Phases")
-@export var tutorial_health: int = 3000
-@export var phase_1_health: int = 1000
-@export var phase_2_health: int = 1000
-@export var phase_3_health: int = 1000
-@export var main_health: int = 5000
-@export var phase_4_health: int = 2500
-@export var phase_5_health: int = 2500
+@export var tutorial_health: int = 5400
+@export var phase_1_health: int = 1800
+@export var phase_2_health: int = 1800
+@export var phase_3_health: int = 1800
+@export var main_health: int = 8000
+@export var phase_4_health: int = 4000
+@export var phase_5_health: int = 4000
 @onready var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
 @onready var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
 @onready var phase_5_health_threshold: int = main_health - phase_4_health
@@ -62,6 +62,8 @@ var intro_drop_landed_y: float = 0.0
 
 var next_attack: String = ""
 var prev_attack: String = ""
+var TAUNT_COOLDOWN: int = 2
+var taunt_cooldown: int = TAUNT_COOLDOWN
 
 @export var sfx_intro_land: Array[AudioStream]
 
@@ -95,20 +97,20 @@ var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + 
 @export var player_defeated_taunt_captions: Array[String]
 
 @export_subgroup("Swipe")
-@export var swipe_damage: float = 14.0
+@export var swipe_damage: float = 20.0
 # SFX
 @export var sfx_swipe: Array[AudioStream]
 @export var sfx_swipe_miss: Array[AudioStream]
 @export_subgroup("Hook")
-@export var hook_damage: float = 12.0
+@export var hook_damage: float = 22.0
 # SFX
 @export var sfx_kick: Array[AudioStream]
 @export_subgroup("Backswipe")
-@export var backswipe_damage: float = 16.0
+@export var backswipe_damage: float = 24.0
 # SFX
 @export var sfx_backswipe: Array[AudioStream]
 @export_subgroup("Slam")
-@export var slam_damage: float = 26.0
+@export var slam_damage: float = 35.0
 @export var slam_delay: float = 0.3
 @export var slam_time: float = 0.9
 var slam_wave_pool: Array = []
@@ -135,7 +137,7 @@ var nail_proj_pool: Array = []
 @export var num_bursts: int = 1
 @export var shots_per_burst: int = 12
 @export var delay_between_burst: float = 0.5
-@export var nail_damage: float = 7.0
+@export var nail_damage: float = 12.0
 #
 @export var tutorial_strafe_distance: float = 9.0
 @export var tutorial_strafe_radius: float = 9.0
@@ -168,7 +170,7 @@ var laser_target_pos: Vector3
 @export_subgroup("Electrify Floor")
 # Tutorial
 @export var shock_floor_hazard_tutorial: ElevatorShockHazard
-@export var shock_damage_tutorial: float = 10.0
+@export var shock_damage_tutorial: float = 15.0
 @export var shock_duration_tutorial: float = 0.6
 # Main
 @export var shock_floor_hazard_prefab: PackedScene
@@ -204,7 +206,7 @@ func _ready() -> void:
 		_init_nail_proj()
 	for i in range(3):
 		_init_aoe_line()
-	for i in range(3):
+	for i in range(8):
 		_init_aoe_wall()
 	
 	#
@@ -365,11 +367,12 @@ func _on_inactive_state_entered() -> void:
 
 func select_attack_phase_1_tutorial() -> void:
 	# Alternate between strafing nail gun and taunt
-	match prev_attack:
-		"strafing_nails":
-			state_chart.send_event("start_taunt_attack")
-		"taunt":
-			state_chart.send_event("start_ranged_naiils_strafe")
+	if taunt_cooldown > 0:
+		taunt_cooldown -= 1
+		state_chart.send_event("start_ranged_naiils_strafe")
+	else:
+		taunt_cooldown = TAUNT_COOLDOWN
+		state_chart.send_event("start_taunt_attack")
 
 
 func select_attack_phase_2_tutorial() -> void:
@@ -426,6 +429,7 @@ func select_attack_phase_4() -> void:
 		state_chart.send_event("start_dash_wave")
 	else:
 		state_chart.send_event("start_ranged_naiils_strafe")
+	state_chart.send_event("end_recovery")
 
 
 func select_attack_phase_5() -> void:
@@ -481,12 +485,29 @@ func select_attack_phase_5() -> void:
 			else:
 				# Reset the ranged attack counter
 				ranged_phase_count = 0
+				attack_interrupt = true
 				# We move into the melee phase, so trigger a random melee attack
+				# TODO - shove boss out towards middle if elevator nails attack
+				if prev_attack == "start_dual_nails_attack":
+					var tween = get_tree().create_tween()
+					var forward_dir: Vector3 = - active_sub_door.basis.z
+					var peek_pos: Vector3 = self.global_position + forward_dir * 2
+					tween.tween_property(
+						self, "global_position", peek_pos, 0.2
+					).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+					active_sub_light.yellow()
+					active_sub_door.close()
+					tween.parallel().tween_callback(active_sub_light.red).set_delay(1.2)  # door.close() anim length
+					await tween.finished
 				# TODO - intro slam state to handle dropping from high up
 				previous_phase = "melee_phase"
-				new_attack = melee_attacks.pick_random()
+				health_component.is_invincible = false
+				health_component.show_damage_text = true
+				new_attack = "start_melee_combo"
+				attack_interrupt = false
 	
 	state_chart.send_event(new_attack)
+	state_chart.send_event("end_recovery")
 
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
@@ -843,8 +864,9 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	
 	select_attack()
-	
-	state_chart.send_event("end_recovery")
+	# HACK - need this call for phase 1, but need to not call it for phase 5
+	if current_phase < 4:
+		state_chart.send_event("end_recovery")
 
 
 ## Spartan Laser AoE
@@ -884,6 +906,8 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	anim_player.play("elevator_boss/laser_arm")
 	
 	await anim_player.animation_finished
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
 	
 	state_chart.send_event("charge_laser")
 
@@ -990,19 +1014,42 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	anim_player.play("elevator_boss/laser_disarm")
 	await anim_player.animation_finished
 	
+	health_component.is_invincible = true
+	health_component.show_damage_text = false
 	sprite.visible = false
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-	$LaserCollider.disabled = true
+	
 	anim_player.play("RESET")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 	sprite.visible = true
 	state_chart.send_event("cooldown_end")
-	
 	desired_distance = DESIRED_DISTANCE
 	
-	select_attack()
+	if ranged_phase_count >= max_sequential_ranged_phases:
+		state_chart.send_event("laser_to_melee")
+	else:
+		select_attack()
+		state_chart.send_event("end_recovery")
+
+
+func _on_laser_aoe_drop_to_melee_state_entered() -> void:
+	anim_player.play("RESET")
+	sprite.visible = true
+	anim_player.play("drop_smoke_enter")
 	
-	state_chart.send_event("end_recovery")
+	await anim_player.animation_finished
+	
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
+	select_attack()
+	state_chart.send_event("end_drop")
+
+
+func _on_laser_aoe_drop_to_melee_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
 
 
 func _intro_drop() -> void:
@@ -1019,6 +1066,7 @@ func _on_smokescreen_idle_state_entered() -> void:
 	state_chart.send_event("stop_moving")
 	
 	var ranged_attacks = [
+		"start_dual_nails_attack",
 		"start_dual_nails_attack",
 		"start_laser_aoe_attack",
 	]
@@ -1066,6 +1114,9 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	
 	await get_tree().create_timer(0.6, false).timeout
 	
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
+	
 	state_chart.send_event(state_event)
 
 
@@ -1108,10 +1159,10 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 
 
 func _on_smokescreen_open_doors_state_entered() -> void:
-	health_component.is_invincible = false
-	health_component.show_damage_text = true
 	self.collision_layer = int(pow(2, 3 - 1))
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
@@ -1124,7 +1175,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	# Move the boss out of the elevator to fire
 	var tween = get_tree().create_tween()
 	var forward_dir: Vector3 = - active_sub_door.basis.z
-	var peek_pos: Vector3 = self.global_position + forward_dir * 3
+	var peek_pos: Vector3 = self.global_position + forward_dir * 3.5
 	tween.tween_property(
 		self, "global_position", peek_pos, 0.5
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -1132,7 +1183,6 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	
 	prev_attack = next_attack
 	state_chart.send_event(next_attack)
-	state_chart.send_event("end_smoke")
 
 
 func get_furthest_laser_spawn() -> Node:
@@ -1218,7 +1268,7 @@ func slam_line(_spawn_pos: Vector3, _range: float = 30.0, _width: float = 4.0, _
 	# Spawn line aoe that grows from boss to target
 	spawn_aoe_line(
 		_width, _height, _damage,
-		self.global_position.distance_to(target.global_position) + 5.0,
+		self.global_position.distance_to(target.global_position) + 10.0,
 		_time,
 		slam_spawn_marker.global_position,
 		state_chart.send_event.bind("combo_end")
@@ -1240,6 +1290,8 @@ func spawn_aoe_line(
 	callback: Callable = func(): pass,
 ) -> void:
 	var _slam_line = slam_line_pool.pop_back()
+	if not _slam_line:
+		return
 	_slam_line.init(width, height, damage, max_range)
 	_slam_line.global_position = area_pos
 	_slam_line.global_basis = self.global_basis
@@ -1256,10 +1308,10 @@ func spawn_aoe_line(
 
 ## SLAM WALL
 
-func slam_wall(max_range: float, speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
+func slam_wall(speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
 	# Spawn wave aoe
 	spawn_aoe_wall(
-		max_range,
+		80.0,
 		speed,
 		_width, _height, _thickness,
 		_damage,
@@ -1284,6 +1336,8 @@ func spawn_aoe_wall(
 	callback: Callable = func(): pass ,
 ) -> void:
 	var _slam_wall = slam_wall_pool.pop_back()
+	if not _slam_wall:
+		return
 	_slam_wall.init(width, height, thickness, damage, max_range)
 	_slam_wall.global_position = area_pos
 	_slam_wall.global_basis = self.global_basis
@@ -1291,7 +1345,7 @@ func spawn_aoe_wall(
 	
 	await get_tree().physics_frame
 	
-	_slam_wall.send_wall()
+	_slam_wall.send_wall(speed)
 	
 	await _slam_wall.finished
 	
@@ -1395,12 +1449,14 @@ func _on_arena_1_cutscene_state_physics_processing(_delta: float) -> void:
 func _on_tutorial_phase_1_state_entered() -> void:
 	# Start with a ranged attack, then alternate taunt and ranged attack until a health threshold is reached
 	# TODO - update health bar/audio triggers
+	attack_interrupt = false
 	show_health()
 	tutorial_phase_1_started.emit()
 
 
 # TAUNT
 func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
+	velocity = Vector3.ZERO
 	state_chart.send_event("start_targeting")
 	prev_attack = "taunt"
 	state_chart.send_event("start_taunt")
@@ -1469,7 +1525,7 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 	await anim_player.animation_finished
 	
 	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
-	await get_tree().create_timer(1.2, false).timeout
+	await get_tree().create_timer(0.7, false).timeout
 	state_chart.send_event("start_shooting")
 
 
@@ -1503,7 +1559,7 @@ func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 ## PHASE 2 - JUMPING
 
 func _on_tutorial_phase_2_state_entered() -> void:
-	attack_interrupt = false
+	attack_interrupt = true
 	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 2
 	tutorial_phase_2_started.emit()
@@ -1605,6 +1661,7 @@ func start_floor_shock() -> void:
 	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	sfx_player.stream = sfx_electric_fadeout.pick_random()
 	sfx_player.play()
+	shock_floor_hazard_tutorial.trigger_effect()
 
 
 func end_floor_shock() -> void:
@@ -1747,7 +1804,6 @@ func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 	
 	anim_player.play("elevator_boss/dash_wave")
 	await anim_player.animation_finished
-	await get_tree().create_timer(1.0, false).timeout
 	
 	state_chart.send_event("end_wave")
 
@@ -1919,7 +1975,7 @@ func _on_tutorial_phase_4_dash_wave_idle_state_physics_processing(delta: float) 
 	orbit_player(delta)
 	
 	if self.global_position.distance_to(target.global_position) > 8.0 and \
-	self.global_position.distance_to(target.global_position) < 20.0:
+	self.global_position.distance_to(target.global_position) < 50.0:
 		state_chart.send_event("start_wave")
 
 

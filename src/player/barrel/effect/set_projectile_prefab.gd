@@ -12,6 +12,11 @@ func on_effect_set():
 	owner_barrel.owner_gun.projectile_prefab_can_be_pooled = prefab_can_be_pooled
 
 
+func on_barrel_start_spin():
+	owner_barrel.owner_gun.reset_modifier()
+	super()
+
+
 func on_reload_end():
 	super()
 	owner_barrel.owner_gun.modified_projectile_prefab = new_prefab

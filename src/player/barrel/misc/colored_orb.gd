@@ -54,6 +54,9 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector3.ZERO
 		
 		OrbState.HOMING:
+			# HACK catch for minions/boss sub-forms that die mid-flight
+			if not homing_target:
+				return
 			if homing_target:
 				var target_pos = homing_target.global_position
 				if homing_target.has_node("BodyCenter"):

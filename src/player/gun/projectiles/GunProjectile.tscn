@@ -1,13 +1,19 @@
-[gd_scene load_steps=24 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=30 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_20dr0"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_hfe15"]
 [ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="4_ks48t"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_xa5jf"]
+[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="5_qkred"]
+[ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="6_nrwwr"]
 [ext_resource type="PackedScene" uid="uid://c54o67tient15" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmit.tscn" id="6_q13y4"]
+[ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="7_3y2u6"]
+[ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="8_b78wo"]
 [ext_resource type="PackedScene" uid="uid://cmgohkgojrv34" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmit.tscn" id="8_cfhry"]
+[ext_resource type="PackedScene" uid="uid://du6plnrfa56ov" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedImpact.tscn" id="9_w8ev7"]
 [ext_resource type="PackedScene" uid="uid://ca0xt7tqp4c1g" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmit.tscn" id="10_1hvph"]
+[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="10_tjui2"]
 [ext_resource type="Shader" path="res://src/player/gun/vfx/distortion_trail.gdshader" id="11_nltpd"]
 [ext_resource type="PackedScene" uid="uid://7r4o8qm4v3km" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmit.tscn" id="12_hmgch"]
 [ext_resource type="PackedScene" uid="uid://dmrsj5hmyumwf" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmit.tscn" id="14_kna87"]
@@ -63,11 +69,14 @@ streams_count = 2
 stream_0/stream = ExtResource("20_31gvv")
 stream_1/stream = ExtResource("21_wcewm")
 
-[node name="GunProjectile" type="Node3D"]
+[node name="GunProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_x0ax1")
 spark_effect = ExtResource("2_20dr0")
 generic_blood_splatter = ExtResource("3_hfe15")
 bullet_decal_prefab = ExtResource("4_ks48t")
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), NodePath("ElementalVFX/ProjectilePoisonEmit"), NodePath("ElementalVFX/ProjectileFreezeEmit"), NodePath("ElementalVFX/ProjectileShockEmit"), NodePath("ElementalVFX/ProjectileBleedEmit")]
+elemental_impact_vfx = Array[PackedScene]([ExtResource("5_qkred"), ExtResource("6_nrwwr"), ExtResource("7_3y2u6"), ExtResource("8_b78wo"), ExtResource("9_w8ev7")])
+sfx_crit = Array[AudioStream]([ExtResource("10_tjui2")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -96,7 +105,7 @@ material_override = SubResource("StandardMaterial3D_pphwl")
 cast_shadow = 0
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_xa5jf")
-segments = 3
+segments = 5
 base_width = 0.1
 width_profile = SubResource("Curve_inxyf")
 

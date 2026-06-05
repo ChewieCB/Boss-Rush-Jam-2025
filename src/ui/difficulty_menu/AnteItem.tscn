@@ -1,34 +1,64 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgdrie48ccxvw"]
+[gd_scene load_steps=7 format=3 uid="uid://bgdrie48ccxvw"]
 
-[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_kqsda"]
+[ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="1_dsftp"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_3gy6e"]
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/ante_item.gd" id="2_a8k7o"]
+[ext_resource type="Texture2D" uid="uid://c33o1e80c6ouq" path="res://src/ui/difficulty_menu/boss_ante_images/mechanic/mechanic_ante_2_shock.png" id="2_ewsvx"]
+[ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="5_kdfri"]
+[ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="5_qr8jw"]
 
-[node name="AnteItem" type="TextureRect"]
-custom_minimum_size = Vector2(100, 300)
-size_flags_horizontal = 3
-texture = ExtResource("1_kqsda")
-script = ExtResource("2_a8k7o")
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -4.0
-offset_bottom = -4.0
+[node name="AnteItem" type="Control"]
+custom_minimum_size = Vector2(384, 720)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
+script = ExtResource("2_a8k7o")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
-self_modulate = Color(0.902344, 0.776165, 0, 1)
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -338.0
+offset_right = 192.0
+offset_bottom = 338.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnteItem" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(384, 560)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_ewsvx")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="AnteIcon" type="TextureRect" parent="VBoxContainer/AnteItem"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.595, 0.595)
+pivot_offset = Vector2(4.295, 0)
+texture = ExtResource("1_dsftp")
+expand_mode = 3
+stretch_mode = 3
+
+[node name="BorderNormal" type="NinePatchRect" parent="VBoxContainer/AnteItem"]
+modulate = Color(0.309804, 0.301961, 0.247059, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,3 +70,120 @@ patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
+
+[node name="BorderSelected" type="NinePatchRect" parent="VBoxContainer/AnteItem"]
+visible = false
+modulate = Color(0.901961, 0.776471, 0, 1)
+custom_minimum_size = Vector2(368, 544)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -272.0
+offset_right = 184.0
+offset_bottom = 272.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_qr8jw")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="DeselectedOverlay" type="ColorRect" parent="VBoxContainer/AnteItem"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.141176, 0.141176, 0.141176, 0.447059)
+
+[node name="Button" type="Button" parent="VBoxContainer/AnteItem"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="LockedOverlay" type="ColorRect" parent="VBoxContainer/AnteItem"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.141176, 0.141176, 0.141176, 0.694118)
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/AnteItem/LockedOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -112.0
+offset_right = 48.0
+offset_bottom = 112.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 96
+theme_override_constants/margin_bottom = 64
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/AnteItem/LockedOverlay/MarginContainer"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+texture = ExtResource("5_kdfri")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="AnteLabelContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Panel" type="Panel" parent="VBoxContainer/AnteLabelContainer"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/AnteLabelContainer/Panel"]
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -18.5
+offset_right = 96.0
+offset_bottom = 18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/font_size = 30
+text = "?????????"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[connection signal="focus_entered" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_focus_entered"]
+[connection signal="focus_exited" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_focus_exited"]
+[connection signal="mouse_entered" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_pressed"]

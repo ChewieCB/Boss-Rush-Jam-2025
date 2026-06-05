@@ -40,6 +40,7 @@ func on_effect_set():
 	for child in child_effects:
 		child.on_effect_set()
 
+
 func on_fire_attempt() -> bool:
 	var res = true
 	for child in child_effects:

@@ -36,8 +36,8 @@ func _ready() -> void:
 	assert(len(PooledObjectEnum.values()) == len(pooled_object_prefabs))
 	
 	if InputHelper.device == InputHelper.DEVICE_STEAMDECK_CONTROLLER:
-		if MAX_POOL_SIZE > 150.0:  # TODO - find a good default value for this
-			MAX_POOL_SIZE = 150.0
+		if MAX_POOL_SIZE > 150: # TODO - find a good default value for this
+			MAX_POOL_SIZE = 150
 	
 	for object_enum in PooledObjectEnum.values():
 		active_object_pool.append([])
@@ -61,7 +61,7 @@ func init_object_pools() -> void:
 				obj.activate()
 	
 	await RenderingServer.frame_post_draw
-	await RenderingServer.frame_post_draw  # depth pre pass
+	await RenderingServer.frame_post_draw # depth pre pass
 	
 	for pool in available_object_pool:
 		for obj in pool:

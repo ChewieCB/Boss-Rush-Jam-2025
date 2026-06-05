@@ -25,9 +25,8 @@ alpha_antialiasing_mode = 0
 albedo_color = Color(1, 0.995527, 0.960938, 0.713726)
 emission = Color(1, 0.731834, 0.032858, 1)
 
-[node name="GunProjectileBall" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_dfyk2")]
+[node name="GunProjectileBall" instance=ExtResource("1_dfyk2")]
 gravity_modifier = 1.0
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), null, null, null, null]
 elemental_impact_vfx = Array[PackedScene]([ExtResource("2_fjism"), ExtResource("3_0rmwu"), ExtResource("4_8ybgg"), ExtResource("4_rsbvh"), ExtResource("6_x5ied")])
 
 [node name="MeshInstance3D" parent="." index="0"]
