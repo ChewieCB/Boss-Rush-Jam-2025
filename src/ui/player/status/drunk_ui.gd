@@ -7,7 +7,7 @@ var drunk_tween: Tween
 @export var upper_blur: float = 0.03
 
 @onready var bgm_bus_lowpass := AudioServer.get_bus_effect(1, 1) as AudioEffectLowPassFilter
-@onready var sfx_bus_lowpass := AudioServer.get_bus_effect(2, 0) as AudioEffectLowPassFilter
+@onready var sfx_bus_lowpass := AudioServer.get_bus_effect(3, 0) as AudioEffectLowPassFilter
 
 
 func _ready() -> void:

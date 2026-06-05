@@ -14,7 +14,7 @@ class_name GunProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_area_col: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
-@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+@onready var ricochet_sfx_player: AudioStreamPlayer3D = $Ricochet3dAudio
 
 
 # Gravity stuff
@@ -55,8 +55,12 @@ func _activate_physics() -> void:
 func _deactivate_physics() -> void:
 	splitted = false
 	is_ricochet_shot = false
+	ricochet_count_left = 0
+	time_ricochetted = 0
+	misc_data = {}
 	homing_locked_in = false
 	homing_target = null
+	life_time = 0
 	
 	trail.full_reset()
 	life_timer.stop()
@@ -157,17 +161,7 @@ func _on_life_timer_timeout() -> void:
 	finished.emit.call_deferred()
 
 func play_ricochet_sfx():
-	var sfx = AudioStreamPlayer3D.new()
-	sfx.stream = ricochet_sfx.stream
-	sfx.stream = ricochet_sfx.stream
-	sfx.unit_size = ricochet_sfx.unit_size
-	sfx.max_distance = ricochet_sfx.max_distance
-	sfx.volume_db = ricochet_sfx.volume_db
-	sfx.attenuation_model = ricochet_sfx.attenuation_model
-	get_tree().root.add_child(sfx)
-	sfx.global_position = global_position
-	sfx.play()
-	sfx.finished.connect(sfx.queue_free)
+	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 func ricochet():
 	super ()

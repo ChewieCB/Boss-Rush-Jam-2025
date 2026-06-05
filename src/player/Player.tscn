@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=88 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -133,7 +133,7 @@ stream_2/stream = ExtResource("71_htgqk")
 stream_3/stream = ExtResource("72_mj3f0")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dxvay"]
-radius = 2.0
+radius = 2.5
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2

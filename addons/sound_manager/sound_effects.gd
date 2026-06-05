@@ -20,7 +20,7 @@ var busy_players_3d: Array[AudioStreamPlayer3D] = []
 var default_pool_size_3d := 4
 
 
-func play_3d(resource: AudioStream, position: Vector3, override_bus: String = "") -> AudioStreamPlayer3D:
+func play_3d(resource: AudioStream, position: Vector3, override_bus: String = "", just_create = false) -> AudioStreamPlayer3D:
 	var player = get_available_player_3d()
 	player.stream = resource
 	player.bus = override_bus if override_bus != "" else bus
@@ -28,7 +28,9 @@ func play_3d(resource: AudioStream, position: Vector3, override_bus: String = ""
 	player.pitch_scale = 1
 	player.global_position = position
 
-	player.call_deferred("play")
+	if not just_create:
+		player.call_deferred("play")
+
 	return player
 
 
