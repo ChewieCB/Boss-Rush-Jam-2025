@@ -3,6 +3,7 @@ class_name LuckTriggerInfo
 
 
 # TODO - update this as we add luck triggers
+# NOTE: DO NOT CHANGE ORDER
 enum LuckTriggerIdEnum {
 	GAMBLERS_PRECISION__LUCKY_SHOT,
 	GAMBLERS_PRECISION__LET_IT_RIDE,
@@ -14,6 +15,7 @@ enum LuckTriggerIdEnum {
 	STICKY_BOMB__CLUSTER_BOMB,
 	STICKY_BOMB__DANGER_CLOSE,
 	MEDICAL_PAYOUT__PAYDAY,
+	SPLIT__SPLITSHOT
 }
 
 @export var id: LuckTriggerIdEnum

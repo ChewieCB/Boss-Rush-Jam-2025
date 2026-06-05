@@ -53,9 +53,10 @@ amount = 15
 one_shot = true
 explosiveness = 1.0
 randomness = 0.5
-visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
+visibility_aabb = AABB(-10000, -10000, -10000, 10000, 10000, 10000)
 process_material = SubResource("ParticleProcessMaterial_k1q2q")
 draw_pass_1 = SubResource("QuadMesh_iy2t6")
 script = ExtResource("1_usdih")
+queue_free_on_finished = true
 
 [connection signal="finished" from="." to="." method="_on_finished"]

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://ur1kc860qqx0"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_oijv7"]
+
+[resource]
+script = ExtResource("1_oijv7")
+id = 10
+name = "Splitshot"
+desc = "+3 luck on a splitted hit"
+message = ""
