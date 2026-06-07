@@ -80,9 +80,10 @@ func _physics_process(delta: float) -> void:
 		var dist_to_target = global_position.distance_to(target_pos)
 		var homing_range = homing_strength * HOMING_RANGE_FACTOR
 		if dist_to_target <= homing_range:
-			var dir_to_target = global_position.direction_to(target_pos)
 			var current_dir_vec = - transform.basis.z
+			var dir_to_target = global_position.direction_to(target_pos)
 			var new_dir = current_dir_vec.lerp(dir_to_target, homing_strength * HOMING_STRENGTH_FACTOR).normalized()
+			homing_curved_degrees += rad_to_deg(current_dir_vec.angle_to(new_dir))
 			look_at(global_position + new_dir)
 	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
 		var aiming_position = GunUtils.get_player_aiming_position()

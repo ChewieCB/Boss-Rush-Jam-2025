@@ -23,8 +23,8 @@ signal destroyed(hit_boss: bool)
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 const RICOCHET_HOMING_STRENGTH = 0.4
-const HOMING_STRENGTH_FACTOR = 0.003
-const HOMING_RANGE_FACTOR = 10 # Also based on homing strength
+const HOMING_STRENGTH_FACTOR = 0.007
+const HOMING_RANGE_FACTOR = 15 # Also based on homing strength
 
 ## Base damage / initial damage
 var damage = 1
@@ -61,6 +61,7 @@ var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
 var hit_boss = false
 var is_crit = false
+var homing_curved_degrees = 0.0
 var misc_data = {}
 
 func _ready() -> void:
