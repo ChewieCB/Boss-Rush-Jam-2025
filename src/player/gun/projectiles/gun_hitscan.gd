@@ -21,7 +21,7 @@ var end_pos
 
 const DELAY_BETWEEN_RICO = 0.05
 const RICO_START_POS_OFFSET_MODIFIER = 0.01
-const HITSCAN_HOMING_STRENTH_MODIFIER = 2
+const HITSCAN_HOMING_STRENTH_MODIFIER = 4
 const BEAM_RANGE_IF_NOT_COLLIDE = 50
 
 
@@ -30,8 +30,6 @@ func _ready():
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
-	# if is_ricochet_shot:
-	# 	redshift_bullet()
 
 func _activate_visuals() -> void:
 	self.visible = true
@@ -41,6 +39,11 @@ func _activate_visuals() -> void:
 func _activate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
+
+	misc_data = {}
+	time_ricochetted = 0
+	is_ricochet_shot = false
+	splitted = false
 	
 	raycast.set_deferred("enabled", true)
 	area_col.set_deferred("disabled", false)
@@ -77,6 +80,8 @@ func _process(delta):
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	activate()
+
 	if shot_flash_start:
 		var rotate_amount = randi_range(0, 90)
 		shot_flash_start.rotate_z(rotate_amount)
@@ -126,7 +131,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	max_range = _max_range
 	raycast.target_position.z = - abs(_max_range)
 	
-	self.look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
+	look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
 	
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -236,7 +241,6 @@ func ricochet():
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
-	print("test")
 	play_ricochet_sfx()
 	# 
 	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
@@ -261,7 +265,7 @@ func get_projectile_color() -> Color:
 
 
 func _on_timer_timeout():
-	destroyed.emit(self, hit_boss)
+	destroyed.emit(self , hit_boss)
 	finished.emit.call_deferred()
 
 
