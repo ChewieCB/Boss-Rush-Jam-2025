@@ -51,10 +51,10 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if self.process_mode == Node.PROCESS_MODE_DISABLED:
 		return
-	
+
 	if sticked:
 		return
-	
+
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
@@ -94,7 +94,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	explosion_damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
-	
+
 	look_at_from_position(start_pos, start_pos + dir)
 	_start_countdown_anim()
 
@@ -107,17 +107,17 @@ func _run_countdown_anim() -> void:
 	var ticks: int = 6
 	var tick_times: Array[float] = []
 	var k: float = 2.5  # Acceleration intensity
-	
+
 	for i in range(ticks):
 		var x = float(i) / float(ticks - 1)
 		var t = (delay_explosion_time) * ((exp(k * x) - 1.0) / (exp(k) - 1.0))
 		tick_times.append(t)
-	
+
 	var tick_durations: Array[float] = []
 	for i in range(ticks - 1):
 		tick_durations.append(tick_times[i + 1] - tick_times[i])
 	tick_durations.reverse()
-	
+
 	tick_sfx_player.volume_db = -6
 	var start_colour := Color("#f70000")
 	var end_colour := Color("#ba2f20")
@@ -138,17 +138,17 @@ func ricochet():
 	super()
 	found_hitscal_col = false
 	is_ricochet_shot = true
-	
+
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
-	
+
 	# Add slight homing toward last look enemy target if available
 	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
 		var target = GameManager.player.last_look_enemy_target
 		var dir_to_target = global_position.direction_to(target.global_position)
 		# Blend bounce direction with target direction (small homing factor)
 		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
-	
+
 	init(global_position, bounce_dir, explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 
@@ -160,11 +160,11 @@ func _on_life_timer_timeout() -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
-	
+
 	var calculated_damage = calculate_bullet_damage()
 	if not calculated_damage:
 		return
-	
+
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			damage_body(body, calculated_damage)
@@ -178,7 +178,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			hit_boss = true
 		stick_bullet(body)
-	
+
 	start_countdown()
 
 
@@ -191,7 +191,7 @@ func start_countdown() -> void:
 func damage_body(body: Node3D, damage: int = 0) -> void:
 	if damage == 0:
 		damage = calculate_bullet_damage()
-		
+
 	before_damage_applied.emit(body, self )
 	damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 	apply_damage_to_health_component(body.health_component, damage)
@@ -224,7 +224,7 @@ func _on_explode_timer_timeout() -> void:
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
 			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
-	
+
 	explosion_inst.call_deferred("activate")
 	exploded.emit(explosion_inst)
 	call_deferred("create_explosion")
@@ -308,7 +308,7 @@ func anim_countdown_tick(tick_time: float, scale_mod: float, colour: Color) -> v
 	tween.parallel().tween_property(mesh.mesh.material, "albedo_color", colour, tick_time * 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 	await tween.finished
-	
+
 	_active_tweens.erase(tween)
 	return
 
@@ -328,7 +328,7 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 	tween.tween_property(mesh, "scale", Vector3(0.1, 0.1, 0.1), tick_time * 0.5).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
-	
+
 	_active_tweens.erase(tween)
 	return
 
@@ -342,7 +342,7 @@ func _activate_visuals() -> void:
 func _activate_physics() -> void:
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
-	
+
 	sticked = false
 	found_hitscal_col = false
 	homing_locked_in = false
@@ -350,10 +350,10 @@ func _activate_physics() -> void:
 	hit_boss = false
 	travelled_distance = 0
 	life_time = 0
-	
+
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
-	
+
 	area.collision_layer = pow(2, 4-1)
 	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
 	homing_area.collision_layer = 0
@@ -373,30 +373,30 @@ func _deactivate_visuals() -> void:
 func _deactivate_physics() -> void:
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
-	
+
 	for tween in _active_tweens:
 		if tween and tween.is_valid():
 			tween.kill()
 	_active_tweens.clear()
-	
+
 	splitted = false
 	is_ricochet_shot = false
 	sticked = false
 	found_hitscal_col = false
 	homing_locked_in = false
 	homing_target = null
-	
+
 	life_timer.stop()
 	explode_timer.stop()
 	tick_sfx_player.stop()
-	
+
 	stop_elemental_particles()
-	
+
 	area.collision_layer = 0
 	area.collision_mask = 0
 	homing_area.collision_layer = 0
 	homing_area.collision_mask = 0
-	
+
 	area_col.set_deferred("disabled", true)
 	area.set_deferred("monitoring", false)
 	area.set_deferred("monitorable", false)
@@ -404,6 +404,6 @@ func _deactivate_physics() -> void:
 	homing_area.set_deferred("monitoring", false)
 	homing_area.set_deferred("monitorable", false)
 	raycast.set_deferred("enabled", false)
-	
+
 	self.process_mode = Node.PROCESS_MODE_DISABLED
 	set_physics_process(false)

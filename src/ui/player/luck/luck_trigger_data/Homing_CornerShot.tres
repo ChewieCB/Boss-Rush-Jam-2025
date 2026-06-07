@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://cn3t18786bhnj"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_3pkcg"]
+
+[resource]
+script = ExtResource("1_3pkcg")
+id = 11
+name = "Corner Shot"
+desc = "+15 lluck when bullet curve more than 90 degree"
+message = ""

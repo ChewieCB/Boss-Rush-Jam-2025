@@ -198,14 +198,14 @@ func _ready() -> void:
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
-	
+
 	# We have 1 more just in case
 	for i in range(max_barrels + 1):
 		var _null_barrel: NullBarrel = null_barrel_prefab.instantiate()
 		null_barrel_pool.push_back(_null_barrel)
-	
+
 	_init_barrel_materials()
-	
+
 	reset_modifier(true)
 	idle_frame_state.start("RESET")
 
@@ -213,7 +213,7 @@ func _ready() -> void:
 		_on_savefile_loaded()
 	else:
 		await reinstall_barrels()
-	
+
 	is_jammed = false
 
 
@@ -319,6 +319,18 @@ func clear_gun_stats() -> void:
 	reload_no_anim()
 
 
+func _call_barrel_effect(method: Callable) -> void:
+	for barrel in installed_barrels:
+		if barrel == null:
+			continue
+		method.call(barrel.get_active_effect())
+
+func _call_barrel_effect_deferred(method_name: String) -> void:
+	for barrel in installed_barrels:
+		if barrel == null:
+			continue
+		barrel.get_active_effect().call_deferred(method_name)
+
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
 	if not GameManager.equipped_gun_frame:
@@ -337,7 +349,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			#reload_interrupt = true
 			#idle_frame_state.travel("shotgun_idle")
 			#await reload_anim_end
-#
 			## Play the post-reload pump to chamber a round if we started reloading from empty
 			#if cached_reload_start_ammo == 0:
 				#idle_frame_state.travel("shotgun_pump_no_shell")
@@ -402,7 +413,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 				bullet_pool = modified_projectile_pool
 			elif modified_is_hitscan:
 				bullet_pool = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_HITSCAN
-			
+
 			create_gun_attack(bullet_pool, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
 		time_since_last_shot = 0
@@ -413,6 +424,13 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			if barrel == null:
 				continue
 			barrel.get_active_effect().on_ammo_consumed()
+
+		if magazine_ammo_left <= 0:
+			for barrel in installed_barrels:
+				if barrel == null:
+					continue
+				barrel.get_active_effect().on_clip_empty()
+
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
 
@@ -515,9 +533,9 @@ func play_post_shot_anim() -> bool:
 func create_gun_attack(bullet_pool_type: ObjectPoolingManager.PooledObjectEnum, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
 	var bullet_inst: BaseBullet = null
 	var is_pooled: bool = false
-	
+
 	bullet_inst = ObjectPoolingManager.get_pooled_object(bullet_pool_type)
-	
+
 	#if projectile_prefab_can_be_pooled:
 		#bullet_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.STICKY_BOMB_PROJECTILE)
 		#is_pooled = true
@@ -547,7 +565,7 @@ func create_gun_attack(bullet_pool_type: ObjectPoolingManager.PooledObjectEnum, 
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
-	
+
 	#if is_pooled:
 	_init_bullet(bullet_inst, start_pos, direction, damage, proj_speed, max_range)
 	#else:
@@ -625,10 +643,10 @@ func spin_all_barrels() -> void:
 	if is_jammed:
 		play_failed_shoot_sfx()
 		return
-	
+
 	if installed_barrels == [null, null, null]:
 		return
-	
+
 	if is_reloading:
 		await gun_reloaded
 
@@ -715,7 +733,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 
 func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	reset_modifier(true)
-	
+
 	var tween := get_tree().create_tween()
 	for i in installed_barrels.size():
 		if installed_barrels[i] == null:
@@ -731,22 +749,22 @@ func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	if barrel == null:
 		return
-		
+
 	var _effect: BaseBarrelEffect = barrel.stop_spin()
 	# Update barrel icon - FIXME: optimise this
 	set_barrel_icon.call_deferred(barrel_idx, _effect.icon_id)
-	
-	barrel.get_active_effect().on_barrel_stop_spin.call_deferred()
-	
+
+	barrel.get_active_effect().on_barrel_stop_spin()
+
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
-	
-	barrel.get_active_effect().on_effect_set.call_deferred()
-	
+
+	barrel.get_active_effect().on_effect_set()
+
 	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
-	
+
 	# Seeded spin stuff - deprecate?
 	#var barrel_label: Label3D = barrel_labels[barrel_idx]
 	#barrel_label.text = "[%s]" % [
@@ -758,17 +776,17 @@ func _get_icon_texture(icon_id: int) -> CompressedTexture2D:
 	var _texture_cache: Dictionary = GameManager.effect_icon_texture_cache
 	if icon_id in _texture_cache:
 		return _texture_cache[icon_id]
-	
+
 	var path := "res://assets/sprite/effect_icons/%s.png" % icon_id
 	var texture := load(path) as CompressedTexture2D
 	_texture_cache[icon_id] = texture
-	
+
 	return texture
 
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
-	
+
 	var mat: StandardMaterial3D = _barrel_materials[barrel_idx]
 	mat.albedo_color = Color.WHITE
 	mat.albedo_texture = _get_icon_texture(icon_id)
@@ -907,7 +925,7 @@ func reload(_already_spin_barrel = false):
 			LuckHandler.decrease_luck(
 				LuckHandler.luck_cost_per_auto_spin * len(barrels_to_auto_spin)
 			)
-			
+
 			var barrel_count: int = 0
 			for barrel in installed_barrels:
 				if barrel == null:
@@ -1042,7 +1060,7 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 	for barrel in barrel_container.get_children():
 		if barrel is not NullBarrel:
 			barrel_count += 1
-	
+
 	var barrel_inst: SpinBarrel
 	if barrel_data == null:
 		barrel_inst = null_barrel_pool.pop_front()
@@ -1051,27 +1069,27 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 		#barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 		barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
 		barrel_inst.owner_gun = self
-	
+
 		var _null = barrel_container.get_child(slot_idx)
 		barrel_container.remove_child(_null)
 		null_barrel_pool.push_back(_null)
-	
+
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
 	magazine_ammo_left = 0
-	
+
 	var barrel_idx: int = slot_idx
 	# Get first available slot if none specified
 	if barrel_idx == -1:
 		barrel_idx = barrel_count
-	
+
 	barrel_container.add_child(barrel_inst)
 	barrel_container.move_child(barrel_inst, barrel_idx)
-	
+
 	if barrel_inst is not NullBarrel and barrel_inst != null:
 		barrel_inst.reloads_before_spin = barrel_data.reloads_before_spin
 		installed_barrels[barrel_idx] = barrel_inst
-		
+
 		barrel_inst.get_active_effect().on_barrel_install()
 		set_barrel_icon(barrel_idx, barrel_inst.get_active_effect().icon_id)
 		barrel_equipped.emit(barrel_inst, barrel_idx)
@@ -1086,7 +1104,7 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 	for barrel in barrel_container.get_children():
 		if barrel is not NullBarrel:
 			barrel.get_active_effect().on_effect_set()
-	
+
 	reload_no_anim()
 
 
@@ -1119,7 +1137,7 @@ func remove_barrel(barrel_idx: int) -> void:
 		var _null = null_barrel_pool.pop_front()
 		barrel_container.add_child(_null)
 		barrel_container.move_child(_null, barrel_idx)
-		
+
 
 	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
 
@@ -1148,7 +1166,7 @@ func recheck_installed_barrels():
 		barrel_label.text = "[%s]" % [
 			barrel.reloads_before_spin - barrel.reload_count
 		]
-	
+
 	for i in installed_barrels.size():
 		var barrel_label: Label3D = barrel_labels[i]
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
@@ -1258,7 +1276,7 @@ func _on_archetype_unequipped(barrel: SpinBarrel, _barrel_idx: int) -> void:
 ## Gun JAM
 func set_barrels_jammed() -> void:
 	barrel_cached_materials = [null, null, null]
-	
+
 	var shuffled_barrel_idxs = []
 	for i in range(installed_barrels.size()):
 		var barrel = installed_barrels[i]
@@ -1266,9 +1284,9 @@ func set_barrels_jammed() -> void:
 			continue
 		barrel_cached_materials[i] = barrel_icon_meshes[i].get_surface_override_material(0)
 		shuffled_barrel_idxs.append(i)
-	
+
 	SoundManager.play_sound(sfx_gp_jam.pick_random(), "Gun")
-	
+
 	shuffled_barrel_idxs.shuffle()
 	for i in shuffled_barrel_idxs:
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
