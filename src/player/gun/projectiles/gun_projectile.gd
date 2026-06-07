@@ -37,31 +37,34 @@ func _activate_visuals() -> void:
 	trail.visible = true
 	trail.emit = true
 
+func _deactivate_visuals() -> void:
+	self.visible = false
+	trail.visible = false
+	trail.emit = false
+	slowmo_trail.visible = false
+
 func _activate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	trail.process_mode = Node.PROCESS_MODE_INHERIT
+	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
-	
+
+	life_timer.start()
+
+	raycast.set_deferred("enabled", true)
+	raycast.call_deferred("force_raycast_update")
 	area_col.set_deferred("disabled", false)
 	area.set_deferred("monitoring", true)
 	area.set_deferred("monitorable", true)
 	
-	raycast.set_deferred("enabled", true)
-
-
-func _deactivate_visuals() -> void:
-	self.visible = false
-	trail.visible = false
-	slowmo_trail.visible = false
 
 func _deactivate_physics() -> void:
 	super()
 	
 	trail.full_reset()
-	trail.process_mode = Node.PROCESS_MODE_DISABLED
-	
 	life_timer.stop()
 	
+	raycast.set_deferred("enabled", false)
 	area_col.set_deferred("disabled", true)
 	area.set_deferred("monitoring", false)
 	area.set_deferred("monitorable", false)
@@ -72,12 +75,13 @@ func _deactivate_physics() -> void:
 	homing_area.set_deferred("monitoring", false)
 	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	self.process_mode = Node.PROCESS_MODE_DISABLED
 	set_physics_process(false)
 
 
 func _process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
@@ -121,8 +125,8 @@ func _physics_process(delta: float) -> void:
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	look_at_from_position(start_pos, start_pos + dir)
 	activate()
-	trail.visible = false
 	
 	if homing_strength > 0:
 		enable_homing()
@@ -148,6 +152,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
 
+	if splitted:
+		redshift_bullet()
+
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit(hit_boss)
@@ -167,7 +174,7 @@ func play_ricochet_sfx():
 	sfx.finished.connect(sfx.queue_free)
 
 func ricochet():
-	super()
+	super ()
 	gravity_free_timer = 0
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
@@ -189,6 +196,11 @@ func ricochet():
 	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
+
+
+func split(split_count: int, split_spread_radius: float, has_pos: bool, pos: Vector3):
+	super (split_count, split_spread_radius, has_pos, pos)
+	# Maybe play a split SFX here
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:

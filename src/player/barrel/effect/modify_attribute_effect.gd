@@ -119,13 +119,16 @@ func on_reload_end():
 
 func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 	super (enemy, projectile)
-	if projectile.is_ricochet_shot and !(enemy is Player):
-		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.RICOCHET__RICOSHOT)
-		if projectile.time_ricochetted >= 10:
-			LuckHandler.increase_luck(20, "+100 Ultra Ricoshot?", LuckHandler.LuckTriggerType.DEVIL)
-		elif projectile.time_ricochetted >= 5:
-			LuckHandler.increase_luck(20, "+20 Mega Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
-		elif projectile.time_ricochetted >= 3:
-			LuckHandler.increase_luck(10, "+10 Super Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
+	if projectile.is_ricochet_shot:
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.SPLIT__SPLITSHOT)
+		if enemy is Player:
+			LuckHandler.increase_luck(1, "+1 Blunderico!", LuckHandler.LuckTriggerType.NEGATIVE)
 		else:
-			LuckHandler.increase_luck(3, "+3 Ricoshot!")
+			if projectile.time_ricochetted >= 10:
+				LuckHandler.increase_luck(100, "+100 Ultra Ricoshot?", LuckHandler.LuckTriggerType.DEVIL)
+			elif projectile.time_ricochetted >= 5:
+				LuckHandler.increase_luck(20, "+20 Mega Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
+			elif projectile.time_ricochetted >= 3:
+				LuckHandler.increase_luck(10, "+10 Super Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
+			else:
+				LuckHandler.increase_luck(3, "+3 Ricoshot!")

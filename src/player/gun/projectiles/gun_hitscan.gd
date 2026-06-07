@@ -26,14 +26,48 @@ const BEAM_RANGE_IF_NOT_COLLIDE = 50
 
 
 func _ready():
-	super()
+	super ()
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
 	init_color = get_projectile_color()
 
+func _activate_visuals() -> void:
+	self.visible = true
+	alpha = 1.0
+	mesh.mesh.material.set_shader_parameter("fade_multiplier", 1.0)
+
+func _activate_physics() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+	
+	raycast.set_deferred("enabled", true)
+	area_col.set_deferred("disabled", false)
+	nearby_enemy_check_area.set_deferred("monitoring", true)
+	nearby_enemy_check_area.set_deferred("monitorable", true)
+
+
+func _deactivate_visuals() -> void:
+	self.visible = false
+	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
+
+func _deactivate_physics() -> void:
+	life_timer.stop()
+	
+	splitted = false
+	is_ricochet_shot = false
+	
+	raycast.set_deferred("enabled", false)
+	area_col.set_deferred("disabled", true)
+	nearby_enemy_check_area.set_deferred("monitoring", false)
+	nearby_enemy_check_area.set_deferred("monitorable", false)
+	
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
+
+
 func _process(delta):
-	super(delta)
+	super (delta)
 	alpha -= delta * fade_speed
 	alpha = clamp(alpha, 0, 1)
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", alpha)
@@ -178,6 +212,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	self.visible = true
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 1.0)
 
+	if splitted:
+		redshift_bullet()
+
 
 func play_ricochet_sfx():
 	var sfx = AudioStreamPlayer3D.new()
@@ -194,14 +231,14 @@ func play_ricochet_sfx():
 
 
 func ricochet():
-	super()
+	super ()
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	
 	found_hitscal_col = false
 	play_ricochet_sfx()
 	# 
-	var new_inst: GunHitscan = create_duplication(true)  # Also set is_ricochet
+	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
 	new_inst.mesh.mesh.material = mesh.mesh.material.duplicate()
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	
@@ -227,19 +264,19 @@ func _on_timer_timeout():
 	finished.emit.call_deferred()
 
 
-func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
-	var _pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
-	super(split_count, split_spread_radius, _has_pos, _pos_hitscan)
+func split(split_count: int, split_spread_radius: float, has_pos: bool, _pos: Vector3):
+	var pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
+	super (split_count, split_spread_radius, has_pos, pos_hitscan)
 	#if splitted:
 		#return
-#
+	
 	#var center_dir = - current_dir
 	#var new_pos = global_position
 	#if found_hitscal_col:
 		#center_dir = hitscan_col_normal
 	#if _has_pos:
 		#new_pos = _pos
-#
+
 	#for i in range(split_count):
 		#if not is_instance_valid(self ):
 			#return
@@ -263,7 +300,7 @@ func redshift_bullet():
 
 
 func change_bullet_color(_new_color: Color):
-	super(_new_color)
+	super (_new_color)
 	if color_changed_count > 1:
 		var current_mesh_color = mesh.mesh.material.get_shader_parameter("color")
 		var current_emission_color = mesh.mesh.material.get_shader_parameter("emission_color")

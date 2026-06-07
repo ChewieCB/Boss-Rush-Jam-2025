@@ -511,7 +511,7 @@ func play_post_shot_anim() -> bool:
 	return true
 
 
-func create_gun_attack(bullet_pool: ObjectPoolingManager.PooledObjectEnum , start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
+func create_gun_attack(bullet_pool_type: ObjectPoolingManager.PooledObjectEnum, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
 	var bullet_inst: BaseBullet = null
 	var is_pooled: bool = false
 	
@@ -545,11 +545,8 @@ func create_gun_attack(bullet_pool: ObjectPoolingManager.PooledObjectEnum , star
 		#bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 
-
 func _init_bullet(_bullet: BaseBullet, start_pos, direction, damage, proj_speed, max_range) -> void:
 	_bullet.global_position = start_pos
-	if _bullet.has_method("activate"):
-		_bullet.activate()
 	_bullet.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 

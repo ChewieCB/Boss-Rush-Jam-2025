@@ -2,7 +2,7 @@ extends BaseBarrelEffect
 
 @export var damage: int
 @export var damage_variance: int = 11
-@export var range: float
+@export var explosion_range: float = 2.5
 
 @export_group("Luck Triggers")
 @export_subgroup("Bada Bing, Bada Boom!")
@@ -37,18 +37,18 @@ func create_explosion(pos: Vector3, status_effects: Array):
 	if not explosion_inst.explosive_damage.is_connected(_on_explosive_damage):
 		explosion_inst.explosive_damage.connect(_on_explosive_damage)
 	
-	explosion_inst.set_damage_radius(range)
+	explosion_inst.set_damage_radius(explosion_range)
 	explosion_inst.global_position = pos
 
 
-func _on_explosive_damage(damage: float, body: CharacterBody3D) -> void:
+func _on_explosive_damage(_damage: float, body: CharacterBody3D) -> void:
 	if body is not Player:
 		# Don't trigger luck buff if we damage outselves
-		accumulate_dps_dealt(damage)
+		accumulate_dps_dealt(_damage)
 
 
-func accumulate_dps_dealt(damage: float) -> void:
-	dps_accumulated_in_window += damage
+func accumulate_dps_dealt(_damage: float) -> void:
+	dps_accumulated_in_window += _damage
 
 
 func _on_dps_dealt_window_timer_timeout() -> void:
