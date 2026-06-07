@@ -132,7 +132,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(hit_boss)
+	destroyed.emit(self, hit_boss)
 	finished.emit.call_deferred()
 
 func play_ricochet_sfx():
@@ -224,7 +224,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit(hit_boss)
+		destroyed.emit(self, hit_boss)
 		finished.emit.call_deferred()
 
 

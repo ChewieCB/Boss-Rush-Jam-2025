@@ -3,6 +3,7 @@ extends BaseBarrelEffect
 @export var tracked_luck_trigger_ids: Array[LuckTriggerInfo.LuckTriggerIdEnum]
 
 var homing_skill_issue_solved_hit_count = 0
+var total_gun_hit_from_this_mag = 0
 
 func on_projectile_spawn(projectile: BaseBullet):
 	if owner_barrel.owner_gun.magazine_ammo_left <= 1:
@@ -35,15 +36,11 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 	if tracked_luck_trigger_ids.has(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__SKILL_ISSUE_SOLVED):
 		if projectile.homing_strength > 0:
 			homing_skill_issue_solved_hit_count += 1
-			if "is_last_bullet" in projectile.misc_data and homing_skill_issue_solved_hit_count >= owner_barrel.owner_gun.modified_magazine_size:
+			if "is_last_bullet" in projectile.misc_data and homing_skill_issue_solved_hit_count >= total_gun_hit_from_this_mag:
 				LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__SKILL_ISSUE_SOLVED)
 				LuckHandler.increase_luck(50, "+50 Skill issue solved!")
 				homing_skill_issue_solved_hit_count = 0
 
-func on_projectile_destroyed(hit_boss: bool):
-	if tracked_luck_trigger_ids.has(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__SKILL_ISSUE_SOLVED):
-		if not hit_boss:
-			homing_skill_issue_solved_hit_count -= 1
-
 func on_reload_end():
 	homing_skill_issue_solved_hit_count = 0
+	total_gun_hit_from_this_mag = owner_barrel.owner_gun.modified_projectile_amount * owner_barrel.owner_gun.modified_magazine_size

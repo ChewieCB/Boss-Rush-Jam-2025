@@ -602,11 +602,11 @@ func check_barrel_effect_on_projectile_impact(_projectile: BaseBullet, _has_pos:
 			continue
 		barrel.get_active_effect().on_projectile_impact(_projectile, _has_pos, _pos)
 
-func check_barrel_effect_on_projectile_destroyed(hit_boss: bool):
+func check_barrel_effect_on_projectile_destroyed(_projectile: BaseBullet, _hit_boss: bool):
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
-		barrel.get_active_effect().on_projectile_destroyed(hit_boss)
+		barrel.get_active_effect().on_projectile_destroyed(_projectile, _hit_boss)
 
 func check_barrel_effect_on_dash_movement():
 	for barrel in installed_barrels:

@@ -261,7 +261,7 @@ func get_projectile_color() -> Color:
 
 
 func _on_timer_timeout():
-	destroyed.emit(hit_boss)
+	destroyed.emit(self, hit_boss)
 	finished.emit.call_deferred()
 
 

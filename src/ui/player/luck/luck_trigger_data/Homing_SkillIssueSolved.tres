@@ -6,5 +6,5 @@
 script = ExtResource("1_by26m")
 id = 12
 name = "Skill Issue Solved"
-desc = "+50 luck when you hit all bullets from your magazine"
+desc = "+50 luck when you dont miss any bullets"
 message = ""

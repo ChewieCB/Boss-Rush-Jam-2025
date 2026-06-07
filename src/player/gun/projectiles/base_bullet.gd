@@ -18,7 +18,7 @@ signal on_player_contact(projectile: BaseBullet)
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
-signal destroyed(hit_boss: bool)
+signal destroyed(projectile: BaseBullet, hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8

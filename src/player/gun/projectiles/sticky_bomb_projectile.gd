@@ -153,7 +153,7 @@ func ricochet():
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(false)
+	destroyed.emit(self, false)
 	finished.emit()
 
 
@@ -234,7 +234,7 @@ func _on_explode_timer_timeout() -> void:
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
-		destroyed.emit(hit_boss)
+		destroyed.emit(self, hit_boss)
 		finished.emit()
 
 

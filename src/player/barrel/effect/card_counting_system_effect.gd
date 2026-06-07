@@ -22,8 +22,8 @@ func on_barrel_start_spin():
 	missed_shot_stack_count = 0
 	GameManager.player.remove_status_effect_by_name("the_system_missed_stack_count")
 	
-func on_projectile_destroyed(hit_boss):
-	super (hit_boss)
+func on_projectile_destroyed(_projectile: BaseBullet, hit_boss: bool):
+	super (_projectile, hit_boss)
 	if not hit_boss:
 		missed_shot_stack_count += 1
 		show_stack_count_ui_effect()
