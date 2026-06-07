@@ -23,6 +23,8 @@ signal destroyed(hit_boss: bool)
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 const RICOCHET_HOMING_STRENGTH = 0.4
+const HOMING_STRENGTH_FACTOR = 0.003
+const HOMING_RANGE_FACTOR = 10 # Also based on homing strength
 
 ## Base damage / initial damage
 var damage = 1

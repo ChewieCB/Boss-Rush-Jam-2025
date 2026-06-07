@@ -178,7 +178,7 @@ var modified_spread_horizontal_bias = 0.5
 var modified_reload_time
 var modified_spin_time
 var modified_ricochet_count = 0
-var modified_homing_strength: float = 0 # radius to search for enemy
+var modified_homing_strength: float = 0 # strength factor for homing toward last seen target
 var modified_projectile_prefab: PackedScene = null
 var modified_projectile_pool: ObjectPoolingManager.PooledObjectEnum = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
 var projectile_prefab_can_be_pooled = false

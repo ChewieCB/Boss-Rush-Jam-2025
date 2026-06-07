@@ -27,7 +27,7 @@ luck_triggers = Array[int]([3])
 script = ExtResource("3_khhtx")
 display_text_title = "Homing Bullet"
 display_text_tag = "Skill issues solved!"
-display_text_desc = "+5 homing strength
+display_text_desc = "+3 homing strength
 -30% damage"
 positive_desc = Array[String](["Shots homing towards enemies"])
 negative_desc = Array[String](["-30% damage"])
