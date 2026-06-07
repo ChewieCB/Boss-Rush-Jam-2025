@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1_3pkcg")
 id = 11
-name = "Corner Shot"
-desc = "+15 lluck when bullet curve more than 90 degree"
+name = "Curved Shot"
+desc = "+8 luck when bullet curved significantly and hit enemies"
 message = ""

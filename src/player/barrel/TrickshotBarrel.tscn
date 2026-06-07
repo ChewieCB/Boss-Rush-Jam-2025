@@ -39,7 +39,7 @@ display_text_desc = "+3 homing strength
 positive_desc = Array[String](["Shots homing towards enemies"])
 negative_desc = Array[String](["-30% damage"])
 icon_id = 44
-luck_triggers = Array[int]([0])
+luck_triggers = Array[int]([11, 12])
 
 [node name="SetHomingStrength" type="Node3D" parent="EffectContainer/Homing"]
 script = ExtResource("3_8iiph")

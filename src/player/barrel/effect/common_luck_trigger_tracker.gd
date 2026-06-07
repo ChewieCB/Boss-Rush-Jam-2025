@@ -27,18 +27,18 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 				else:
 					LuckHandler.increase_luck(3, "+3 Ricoshot!")
 
-	if tracked_luck_trigger_ids.has(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__CORNER_SHOT):
+	if tracked_luck_trigger_ids.has(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__CURVED_SHOT):
 		if projectile.homing_strength > 0:
-			if projectile.homing_curved_degrees >= 90:
-				LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__CORNER_SHOT)
-				LuckHandler.increase_luck(3, "+15 Corner Shot!")
+			if projectile.homing_curved_degrees >= 45:
+				LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__CURVED_SHOT)
+				LuckHandler.increase_luck(3, "+8 Curved Shot!")
 
 	if tracked_luck_trigger_ids.has(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__SKILL_ISSUE_SOLVED):
 		if projectile.homing_strength > 0:
 			homing_skill_issue_solved_hit_count += 1
 			if "is_last_bullet" in projectile.misc_data and homing_skill_issue_solved_hit_count >= total_gun_hit_from_this_mag:
 				LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__SKILL_ISSUE_SOLVED)
-				LuckHandler.increase_luck(50, "+50 Skill issue solved!")
+				LuckHandler.increase_luck(20, "+20 Skill issue solved!")
 				homing_skill_issue_solved_hit_count = 0
 
 func on_reload_end():

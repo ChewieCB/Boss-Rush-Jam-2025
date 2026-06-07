@@ -13,7 +13,7 @@
 [ext_resource type="Resource" uid="uid://jx3qhymvhjim" path="res://src/ui/player/luck/luck_trigger_data/StickyBomb_DangerClose.tres" id="11_gk8jg"]
 [ext_resource type="Resource" uid="uid://cteusv30a4rpw" path="res://src/ui/player/luck/luck_trigger_data/MedicalPayout_Payday.tres" id="12_q73gr"]
 [ext_resource type="Resource" uid="uid://ur1kc860qqx0" path="res://src/ui/player/luck/luck_trigger_data/Split_Splitshot.tres" id="13_7jkcv"]
-[ext_resource type="Resource" uid="uid://cn3t18786bhnj" path="res://src/ui/player/luck/luck_trigger_data/Homing_CornerShot.tres" id="14_88gt3"]
+[ext_resource type="Resource" uid="uid://cn3t18786bhnj" path="res://src/ui/player/luck/luck_trigger_data/Homing_CurvedShot.tres" id="14_88gt3"]
 [ext_resource type="Resource" uid="uid://40ppl01ilsrm" path="res://src/ui/player/luck/luck_trigger_data/Homing_SkillIssueSolved.tres" id="15_ko8f2"]
 
 [node name="LuckHandler" type="Node"]
