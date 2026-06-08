@@ -9925,6 +9925,7 @@ entProperties = {
 
 [node name="entity_3_BossSlots" parent="FuncGodotMap" index="3" node_paths=PackedStringArray("target") instance=ExtResource("21_5oyqj")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.75, 0.75, -21.625)
+charge_knockback = 30.0
 target = NodePath("../entity_43_PlayerRef")
 
 [node name="entity_4_SlotRollerDecal" parent="FuncGodotMap" index="4" instance=ExtResource("25_l15rp")]

@@ -2,6 +2,7 @@ extends RigidBody3D
 class_name PokerChip
 
 signal collected(chip: PokerChip, value: int)
+signal finished
 
 @export var value_array: Array[int] = [1, 2, 5, 10, 25, 50, 100]
 @export var sprite_array: Array[Texture2D] = []
@@ -92,6 +93,7 @@ func _on_collect() -> void:
 				bonus_luck = 4
 		GameManager.player.luck_component.current_luck += bonus_luck
 	
+	finished.emit()
 	deactivate()
 
 
