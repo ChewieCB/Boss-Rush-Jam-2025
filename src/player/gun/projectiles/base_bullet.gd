@@ -24,6 +24,8 @@ const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 const RICOCHET_HOMING_STRENGTH = 0.4
 
+var init_color: Color
+
 ## Base damage / initial damage
 var damage = 1
 ## In decimal
@@ -89,7 +91,30 @@ func _deactivate_visuals() -> void:
 	push_error("BaseBullet sub-class does not have an _deactivate_visuals method set.")
 
 func _deactivate_physics() -> void:
-	push_error("BaseBullwet sub-class does not have an _deactivate_physics method set.")
+	reset_bullet_stats()
+	#push_error("BaseBullet sub-class does not have an _deactivate_physics method set.")
+
+
+func reset_bullet_stats() -> void:
+	damage = 1
+	crit_chance = 0
+	ricochet_count_left = 0
+	color_changed_count = 0
+	time_ricochetted = 0
+	is_ricochet_shot = false
+	homing_strength = 0 # radius to search for enemy
+	homing_locked_in = false
+	homing_target = null
+	delayed_time = 1
+	found_hitscal_col = false
+	hitscan_col_point = Vector3.ZERO
+	hitscan_col_normal = Vector3.ZERO
+	projectile_speed = 100
+	splitted = false
+	is_hitscan = false
+	infused_status_effect = [false, false, false, false, false]
+	can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
+	min_lifetime_before_can_be_aim_guided = 0.2
 
 
 func _connect_callbacks() -> void:
