@@ -90,29 +90,31 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	self.visible = false
 	self.global_position = start_pos
 	
-	# For homing stuff
+	# For homing stuff, it will overwrite player aim and autotarget enemy body center
+	# nearest the crosshair
 	if homing_strength > 0:
 		await get_tree().physics_frame
 		await get_tree().physics_frame
 		
 		var min_distance = 999999
 		var test_dist = 0
-		var test_dir = 0
+		var homing_enemy_dir = 0
 		
+		# Find the enemy body to overwrite
 		for body in nearby_enemy_check_area.get_overlapping_bodies():
 			var target_pos = body.global_position
 			if body.has_node("BodyCenter"):
 				target_pos = body.get_node("BodyCenter").global_position
 			
 			test_dist = start_pos.distance_to(target_pos)
-			test_dir = start_pos.direction_to(target_pos)
-			var deg_diff = GunUtils.angle_between_vectors(dir, test_dir)
+			homing_enemy_dir = start_pos.direction_to(target_pos)
+			var deg_diff = GunUtils.angle_between_vectors(dir, homing_enemy_dir)
 			if test_dist < min_distance and deg_diff < homing_strength * HITSCAN_HOMING_STRENTH_MODIFIER:
 				homing_target = body
 				min_distance = test_dist
 		
 		if homing_target:
-			current_dir = test_dir
+			current_dir = homing_enemy_dir
 		else:
 			current_dir = dir
 	else:
@@ -272,25 +274,6 @@ func _on_timer_timeout():
 func split(split_count: int, split_spread_radius: float, has_pos: bool, _pos: Vector3):
 	var pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
 	super (split_count, split_spread_radius, has_pos, pos_hitscan)
-	#if splitted:
-		#return
-	
-	#var center_dir = - current_dir
-	#var new_pos = global_position
-	#if found_hitscal_col:
-		#center_dir = hitscan_col_normal
-	#if _has_pos:
-		#new_pos = _pos
-
-	#for i in range(split_count):
-		#if not is_instance_valid(self ):
-			#return
-		#var new_inst = create_duplication()
-		#var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
-		## Offset a bit to prevent stuck inside collision body
-		#new_pos = hitscan_col_point - current_dir * 0.01
-		#new_inst.init(new_pos, new_dir, int(damage / split_count), ricochet_count_left, projectile_speed, max_range)
-		#new_inst.splitted = true
 
 
 func redshift_bullet():
