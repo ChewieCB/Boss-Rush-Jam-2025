@@ -35,6 +35,7 @@ func _activate_visuals() -> void:
 	trail.emit = true
 
 func _deactivate_visuals() -> void:
+	super ()
 	self.visible = false
 	trail.visible = false
 	trail.emit = false

@@ -363,8 +363,8 @@ func _activate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 
-	area.collision_layer = pow(2, 4 - 1)
-	area.collision_mask = pow(2, 1 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
+	area.collision_layer = int(pow(2, 4 - 1))
+	area.collision_mask = int(pow(2, 1 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1))
 	area_col.set_deferred("disabled", false)
 	area.set_deferred("monitoring", true)
 	area.set_deferred("monitorable", true)
@@ -375,6 +375,7 @@ func _activate_physics() -> void:
 
 
 func _deactivate_visuals() -> void:
+	super ()
 	self.visible = false
 
 func _deactivate_physics() -> void:

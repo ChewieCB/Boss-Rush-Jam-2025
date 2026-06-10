@@ -30,6 +30,8 @@ func _ready():
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
+	if is_ricochet_shot:
+		redshift_bullet()
 	init_color = get_projectile_color()
 
 func _activate_visuals() -> void:
@@ -40,11 +42,6 @@ func _activate_visuals() -> void:
 func _activate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
-
-	misc_data = {}
-	time_ricochetted = 0
-	is_ricochet_shot = false
-	splitted = false
 	
 	raycast.set_deferred("enabled", true)
 	area_col.set_deferred("disabled", false)
@@ -53,6 +50,7 @@ func _activate_physics() -> void:
 
 
 func _deactivate_visuals() -> void:
+	super ()
 	self.visible = false
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
 
@@ -262,6 +260,7 @@ func ricochet():
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - new_dir * RICO_START_POS_OFFSET_MODIFIER
 	new_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
+	new_inst.is_ricochet_shot = true
 	# Redshift the bullet color after ricochet. Only do it once.
 
 

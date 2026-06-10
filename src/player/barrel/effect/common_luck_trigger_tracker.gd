@@ -29,7 +29,7 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 
 	if tracked_luck_trigger_ids.has(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__CURVED_SHOT):
 		if projectile.homing_strength > 0:
-			if projectile.homing_curved_degrees >= 45:
+			if projectile.homing_curved_degrees >= 30:
 				LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HOMING__CURVED_SHOT)
 				LuckHandler.increase_luck(3, "+8 Curved Shot!")
 
