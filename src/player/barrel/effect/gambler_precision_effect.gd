@@ -31,8 +31,8 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LUCKY_SHOT)
 		LuckHandler.increase_luck(luck_gain_on_crit, "+4 Lucky shot!")
 
-func on_projectile_destroyed(_hit_boss: bool):
-	super (_hit_boss)
+func on_projectile_destroyed(_projectile: BaseBullet, _hit_boss: bool):
+	super (_projectile, _hit_boss)
 	projectile_count += 1
 	
 	# We only check for missed after all projectiles destroyed

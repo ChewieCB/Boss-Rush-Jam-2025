@@ -11,9 +11,6 @@ class_name GunProjectile
 @onready var trail: Trail3D = $Trail/Trail3D
 @onready var slowmo_trail: Trail3D = $Trail/Trail3DBulletTime
 
-@onready var homing_area: Area3D = $HomingArea3D
-@onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
-
 @onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
 
 
@@ -26,7 +23,7 @@ var gravity_accel = 0
 var gravity_free_timer = 0.2
 
 func _ready() -> void:
-	super()
+	super ()
 	Mesh
 	init_color = mesh.mesh.surface_get_material(0).albedo_color
 
@@ -38,6 +35,7 @@ func _activate_visuals() -> void:
 	trail.emit = true
 
 func _deactivate_visuals() -> void:
+	super ()
 	self.visible = false
 	trail.visible = false
 	trail.emit = false
@@ -59,7 +57,10 @@ func _activate_physics() -> void:
 	
 
 func _deactivate_physics() -> void:
-	super()
+	splitted = false
+	is_ricochet_shot = false
+	misc_data = {}
+	super ()
 	
 	trail.full_reset()
 	life_timer.stop()
@@ -68,11 +69,6 @@ func _deactivate_physics() -> void:
 	area_col.set_deferred("disabled", true)
 	area.set_deferred("monitoring", false)
 	area.set_deferred("monitorable", false)
-	
-	raycast.set_deferred("enabled", false)
-	
-	homing_collision_shape.set_deferred("disabled", true)
-	homing_area.set_deferred("monitoring", false)
 	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
@@ -85,17 +81,19 @@ func _process(delta: float) -> void:
 	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
-	if homing_locked_in and homing_target:
-		gravity_modifier = 0
-		gravity_accel = 0
-		# HACK catch for minions/boss sub-forms that die mid-flight
-		if not homing_target:
-			return
-		var target_pos = homing_target.global_position
-		if homing_target.has_node("BodyCenter"):
-			target_pos = homing_target.get_node("BodyCenter").global_position
-		var dir_to_target = global_position.direction_to(target_pos)
-		look_at(global_position + dir_to_target)
+	if homing_strength > 0 and GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var target_pos = target.global_position
+		if target.has_node("BodyCenter"):
+			target_pos = target.get_node("BodyCenter").global_position
+		var dist_to_target = global_position.distance_to(target_pos)
+		var homing_range = homing_strength * HOMING_RANGE_FACTOR
+		if dist_to_target <= homing_range:
+			var current_dir_vec = - transform.basis.z
+			var dir_to_target = global_position.direction_to(target_pos)
+			var new_dir = current_dir_vec.lerp(dir_to_target, homing_strength * HOMING_STRENGTH_FACTOR).normalized()
+			homing_curved_degrees += rad_to_deg(current_dir_vec.angle_to(new_dir))
+			look_at(global_position + new_dir)
 	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
 		var aiming_position = GunUtils.get_player_aiming_position()
 		var dir_to_target = global_position.direction_to(aiming_position)
@@ -116,20 +114,12 @@ func _physics_process(delta: float) -> void:
 		if dot < 0.99:
 			raycast.rotate_object_local(Vector3(1, 0, 0), pitch_angle)
 
-	if raycast.is_colliding():
-		hitscan_col_point = raycast.get_collision_point()
-		hitscan_col_normal = raycast.get_collision_normal()
-		found_hitscal_col = true
-	else:
-		found_hitscal_col = false
+	check_raycast_col()
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	look_at_from_position(start_pos, start_pos + dir)
 	activate()
-	
-	if homing_strength > 0:
-		enable_homing()
 	
 	life_timer.start()
 	projectile_speed = _speed
@@ -147,17 +137,14 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	trail.visible = true
 	
-	if raycast.is_colliding():
-		hitscan_col_point = raycast.get_collision_point()
-		hitscan_col_normal = raycast.get_collision_normal()
-		found_hitscal_col = true
+	check_raycast_col()
 
 	if splitted:
 		redshift_bullet()
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(hit_boss)
+	destroyed.emit(self , hit_boss)
 	finished.emit.call_deferred()
 
 func play_ricochet_sfx():
@@ -211,6 +198,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		on_player_contact.emit(self )
 		if time_ricochetted == 0:
 			return
+
+	check_raycast_col()
 	
 	var calculated_damage = calculate_bullet_damage()
 	
@@ -246,30 +235,20 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit(hit_boss)
+		destroyed.emit(self , hit_boss)
 		finished.emit.call_deferred()
 
 
-func _on_homing_area_3d_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D:
-		homing_locked_in = true
-		homing_target = body
-		homing_collision_shape.set_deferred("disabled", true)
-		homing_area.set_deferred("monitoring", false)
-		homing_area.set_deferred("monitorable", false)
-
-
-func enable_homing() -> void:
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
-	homing_collision_shape.set_deferred("disabled", false)
-	homing_area.set_deferred("monitoring", true)
-	homing_area.set_deferred("monitorable", true)
-	homing_collision_shape.shape.radius = homing_strength
-
+func check_raycast_col():
+	if raycast.is_colliding():
+		hitscan_col_point = raycast.get_collision_point()
+		hitscan_col_normal = raycast.get_collision_normal()
+		found_hitscal_col = true
+	else:
+		found_hitscal_col = false
 
 func change_bullet_color(_new_color: Color):
-	super(_new_color)
+	super (_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)

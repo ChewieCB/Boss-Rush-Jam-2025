@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dyak3rklcc1gg"]
+[gd_scene load_steps=16 format=3 uid="uid://dyak3rklcc1gg"]
 
 [ext_resource type="Script" path="res://src/player/luck_handler.gd" id="1_718cx"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="2_0f31e"]
@@ -13,10 +13,12 @@
 [ext_resource type="Resource" uid="uid://jx3qhymvhjim" path="res://src/ui/player/luck/luck_trigger_data/StickyBomb_DangerClose.tres" id="11_gk8jg"]
 [ext_resource type="Resource" uid="uid://cteusv30a4rpw" path="res://src/ui/player/luck/luck_trigger_data/MedicalPayout_Payday.tres" id="12_q73gr"]
 [ext_resource type="Resource" uid="uid://ur1kc860qqx0" path="res://src/ui/player/luck/luck_trigger_data/Split_Splitshot.tres" id="13_7jkcv"]
+[ext_resource type="Resource" uid="uid://cn3t18786bhnj" path="res://src/ui/player/luck/luck_trigger_data/Homing_CurvedShot.tres" id="14_88gt3"]
+[ext_resource type="Resource" uid="uid://40ppl01ilsrm" path="res://src/ui/player/luck/luck_trigger_data/Homing_SkillIssueSolved.tres" id="15_ko8f2"]
 
 [node name="LuckHandler" type="Node"]
 script = ExtResource("1_718cx")
-luck_triggers = Array[ExtResource("2_0f31e")]([ExtResource("3_45r3b"), ExtResource("4_awui0"), ExtResource("5_67a7k"), ExtResource("6_tshfl"), ExtResource("8_s5dy7"), ExtResource("7_diksw"), ExtResource("9_ew7qh"), ExtResource("10_3bi80"), ExtResource("11_gk8jg"), ExtResource("12_q73gr"), ExtResource("13_7jkcv")])
+luck_triggers = Array[ExtResource("2_0f31e")]([ExtResource("3_45r3b"), ExtResource("4_awui0"), ExtResource("5_67a7k"), ExtResource("6_tshfl"), ExtResource("8_s5dy7"), ExtResource("7_diksw"), ExtResource("9_ew7qh"), ExtResource("10_3bi80"), ExtResource("11_gk8jg"), ExtResource("12_q73gr"), ExtResource("13_7jkcv"), ExtResource("14_88gt3"), ExtResource("15_ko8f2")])
 
 [node name="LuckDecayTimer" type="Timer" parent="."]
 process_callback = 0

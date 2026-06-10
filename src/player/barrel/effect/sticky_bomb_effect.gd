@@ -47,7 +47,7 @@ func _update_sticky_hit_tracker(_enemy: CharacterBody3D, projectile: BaseBullet)
 	sticky_hits += 1
 	
 	
-func _on_first_proj_in_window_destroyed(_hit_boss: bool) -> void:
+func _on_first_proj_in_window_destroyed(_projectile: BaseBullet, _hit_boss: bool) -> void:
 	if sticky_hits >= luck_trigger_sticky_threshold:
 		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.STICKY_BOMB__CLUSTER_BOMB)
 		LuckHandler.increase_luck(luck_gain_sticky, "+25 Cluster Bomb!")

@@ -163,7 +163,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(hit_boss)
+	destroyed.emit(self, hit_boss)
 	deactivate()
 
 

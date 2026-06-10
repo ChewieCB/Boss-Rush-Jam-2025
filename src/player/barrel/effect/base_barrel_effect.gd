@@ -130,7 +130,7 @@ func on_projectile_travel_tick():
 func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
-func on_projectile_destroyed(_hit_boss: bool):
+func on_projectile_destroyed(_projectile: BaseBullet, _hit_boss: bool):
 	return
 
 ## Before bullet go out of barrel. Not take into account bullet effect yet.

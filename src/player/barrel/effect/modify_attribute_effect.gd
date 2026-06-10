@@ -97,38 +97,3 @@ func on_prepare_to_fire():
 		AttributeNameEnum.SCREENSHAKE:
 			owner_barrel.owner_gun.modified_screenshake = calculate_new_value(
 				owner_barrel.owner_gun.modified_screenshake, modify_value, is_perc, false)
-
-
-func on_reload_start():
-	super ()
-	#match attribute:
-		#AttributeNameEnum.MAGAZINE_SIZE:
-			#owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
-				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
-		#AttributeNameEnum.RELOAD_TIME:
-			#owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
-				#owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
-
-func on_reload_end():
-	super ()
-	#match attribute:
-		#AttributeNameEnum.MAGAZINE_SIZE:
-			#owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
-				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
-
-
-func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
-	super (enemy, projectile)
-	if projectile.is_ricochet_shot:
-		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.SPLIT__SPLITSHOT)
-		if enemy is Player:
-			LuckHandler.increase_luck(1, "+1 Blunderico!", LuckHandler.LuckTriggerType.NEGATIVE)
-		else:
-			if projectile.time_ricochetted >= 10:
-				LuckHandler.increase_luck(100, "+100 Ultra Ricoshot?", LuckHandler.LuckTriggerType.DEVIL)
-			elif projectile.time_ricochetted >= 5:
-				LuckHandler.increase_luck(20, "+20 Mega Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
-			elif projectile.time_ricochetted >= 3:
-				LuckHandler.increase_luck(10, "+10 Super Ricoshot!!", LuckHandler.LuckTriggerType.RARE)
-			else:
-				LuckHandler.increase_luck(3, "+3 Ricoshot!")
