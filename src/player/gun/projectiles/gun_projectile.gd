@@ -68,10 +68,6 @@ func _deactivate_physics() -> void:
 	area_col.set_deferred("disabled", true)
 	area.set_deferred("monitoring", false)
 	area.set_deferred("monitorable", false)
-
-	
-	homing_collision_shape.set_deferred("disabled", true)
-	homing_area.set_deferred("monitoring", false)
 	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
@@ -249,14 +245,6 @@ func check_raycast_col():
 		found_hitscal_col = true
 	else:
 		found_hitscal_col = false
-
-func _on_homing_area_3d_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D:
-		homing_locked_in = true
-		homing_target = body
-		homing_collision_shape.set_deferred("disabled", true)
-		homing_area.set_deferred("monitoring", false)
-		homing_area.set_deferred("monitorable", false)
 
 func change_bullet_color(_new_color: Color):
 	super (_new_color)
