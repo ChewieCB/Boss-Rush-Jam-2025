@@ -133,8 +133,9 @@ var interrupted_state: String
 @export var sfx_lever_swipe: Array[AudioStream]
 
 @export_subgroup("Charge")
+@export var charge_collider: CollisionShape3D
 @export var charge_damage: float = 32.0
-@export var charge_knockback: float = 50.0
+@export var charge_knockback: float = 30.0
 @export var min_charge_distance: float = 10.0
 @export var speedline_vfx_prefab: PackedScene
 @export var crack_decal_prefab: PackedScene
@@ -984,6 +985,11 @@ func _on_charge_targeting_state_entered() -> void:
 	desired_distance = min_charge_distance * 2
 	MAX_SPEED *= 1.6
 	charge_locked = false
+	
+	# Swap melee colliders
+	hurtbox_collider.set_deferred("disabled", true)
+	charge_collider.set_deferred("disabled", false)
+	
 	state_chart.send_event("start_moving")
 
 	await charge_lined_up
@@ -1044,14 +1050,13 @@ func _on_charge_charging_state_entered() -> void:
 
 func _on_charge_collision(body: Node3D) -> void:
 	const CHARGE_TREMOR_INTENSITY = 0.5
-	const CHARGE_PUSH_FORCE_MULT = 3.0
 	if body == target:
 		velocity = Vector3.ZERO
 		anim_player.play("melee_swipe")
 		body.health_component.damage(charge_damage * GameManager.get_risk_dmg_mult())
 		if body is Player:
 			body.player_camera.add_trauma(CHARGE_TREMOR_INTENSITY)
-			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * charge_damage * CHARGE_PUSH_FORCE_MULT)
+			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * charge_knockback)
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 
@@ -1087,6 +1092,9 @@ func _on_charge_recover_state_entered() -> void:
 	desired_height = DESIRED_HEIGHT
 	drop_factor = DROP_FACTOR
 	
+	# Swap melee colliders
+	hurtbox_collider.set_deferred("disabled", false)
+	charge_collider.set_deferred("disabled", true)
 	hurtbox.set_deferred("monitoring", true)
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)

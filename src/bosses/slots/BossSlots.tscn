@@ -1,4 +1,4 @@
-[gd_scene load_steps=219 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=221 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -156,6 +156,7 @@
 [ext_resource type="Texture2D" uid="uid://crpid0gtchyc0" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_31.png" id="134_6q1jv"]
 [ext_resource type="Texture2D" uid="uid://dbxjhjb86bh74" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_32.png" id="135_mkglq"]
 [ext_resource type="Texture2D" uid="uid://dopxmvfff58bm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_33.png" id="136_omfb6"]
+[ext_resource type="Texture2D" uid="uid://cplijr7fp5qxw" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_2.png" id="141_tb8vf"]
 [ext_resource type="Texture2D" uid="uid://dx8m3mdoyrffw" path="res://src/bosses/slots/assets/Slotty_bellSummon.png" id="156_0718p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
@@ -168,9 +169,8 @@ shader_parameter/impact_points = null
 shader_parameter/impact_size = 1.0
 shader_parameter/impact_falloff_sharpness = 1.0
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vg3vh"]
-radius = 1.7
-height = 3.4
+[sub_resource type="SphereShape3D" id="SphereShape3D_n623y"]
+radius = 3.1
 
 [sub_resource type="SphereMesh" id="SphereMesh_unuxb"]
 radius = 1.7
@@ -186,6 +186,9 @@ height = 0.7
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oavlp"]
 size = Vector3(7, 15, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_erym8"]
+size = Vector3(7, 11.6346, 2)
 
 [sub_resource type="Resource" id="Resource_7mlln"]
 script = ExtResource("66_4ktje")
@@ -634,7 +637,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("83_kw510"), ExtResource("84_4w3pm")]
+"values": [ExtResource("83_kw510"), ExtResource("141_tb8vf")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -1877,7 +1880,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_udcdq")
 
-[node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
+[node name="BossSlots" node_paths=PackedStringArray("charge_collider", "sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
@@ -1928,8 +1931,9 @@ swipe_knockback = 50.0
 swipe_dodge_speed = 10.0
 swipe_cooldown = 5.0
 sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_31vh7"), ExtResource("34_otbm5")])
+charge_collider = NodePath("Hurtbox/ChargeCollisionShape")
 charge_damage = 32.0
-charge_knockback = 50.0
+charge_knockback = 15.0
 min_charge_distance = 10.0
 speedline_vfx_prefab = ExtResource("46_36cao")
 crack_decal_prefab = ExtResource("47_xyq4h")
@@ -2021,8 +2025,8 @@ billboard = 2
 texture = ExtResource("66_h52w4")
 
 [node name="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("CapsuleShape3D_vg3vh")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15951, 0)
+shape = SubResource("SphereShape3D_n623y")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -2083,6 +2087,11 @@ monitoring = true
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 3.3235, -4.85)
 shape = SubResource("BoxShape3D_oavlp")
+
+[node name="ChargeCollisionShape" type="CollisionShape3D" parent="Hurtbox" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 1.64082, -0.85)
+shape = SubResource("BoxShape3D_erym8")
+disabled = true
 
 [node name="HealthComponent" parent="." index="5"]
 max_health = 8000.0

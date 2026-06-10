@@ -1014,7 +1014,7 @@ func get_barrel_sprite_screen_positions() -> Array[Vector2]:
 
 
 func spin_barrels() -> void:
-	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading or current_gun.is_spinning:
+	if current_gun.installed_barrels == [null, null, null] or current_gun.is_reloading or current_gun.is_spinning:
 		return
 	# Check if we have enough chips
 	if GameManager.purchase_reroll():

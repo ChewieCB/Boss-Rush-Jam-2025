@@ -126,7 +126,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit(hit_boss)
+		destroyed.emit(self, hit_boss)
 		call_deferred("queue_free")
 
 
@@ -138,7 +138,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(false)
+	destroyed.emit(self, false)
 	call_deferred("queue_free")
 
 

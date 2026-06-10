@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=29 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_20dr0"]
@@ -60,9 +60,6 @@ shader_parameter/trail_opacity = 0.6
 shader_parameter/time_offset = 0.0
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_whhfj")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
-radius = 1.0
-
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_lli1j"]
 random_pitch = 1.7
 streams_count = 2
@@ -94,6 +91,7 @@ wait_time = 10.0
 one_shot = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
 target_position = Vector3(0, 0, -100)
 collision_mask = 29
 
@@ -121,15 +119,6 @@ segments = 5
 lifetime = 1.0
 base_width = 0.1
 width_profile = SubResource("Curve_inxyf")
-
-[node name="HomingArea3D" type="Area3D" parent="."]
-collision_layer = 0
-collision_mask = 196
-monitoring = false
-monitorable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HomingArea3D"]
-shape = SubResource("SphereShape3D_m0ts0")
 
 [node name="ElementalVFX" type="Node3D" parent="."]
 
@@ -162,4 +151,3 @@ bus = &"SFX"
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
-[connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]

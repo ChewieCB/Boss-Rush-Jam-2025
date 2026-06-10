@@ -18,11 +18,15 @@ signal on_player_contact(projectile: BaseBullet)
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
-signal destroyed(hit_boss: bool)
+signal destroyed(projectile: BaseBullet, hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 const RICOCHET_HOMING_STRENGTH = 0.4
+const HOMING_STRENGTH_FACTOR = 0.007
+const HOMING_RANGE_FACTOR = 15 # Also based on homing strength
+
+var init_color: Color
 
 ## Base damage / initial damage
 var damage = 1
@@ -59,6 +63,7 @@ var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
 var hit_boss = false
 var is_crit = false
+var homing_curved_degrees = 0.0
 var misc_data = {}
 
 func _ready() -> void:
@@ -86,11 +91,34 @@ func deactivate() -> void:
 	_deactivate_physics()
 
 func _deactivate_visuals() -> void:
-	push_error("BaseBullet sub-class does not have an _deactivate_visuals method set.")
+	stop_elemental_particles()
 
 func _deactivate_physics() -> void:
-	push_error("BaseBullwet sub-class does not have an _deactivate_physics method set.")
+	reset_bullet_stats()
 
+
+func reset_bullet_stats() -> void:
+	damage = 1
+	crit_chance = 0
+	ricochet_count_left = 0
+	color_changed_count = 0
+	time_ricochetted = 0
+	is_ricochet_shot = false
+	homing_strength = 0 # radius to search for enemy
+	homing_locked_in = false
+	homing_target = null
+	delayed_time = 1
+	found_hitscal_col = false
+	hitscan_col_point = Vector3.ZERO
+	hitscan_col_normal = Vector3.ZERO
+	projectile_speed = 100
+	splitted = false
+	is_hitscan = false
+	infused_status_effect = [false, false, false, false, false]
+	can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
+	min_lifetime_before_can_be_aim_guided = 0.2
+	homing_curved_degrees = 0
+	misc_data = {}
 
 func _connect_callbacks() -> void:
 	if not on_player_contact.is_connected(owner_gun.check_barrel_effect_on_player_contact):
@@ -126,8 +154,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 	var spark_inst = ObjectPoolingManager.get_pooled_object(
 		ObjectPoolingManager.PooledObjectEnum.GUN_SPARK
 	)
-	#var spark_inst = spark_effect.instantiate()
-	#get_parent().add_child(spark_inst)
+
 	spark_inst.global_position = pos
 
 	if normal.is_equal_approx(Vector3.DOWN):
@@ -233,11 +260,14 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.life_time = life_time
 	new_inst.travelled_distance = travelled_distance
 	new_inst.time_ricochetted = time_ricochetted
+	new_inst.misc_data = misc_data
+	new_inst.is_hitscan = is_hitscan
+	new_inst.infused_status_effect = infused_status_effect
+	new_inst.homing_curved_degrees = homing_curved_degrees
+	new_inst.crit_chance = crit_chance
 	
 	if is_ricochet:
 		new_inst.time_ricochetted += 1
-	
-	new_inst.misc_data = misc_data
 	
 	new_inst.activate()
 	

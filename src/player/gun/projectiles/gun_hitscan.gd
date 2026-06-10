@@ -21,7 +21,7 @@ var end_pos
 
 const DELAY_BETWEEN_RICO = 0.05
 const RICO_START_POS_OFFSET_MODIFIER = 0.01
-const HITSCAN_HOMING_STRENTH_MODIFIER = 2
+const HITSCAN_HOMING_STRENTH_MODIFIER = 4
 const BEAM_RANGE_IF_NOT_COLLIDE = 50
 
 
@@ -30,8 +30,9 @@ func _ready():
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
-	# if is_ricochet_shot:
-	# 	redshift_bullet()
+	if is_ricochet_shot:
+		redshift_bullet()
+	init_color = get_projectile_color()
 
 func _activate_visuals() -> void:
 	self.visible = true
@@ -49,10 +50,12 @@ func _activate_physics() -> void:
 
 
 func _deactivate_visuals() -> void:
+	super ()
 	self.visible = false
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
 
 func _deactivate_physics() -> void:
+	super ()
 	life_timer.stop()
 	
 	splitted = false
@@ -77,6 +80,8 @@ func _process(delta):
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	activate()
+
 	if shot_flash_start:
 		var rotate_amount = randi_range(0, 90)
 		shot_flash_start.rotate_z(rotate_amount)
@@ -85,29 +90,31 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	self.visible = false
 	self.global_position = start_pos
 	
-	# For homing stuff
+	# For homing stuff, it will overwrite player aim and autotarget enemy body center
+	# nearest the crosshair
 	if homing_strength > 0:
 		await get_tree().physics_frame
 		await get_tree().physics_frame
 		
 		var min_distance = 999999
 		var test_dist = 0
-		var test_dir = 0
+		var homing_enemy_dir = 0
 		
+		# Find the enemy body to overwrite
 		for body in nearby_enemy_check_area.get_overlapping_bodies():
 			var target_pos = body.global_position
 			if body.has_node("BodyCenter"):
 				target_pos = body.get_node("BodyCenter").global_position
 			
 			test_dist = start_pos.distance_to(target_pos)
-			test_dir = start_pos.direction_to(target_pos)
-			var deg_diff = GunUtils.angle_between_vectors(dir, test_dir)
+			homing_enemy_dir = start_pos.direction_to(target_pos)
+			var deg_diff = GunUtils.angle_between_vectors(dir, homing_enemy_dir)
 			if test_dist < min_distance and deg_diff < homing_strength * HITSCAN_HOMING_STRENTH_MODIFIER:
 				homing_target = body
 				min_distance = test_dist
 		
 		if homing_target:
-			current_dir = test_dir
+			current_dir = homing_enemy_dir
 		else:
 			current_dir = dir
 	else:
@@ -126,7 +133,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	max_range = _max_range
 	raycast.target_position.z = - abs(_max_range)
 	
-	self.look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
+	look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
 	
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -235,8 +242,8 @@ func ricochet():
 	super ()
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
+	
 	found_hitscal_col = false
-	print("test")
 	play_ricochet_sfx()
 	# 
 	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
@@ -253,6 +260,7 @@ func ricochet():
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - new_dir * RICO_START_POS_OFFSET_MODIFIER
 	new_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
+	new_inst.is_ricochet_shot = true
 	# Redshift the bullet color after ricochet. Only do it once.
 
 
@@ -261,32 +269,13 @@ func get_projectile_color() -> Color:
 
 
 func _on_timer_timeout():
-	destroyed.emit(hit_boss)
+	destroyed.emit(self , hit_boss)
 	finished.emit.call_deferred()
 
 
 func split(split_count: int, split_spread_radius: float, has_pos: bool, _pos: Vector3):
 	var pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
 	super (split_count, split_spread_radius, has_pos, pos_hitscan)
-	#if splitted:
-		#return
-	
-	#var center_dir = - current_dir
-	#var new_pos = global_position
-	#if found_hitscal_col:
-		#center_dir = hitscan_col_normal
-	#if _has_pos:
-		#new_pos = _pos
-
-	#for i in range(split_count):
-		#if not is_instance_valid(self ):
-			#return
-		#var new_inst = create_duplication()
-		#var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
-		## Offset a bit to prevent stuck inside collision body
-		#new_pos = hitscan_col_point - current_dir * 0.01
-		#new_inst.init(new_pos, new_dir, int(damage / split_count), ricochet_count_left, projectile_speed, max_range)
-		#new_inst.splitted = true
 
 
 func redshift_bullet():
