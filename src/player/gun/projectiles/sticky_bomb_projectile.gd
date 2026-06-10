@@ -33,7 +33,7 @@ var _init_start_pos: Vector3
 
 func _ready() -> void:
 	await get_parent().ready
-	super()
+	super ()
 	randomize()
 	delay_explosion_time += randf_range(-delay_randomness, delay_randomness)
 	explode_timer.wait_time = delay_explosion_time
@@ -45,7 +45,7 @@ func make_material_unique() -> void:
 
 
 func _process(delta: float) -> void:
-	super(delta)
+	super (delta)
 
 
 func _physics_process(delta: float) -> void:
@@ -80,8 +80,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	activate()
 	sticked = false
 	if homing_strength > 0:
-		homing_area.monitoring = true
-		homing_collision_shape.shape.radius = homing_strength
+		enable_homing()
 	life_timer.start()
 
 	projectile_speed = _speed
@@ -106,7 +105,7 @@ func _start_countdown_anim() -> void:
 func _run_countdown_anim() -> void:
 	var ticks: int = 6
 	var tick_times: Array[float] = []
-	var k: float = 2.5  # Acceleration intensity
+	var k: float = 2.5 # Acceleration intensity
 
 	for i in range(ticks):
 		var x = float(i) / float(ticks - 1)
@@ -123,7 +122,7 @@ func _run_countdown_anim() -> void:
 	var end_colour := Color("#ba2f20")
 	for i in range(tick_durations.size()):
 		# Exit if deactivated mid-countdown
-		if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED \
+		if not is_instance_valid(self ) or process_mode == Node.PROCESS_MODE_DISABLED \
 		or not self.is_inside_tree():
 			return
 		var duration = tick_durations[i]
@@ -135,7 +134,7 @@ func _run_countdown_anim() -> void:
 
 
 func ricochet():
-	super()
+	super ()
 	found_hitscal_col = false
 	is_ricochet_shot = true
 
@@ -153,7 +152,7 @@ func ricochet():
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(self, false)
+	destroyed.emit(self , false)
 	finished.emit()
 
 
@@ -206,6 +205,15 @@ func stick_bullet(body: Node3D) -> void:
 	sticked = true
 
 
+func enable_homing() -> void:
+	homing_area.collision_layer = 0
+	homing_area.collision_mask = pow(2, 3 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
+	homing_collision_shape.set_deferred("disabled", false)
+	homing_area.set_deferred("monitoring", true)
+	homing_area.set_deferred("monitorable", true)
+	homing_collision_shape.shape.radius = homing_strength
+
+
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		homing_locked_in = true
@@ -223,7 +231,7 @@ func _on_explode_timer_timeout() -> void:
 
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
-			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
+			explosion_inst.add_status_effect(i + 1) # Offset for the None enum value
 
 	explosion_inst.call_deferred("activate")
 	exploded.emit(explosion_inst)
@@ -234,7 +242,7 @@ func _on_explode_timer_timeout() -> void:
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
-		destroyed.emit(self, hit_boss)
+		destroyed.emit(self , hit_boss)
 		finished.emit()
 
 
@@ -264,7 +272,7 @@ func create_explosion() -> void:
 
 
 func change_bullet_color(_new_color: Color):
-	super(_new_color)
+	super (_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
@@ -351,19 +359,18 @@ func _activate_physics() -> void:
 	travelled_distance = 0
 	life_time = 0
 
+	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 
-	area.collision_layer = pow(2, 4-1)
-	area.collision_mask = pow(2, 1-1) + pow(2, 3-1) + pow(2, 4-1) + pow(2, 5-1) + pow(2, 7-1) + pow(2, 8-1)
-	homing_area.collision_layer = 0
-	homing_area.collision_mask = pow(2, 3-1) + pow(2, 7-1) + pow(2, 8-1)
+	area.collision_layer = pow(2, 4 - 1)
+	area.collision_mask = pow(2, 1 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
 	area_col.set_deferred("disabled", false)
 	area.set_deferred("monitoring", true)
 	area.set_deferred("monitorable", true)
-	homing_collision_shape.set_deferred("disabled", false)
-	homing_area.set_deferred("monitoring", true)
-	homing_area.set_deferred("monitorable", true)
+	#homing_collision_shape.set_deferred("disabled", false)
+	#homing_area.set_deferred("monitoring", true)
+	#homing_area.set_deferred("monitorable", true)
 	raycast.set_deferred("enabled", true)
 
 
@@ -371,6 +378,8 @@ func _deactivate_visuals() -> void:
 	self.visible = false
 
 func _deactivate_physics() -> void:
+	super ()
+	
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 
@@ -386,6 +395,7 @@ func _deactivate_physics() -> void:
 	homing_locked_in = false
 	homing_target = null
 
+	
 	life_timer.stop()
 	explode_timer.stop()
 	tick_sfx_player.stop()

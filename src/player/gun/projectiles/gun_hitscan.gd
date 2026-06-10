@@ -30,6 +30,7 @@ func _ready():
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
+	init_color = get_projectile_color()
 
 func _activate_visuals() -> void:
 	self.visible = true
@@ -56,6 +57,7 @@ func _deactivate_visuals() -> void:
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
 
 func _deactivate_physics() -> void:
+	super ()
 	life_timer.stop()
 	
 	splitted = false
@@ -242,6 +244,7 @@ func ricochet():
 	super ()
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
+	
 	found_hitscal_col = false
 	play_ricochet_sfx()
 	# 

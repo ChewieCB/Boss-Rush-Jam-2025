@@ -22,8 +22,14 @@ const GRAVITY_IGNORE_AFTER_RICO_TIME = 0.2
 var gravity_accel = 0
 var gravity_free_timer = 0.2
 
+func _ready() -> void:
+	super ()
+	Mesh
+	init_color = mesh.mesh.surface_get_material(0).albedo_color
+
 
 func _activate_visuals() -> void:
+	change_bullet_color(init_color)
 	self.visible = true
 	trail.visible = true
 	trail.emit = true
@@ -53,6 +59,7 @@ func _deactivate_physics() -> void:
 	splitted = false
 	is_ricochet_shot = false
 	misc_data = {}
+	super ()
 	
 	trail.full_reset()
 	life_timer.stop()
@@ -62,6 +69,10 @@ func _deactivate_physics() -> void:
 	area.set_deferred("monitoring", false)
 	area.set_deferred("monitorable", false)
 
+	
+	homing_collision_shape.set_deferred("disabled", true)
+	homing_area.set_deferred("monitoring", false)
+	
 	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	self.process_mode = Node.PROCESS_MODE_DISABLED
@@ -95,7 +106,6 @@ func _physics_process(delta: float) -> void:
 	global_position += velocity
 	travelled_distance += projectile_speed * delta
 
-
 	if gravity_modifier > 0 and gravity_free_timer > GRAVITY_IGNORE_AFTER_RICO_TIME:
 		gravity_accel += GRAVITY_FORCE * gravity_modifier * delta
 		global_position += Vector3(0, 1, 0) * gravity_accel * delta
@@ -106,6 +116,9 @@ func _physics_process(delta: float) -> void:
 		# Only rotate if not point downward
 		if dot < 0.99:
 			raycast.rotate_object_local(Vector3(1, 0, 0), pitch_angle)
+
+	check_raycast_col()
+
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	look_at_from_position(start_pos, start_pos + dir)
@@ -122,9 +135,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
-
-	await get_tree().process_frame
-	await get_tree().process_frame
+	redshift_bullet()
+	look_at_from_position(start_pos, start_pos + dir)
+	
+	trail.visible = true
 	
 	check_raycast_col()
 
@@ -155,9 +169,8 @@ func ricochet():
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
 	if is_ricochet_shot == false:
-		redshift_bullet()
 		is_ricochet_shot = true
-		
+	
 	play_ricochet_sfx()
 	
 	# Calculate bounce direction
@@ -236,6 +249,14 @@ func check_raycast_col():
 		found_hitscal_col = true
 	else:
 		found_hitscal_col = false
+
+func _on_homing_area_3d_body_entered(body: Node3D) -> void:
+	if body is CharacterBody3D:
+		homing_locked_in = true
+		homing_target = body
+		homing_collision_shape.set_deferred("disabled", true)
+		homing_area.set_deferred("monitoring", false)
+		homing_area.set_deferred("monitorable", false)
 
 func change_bullet_color(_new_color: Color):
 	super (_new_color)
