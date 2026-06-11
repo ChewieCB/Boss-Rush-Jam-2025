@@ -474,7 +474,6 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	super (item_ui, data)
-
 	if item_ui.is_locked:
 		return
 
@@ -523,6 +522,11 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		equip_item_ui = equip_barrel_container.get_child(active_equip_idx).item_ui
 		clear_item_ui_highlight(equip_item_ui)
 		_reset_sibling_saturation(equip_item_ui)
-		get_equip_slot_focus()
+
+		# Focus the next empty slot (from right to left)
+		for i in range(len(equip_slots) - 1, -1, -1):
+			if equip_slots[i].item_ui.is_empty:
+				active_equip_idx = i
+				break
 
 	full_refresh_ui(focus_area_callable)
