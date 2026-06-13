@@ -3,7 +3,7 @@ class_name BaseBullet
 
 signal finished
 
-@export var pool_idx: ObjectPoolingManager.PooledObjectEnum = 2
+@export var pool_idx: ObjectPoolingManager.PooledObjectEnum = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene

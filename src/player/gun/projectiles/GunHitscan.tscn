@@ -1,11 +1,14 @@
-[gd_scene load_steps=16 format=3 uid="uid://dtf2h2dydbopt"]
+[gd_scene load_steps=19 format=3 uid="uid://dtf2h2dydbopt"]
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]
 [ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="2_748yq"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_u6ll4"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_22exd"]
 [ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="3_bgtmp"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
 [ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="4_is7ad"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="4_m7cg7"]
 [ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="5_1e6ml"]
 [ext_resource type="PackedScene" uid="uid://du6plnrfa56ov" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedImpact.tscn" id="6_withs"]
 [ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_r77jx"]
@@ -42,6 +45,9 @@ stream_1/stream = ExtResource("11_8xeeu")
 [node name="GunHitscan" type="Node3D"]
 script = ExtResource("1_uqjuh")
 pool_idx = 3
+spark_effect = ExtResource("2_u6ll4")
+generic_blood_splatter = ExtResource("3_22exd")
+bullet_decal_prefab = ExtResource("4_m7cg7")
 elemental_impact_vfx = Array[PackedScene]([ExtResource("2_748yq"), ExtResource("3_bgtmp"), ExtResource("4_is7ad"), ExtResource("5_1e6ml"), ExtResource("6_withs")])
 sfx_crit = Array[AudioStream]([ExtResource("7_r77jx")])
 
