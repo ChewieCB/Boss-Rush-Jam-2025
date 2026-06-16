@@ -6,7 +6,7 @@ func on_projectile_spawn(projectile: BaseBullet):
 
 func on_player_contact(projectile: BaseBullet):
 	const PASSTHROUGH_LUCK = 3
-	const MIN_LIFE_TIME = 0.05
+	const MIN_LIFE_TIME = 0.1
 	if projectile.life_time > MIN_LIFE_TIME and not ("passthrough_triggered" in projectile.misc_data):
 		projectile.misc_data["passthrough_triggered"] = true
 		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.BULLET_TIME__PASSTHROUGH)

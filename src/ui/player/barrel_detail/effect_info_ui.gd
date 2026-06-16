@@ -15,7 +15,7 @@ func _ready() -> void:
 	self.modulate.a = 0.0
 
 
-func update_luck_trigger(idx: int, trigger_name: String, trigger_desc: String, trigger_discovered: bool, show: bool = true) -> void:
+func update_luck_trigger(idx: int, trigger_name: String, trigger_desc: String, trigger_discovered: bool, _show: bool = true) -> void:
 	var luck_trigger_ui: LuckTriggerInfoUI
 	match idx:
 		0:
@@ -26,7 +26,7 @@ func update_luck_trigger(idx: int, trigger_name: String, trigger_desc: String, t
 			push_error("Invalid luck trigger index, limit is 2 | idx = %s" % [idx])
 	
 	luck_trigger_ui.set_info(trigger_name, trigger_desc, trigger_discovered)
-	luck_trigger_ui.visible = show
+	luck_trigger_ui.visible = _show
 
 
 func clear_luck_triggers() -> void:
