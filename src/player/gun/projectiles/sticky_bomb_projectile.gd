@@ -359,7 +359,7 @@ func _activate_physics() -> void:
 	travelled_distance = 0
 	life_time = 0
 
-	
+
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 
@@ -380,7 +380,7 @@ func _deactivate_visuals() -> void:
 
 func _deactivate_physics() -> void:
 	super ()
-	
+
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 
@@ -396,7 +396,7 @@ func _deactivate_physics() -> void:
 	homing_locked_in = false
 	homing_target = null
 
-	
+
 	life_timer.stop()
 	explode_timer.stop()
 	tick_sfx_player.stop()

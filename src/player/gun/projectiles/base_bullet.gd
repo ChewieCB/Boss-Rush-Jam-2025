@@ -3,7 +3,7 @@ class_name BaseBullet
 
 signal finished
 
-@export var pool_idx: ObjectPoolingManager.PooledObjectEnum = ObjectPoolingManager.PooledObjectEnum.PLAYER_GUN_PROJECTILE
+@export var pool_idx: ObjectPoolingManager.PooledObjectEnum = 2
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
@@ -222,19 +222,20 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 
 
 func calculate_bullet_damage(reroll_crit = true):
-	# FIXME - this resets crit damage 
 	if not is_instance_valid(owner_gun):
 		return null
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit
 	if reroll_crit:
+		is_crit = false
 		var roll = randi_range(1, 100)
 		var roll_target = int(crit_chance * 100)
 		if roll <= roll_target:
-			calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
-			owner_gun.crit_damage(calculated_damage)
 			is_crit = true
+	if is_crit:
+		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+		owner_gun.crit_damage(calculated_damage)
 	return calculated_damage
 
 

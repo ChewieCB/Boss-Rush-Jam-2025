@@ -20,7 +20,7 @@ signal ui_accept
 
 var display_barrels: Array = []
 
-var no_difficulty_bosses: Array[int] = []#[BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
+var no_difficulty_bosses: Array[int] = [] # [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
 
 func _ready() -> void:
@@ -44,6 +44,7 @@ func _ready() -> void:
 	
 	get_tree().paused = false
 	
+	GameManager.selected_boss_id = BossCore.BossIdEnum.BASE
 	GameManager.current_boss_map = self
 	GameManager.change_fmod_bgm_music_state("Backroom") # Backroom is the new Lobby
 	

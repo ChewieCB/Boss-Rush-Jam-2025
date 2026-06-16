@@ -21,10 +21,10 @@ script = ExtResource("1_2a2qf")
 script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not N*o though"
-display_text_desc = "-80% projectile speed
-+35% damage"
-positive_desc = Array[String](["+35% damage"])
-negative_desc = Array[String](["-80% projectile speed"])
+display_text_desc = "-60% projectile speed
++40% damage"
+positive_desc = Array[String](["+40% damage"])
+negative_desc = Array[String](["-60% projectile speed"])
 icon_id = 19
 luck_triggers = Array[int]([4, 5])
 
@@ -35,14 +35,19 @@ attribute = 6
 [node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_307l2")
 attribute = 3
-modify_value = -80.0
+modify_value = -60.0
 is_perc = true
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 35.0
+modify_value = 40.0
 is_perc = true
+
+[node name="ModifyLifetime" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("5_307l2")
+attribute = 14
+modify_value = 4.0
 
 [node name="SlowMoEffect" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_fl357")

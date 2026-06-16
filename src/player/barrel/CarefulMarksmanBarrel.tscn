@@ -30,6 +30,11 @@ attribute = 3
 modify_value = -50.0
 is_perc = true
 
+[node name="ModifyLifetime" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("7_aowsl")
+attribute = 14
+modify_value = 4.0
+
 [node name="SafetyFold" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_o0oe4")
 display_text_title = "Safety Fold"

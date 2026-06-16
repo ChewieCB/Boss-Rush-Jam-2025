@@ -23,17 +23,23 @@ negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 29
 luck_triggers = Array[int]([13])
 
-[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
-script = ExtResource("3_b2svt")
-
 [node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SlowRoller"]
 script = ExtResource("5_2xsnk")
 attribute = 3
 modify_value = -50.0
 is_perc = true
 
+[node name="ModifyLifetime" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("5_2xsnk")
+attribute = 14
+modify_value = 4.0
+
+[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("3_b2svt")
+
 [node name="LongShot" type="Node3D" parent="EffectContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0242209, 0, 0.0132322)
+visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Long Shot"
 display_text_tag = "Oh, the separation!"
@@ -53,6 +59,7 @@ modify_value = -50.0
 is_perc = true
 
 [node name="SnapCall" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
 display_text_tag = "Oh, the attraction!"

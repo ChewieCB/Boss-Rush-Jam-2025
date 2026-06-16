@@ -142,7 +142,7 @@ func on_player_contact(_projectile: BaseBullet):
 	return
 
 ## When bullet hit enemy but JUST before applied damage (but after normal damage calculation).
-## You can modify bullet damage which take into account bonus of each bullet here.
+## You can modify bullet calculated_damage which take into account bonus of each bullet here.
 func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	return
 
