@@ -25,8 +25,15 @@ var gravity_free_timer = 0.2
 
 func _ready() -> void:
 	super ()
-	Mesh
 	init_color = mesh.mesh.surface_get_material(0).albedo_color
+
+func _process(delta: float) -> void:
+	super (delta)
+	gravity_free_timer += delta
+	if "slow_roll_lifetime_required" in misc_data:
+		if misc_data["slow_roll_lifetime_required"] <= life_time:
+			# Do some visual here
+			misc_data.erase("slow_roll_lifetime_required")
 
 
 func _activate_visuals() -> void:
@@ -72,10 +79,6 @@ func _deactivate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_DISABLED
 	set_physics_process(false)
 
-
-func _process(delta: float) -> void:
-	super (delta)
-	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
 	if homing_strength > 0 and GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
