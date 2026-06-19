@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=36 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_20dr0"]
@@ -66,6 +66,50 @@ streams_count = 2
 stream_0/stream = ExtResource("20_31gvv")
 stream_1/stream = ExtResource("21_wcewm")
 
+[sub_resource type="Gradient" id="Gradient_w56hi"]
+offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
+colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_idfh0"]
+gradient = SubResource("Gradient_w56hi")
+
+[sub_resource type="Curve" id="Curve_6a1fe"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_iwupy"]
+curve = SubResource("Curve_6a1fe")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k1q2q"]
+lifetime_randomness = 0.3
+angle_min = -30.0
+angle_max = 30.0
+direction = Vector3(0, 0, -1)
+initial_velocity_min = 6.0
+initial_velocity_max = 10.0
+angular_velocity_min = -45.0
+angular_velocity_max = 45.0
+linear_accel_min = -5.0
+linear_accel_max = -5.0
+scale_min = 0.75
+scale_max = 1.25
+scale_curve = SubResource("CurveTexture_iwupy")
+color_ramp = SubResource("GradientTexture1D_idfh0")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p54np"]
+vertex_color_use_as_albedo = true
+emission_enabled = true
+rim_enabled = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_iy2t6"]
+material = SubResource("StandardMaterial3D_p54np")
+size = Vector2(0.2, 0.2)
+
 [node name="GunProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_x0ax1")
 spark_effect = ExtResource("2_20dr0")
@@ -124,7 +168,6 @@ width_profile = SubResource("Curve_inxyf")
 
 [node name="ProjectileBurnEmit" parent="ElementalVFX" instance=ExtResource("6_q13y4")]
 visible = false
-time_until_queue_free = 1.0
 
 [node name="ProjectilePoisonEmit" parent="ElementalVFX" node_paths=PackedStringArray("gpu_particles") instance=ExtResource("8_cfhry")]
 visible = false
@@ -148,6 +191,16 @@ volume_db = 1.0
 unit_size = 7.0
 max_db = 1.0
 bus = &"SFX"
+
+[node name="BarrelVFXEffect" type="Node3D" parent="."]
+visible = false
+
+[node name="SlowRoller" type="GPUParticles3D" parent="BarrelVFXEffect"]
+amount = 16
+randomness = 0.5
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_k1q2q")
+draw_pass_1 = SubResource("QuadMesh_iy2t6")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

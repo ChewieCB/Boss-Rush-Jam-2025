@@ -189,7 +189,7 @@ shadow_mesh = SubResource("ArrayMesh_udcdq")
 [node name="ProjectileBurnEmit" type="Node3D" node_paths=PackedStringArray("gpu_particles")]
 script = ExtResource("1_hujhj")
 gpu_particles = [NodePath("Flame"), NodePath("Smoke"), NodePath("Sparks")]
-time_until_queue_free = 3
+time_until_queue_free = 3.0
 
 [node name="Flame" type="GPUParticles3D" parent="."]
 amount = 64

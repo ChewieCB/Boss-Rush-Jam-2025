@@ -8,7 +8,7 @@ signal finished
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
 # Check BossCore.BossStatusEffect for order
-@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
+@export var elemental_emitting_vfx: Array[GPUParticleController] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
 @export_group("SFX")
@@ -278,7 +278,7 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
 		return
-	if not is_instance_valid(self ):
+	if not is_instance_valid(self):
 		return
 
 	var center_dir = - current_dir
@@ -307,7 +307,7 @@ func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
 func stop_elemental_particles():
 	for elem in elemental_emitting_vfx:
 		if is_instance_valid(elem):
-			elem.deactivate()
+			elem.deactivate(1)
 
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	# Wait a bit to make the effect look better
@@ -315,8 +315,8 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = true
-		if element_vfx_node.has_method("turn_on"):
-			element_vfx_node.turn_on()
+		if element_vfx_node.has_method("activate"):
+			element_vfx_node.activate()
 
 
 func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
