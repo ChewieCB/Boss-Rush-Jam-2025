@@ -8,8 +8,9 @@ signal finished
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
 # Check BossCore.BossStatusEffect for order
-@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
+@export var elemental_emitting_vfx: Array[GPUParticleController] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
+@onready var barrel_vfx_effect_container: Node3D = $BarrelVFXEffectContainer
 
 @export_group("SFX")
 @export var sfx_crit: Array[AudioStream]
@@ -69,7 +70,7 @@ var misc_data = {}
 func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
-	
+
 	for elem in elemental_emitting_vfx:
 		if elem:
 			elem.visible = false
@@ -92,6 +93,8 @@ func deactivate() -> void:
 
 func _deactivate_visuals() -> void:
 	stop_elemental_particles()
+	stop_barrel_vfx()
+
 
 func _deactivate_physics() -> void:
 	reset_bullet_stats()
@@ -118,6 +121,7 @@ func reset_bullet_stats() -> void:
 	can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
 	min_lifetime_before_can_be_aim_guided = 0.2
 	homing_curved_degrees = 0
+	life_time = 0
 	misc_data = {}
 
 func _connect_callbacks() -> void:
@@ -163,7 +167,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 		spark_inst.rotation_degrees.x = 90
 	else:
 		spark_inst.look_at(pos + normal, Vector3.UP)
-	
+
 	spark_inst.activate()
 
 
@@ -222,19 +226,20 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 
 
 func calculate_bullet_damage(reroll_crit = true):
-	# FIXME - this resets crit damage 
 	if not is_instance_valid(owner_gun):
 		return null
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit
 	if reroll_crit:
+		is_crit = false
 		var roll = randi_range(1, 100)
 		var roll_target = int(crit_chance * 100)
 		if roll <= roll_target:
-			calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
-			owner_gun.crit_damage(calculated_damage)
 			is_crit = true
+	if is_crit:
+		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+		owner_gun.crit_damage(calculated_damage)
 	return calculated_damage
 
 
@@ -252,7 +257,7 @@ func get_damage_variance_modifier(_damage: int) -> int:
 
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = ObjectPoolingManager.get_pooled_object(pool_idx)
-	
+
 	new_inst.owner_gun = owner_gun
 	new_inst.is_ricochet_shot = is_ricochet
 	new_inst.homing_strength = homing_strength
@@ -265,19 +270,19 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.infused_status_effect = infused_status_effect
 	new_inst.homing_curved_degrees = homing_curved_degrees
 	new_inst.crit_chance = crit_chance
-	
+
 	if is_ricochet:
 		new_inst.time_ricochetted += 1
-	
+
 	new_inst.activate()
-	
+
 	return new_inst
 
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
 		return
-	if not is_instance_valid(self ):
+	if not is_instance_valid(self):
 		return
 
 	var center_dir = - current_dir
@@ -286,7 +291,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		center_dir = hitscan_col_normal
 	if _has_pos:
 		new_pos = _pos
-	
+
 	for i in range(split_count):
 		var new_inst = create_duplication()
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
@@ -299,14 +304,24 @@ func change_bullet_color(_new_color: Color):
 	color_changed_count += 1
 
 
-func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
+func infuse_status_effect(_status_effect: BossCore.BossStatusEffect) -> void:
 	infused_status_effect[int(_status_effect) - 1] = true
 
+
+func activate_barrel_vfx(vfx_name: String) -> void:
+	if barrel_vfx_effect_container.has_node(vfx_name):
+		var vfx: GPUParticleController = barrel_vfx_effect_container.get_node(vfx_name)
+		vfx.activate()
 
 func stop_elemental_particles():
 	for elem in elemental_emitting_vfx:
 		if is_instance_valid(elem):
-			elem.deactivate()
+			elem.deactivate(1)
+
+func stop_barrel_vfx():
+	for child in barrel_vfx_effect_container.get_children():
+		if is_instance_valid(child):
+			child.deactivate(1)
 
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	# Wait a bit to make the effect look better
@@ -314,8 +329,8 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = true
-		if element_vfx_node.has_method("turn_on"):
-			element_vfx_node.turn_on()
+		if element_vfx_node.has_method("activate"):
+			element_vfx_node.activate()
 
 
 func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):

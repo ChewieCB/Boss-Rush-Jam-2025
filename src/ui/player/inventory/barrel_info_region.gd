@@ -15,6 +15,7 @@ class_name BarrelInfoRegion
 @export var effect_flavour_label: RichTextLabel
 @export var effect_desc_label: RichTextLabel
 @export var effect_panel_barrel_icon: TextureRect
+@export var luck_trigger_container: Container
 
 @export var barrel_effect_list_label_1: EffectInfoListUI
 @export var barrel_effect_list_label_2: EffectInfoListUI
@@ -130,7 +131,7 @@ func set_gun_frame_overview_data(data: GunFrameResource, is_locked: bool = false
 		return
 
 
-func show_effect_detail(show_content: bool = true) -> void:
+func show_effect_detail(_show_content: bool = true) -> void:
 	gun_frame_icon_container.visible = false
 	_show_ui(true, false, true)
 	grab_detail_focus(0)
@@ -143,6 +144,18 @@ func set_effect_detail_data(idx: int) -> void:
 	effect_name_label.text = "[b]%s[/b]" % [data.title]
 	effect_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.flavour_text]
 	effect_desc_label.text = data.description
+
+	# Should only have 2 childs
+	for child in luck_trigger_container.get_children():
+		child.visible = false
+
+	for i in range(data.luck_triggers.size()):
+		var trigger_id = data.luck_triggers[i]
+		var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
+		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
+		var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
+		luck_trigger_container.get_child(i).set_info(trigger_info.name, trigger_info.desc, is_discovered)
+		luck_trigger_container.get_child(i).visible = true
 
 
 func grab_detail_focus(idx: int) -> void:
@@ -164,8 +177,8 @@ func _init_barrel_effect_ui() -> void:
 		barrel_info_icon_effect_pool.append(ui)
 
 
-func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
-	var barrel_inst: SpinBarrel = barrel_data.barrel_prefab.instantiate()
+func populate_detail_circle_ui(target_barrel_data: BarrelDataResource) -> void:
+	var barrel_inst: SpinBarrel = target_barrel_data.barrel_prefab.instantiate()
 	add_child(barrel_inst)
 	
 	# Regen the barrel roll effects around the circle using the barrel data
@@ -245,12 +258,6 @@ func rotate_circle_one_slot() -> void:
 # When barrel is focused in Inventory/Shop, show the barrel overview details
 # When the player holds the DETAIL input, show the effect detail ring instead
 
-
-func set_barrel_data_resource(_barrel_data: BarrelDataResource) -> void:
-	barrel_data = _barrel_data
-	refresh_ui()
-
-
 func refresh_ui() -> void:
 	return
 	# Empty the circle ring UI elements
@@ -269,7 +276,7 @@ func refresh_ui() -> void:
 	# Update Barrel Info Summary UI
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	queue_redraw()
 
 

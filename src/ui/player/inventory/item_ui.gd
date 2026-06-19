@@ -86,10 +86,10 @@ func _on_button_focus_entered(grab_focus: bool = true) -> void:
 				parent_inventory_ui.scroll_container.ensure_control_visible(get_parent())
 			else:
 				if grab_focus:
-					grab_focus()  # This wont show the chip cost, but at least it wont crash
+					grab_focus() # This wont show the chip cost, but at least it wont crash
 		else:
 			if parent_inventory_ui.visible:
-				parent_inventory_ui.scroll_container.ensure_control_visible(self)
+				parent_inventory_ui.scroll_container.ensure_control_visible(self )
 
 
 func _on_button_focus_exited() -> void:
@@ -102,11 +102,11 @@ func _on_button_pressed() -> void:
 		return
 	
 	if is_empty:
-		interact_item.emit(self, data)
+		interact_item.emit(self , data)
 		return
 	
 	if not clicked_once:
-		select_item.emit(self, data)
+		select_item.emit(self , data)
 		if is_locked:
 			pass
 		elif not is_purchased:
@@ -121,4 +121,4 @@ func _on_button_pressed() -> void:
 		clicked_once = true
 		border_selected.visible = true
 	else:
-		interact_item.emit(self, data)
+		interact_item.emit(self , data)

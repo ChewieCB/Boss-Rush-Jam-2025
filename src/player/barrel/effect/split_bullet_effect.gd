@@ -1,7 +1,7 @@
 extends BaseBarrelEffect
 
-@export var split_count = 2
-@export var split_spread_radius = 10.0
+@export var split_count = 3
+@export var split_spread_radius = 90.0
 
 func on_projectile_impact(projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	if not is_instance_valid(projectile):

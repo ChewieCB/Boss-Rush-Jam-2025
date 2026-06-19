@@ -333,7 +333,6 @@ func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunF
 
 	current_selected_item_ui = gun_frame_item_ui
 	# TODO: Add UI show gun frame stat
-	# barrel_info_region.set_barrel_data_resource(data)
 	SoundManager.play_ui_sound(sfx_click, "UI")
 
 

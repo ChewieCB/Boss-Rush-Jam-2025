@@ -19,6 +19,7 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 #@onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
 @onready var _root = get_tree().get_root()
+@onready var min_time_before_stick_again_timer: Timer = $MinTimeBeforeStickAgainTimer
 
 var _active_tweens: Array[Tween] = []
 
@@ -139,15 +140,10 @@ func ricochet():
 	is_ricochet_shot = true
 
 	# Calculate bounce direction
+	# For balancing purpose, sticky bomb dont get minor homing toward enemy
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
 
-	# Add slight homing toward last look enemy target if available
-	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
-		var target = GameManager.player.last_look_enemy_target
-		var dir_to_target = global_position.direction_to(target.global_position)
-		# Blend bounce direction with target direction (small homing factor)
-		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
-
+	min_time_before_stick_again_timer.start()
 	init(global_position, bounce_dir, explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 
@@ -158,6 +154,9 @@ func _on_life_timer_timeout() -> void:
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
+		return
+
+	if not min_time_before_stick_again_timer.is_stopped():
 		return
 
 	var calculated_damage = calculate_bullet_damage()
@@ -359,7 +358,7 @@ func _activate_physics() -> void:
 	travelled_distance = 0
 	life_time = 0
 
-	
+
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 
@@ -380,7 +379,7 @@ func _deactivate_visuals() -> void:
 
 func _deactivate_physics() -> void:
 	super ()
-	
+
 	if get_parent() != _root:
 		self.reparent.call_deferred(_root)
 
@@ -396,7 +395,7 @@ func _deactivate_physics() -> void:
 	homing_locked_in = false
 	homing_target = null
 
-	
+
 	life_timer.stop()
 	explode_timer.stop()
 	tick_sfx_player.stop()

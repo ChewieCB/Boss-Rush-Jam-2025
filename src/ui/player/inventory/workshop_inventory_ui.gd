@@ -449,6 +449,13 @@ func change_gun_frame(idx_diff: int) -> void:
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
 	var parent: Control = ui.get_parent()
+	var ui_item: ItemUI = ui if ui is ItemUI else ui.item_ui
+	
+	if barrel_info_region.effect_detail_wheel.visible:
+		if current_selected_item_ui != null:
+			toggle_ui_focus_neighbors(current_selected_item_ui.button, true)
+		hide_effect_detail_view(ui_item if ui is ItemUI else ui)
+	
 	if ui.clicked_once:
 		active_focus_idx = parent.get_index() if parent is BarrelEquipSlotUI else ui.get_index()
 	if ui.is_equipped or ui.is_empty:
@@ -474,13 +481,12 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	super (item_ui, data)
-
 	if item_ui.is_locked:
 		return
 
 	var focus_area_callable: Callable = get_equip_slot_focus.bind(active_equip_idx)
 
-	# Equipped barrel slot UI
+	# Equipped barrel slot UI -> Remove an equipped barrel
 	if item_ui.is_equipped:
 		var _warning_text = GameManager.remove_barrel(data.barrel_id)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
@@ -497,9 +503,8 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		current_selected_item_ui = null
 		input_prompt_accept.update_text("Equip")
 
-	# Empty equip slot UI
+	# Empty equip slot UI -> Change focus to Inventory barrels
 	elif item_ui.is_empty:
-		# Change focus to Inventory barrels
 		focus_area_callable = get_inventory_focus
 		active_equip_idx = item_ui.get_parent().get_index()
 		persist_item_ui_highlight(item_ui)
@@ -507,9 +512,8 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		input_prompt_accept.update_text("Select")
 		input_prompt_cancel.update_text("Cancel")
 
-	# Inventory slot UI
+	# Inventory slot UI -> Equip a barrel
 	else:
-		# FIXME - reverse barrel order when dealing with GameManager
 		# Check we're not overwriting an existing barrel
 		var equip_slots = equip_barrel_container.get_children()
 		var equip_item_ui: ItemUI = equip_slots[active_equip_idx].item_ui
@@ -523,6 +527,11 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		equip_item_ui = equip_barrel_container.get_child(active_equip_idx).item_ui
 		clear_item_ui_highlight(equip_item_ui)
 		_reset_sibling_saturation(equip_item_ui)
-		get_equip_slot_focus()
+
+		# Focus the next empty slot (from right to left)
+		for i in range(len(equip_slots) - 1, -1, -1):
+			if equip_slots[i].item_ui.is_empty:
+				active_equip_idx = i
+				break
 
 	full_refresh_ui(focus_area_callable)

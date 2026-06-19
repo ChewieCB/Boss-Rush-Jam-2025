@@ -58,11 +58,10 @@ tracked_luck_trigger_ids = Array[int]([11, 12])
 
 [node name="Split" type="Node3D" parent="EffectContainer"]
 script = ExtResource("5_ai2fh")
-split_count = 3
-split_spread_radius = 90.0
 display_text_title = "Split Bullet"
 display_text_tag = "Extra bullets on impact!"
-display_text_desc = "Bullets split into 3 on impact"
+display_text_desc = "Bullets split into 3 weaker bullets on impact"
 positive_desc = Array[String](["Shots split into multiple sub-shots on impact"])
 negative_desc = Array[String](["Split shots can hurt you too"])
 icon_id = 46
+luck_triggers = Array[int]([10])

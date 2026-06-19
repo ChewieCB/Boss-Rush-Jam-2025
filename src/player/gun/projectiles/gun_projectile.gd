@@ -24,23 +24,35 @@ var gravity_accel = 0
 var gravity_free_timer = 0.2
 
 func _ready() -> void:
-	super ()
-	Mesh
+	super()
 	init_color = mesh.mesh.surface_get_material(0).albedo_color
+
+func _process(delta: float) -> void:
+	super(delta)
+	gravity_free_timer += delta
+	if "slow_roll_lifetime_required" in misc_data:
+		if misc_data["slow_roll_lifetime_required"] <= life_time:
+			misc_data.erase("slow_roll_lifetime_required")
+			if "slow_roll_barrel_vfx_node_name" in misc_data:
+				activate_barrel_vfx(misc_data["slow_roll_barrel_vfx_node_name"])
+				misc_data.erase("slow_roll_barrel_vfx_node_name")
 
 
 func _activate_visuals() -> void:
+	mesh.visible = true
 	change_bullet_color(init_color)
-	self.visible = true
 	trail.visible = true
 	trail.emit = true
+	visible = true
 
 func _deactivate_visuals() -> void:
-	super ()
-	self.visible = false
+	super()
+	mesh.visible = false
 	trail.visible = false
 	trail.emit = false
 	slowmo_trail.visible = false
+	await get_tree().create_timer(1).timeout
+	visible = false
 
 func _activate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
@@ -58,7 +70,7 @@ func _activate_physics() -> void:
 	
 
 func _deactivate_physics() -> void:
-	super ()
+	super()
 	trail.full_reset()
 	life_timer.stop()
 	
@@ -72,10 +84,6 @@ func _deactivate_physics() -> void:
 	self.process_mode = Node.PROCESS_MODE_DISABLED
 	set_physics_process(false)
 
-
-func _process(delta: float) -> void:
-	super (delta)
-	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
 	if homing_strength > 0 and GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
@@ -141,14 +149,14 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit(self , hit_boss)
+	destroyed.emit(self, hit_boss)
 	finished.emit.call_deferred()
 
 func play_ricochet_sfx():
 	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 func ricochet():
-	super ()
+	super()
 	gravity_free_timer = 0
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
@@ -173,7 +181,7 @@ func ricochet():
 
 
 func split(split_count: int, split_spread_radius: float, has_pos: bool, pos: Vector3):
-	super (split_count, split_spread_radius, has_pos, pos)
+	super(split_count, split_spread_radius, has_pos, pos)
 	# Maybe play a split SFX here
 
 
@@ -182,7 +190,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		return
 	
 	if body is Player:
-		on_player_contact.emit(self )
+		on_player_contact.emit(self)
 		if time_ricochetted == 0:
 			return
 
@@ -192,8 +200,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self )
-			#calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
+			before_damage_applied.emit(body, self)
+			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
@@ -217,12 +225,12 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		else:
 			call_deferred("create_spark", global_position, Vector3.UP)
 			call_deferred("create_bullet_decal", global_position, Vector3.UP)
-	impacted.emit(self , true, global_position)
+	impacted.emit(self, true, global_position)
 
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit(self , hit_boss)
+		destroyed.emit(self, hit_boss)
 		finished.emit.call_deferred()
 
 
@@ -235,7 +243,7 @@ func check_raycast_col():
 		found_hitscal_col = false
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
@@ -260,7 +268,7 @@ func redshift_bullet():
 
 
 func switch_to_slowmo_bullet_trail():
-	super ()
+	super()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
 	trail.clear_points()
