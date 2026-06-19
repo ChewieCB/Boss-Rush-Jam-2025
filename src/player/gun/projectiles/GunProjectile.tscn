@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=38 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_20dr0"]
@@ -17,6 +17,7 @@
 [ext_resource type="Shader" path="res://src/player/gun/vfx/distortion_trail.gdshader" id="11_nltpd"]
 [ext_resource type="PackedScene" uid="uid://7r4o8qm4v3km" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmit.tscn" id="12_hmgch"]
 [ext_resource type="PackedScene" uid="uid://dmrsj5hmyumwf" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmit.tscn" id="14_kna87"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="20_6okcb"]
 [ext_resource type="AudioStream" uid="uid://nsevw0dctc7c" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 1.mp3" id="20_31gvv"]
 [ext_resource type="AudioStream" uid="uid://bp0ai5js54012" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 2.mp3" id="21_wcewm"]
 
@@ -70,14 +71,14 @@ stream_1/stream = ExtResource("21_wcewm")
 offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
 colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_idfh0"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6gfk4"]
 gradient = SubResource("Gradient_w56hi")
 
 [sub_resource type="Curve" id="Curve_6a1fe"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_iwupy"]
+[sub_resource type="CurveTexture" id="CurveTexture_jyj17"]
 curve = SubResource("Curve_6a1fe")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k1q2q"]
@@ -85,19 +86,25 @@ lifetime_randomness = 0.3
 angle_min = -30.0
 angle_max = 30.0
 direction = Vector3(0, 0, -1)
-initial_velocity_min = 6.0
-initial_velocity_max = 10.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
 angular_velocity_min = -45.0
 angular_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
 linear_accel_min = -5.0
 linear_accel_max = -5.0
 scale_min = 0.75
 scale_max = 1.25
-scale_curve = SubResource("CurveTexture_iwupy")
-color_ramp = SubResource("GradientTexture1D_idfh0")
+scale_curve = SubResource("CurveTexture_jyj17")
+color_ramp = SubResource("GradientTexture1D_6gfk4")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p54np"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fsulx"]
+load_path = "res://.godot/imported/star.png-e13a19c003ac52e153eed2503d82e994.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrcyx"]
+transparency = 1
 vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_fsulx")
 emission_enabled = true
 rim_enabled = true
 billboard_mode = 3
@@ -106,8 +113,8 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="QuadMesh" id="QuadMesh_iy2t6"]
-material = SubResource("StandardMaterial3D_p54np")
+[sub_resource type="QuadMesh" id="QuadMesh_otb4d"]
+material = SubResource("StandardMaterial3D_lrcyx")
 size = Vector2(0.2, 0.2)
 
 [node name="GunProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
@@ -192,15 +199,20 @@ unit_size = 7.0
 max_db = 1.0
 bus = &"SFX"
 
-[node name="BarrelVFXEffect" type="Node3D" parent="."]
-visible = false
+[node name="BarrelVFXEffectContainer" type="Node3D" parent="."]
 
-[node name="SlowRoller" type="GPUParticles3D" parent="BarrelVFXEffect"]
+[node name="SparklingEffect" type="Node3D" parent="BarrelVFXEffectContainer" node_paths=PackedStringArray("gpu_particles")]
+visible = false
+script = ExtResource("20_6okcb")
+gpu_particles = [NodePath("Sparkling")]
+
+[node name="Sparkling" type="GPUParticles3D" parent="BarrelVFXEffectContainer/SparklingEffect"]
 amount = 16
-randomness = 0.5
+explosiveness = 0.2
+randomness = 0.2
 visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 process_material = SubResource("ParticleProcessMaterial_k1q2q")
-draw_pass_1 = SubResource("QuadMesh_iy2t6")
+draw_pass_1 = SubResource("QuadMesh_otb4d")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

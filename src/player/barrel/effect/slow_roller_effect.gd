@@ -12,6 +12,7 @@ const EXTRA_TIME_FOR_ICBM = 3
 
 func on_projectile_spawn(projectile: BaseBullet):
 	projectile.misc_data["slow_roll_lifetime_required"] = HIGH_TRAVEL_TIME_THRESHOLD
+	projectile.misc_data["slow_roll_barrel_vfx_node_name"] = "SparklingEffect"
 
 func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
 	var dist_diff = abs(lifetime_threshold - projectile.life_time)

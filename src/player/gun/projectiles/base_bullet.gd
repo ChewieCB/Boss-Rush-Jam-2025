@@ -10,6 +10,7 @@ signal finished
 # Check BossCore.BossStatusEffect for order
 @export var elemental_emitting_vfx: Array[GPUParticleController] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
+@onready var barrel_vfx_effect_container: Node3D = $BarrelVFXEffectContainer
 
 @export_group("SFX")
 @export var sfx_crit: Array[AudioStream]
@@ -69,7 +70,7 @@ var misc_data = {}
 func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
-	
+
 	for elem in elemental_emitting_vfx:
 		if elem:
 			elem.visible = false
@@ -92,6 +93,8 @@ func deactivate() -> void:
 
 func _deactivate_visuals() -> void:
 	stop_elemental_particles()
+	stop_barrel_vfx()
+
 
 func _deactivate_physics() -> void:
 	reset_bullet_stats()
@@ -118,6 +121,7 @@ func reset_bullet_stats() -> void:
 	can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
 	min_lifetime_before_can_be_aim_guided = 0.2
 	homing_curved_degrees = 0
+	life_time = 0
 	misc_data = {}
 
 func _connect_callbacks() -> void:
@@ -163,7 +167,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 		spark_inst.rotation_degrees.x = 90
 	else:
 		spark_inst.look_at(pos + normal, Vector3.UP)
-	
+
 	spark_inst.activate()
 
 
@@ -253,7 +257,7 @@ func get_damage_variance_modifier(_damage: int) -> int:
 
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = ObjectPoolingManager.get_pooled_object(pool_idx)
-	
+
 	new_inst.owner_gun = owner_gun
 	new_inst.is_ricochet_shot = is_ricochet
 	new_inst.homing_strength = homing_strength
@@ -266,12 +270,12 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.infused_status_effect = infused_status_effect
 	new_inst.homing_curved_degrees = homing_curved_degrees
 	new_inst.crit_chance = crit_chance
-	
+
 	if is_ricochet:
 		new_inst.time_ricochetted += 1
-	
+
 	new_inst.activate()
-	
+
 	return new_inst
 
 
@@ -287,7 +291,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		center_dir = hitscan_col_normal
 	if _has_pos:
 		new_pos = _pos
-	
+
 	for i in range(split_count):
 		var new_inst = create_duplication()
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
@@ -300,14 +304,24 @@ func change_bullet_color(_new_color: Color):
 	color_changed_count += 1
 
 
-func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
+func infuse_status_effect(_status_effect: BossCore.BossStatusEffect) -> void:
 	infused_status_effect[int(_status_effect) - 1] = true
 
+
+func activate_barrel_vfx(vfx_name: String) -> void:
+	if barrel_vfx_effect_container.has_node(vfx_name):
+		var vfx: GPUParticleController = barrel_vfx_effect_container.get_node(vfx_name)
+		vfx.activate()
 
 func stop_elemental_particles():
 	for elem in elemental_emitting_vfx:
 		if is_instance_valid(elem):
 			elem.deactivate(1)
+
+func stop_barrel_vfx():
+	for child in barrel_vfx_effect_container.get_children():
+		if is_instance_valid(child):
+			child.deactivate(1)
 
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	# Wait a bit to make the effect look better

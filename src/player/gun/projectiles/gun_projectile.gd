@@ -32,15 +32,18 @@ func _process(delta: float) -> void:
 	gravity_free_timer += delta
 	if "slow_roll_lifetime_required" in misc_data:
 		if misc_data["slow_roll_lifetime_required"] <= life_time:
-			# Do some visual here
 			misc_data.erase("slow_roll_lifetime_required")
+			if "slow_roll_barrel_vfx_node_name" in misc_data:
+				activate_barrel_vfx(misc_data["slow_roll_barrel_vfx_node_name"])
+				misc_data.erase("slow_roll_barrel_vfx_node_name")
 
 
 func _activate_visuals() -> void:
+	mesh.visible = true
 	change_bullet_color(init_color)
-	self.visible = true
 	trail.visible = true
 	trail.emit = true
+	visible = true
 
 func _deactivate_visuals() -> void:
 	super()

@@ -85,5 +85,7 @@ unit_size = 92.61
 max_db = 6.0
 bus = &"SFX"
 
+[node name="BarrelVFXEffectContainer" type="Node3D" parent="."]
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="NearbyEnemyCheckArea3D" to="." method="_on_nearby_enemy_check_area_3d_body_entered"]
