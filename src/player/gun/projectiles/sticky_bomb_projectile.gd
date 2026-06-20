@@ -16,9 +16,8 @@ signal exploded(explosion_inst: ExplosionDamageArea)
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
-#@onready var trail: Trail3D = $Trail/Trail3D
 @onready var tick_sfx_player: AudioStreamPlayer3D = $TickSFXPlayer
-@onready var ricochet_sfx_player: AudioStreamPlayer3D = $RiochetSFXPlayer
+@onready var ricochet_sfx_player: AudioStreamPlayer3D = $RicochetSFXPlayer
 @onready var _root = get_tree().get_root()
 @onready var min_time_before_stick_again_timer: Timer = $MinTimeBeforeStickAgainTimer
 

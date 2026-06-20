@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=39 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_20dr0"]
@@ -77,14 +77,14 @@ stream_1/stream = ExtResource("21_wcewm")
 offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
 colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_6gfk4"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7jf0o"]
 gradient = SubResource("Gradient_w56hi")
 
 [sub_resource type="Curve" id="Curve_6a1fe"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_jyj17"]
+[sub_resource type="CurveTexture" id="CurveTexture_7yeom"]
 curve = SubResource("Curve_6a1fe")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k1q2q"]
@@ -101,13 +101,13 @@ linear_accel_min = -5.0
 linear_accel_max = -5.0
 scale_min = 0.75
 scale_max = 1.25
-scale_curve = SubResource("CurveTexture_jyj17")
-color_ramp = SubResource("GradientTexture1D_6gfk4")
+scale_curve = SubResource("CurveTexture_7yeom")
+color_ramp = SubResource("GradientTexture1D_7jf0o")
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fsulx"]
 load_path = "res://.godot/imported/star.png-e13a19c003ac52e153eed2503d82e994.s3tc.ctex"
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrcyx"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dktx7"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = SubResource("CompressedTexture2D_fsulx")
@@ -120,16 +120,15 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_otb4d"]
-material = SubResource("StandardMaterial3D_lrcyx")
+material = SubResource("StandardMaterial3D_dktx7")
 size = Vector2(0.2, 0.2)
 
-[node name="GunProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
+[node name="GunProjectile" type="Node3D"]
 script = ExtResource("1_x0ax1")
 sfx_split = Array[AudioStream]([SubResource("AudioStreamRandomizer_jb2pd")])
 spark_effect = ExtResource("2_20dr0")
 generic_blood_splatter = ExtResource("3_hfe15")
 bullet_decal_prefab = ExtResource("4_ks48t")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), NodePath("ElementalVFX/ProjectilePoisonEmit"), NodePath("ElementalVFX/ProjectileFreezeEmit"), NodePath("ElementalVFX/ProjectileShockEmit"), NodePath("ElementalVFX/ProjectileBleedEmit")]
 elemental_impact_vfx = Array[PackedScene]([ExtResource("5_qkred"), ExtResource("6_nrwwr"), ExtResource("7_3y2u6"), ExtResource("8_b78wo"), ExtResource("9_w8ev7")])
 sfx_crit = Array[AudioStream]([ExtResource("10_tjui2")])
 

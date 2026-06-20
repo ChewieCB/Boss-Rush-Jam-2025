@@ -124,6 +124,7 @@ func reset_bullet_stats() -> void:
 	life_time = 0
 	misc_data = {}
 
+
 func _connect_callbacks() -> void:
 	if not on_player_contact.is_connected(owner_gun.check_barrel_effect_on_player_contact):
 		on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
@@ -245,7 +246,8 @@ func calculate_bullet_damage(reroll_crit = true):
 
 func ricochet():
 	time_ricochetted += 1
-	return
+	play_ricochet_sfx()
+	is_ricochet_shot = true
 
 
 ## This will be added to normal damage
@@ -285,6 +287,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 	if not is_instance_valid(self):
 		return
 
+	play_split_sfx()
 	var center_dir = - current_dir
 	var new_pos = global_position
 	if found_hitscal_col:
@@ -298,6 +301,12 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		# Splitted bullet CAN NOT ricochet or split again
 		new_inst.splitted = true
 		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
+
+func play_ricochet_sfx():
+	return
+
+func play_split_sfx():
+	return
 
 
 func change_bullet_color(_new_color: Color):

@@ -30,8 +30,6 @@ func _ready():
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
-	if is_ricochet_shot:
-		redshift_bullet()
 	init_color = get_projectile_color()
 
 func _activate_visuals() -> void:

@@ -138,11 +138,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
-	redshift_bullet()
 	look_at_from_position(start_pos, start_pos + dir)
 	
 	trail.visible = true
-	
 	check_raycast_col()
 
 	if splitted:
@@ -164,15 +162,13 @@ func play_ricochet_sfx():
 	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 func ricochet():
+	# Redshift the bullet color after ricochet. Only do it once.
+	if is_ricochet_shot == false:
+		redshift_bullet()
 	super()
 	gravity_free_timer = 0
 	found_hitscal_col = false
-	# Redshift the bullet color after ricochet. Only do it once.
-	if is_ricochet_shot == false:
-		is_ricochet_shot = true
-	
-	play_ricochet_sfx()
-	
+
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
 	
@@ -186,11 +182,6 @@ func ricochet():
 	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
-
-
-func split(split_count: int, split_spread_radius: float, has_pos: bool, pos: Vector3):
-	super(split_count, split_spread_radius, has_pos, pos)
-	# Maybe play a split SFX here
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
@@ -242,12 +233,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		finished.emit.call_deferred()
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
-	# Run the base_bullet.gd split() code first
 	super(split_count, split_spread_radius, _has_pos, _pos)
-	# Play our sound
-	play_ricochet_sfx() # Pick a random sound from our array of audio files declared above
-	# Do any tweaks to the player here before you trigger it
-	
 
 func check_raycast_col():
 	if raycast.is_colliding():
