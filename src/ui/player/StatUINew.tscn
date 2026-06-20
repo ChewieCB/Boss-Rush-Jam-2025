@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://d2m0w0bro5j5l"]
+[gd_scene load_steps=39 format=3 uid="uid://d2m0w0bro5j5l"]
 
 [ext_resource type="Script" path="res://src/ui/player/radial_ammo_ui.gd" id="1_awes1"]
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
@@ -23,6 +23,24 @@
 [sub_resource type="Theme" id="Theme_sph0g"]
 default_font = ExtResource("4_6gcbv")
 
+[sub_resource type="Shader" id="Shader_a8e7g"]
+code = "shader_type canvas_item;
+uniform float skew_factor = 0.0; // Adjust this value
+uniform float skew_cutoff = 1.0;
+
+void vertex() {
+	if (VERTEX.x < skew_cutoff) {
+    	VERTEX.x -= skew_factor * VERTEX.y; // Skews the bar
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_spm1a"]
+resource_local_to_scene = true
+shader = SubResource("Shader_a8e7g")
+shader_parameter/skew_factor = 0.5
+shader_parameter/skew_cutoff = 319.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ielym"]
 shader = ExtResource("12_bmj6s")
 shader_parameter/scale_mult = Vector2(1, 1)
@@ -33,6 +51,30 @@ shader_parameter/tiling = 1.71
 shader_parameter/movment_dir_speed = Vector2(-1.8, 3)
 shader_parameter/movment_dir_speed2 = Vector2(1.8, 3)
 shader_parameter/noise_seed = Vector2(1, 1)
+
+[sub_resource type="Shader" id="Shader_aekxn"]
+code = "shader_type canvas_item;
+uniform float skew_factor = 0.0; // Adjust this value
+uniform float skew_cutoff = 1.0;
+
+void vertex() {
+	if (VERTEX.x < skew_cutoff) {
+    	VERTEX.x -= skew_factor * VERTEX.y; // Skews the bar
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l6kyc"]
+resource_local_to_scene = true
+shader = SubResource("Shader_aekxn")
+shader_parameter/skew_factor = 0.5
+shader_parameter/skew_cutoff = 372.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oxa01"]
+resource_local_to_scene = true
+shader = SubResource("Shader_a8e7g")
+shader_parameter/skew_factor = 0.5
+shader_parameter/skew_cutoff = 372.0
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_iadbw"]
 color = Color(1, 1, 1, 1)
@@ -197,8 +239,7 @@ size_flags_vertical = 8
 
 [node name="HealthContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox"]
 layout_mode = 2
-theme_override_constants/margin_left = 80
-theme_override_constants/margin_right = -16
+theme_override_constants/margin_left = 72
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer"]
 layout_mode = 2
@@ -207,6 +248,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="HealthIconContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 16
 
@@ -244,7 +286,7 @@ vertical_alignment = 1
 material = ExtResource("6_uywjm")
 layout_mode = 2
 mouse_filter = 2
-value = 60.0
+value = 36.0
 fill_mode = 1
 nine_patch_stretch = true
 stretch_margin_left = 20
@@ -257,12 +299,13 @@ tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
 [node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer"]
-material = ExtResource("6_uywjm")
+material = SubResource("ShaderMaterial_spm1a")
 custom_minimum_size = Vector2(304, 20)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
-value = 40.0
+value = 25.0
+rounded = true
 fill_mode = 1
 nine_patch_stretch = true
 stretch_margin_left = 20
@@ -280,7 +323,7 @@ one_shot = true
 
 [node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar", "high_luck_mark_margin_ui", "high_luck_glow", "luck_buff_container")]
 layout_mode = 2
-theme_override_constants/margin_right = -36
+theme_override_constants/margin_right = -49
 script = ExtResource("9_7pd86")
 timer = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer")
 luck_bar = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar")
@@ -347,7 +390,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer"]
-material = ExtResource("6_uywjm")
+material = SubResource("ShaderMaterial_l6kyc")
 layout_mode = 2
 mouse_filter = 2
 value = 60.0
@@ -363,7 +406,7 @@ tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
 [node name="LuckBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer"]
-material = ExtResource("6_uywjm")
+material = SubResource("ShaderMaterial_oxa01")
 custom_minimum_size = Vector2(240, 20)
 layout_mode = 2
 size_flags_vertical = 4
@@ -431,7 +474,7 @@ layout_mode = 2
 
 [node name="CircularUIContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = -24
+theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = -106
 
 [node name="SpinAbilityUI" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/CircularUIContainer"]
@@ -542,9 +585,6 @@ stretch_mode = 5
 libraries = {
 "": SubResource("AnimationLibrary_2600x")
 }
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(960, 540)
 
 [connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer" method="_on_timer_timeout"]
 [connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer" method="_on_timer_timeout"]

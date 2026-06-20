@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=88 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -46,12 +46,14 @@
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
 [ext_resource type="Script" path="res://src/components/health/health_component_player.gd" id="34_6waar"]
 [ext_resource type="PackedScene" uid="uid://di1fwsgnfbfd" path="res://src/utils/freecam/FreeCam.tscn" id="34_kq3ih"]
-[ext_resource type="PackedScene" uid="uid://by55cbg34v6j7" path="res://src/player/DustRing.tscn" id="34_ph8h0"]
+[ext_resource type="PackedScene" uid="uid://by55cbg34v6j7" path="res://src/player/misc/DustRing.tscn" id="34_ph8h0"]
 [ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/misc/HitText.tscn" id="35_uogvx"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="PackedScene" uid="uid://c4p2faplbsqt6" path="res://src/player/misc/HealCloudVFX.tscn" id="36_isl1y"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Script" path="res://src/player/aim_recticle.gd" id="42_rky08"]
+[ext_resource type="AudioStream" uid="uid://dtujbr2sc5n0g" path="res://src/player/assets/sfx/458533__shyguy014__healpop.mp3" id="45_n5un2"]
 [ext_resource type="PackedScene" uid="uid://diyo7ftvwcl0r" path="res://src/ui/player/status/DrunkUI.tscn" id="46_587r8"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
@@ -62,10 +64,14 @@
 [ext_resource type="Script" path="res://src/player/interact_ui.gd" id="48_hxlt6"]
 [ext_resource type="PackedScene" uid="uid://dymal26tqayfd" path="res://src/ui/player/luck/LuckMessageUI.tscn" id="49_7wxbq"]
 [ext_resource type="PackedScene" uid="uid://d2m0w0bro5j5l" path="res://src/ui/player/StatUINew.tscn" id="51_vst8k"]
-[ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
+[ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/misc/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
 [ext_resource type="PackedScene" uid="uid://cu1jrlwvdnnl" path="res://src/ui/player/inventory/WorkshopInventoryUI.tscn" id="60_44qli"]
+[ext_resource type="AudioStream" uid="uid://s2gc0l4t45ar" path="res://src/player/assets/sfx/Bullet Whiz 1.mp3" id="69_7cdgm"]
+[ext_resource type="AudioStream" uid="uid://bpdnxlyoguky5" path="res://src/player/assets/sfx/Bullet Whiz 2.mp3" id="70_733vl"]
+[ext_resource type="AudioStream" uid="uid://dwriy0s2kb1i7" path="res://src/player/assets/sfx/Bullet Whiz 3.mp3" id="71_htgqk"]
+[ext_resource type="AudioStream" uid="uid://dvrx3b03s5o82" path="res://src/player/assets/sfx/Bullet Whiz 4.mp3" id="72_mj3f0"]
 [ext_resource type="Script" path="res://src/player/bullet_whizz_radius.gd" id="119_e0qef"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
@@ -119,8 +125,15 @@ shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 [sub_resource type="SphereShape3D" id="SphereShape3D_q6pr3"]
 radius = 5.0
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_x0ll1"]
+streams_count = 4
+stream_0/stream = ExtResource("69_7cdgm")
+stream_1/stream = ExtResource("70_733vl")
+stream_2/stream = ExtResource("71_htgqk")
+stream_3/stream = ExtResource("72_mj3f0")
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_dxvay"]
-radius = 2.0
+radius = 2.5
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
@@ -147,6 +160,9 @@ jump_dust_ring_prefab = ExtResource("34_ph8h0")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
+
+[node name="HealCloudVFX" parent="." instance=ExtResource("36_isl1y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")
@@ -256,6 +272,7 @@ texture_albedo = ExtResource("3_tgexf")
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("41_63osp")
+heal_flash_sfx = ExtResource("45_n5un2")
 
 [node name="CustomEffectShader" type="Control" parent="UI"]
 layout_mode = 3
@@ -265,6 +282,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="StatusOverlay" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HealFlash" type="ColorRect" parent="UI/StatusOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.472, 0.826, 0, 0)
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
@@ -458,7 +494,6 @@ text = "Saving..."
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
-z_index = 10
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1
@@ -637,6 +672,7 @@ collision_layer = 0
 collision_mask = 8
 monitorable = false
 script = ExtResource("119_e0qef")
+bullet_whizz_sfx = SubResource("AudioStreamRandomizer_x0ll1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BulletWhizzRadius"]
 shape = SubResource("SphereShape3D_dxvay")

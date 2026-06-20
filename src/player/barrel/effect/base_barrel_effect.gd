@@ -69,6 +69,12 @@ func on_barrel_stop_spin():
 func on_effect_set():
 	return
 
+
+## Call when an effect is removed
+func on_effect_removed():
+	return
+
+
 ## Call when player start to hold or click LMB (or shoot button)
 func on_trigger_pulled():
 	return
@@ -124,7 +130,7 @@ func on_projectile_travel_tick():
 func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
-func on_projectile_destroyed(_hit_boss: bool):
+func on_projectile_destroyed(_projectile: BaseBullet, _hit_boss: bool):
 	return
 
 ## Before bullet go out of barrel. Not take into account bullet effect yet.
@@ -136,7 +142,7 @@ func on_player_contact(_projectile: BaseBullet):
 	return
 
 ## When bullet hit enemy but JUST before applied damage (but after normal damage calculation).
-## You can modify bullet damage which take into account bonus of each bullet here.
+## You can modify bullet calculated_damage which take into account bonus of each bullet here.
 func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	return
 

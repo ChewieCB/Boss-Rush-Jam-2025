@@ -14,10 +14,10 @@ var is_spinning = false
 var chosen_id: int:
 	set(value):
 		chosen_id = value
-		barrel_effect_changed.emit.call_deferred(self, effect_list[chosen_id])
+		barrel_effect_changed.emit.call_deferred(self , effect_list[chosen_id])
 var force_next_spin_id: int = -1
 var is_equipped = false
-var last_chosen_set: Dictionary = {}  # effect_idx -> true/false
+var last_chosen_set: Dictionary = {} # effect_idx -> true/false
 var last_chosen_queue = []
 
 # TODO - reloads before spin for each barrel should be generated on save file creation, seeded
@@ -146,5 +146,6 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
 		"icon_id": barrel_effect.icon_id,
+		"luck_triggers": barrel_effect.luck_triggers
 	 }
 	return res

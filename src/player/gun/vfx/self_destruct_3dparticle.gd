@@ -1,7 +1,22 @@
 extends GPUParticles3D
 
-func _ready():
-	emitting = true
+@export var queue_free_on_finished = false
 
 func _on_finished():
-	call_deferred("queue_free")
+	if queue_free_on_finished:
+		queue_free()
+		return
+	
+	deactivate()
+
+
+func activate() -> void:
+	self.visible = true
+	restart()
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func deactivate() -> void:
+	emitting = false
+	self.visible = false
+	self.process_mode = Node.PROCESS_MODE_DISABLED

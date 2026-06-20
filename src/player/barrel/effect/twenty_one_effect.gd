@@ -107,9 +107,10 @@ func resolve_quick_twenty_one_effect():
 		twenty_one_found = false
 
 		# Create explosion
-		var explosion_inst: ExplosionDamageArea = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+		var explosion_inst: ExplosionDamageArea = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 		explosion_inst.init(floor(GameManager.player.health_component.current_health * EXPLOSION_CURRENT_HP_DAMAGE_PERC))
-		explosion_inst.activate(GameManager.player.global_position)
+		explosion_inst.global_position = GameManager.player.global_position
+		explosion_inst.activate.call_deferred()
 		# Explosion SFX
 		var rand_pitch = randf_range(0.8, 1.2)
 		SoundManager.play_sound_with_pitch(explosion_sfx, rand_pitch)
@@ -132,7 +133,7 @@ func add_status_effect():
 		TwentyOneEffectEnum.EXPLOSION_15_PERC_HP_NON_LETHAL
 	]:
 		is_bad_effect = true
-	
+
 	var status_effect = StatusEffect.new()
 	status_effect.display_name = "Found Twenty-One"
 	status_effect.status_code = "found_twenty_one"

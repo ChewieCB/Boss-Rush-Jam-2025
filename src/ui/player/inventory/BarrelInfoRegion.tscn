@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="10_xfxnq"]
 [ext_resource type="Texture2D" uid="uid://eo0lldpw8no2" path="res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png" id="12_nehlt"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "effect_detail_spin_prompt", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "luck_trigger_container", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "effect_detail_spin_prompt", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -31,6 +31,7 @@ effect_name_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/
 effect_flavour_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectFlavourText/RichTextLabel")
 effect_desc_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDescription/RichTextLabel")
 effect_panel_barrel_icon = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/EffectIcon")
+luck_trigger_container = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/LuckTriggers/HBoxContainer")
 barrel_effect_list_label_1 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine")
 barrel_effect_list_label_2 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine2")
 barrel_effect_list_label_3 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine3")
@@ -121,7 +122,6 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="SingleEffectDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -225,6 +225,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="BarrelOverviewDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

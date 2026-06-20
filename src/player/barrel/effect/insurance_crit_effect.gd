@@ -19,7 +19,7 @@ func on_barrel_stop_spin():
 	sure_crit = false
 
 
-func on_projectile_destroyed(hit_boss: bool):
+func on_projectile_destroyed(_projectile: BaseBullet, hit_boss: bool):
 	if not hit_boss:
 		sure_crit = true
 

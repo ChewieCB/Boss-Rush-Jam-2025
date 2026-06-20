@@ -3,6 +3,7 @@ class_name ElevatorShockHazard
 
 signal finished
 
+@export var initial_damage: float = 20.0
 @export var damage_per_tick: float = 5.0
 @export var duration: float = 5
 @export var slow_perc: float = 0
@@ -44,7 +45,7 @@ func _on_damage_timer_timeout() -> void:
 	if not is_active:
 		return
 	
-	trigger_effect()
+	#trigger_effect()
 
 
 func trigger_effect() -> void:
@@ -52,8 +53,9 @@ func trigger_effect() -> void:
 		for body in bodies_inside:
 			if body in immune_bodies:
 				continue
-			if damage_per_tick > 0:
-				body.health_component.damage(damage_per_tick)
+			body.health_component.damage(initial_damage)
+			#if damage_per_tick > 0:
+				#body.health_component.damage(damage_per_tick)
 			
 			if body is Player and slow_perc > 0:
 				var run_debuff = create_slow_run_debuff(1)
@@ -68,7 +70,7 @@ func start_hazard() -> void:
 	if sfx_effect:
 		sfx_player.stream = sfx_effect.pick_random()
 		sfx_player.play()
-	trigger_effect()
+	#trigger_effect()
 
 
 func clear_hazard():

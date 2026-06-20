@@ -512,28 +512,28 @@ func _spawn_arc_proj() -> void:
 	)
 	active_arc_projectiles.append(arc_proj)
 
+#
+#func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
+	#if len(sfx_arr) > 0:
+		#play_positional_sound(sfx_arr.pick_random())
+#
+	#var projectile = proj_pool.pop_front()
+	#if not projectile:
+		#return
+	#
+	#projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
+	#projectile.activate()
+	#projectile.global_position = spawn_pos
+	#var dir_to_target = spawn_pos.direction_to(target.global_position)
+	#var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	#projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
+	#
+	#return projectile
 
-func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
-	if len(sfx_arr) > 0:
-		play_positional_sound(sfx_arr.pick_random())
 
-	var projectile = proj_pool.pop_front()
-	if not projectile:
-		return
-	
-	projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
-	projectile.activate()
-	projectile.global_position = spawn_pos
-	var dir_to_target = spawn_pos.direction_to(target.global_position)
-	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
-	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
-	
-	return projectile
-
-
-func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
-	proj.deactivate()
-	proj_pool.push_back(proj)
+#func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
+	#proj.deactivate()
+	#proj_pool.push_back(proj)
 
 
 func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:

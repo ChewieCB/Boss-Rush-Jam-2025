@@ -20,7 +20,7 @@ signal ui_accept
 
 var display_barrels: Array = []
 
-var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
+var no_difficulty_bosses: Array[int] = [] # [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
 
 func _ready() -> void:
@@ -44,6 +44,7 @@ func _ready() -> void:
 	
 	get_tree().paused = false
 	
+	GameManager.selected_boss_id = BossCore.BossIdEnum.BASE
 	GameManager.current_boss_map = self
 	GameManager.change_fmod_bgm_music_state("Backroom") # Backroom is the new Lobby
 	
@@ -58,10 +59,11 @@ func _ready() -> void:
 	
 	GameManager.reset_reroll_cost()
 	GameManager.is_free_reroll = true
+	GameManager.boss_ante = 1
 	GameManager.bet_value = 0
 	GameManager.reward_value = 0
 	
-	if GameManager.elevator_respawn_transform:
+	if GameManager.elevator_respawn_transform != Transform3D():
 		player.global_transform = GameManager.elevator_respawn_transform
 	
 	# HACK for backroom load

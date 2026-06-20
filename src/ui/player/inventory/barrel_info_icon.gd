@@ -22,6 +22,7 @@ var barrel_roll_data: Dictionary = {
 	"positive_desc": [],
 	"negative_desc": [],
 	"icon_id": - 1,
+	"luck_triggers": [],
 }
 var _base_color: Color
 var _time: float = 0.0
@@ -64,14 +65,14 @@ func expand_button_size():
 	is_expanded = true
 	colour_rect.pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self, "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
+	tween.tween_property(self , "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
 
 
 func return_button_size():
 	is_expanded = false
 	colour_rect.pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)
+	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
 
 
 func play_button_hover_sfx():
@@ -107,4 +108,4 @@ func _on_barrel_info_icon_mouse_exited() -> void:
 
 
 func _on_button_pressed() -> void:
-	clicked.emit(self)
+	clicked.emit(self )

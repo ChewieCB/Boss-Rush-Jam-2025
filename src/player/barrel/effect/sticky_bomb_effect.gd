@@ -1,6 +1,5 @@
 extends CompoundEffect
 
-
 @export_group("Luck Triggers")
 @export_subgroup("Cluster Bomb")
 @export var luck_trigger_sticky_threshold: int = 20
@@ -14,7 +13,7 @@ var sticky_hits: int = 0
 @export var luck_trigger_indirect_damage_threshold: float = 100.0
 @export var luck_gain_indirect_damage: float = 20.0
 #
-@export var explosive_dps_dealt_window: float = 2.4 
+@export var explosive_dps_dealt_window: float = 2.4
 @export var explosive_dps_dealt_window_timer: Timer
 var explosive_dps_accumulated_in_window: float = 0.0:
 	set(value):
@@ -23,11 +22,11 @@ var explosive_dps_accumulated_in_window: float = 0.0:
 			explosive_dps_dealt_window_timer.start(explosive_dps_dealt_window)
 
 
-
 func on_projectile_spawn(_projectile: BaseBullet):
 	super(_projectile)
 	await get_tree().physics_frame
-	_projectile.before_damage_applied.connect(_update_sticky_hit_tracker)
+	if not _projectile.before_damage_applied.is_connected(_update_sticky_hit_tracker):
+		_projectile.before_damage_applied.connect(_update_sticky_hit_tracker)
 	if "explosion_inst" in _projectile:
 		_projectile.explosion_inst.explosive_damage.connect(_on_explosive_damage.bind(_projectile))
 
@@ -48,15 +47,9 @@ func _update_sticky_hit_tracker(_enemy: CharacterBody3D, projectile: BaseBullet)
 	sticky_hits += 1
 	
 	
-func _on_first_proj_in_window_destroyed(_hit_boss: bool) -> void:
+func _on_first_proj_in_window_destroyed(_projectile: BaseBullet, _hit_boss: bool) -> void:
 	if sticky_hits >= luck_trigger_sticky_threshold:
-		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
-			LuckTriggerInfo.LuckTriggerIdEnum.STICKY_BOMB__CLUSTER_BOMB
-		]
-		if LuckHandler.luck_trigger_dict[enum_str] == false:
-			LuckHandler.luck_trigger_dict[enum_str] = true
-			LuckHandler.trigger_discovered.emit()
-		
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.STICKY_BOMB__CLUSTER_BOMB)
 		LuckHandler.increase_luck(luck_gain_sticky, "+25 Cluster Bomb!")
 	
 	sticky_hits = 0
@@ -70,14 +63,7 @@ func accumulate_dps_dealt(damage: float) -> void:
 
 func _on_dps_dealt_window_timer_timeout() -> void:
 	if explosive_dps_accumulated_in_window > luck_trigger_indirect_damage_threshold:
-		# Mark the luck trigger as discovered if we haven't triggered it before
-		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
-			LuckTriggerInfo.LuckTriggerIdEnum.STICKY_BOMB__DANGER_CLOSE
-		]
-		if LuckHandler.luck_trigger_dict[enum_str] == false:
-			LuckHandler.luck_trigger_dict[enum_str] = true
-			LuckHandler.trigger_discovered.emit()
-		
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.STICKY_BOMB__DANGER_CLOSE)
 		LuckHandler.increase_luck(luck_gain_indirect_damage, "+20 Danger Close!")
 	
 	explosive_dps_accumulated_in_window = 0.0

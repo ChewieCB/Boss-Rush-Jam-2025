@@ -1,11 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://c0ddu7x6kgycs"]
+[gd_scene load_steps=10 format=3 uid="uid://c0ddu7x6kgycs"]
 
 [ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/base_boss_projectile.gd" id="1_3p6ml"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_en370"]
 [ext_resource type="Shader" path="res://src/bosses/base/attacks/ranged/blob_shader.gdshader" id="3_f38pi"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_so2kb"]
-radius = 1.0
+radius = 1.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcyja"]
 transparency = 1
@@ -22,7 +22,7 @@ point_count = 2
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i6dov"]
 render_priority = 0
 shader = ExtResource("3_f38pi")
-shader_parameter/colour = Color(0.24969, 0.41, 0.1271, 0.858824)
+shader_parameter/colour = Color(0.47, 0.420493, 0.0987, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_5sgai"]
 material = SubResource("ShaderMaterial_i6dov")
@@ -30,9 +30,6 @@ radius = 1.0
 height = 2.0
 radial_segments = 32
 rings = 16
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_rq8jn"]
-radius = 1.0
 
 [node name="ChiptopedeProjectile" type="Area3D"]
 collision_layer = 8
@@ -61,9 +58,6 @@ width_profile = SubResource("Curve_my72y")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
 mesh = SubResource("SphereMesh_5sgai")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_rq8jn")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -100)

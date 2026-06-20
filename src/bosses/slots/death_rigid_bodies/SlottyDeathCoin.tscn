@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://4oxspbiiuf3p"]
+
+[ext_resource type="Texture2D" uid="uid://cqb2wwjq1cbxv" path="res://src/bosses/slots/assets/Slotty-Coin-isolated.png" id="1_idgdk"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1b42f"]
+friction = 0.64
+bounce = 0.3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vankt"]
+height = 0.2
+radius = 1.0
+
+[node name="SlottyDeathCoin" type="RigidBody3D"]
+collision_layer = 0
+collision_mask = 9
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+mass = 23.0
+physics_material_override = SubResource("PhysicsMaterial_1b42f")
+freeze = true
+angular_damp = 0.5
+
+[node name="Sprite3D2" type="Sprite3D" parent="."]
+transform = Transform3D(0.395, 0, 0, 0, 0.395, 0, 0, 0, 0.395, 0, 0, 0)
+texture = ExtResource("1_idgdk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_vankt")

@@ -82,6 +82,16 @@ func play_sound(resource: AudioStream, override_bus: String = "") -> AudioStream
 	return sound_effects.play(resource, override_bus)
 
 
+var _last_sfx_time: float = 0.0
+
+func play_sfx_guarded(player: AudioStreamPlayer3D, cooldown: float = 0.05) -> void:
+	var now = Time.get_ticks_msec() / 1000.0
+	if _last_sfx_time + cooldown > now:
+		return
+	_last_sfx_time = now
+	player.play()
+
+
 func play_sound_with_pitch(resource: AudioStream, pitch: float = 1.0, override_bus: String = "") -> AudioStreamPlayer:
 	var player = sound_effects.play(resource, override_bus)
 	player.pitch_scale = pitch
@@ -90,6 +100,19 @@ func play_sound_with_pitch(resource: AudioStream, pitch: float = 1.0, override_b
 
 func play_sound_3d(resource: AudioStream, position: Vector3, pitch: float = 1.0, override_bus: String = "") -> AudioStreamPlayer3D:
 	return sound_effects.play_3d(resource, position, override_bus)
+
+func instantiate_configured_player(position: Vector3, player: AudioStreamPlayer3D) -> void:
+	var new_sfx = AudioStreamPlayer3D.new()
+	new_sfx.stream = player.stream
+	new_sfx.stream = player.stream
+	new_sfx.unit_size = player.unit_size
+	new_sfx.max_distance = player.max_distance
+	new_sfx.volume_db = player.volume_db
+	new_sfx.attenuation_model = player.attenuation_model
+	get_tree().root.add_child(new_sfx)
+	new_sfx.global_position = position
+	new_sfx.play()
+	new_sfx.finished.connect(new_sfx.queue_free)
 
 
 func stop_sound(resource: AudioStream) -> void:
