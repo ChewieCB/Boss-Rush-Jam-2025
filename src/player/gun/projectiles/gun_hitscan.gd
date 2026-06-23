@@ -14,7 +14,7 @@ signal end_pos_set(pos: Vector3)
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 @onready var area_col: CollisionShape3D = $NearbyEnemyCheckArea3D/CollisionShape3D
 
-@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+@onready var ricochet_sfx_player: AudioStreamPlayer3D = $Ricochet3dAudio
 
 var alpha = 1.0
 var end_pos
@@ -234,17 +234,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func play_ricochet_sfx():
-	var sfx = AudioStreamPlayer3D.new()
-	sfx.stream = ricochet_sfx.stream
-	sfx.stream = ricochet_sfx.stream
-	sfx.unit_size = ricochet_sfx.unit_size
-	sfx.max_distance = ricochet_sfx.max_distance
-	sfx.volume_db = ricochet_sfx.volume_db
-	sfx.attenuation_model = ricochet_sfx.attenuation_model
-	get_tree().root.add_child(sfx)
-	sfx.global_position = global_position
-	sfx.play()
-	sfx.finished.connect(sfx.queue_free)
+	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 
 func ricochet():
