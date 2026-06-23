@@ -41,13 +41,13 @@ func _process(delta: float) -> void:
 
 func _activate_visuals() -> void:
 	mesh.visible = true
-	change_bullet_color(init_color)
 	trail.visible = true
 	trail.emit = true
 	visible = true
 
 func _deactivate_visuals() -> void:
 	super()
+	change_bullet_color(init_color)
 	mesh.visible = false
 	trail.visible = false
 	trail.emit = false
@@ -125,7 +125,8 @@ func _physics_process(delta: float) -> void:
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	look_at_from_position(start_pos, start_pos + dir)
-	activate()
+	if not is_ricochet_shot:
+		activate()
 	
 	life_timer.start()
 	projectile_speed = _speed
