@@ -47,7 +47,9 @@ func _activate_visuals() -> void:
 
 func _deactivate_visuals() -> void:
 	super()
+	color_changed_count = 0
 	change_bullet_color(init_color)
+	color_changed_count = 0
 	mesh.visible = false
 	trail.visible = false
 	trail.emit = false
@@ -261,8 +263,8 @@ func change_bullet_color(_new_color: Color):
 func redshift_bullet():
 	var current_color = mesh.mesh.material.albedo_color
 	var redshifted_color = Color(
-		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
-		current_color.g * 0.7, # Reduce green
+		current_color.r + (1.0 - current_color.r) * 0.7, # Shift red towards 1.0,
+		current_color.g * 0.3, # Reduce green
 		current_color.b * 0.3, # Reduce blue significantly
 		current_color.a
 	)

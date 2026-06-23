@@ -31,7 +31,6 @@ script = ExtResource("4_4ylkc")
 tracked_luck_trigger_ids = Array[int]([3])
 
 [node name="Homing" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("3_khhtx")
 display_text_title = "Homing Bullet"
 display_text_tag = "Skill issues solved!"

@@ -51,6 +51,9 @@ func _deactivate_visuals() -> void:
 	super()
 	self.visible = false
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
+	color_changed_count = 0
+	change_bullet_color(init_color)
+	color_changed_count = 0
 
 func _deactivate_physics() -> void:
 	super()
@@ -174,10 +177,18 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self)
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
-			apply_damage_to_health_component(target.health_component, calculated_damage)
-			damage_applied.emit(calculated_damage, true, target.global_position)
-			hit_boss = true
 			call_deferred("create_blood_splatter", hitscan_col_point, hitscan_col_normal)
+			if target is Player:
+				on_player_contact.emit(self)
+				if time_ricochetted == 0:
+					return
+				else:
+					apply_damage_to_health_component(target.health_component, calculated_damage * 0.5) # Weaken ricochet dmg
+					damage_applied.emit(calculated_damage * 0.5, true, target.global_position)
+			else:
+				apply_damage_to_health_component(target.health_component, calculated_damage)
+				damage_applied.emit(calculated_damage, true, target.global_position)
+				hit_boss = true
 		else:
 			if "health_component" in target:
 				if target is Shield:
