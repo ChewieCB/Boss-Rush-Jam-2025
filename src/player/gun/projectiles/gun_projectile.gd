@@ -54,6 +54,7 @@ func _deactivate_visuals() -> void:
 	trail.visible = false
 	trail.emit = false
 	slowmo_trail.visible = false
+	slowmo_trail.emit = false
 	await get_tree().create_timer(1).timeout
 	visible = false
 
@@ -275,7 +276,9 @@ func switch_to_slowmo_bullet_trail():
 	super()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
+	slowmo_trail.emit = false
 	trail.clear_points()
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	slowmo_trail.visible = true
+	slowmo_trail.emit = true
 	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT
