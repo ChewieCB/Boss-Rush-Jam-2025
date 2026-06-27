@@ -6,5 +6,5 @@
 script = ExtResource("1_2xgjn")
 id = 5
 name = "Foresight"
-desc = "+10 luck on hitting target with bullets after travelled for more than 2 seconds."
+desc = "+7 luck on hitting target with bullets after travelled for some time."
 message = ""
