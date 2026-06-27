@@ -225,10 +225,8 @@ func _init_barrel_materials() -> void:
 
 
 func equip_active() -> void:
-	#reset_modifier(true)
 	if GameManager.equipped_gun_frame:
 		set_stat_from_gun_frame()
-	#magazine_ammo_left = modified_magazine_size
 	muzzle_flash_light.light_energy = 0
 
 
@@ -801,9 +799,6 @@ func reload(_already_spin_barrel = false):
 
 	release_trigger()
 
-	#if not already_spin_barrel:
-		#reset_modifier(true)
-
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
@@ -932,7 +927,6 @@ func reload(_already_spin_barrel = false):
 
 
 func reload_no_anim() -> void:
-	#reset_modifier(true)
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
