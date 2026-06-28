@@ -15,7 +15,9 @@ script = ExtResource("1_7j35g")
 [node name="GuidedHand" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_o0oe4")
 display_text_title = "Guided Hand"
-display_text_tag = "Keep aiming at the target"
+display_text_tag = "Keep aiming at the target."
+display_text_desc = "Bullet homing to aimed location
+-50% projectile speed"
 positive_desc = Array[String](["Bullet homing to aimed location"])
 negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 57
@@ -30,10 +32,17 @@ attribute = 3
 modify_value = -50.0
 is_perc = true
 
+[node name="ModifyLifetime" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("7_aowsl")
+attribute = 14
+modify_value = 4.0
+
 [node name="SafetyFold" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_o0oe4")
 display_text_title = "Safety Fold"
-display_text_tag = "..know when to fold 'em"
+display_text_tag = "... know when to fold 'em."
+display_text_desc = "Gain 50% damage resistance during reload
+-50% reload speed"
 positive_desc = Array[String](["Gain 50% damage resistance during reload"])
 negative_desc = Array[String](["-50% reload speed"])
 icon_id = 59
@@ -51,6 +60,8 @@ is_perc = true
 script = ExtResource("2_o0oe4")
 display_text_title = "Measured Shot"
 display_text_tag = "Stay calm. Wait for the best moment. Shoot when you are ready."
+display_text_desc = "Wait for 2 seconds to stablize and +200% damage for the next shot. 
+Otherwise, -50% damage and +100% bullet spread"
 positive_desc = Array[String](["Wait for 2 seconds to stablize and +200% damage for the next shot"])
 negative_desc = Array[String](["-50% damage when unstable", "+100% bullet spread when unstable"])
 icon_id = 19

@@ -1,0 +1,46 @@
+[gd_scene load_steps=11 format=3 uid="uid://cx0o0nh68vxt5"]
+
+[ext_resource type="Script" path="res://src/bosses/tutorial/slam_aoe_wall.gd" id="1_6j3rk"]
+[ext_resource type="AudioStream" uid="uid://dr2a3cibksmi7" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 1.mp3" id="2_mnk62"]
+[ext_resource type="Material" uid="uid://dtya4iffmvt1m" path="res://src/bosses/tutorial/assets/materials/wave_wall_mat.tres" id="2_vs7wm"]
+[ext_resource type="PackedScene" uid="uid://v6u7isrgig0w" path="res://src/bosses/tutorial/SlamWallParticles.tscn" id="3_82pk3"]
+[ext_resource type="AudioStream" uid="uid://b5yf2b5712obg" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 2.mp3" id="3_oy3q3"]
+[ext_resource type="AudioStream" uid="uid://cg2blsh10wqvv" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 1.mp3" id="4_360el"]
+[ext_resource type="AudioStream" uid="uid://0qoqwlp6f05d" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 2.mp3" id="5_gux4c"]
+[ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="6_r3pp5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g8ujx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_8s8tk"]
+resource_local_to_scene = true
+material = ExtResource("2_vs7wm")
+
+[node name="SlamAoEWall" type="Node3D"]
+process_mode = 4
+visible = false
+script = ExtResource("1_6j3rk")
+sfx_flame_wall = Array[AudioStream]([ExtResource("2_mnk62"), ExtResource("3_oy3q3")])
+sfx_flame_wall_dashed = Array[AudioStream]([ExtResource("4_360el"), ExtResource("5_gux4c")])
+sfx_flame_wall_hit = Array[AudioStream]([ExtResource("6_r3pp5")])
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 66
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_g8ujx")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_8s8tk")
+
+[node name="SlamWallParticles" parent="." instance=ExtResource("3_82pk3")]
+emitting = false
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SlamWallParticles"]
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

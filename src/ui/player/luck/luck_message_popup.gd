@@ -13,6 +13,31 @@ signal popup_expired(popup: LuckMessagePopupUI)
 var count: int = 1
 
 
+func set_luck_text_color(luck_type: LuckHandler.LuckTriggerType) -> void:
+	# LuckTriggerType.NORMAL
+	var _font_color = Color(1, 0.82, 0.31)
+	var _font_shadow_color = Color(0.41, 0.3, 0)
+	var _font_outline_color = Color(0.75, 0.55, 0.14)
+
+	match luck_type:
+		LuckHandler.LuckTriggerType.RARE:
+			_font_color = Color(1.0, 0.48, 0.0)
+			_font_shadow_color = Color(0.62, 0.34, 0.02)
+			_font_outline_color = Color(1.0, 0.68, 0.16)
+		LuckHandler.LuckTriggerType.NEGATIVE:
+			_font_color = Color(0.78, 0.12, 0.16)
+			_font_shadow_color = Color(0.32, 0.03, 0.05)
+			_font_outline_color = Color(0.95, 0.32, 0.36)
+		LuckHandler.LuckTriggerType.DEVIL:
+			_font_color = Color(0.62, 0.08, 0.42)
+			_font_shadow_color = Color(0.18, 0.0, 0.12)
+			_font_outline_color = Color(0.82, 0.32, 0.62)
+
+	label.add_theme_color_override("font_color", _font_color)
+	label.add_theme_color_override("font_shadow_color", _font_shadow_color)
+	label.add_theme_color_override("font_outline_color", _font_outline_color)
+
+
 func show_popup() -> void:
 	label.text = text
 	var popup_tween := get_tree().create_tween()
@@ -57,7 +82,7 @@ func hide_popup() -> void:
 
 
 func remove_popup() -> void:
-	popup_expired.emit(self)
+	popup_expired.emit(self )
 	self.queue_free()
 
 
@@ -65,7 +90,7 @@ func change_count(value: int) -> void:
 	timer.start(lifetime)
 	count += value
 	
-	label.text = text 
+	label.text = text
 	if count > 1:
 		label.text += " (x%s)" % [count]
 	

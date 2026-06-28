@@ -1,12 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://dtf2h2dydbopt"]
+[gd_scene load_steps=19 format=3 uid="uid://dtf2h2dydbopt"]
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]
-[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bqde1"]
-[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="2_nh8tt"]
-[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_ajvft"]
+[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="2_748yq"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_u6ll4"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_22exd"]
+[ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="3_bgtmp"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
-[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="5_4jihr"]
+[ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="4_is7ad"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="4_m7cg7"]
+[ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="5_1e6ml"]
+[ext_resource type="PackedScene" uid="uid://du6plnrfa56ov" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedImpact.tscn" id="6_withs"]
+[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_r77jx"]
+[ext_resource type="AudioStream" uid="uid://nsevw0dctc7c" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 1.mp3" id="10_vce0s"]
+[ext_resource type="AudioStream" uid="uid://bp0ai5js54012" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 2.mp3" id="11_8xeeu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_voy5t"]
 resource_local_to_scene = true
@@ -29,12 +36,20 @@ material = SubResource("ShaderMaterial_voy5t")
 [sub_resource type="SphereShape3D" id="SphereShape3D_kk8sx"]
 radius = 500.0
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_850h7"]
+random_pitch = 1.6
+streams_count = 2
+stream_0/stream = ExtResource("10_vce0s")
+stream_1/stream = ExtResource("11_8xeeu")
+
 [node name="GunHitscan" type="Node3D"]
 script = ExtResource("1_uqjuh")
-spark_effect = ExtResource("2_bqde1")
-generic_blood_splatter = ExtResource("3_ajvft")
-bullet_decal_prefab = ExtResource("2_nh8tt")
-sfx_crit = Array[AudioStream]([ExtResource("5_4jihr")])
+pool_idx = 3
+spark_effect = ExtResource("2_u6ll4")
+generic_blood_splatter = ExtResource("3_22exd")
+bullet_decal_prefab = ExtResource("4_m7cg7")
+elemental_impact_vfx = Array[PackedScene]([ExtResource("2_748yq"), ExtResource("3_bgtmp"), ExtResource("4_is7ad"), ExtResource("5_1e6ml"), ExtResource("6_withs")])
+sfx_crit = Array[AudioStream]([ExtResource("7_r77jx")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
@@ -52,7 +67,7 @@ texture = ExtResource("3_d15wr")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
 target_position = Vector3(0, 0, -100)
-collision_mask = 69
+collision_mask = 71
 collide_with_areas = true
 
 [node name="NearbyEnemyCheckArea3D" type="Area3D" parent="."]
@@ -62,6 +77,15 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NearbyEnemyCheckArea3D"]
 shape = SubResource("SphereShape3D_kk8sx")
+
+[node name="Ricochet3dAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_850h7")
+volume_db = 60.9
+unit_size = 92.61
+max_db = 6.0
+bus = &"SFX"
+
+[node name="BarrelVFXEffectContainer" type="Node3D" parent="."]
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="NearbyEnemyCheckArea3D" to="." method="_on_nearby_enemy_check_area_3d_body_entered"]

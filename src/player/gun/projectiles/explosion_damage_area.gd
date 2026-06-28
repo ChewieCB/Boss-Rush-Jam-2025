@@ -2,6 +2,7 @@ extends Area3D
 class_name ExplosionDamageArea
 
 signal explosive_damage(damage: float, target: CharacterBody3D)
+signal finished
 
 @onready var explosion_vfx: ExplosionParticles = $ExplosionVFX
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -18,21 +19,11 @@ var infused_status_effects: Array[BossCore.BossStatusEffect] = []
 
 
 func _ready():
-	explosion_vfx.finished.connect(deactivate)
+	explosion_vfx.finished.connect(finished.emit)
 	
 
 func init(_damage: int):
 	damage = _damage
-
-
-func activate(start_pos: Vector3) -> void:
-	damage_disabled = false
-	global_position = start_pos
-	active = true
-	visible = true
-	collision_shape.call_deferred("set_disabled", false)
-	explode()
-	process_mode = PROCESS_MODE_INHERIT
 
 
 func set_damage_radius(radius: float) -> void:
@@ -47,24 +38,11 @@ func add_status_effect(status_effect: BossCore.BossStatusEffect) -> void:
 		infused_status_effects.append(status_effect)
 
 
-func deactivate() -> void:
-	if sfx_player.is_playing():
-		await sfx_player.finished
-	
-	infused_status_effects = []
-	explosion_vfx.reset_color()
-	visible = false
-	active = false
-	damage_disabled = true
-	collision_shape.call_deferred("set_disabled", true)
-	process_mode = PROCESS_MODE_DISABLED
-
-
 func explode():
 	if explosion_vfx.time_until_queue_free < LINGERING_DURATION:
 		push_warning("Explosion VFX visible duration is less than damage hitbox duration!")
 	
-	sfx_player.play()
+	SoundManager.play_sfx_guarded(sfx_player)
 	if infused_status_effects:
 		match infused_status_effects[-1]:
 			BossCore.BossStatusEffect.BURNING:
@@ -85,8 +63,8 @@ func explode():
 	)
 
 
-func _on_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D and not damage_disabled:
+func _on_body_entered(body: Node3D, is_disabled: bool = damage_disabled) -> void:
+	if body is CharacterBody3D and not is_disabled:
 		# Colour the damage text based on any elemental effects
 		var text_colour: Color = Color.ORANGE
 		for status_effect in infused_status_effects:
@@ -113,3 +91,37 @@ func _on_body_entered(body: Node3D) -> void:
 			# TODO - negative luck from getting hit by your own AoE
 		else:
 			LuckHandler.accumulate_dps_dealt(damage)
+
+
+func _on_area_entered(area: Area3D) -> void:
+	var _parent = area.get_parent()
+	if _parent is CharacterBody3D:
+		_on_body_entered(_parent)
+
+
+func activate() -> void:
+	damage_disabled = false
+	active = true
+	
+	self.set_deferred("monitoring", true)
+	self.set_deferred("monitorable", true)
+	collision_shape.disabled = false
+	self.collision_mask = pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
+	self.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	explode.call_deferred()
+
+
+func deactivate() -> void:
+	damage_disabled = true
+	infused_status_effects = []
+	explosion_vfx.reset_color()
+	self.visible = false
+	active = false
+	
+	self.set_deferred("monitoring", false)
+	self.set_deferred("monitorable", false)
+	self.collision_mask = 0
+	collision_shape.set_deferred("disabled", false)
+	sfx_player.stop()
+	self.process_mode = Node.PROCESS_MODE_DISABLED

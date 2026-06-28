@@ -40,6 +40,7 @@ func on_effect_set():
 	for child in child_effects:
 		child.on_effect_set()
 
+
 func on_fire_attempt() -> bool:
 	var res = true
 	for child in child_effects:
@@ -91,9 +92,9 @@ func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos:
 	for child in child_effects:
 		child.on_projectile_impact(_projectile, _has_pos, _pos)
 
-func on_projectile_destroyed(_hit_boss: bool):
+func on_projectile_destroyed(_projectile: BaseBullet, _hit_boss: bool):
 	for child in child_effects:
-		child.on_projectile_destroyed(_hit_boss)
+		child.on_projectile_destroyed(_projectile, _hit_boss)
 
 func on_gun_damage_calculation():
 	for child in child_effects:

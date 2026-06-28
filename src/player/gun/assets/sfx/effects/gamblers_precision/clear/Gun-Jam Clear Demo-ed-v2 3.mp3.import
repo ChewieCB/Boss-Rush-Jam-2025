@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bxuitpjqxjyy"
+path="res://.godot/imported/Gun-Jam Clear Demo-ed-v2 3.mp3-83fe6fc473ceb7e366f9daff22732772.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/gamblers_precision/clear/Gun-Jam Clear Demo-ed-v2 3.mp3"
+dest_files=["res://.godot/imported/Gun-Jam Clear Demo-ed-v2 3.mp3-83fe6fc473ceb7e366f9daff22732772.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

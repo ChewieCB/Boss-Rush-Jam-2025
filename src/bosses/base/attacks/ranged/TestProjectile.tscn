@@ -44,7 +44,7 @@ top_level = true
 material_override = SubResource("StandardMaterial3D_mcyja")
 mesh = SubResource("ImmediateMesh_bli60")
 script = ExtResource("3_dflu1")
-segments = 10
+segments = 3
 base_width = 0.1
 width_profile = SubResource("Curve_my72y")
 

@@ -127,7 +127,6 @@ shadow_mesh = SubResource("ArrayMesh_udcdq")
 script = ExtResource("1_7uasm")
 gpu_particles = [NodePath("Flame"), NodePath("Smoke")]
 lights = [NodePath("OmniLight3D")]
-time_until_queue_free = 3
 
 [node name="Flame" type="GPUParticles3D" parent="."]
 amount = 32

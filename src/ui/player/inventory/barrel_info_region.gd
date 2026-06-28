@@ -2,7 +2,7 @@ extends Control
 class_name BarrelInfoRegion
 
 @export var barrel_info_icon_prefab: PackedScene
-@export var rotation_speed: float = 0.2  # Radians per second
+@export var rotation_speed: float = 0.2 # Radians per second
 
 @export var info_panel: ColorRect
 
@@ -15,6 +15,7 @@ class_name BarrelInfoRegion
 @export var effect_flavour_label: RichTextLabel
 @export var effect_desc_label: RichTextLabel
 @export var effect_panel_barrel_icon: TextureRect
+@export var luck_trigger_container: Container
 
 @export var barrel_effect_list_label_1: EffectInfoListUI
 @export var barrel_effect_list_label_2: EffectInfoListUI
@@ -54,7 +55,7 @@ var active_effect_detail_idx: int = 0
 
 func _ready() -> void:
 	circle_ring_center_pos = circle_ring_centerpoint.position
-	circle_ring_radius = -(circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
+	circle_ring_radius = - (circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
 	
 	_init_barrel_effect_ui()
 	show_barrel_overview(false)
@@ -130,7 +131,7 @@ func set_gun_frame_overview_data(data: GunFrameResource, is_locked: bool = false
 		return
 
 
-func show_effect_detail(show_content: bool = true) -> void:
+func show_effect_detail(_show_content: bool = true) -> void:
 	gun_frame_icon_container.visible = false
 	_show_ui(true, false, true)
 	grab_detail_focus(0)
@@ -143,6 +144,18 @@ func set_effect_detail_data(idx: int) -> void:
 	effect_name_label.text = "[b]%s[/b]" % [data.title]
 	effect_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.flavour_text]
 	effect_desc_label.text = data.description
+
+	# Should only have 2 childs
+	for child in luck_trigger_container.get_children():
+		child.visible = false
+
+	for i in range(data.luck_triggers.size()):
+		var trigger_id = data.luck_triggers[i]
+		var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
+		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
+		var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
+		luck_trigger_container.get_child(i).set_info(trigger_info.name, trigger_info.desc, is_discovered)
+		luck_trigger_container.get_child(i).visible = true
 
 
 func grab_detail_focus(idx: int) -> void:
@@ -164,8 +177,8 @@ func _init_barrel_effect_ui() -> void:
 		barrel_info_icon_effect_pool.append(ui)
 
 
-func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
-	var barrel_inst: SpinBarrel = barrel_data.barrel_prefab.instantiate()
+func populate_detail_circle_ui(target_barrel_data: BarrelDataResource) -> void:
+	var barrel_inst: SpinBarrel = target_barrel_data.barrel_prefab.instantiate()
 	add_child(barrel_inst)
 	
 	# Regen the barrel roll effects around the circle using the barrel data
@@ -186,7 +199,7 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 			continue
 		
 		var barrel_roll_data: Dictionary = barrel_inst.get_barrel_effect_data_at(i)
-		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(PI/2 + (rotation_step * i))
+		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(PI / 2 + (rotation_step * i))
 		ui.set_barrel_roll_data(barrel_roll_data)
 		ui.visible = true
 	
@@ -202,8 +215,8 @@ func cycle_effect_detail(hide_line: bool = false) -> void:
 		active_detail_icon = null
 	
 	active_effect_detail_idx = wrapi(
-		active_effect_detail_idx - 1, 
-		0, 
+		active_effect_detail_idx - 1,
+		0,
 		current_effect_count
 	)
 	
@@ -220,15 +233,15 @@ func rotate_circle_one_slot() -> void:
 	var rotation_step = 2 * PI / current_effect_count
 	
 	spin_tween = get_tree().create_tween()
-	spin_tween.set_parallel(true)#.set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
+	spin_tween.set_parallel(true) # .set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
 	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
-	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2*PI, 0.23).set_ease(Tween.EASE_OUT)
+	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2 * PI, 0.23).set_ease(Tween.EASE_OUT)
 	
 	var scale_tween = self.create_tween()
 	scale_tween.set_parallel(false)
-	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(0.8, 0.8), 0.1)
-	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(1.1, 1.1), 0.12).set_ease(Tween.EASE_IN)
-	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(1.0, 1.0), 0.16).set_ease(Tween.EASE_OUT)
+	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(0.8, 0.8), 0.1)
+	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(1.1, 1.1), 0.12).set_ease(Tween.EASE_IN)
+	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(1.0, 1.0), 0.16).set_ease(Tween.EASE_OUT)
 	
 	for i in range(MAX_EFFECT_COUNT):
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
@@ -244,12 +257,6 @@ func rotate_circle_one_slot() -> void:
 
 # When barrel is focused in Inventory/Shop, show the barrel overview details
 # When the player holds the DETAIL input, show the effect detail ring instead
-
-
-func set_barrel_data_resource(_barrel_data: BarrelDataResource) -> void:
-	barrel_data = _barrel_data
-	refresh_ui()
-
 
 func refresh_ui() -> void:
 	return
@@ -269,7 +276,7 @@ func refresh_ui() -> void:
 	# Update Barrel Info Summary UI
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	queue_redraw()
 
 

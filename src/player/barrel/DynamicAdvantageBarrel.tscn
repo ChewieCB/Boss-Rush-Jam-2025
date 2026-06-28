@@ -17,9 +17,9 @@ bonus_firerate_per_interval = 5.0
 interval_time = 0.2
 is_perc = true
 display_text_title = "Ramp up"
-display_text_tag = "Keep shooting"
+display_text_tag = "Keep shooting."
 display_text_desc = "+5% firerate per 0.2s
-non-stop shooting"
+Non-stop shooting"
 positive_desc = Array[String](["Firerate increases as you keep firing"])
 icon_id = 24
 
@@ -47,12 +47,12 @@ is_perc = true
 
 [node name="ExplosiveBullet" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("dps_dealt_window_timer")]
 script = ExtResource("6_ayuco")
-damage = 30
+damage = 15
 range = 2.5
 dps_dealt_window_timer = NodePath("DPSWindowTImer")
-display_text_title = "Explosive bullet"
+display_text_title = "Explosive bullets."
 display_text_tag = "Don't hurt yourself!"
-display_text_desc = "Make bullets go boom"
+display_text_desc = "Make bullets go boom."
 positive_desc = Array[String](["Rounds explode on impact, deal flat 10 damage"])
 negative_desc = Array[String](["Explosive damage hurts you too"])
 icon_id = 22

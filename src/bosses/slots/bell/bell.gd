@@ -1,6 +1,7 @@
 extends StaticBody3D
 class_name Bell
 
+signal finished
 signal destroyed(bell: Bell)
 
 @export var damage: float = 20.0
@@ -25,6 +26,7 @@ const CLOSE_TREMOR_INTENSITY = 0.6
 
 var size: float = 1
 var floor_y: float = 0.0
+var _init_mesh_scale := Vector3(312, 312, 312)
 
 
 func init(_damage: float, _size: float):
@@ -69,22 +71,42 @@ func destroy() -> void:
 	explosion_vfx.global_position = global_position + Vector3(0, 1, 0)
 	explosion_vfx.scale_factor = size
 	explosion_vfx.explode()
+	
 	var tween = get_tree().create_tween()
-	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 0, 0.14).set_trans(Tween.TRANS_EXPO)
+	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 0, 0.3).set_trans(Tween.TRANS_EXPO)
 	tween.tween_callback(_on_destroyed)
 
 
 func _on_destroyed() -> void:
 	destroyed.emit(self)
-	mesh.visible = false
-	hurtbox_collider.disabled = true
-	collider.disabled = true
-	if sfx_player.playing:
-		await sfx_player.finished
-	queue_free()
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body is Player:
 			body.health_component.damage(damage)
 		# TODO - damage boss? Allow kiting?
+
+
+func activate() -> void:
+	collider.set_deferred("disabled", false)
+	hurtbox_collider.set_deferred("disabled", false)
+	hurtbox.monitoring = true
+	hurtbox.monitorable = true
+	raycast.enabled = true
+	self.visible = true
+	mesh.scale = _init_mesh_scale
+	mesh.mesh.surface_get_material(0).albedo_color.a = 1.0
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func deactivate() -> void:
+	collider.set_deferred("disabled", true)
+	hurtbox_collider.set_deferred("disabled", true)
+	raycast.enabled = false
+	hurtbox.monitoring = false
+	hurtbox.monitorable = false
+	self.visible = false
+	# Prevent cutoff
+	if sfx_player.playing:
+		await sfx_player.finished
+	self.process_mode = Node.PROCESS_MODE_DISABLED

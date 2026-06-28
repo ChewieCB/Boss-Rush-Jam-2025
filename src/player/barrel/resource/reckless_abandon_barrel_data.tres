@@ -8,7 +8,7 @@
 script = ExtResource("3_3se0o")
 barrel_id = 43
 barrel_name = "Reckless Abandon"
-barrel_desc = "Reward reckless and aggressive playstyle. You won't live long like that though."
+barrel_desc = "Rewards a reckless and aggressive playstyle. You won't live long like that though."
 barrel_info_summary = "I'm all in!"
 barrel_image = ExtResource("1_tng3t")
 barrel_cost = 1400

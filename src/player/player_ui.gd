@@ -1,6 +1,8 @@
 extends CanvasLayer
 class_name PlayerUI
 
+@export var heal_flash_sfx: AudioStream
+
 @onready var saving_indicator: Label = $SavingIndicator
 @onready var pause_ui: PauseUI = $PauseUI
 @onready var stat_ui: StatUI = $StatUI
@@ -8,17 +10,11 @@ class_name PlayerUI
 @onready var gun_ui = $GunUI
 @onready var reticle_ui_1 = $GunUI/AimRecticle
 @onready var reticle_ui_2 = $GunUI/AimRecticle2
-
-@onready var parry_flash: ColorRect = $OtherEffectUI/ParryFlash
-@onready var parry_flash_cd_timer: Timer = $OtherEffectUI/ParryFlashCDTimer
-
-var parry_sfx = preload("res://src/maps/bartender_boss/bar_table/446128__justinvoke__metal-clank-4.wav")
+@onready var heal_flash_overlay: ColorRect = $StatusOverlay/HealFlash
 
 func _ready() -> void:
-	GameManager.player_ui = self
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
 	SaveManager.finished_saving.connect(hide_saving_indicator)
-	#LuckHandler.modifier_message.connect(update_luck_modifier_text)
 	pause_ui.setting_ui.setting_changed.connect(refresh_after_setting_changed)
 	refresh_after_setting_changed()
 
@@ -32,9 +28,9 @@ func _ready() -> void:
 	#luck_modifier_text.visible = false
 
 
-func toggle_aim_reticle(is_visible: bool) -> void:
+func toggle_aim_reticle(_visible: bool) -> void:
 	for ui in [reticle_ui_1, reticle_ui_2]:
-		ui.visible = is_visible
+		ui.visible = _visible
 
 
 func hide_saving_indicator():
@@ -42,22 +38,17 @@ func hide_saving_indicator():
 	saving_indicator.visible = false
 
 
-func refresh_after_setting_changed() -> void:
+func refresh_after_setting_changed():
 	stat_ui.visible = not GameManager.hide_ui
 	interact_ui.visible = not GameManager.hide_ui
 	# NOTE: Currently GunUI only show barrels info when user press "tab" so no need to hide it
 	# However, if there is more elements are added in the future then it will need modification.
 	# gun_ui.visible = not GameManager.hide_ui
 
-func play_parried_effect(timestop_duration: float = 0.1) -> void:
-	if not parry_flash_cd_timer.is_stopped():
-		return
-	parry_flash_cd_timer.start()
-	SoundManager.play_sound(parry_sfx, "SFX")
-	parry_flash.visible = true
-	var original_time_scale = Engine.time_scale
-	Engine.time_scale = 0.01
-	await get_tree().create_timer(timestop_duration, false, false, true).timeout
-	Engine.time_scale = original_time_scale
-	parry_flash.visible = false
-	parry_flash_cd_timer.start()
+func start_heal_flash() -> void:
+	const DURATION = 1
+	var start_color = Color(0.47, 0.82, 0, 0.4) # GREEN
+	heal_flash_overlay.color = start_color
+	var tween = create_tween()
+	tween.tween_property(heal_flash_overlay, "color:a", 0.0, DURATION)
+	SoundManager.play_sound(heal_flash_sfx)

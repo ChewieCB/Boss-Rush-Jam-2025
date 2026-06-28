@@ -29,6 +29,8 @@ signal setting_back_button_pressed
 @onready var resolution_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton
 @onready var scaling_3d_slider: HSlider = $TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider
 @onready var scaling_3d_value: Label = $TabContainer/Graphic/VBoxContainer/Scaling3D/Value
+@onready var max_pool_size_slider: HSlider = $TabContainer/Graphic/VBoxContainer/MaxPoolSize/MaxPoolSizeSlider
+@onready var max_pool_size_value: Label = $TabContainer/Graphic/VBoxContainer/MaxPoolSize/Value
 @onready var hide_ui_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle
 @onready var hide_hurt_overlay_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideHurtOverlay/HideHurtOverlayToggle
 @onready var hide_damage_number_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideDamageNumber/HideDamageNumberToggle
@@ -309,6 +311,12 @@ func _on_scaling_3d_slider_value_changed(value: float) -> void:
 	get_viewport().set_scaling_3d_scale(value / 100.0)
 	scaling_3d_value.text = "{0}%".format([value])
 
+
+func _on_max_pool_size_slider_value_changed(value: float) -> void:
+	ObjectPoolingManager.MAX_POOL_SIZE = value
+	max_pool_size_value.text = "{0}".format([value])
+
+
 func create_keybind_buttons():
 	for child in keybind_container.get_children():
 		child.queue_free()
@@ -399,6 +407,11 @@ func refresh_setting_value():
 	get_viewport().set_scaling_3d_scale(GameManager.scaling_3d / 100.0)
 	scaling_3d_slider.value = GameManager.scaling_3d
 	scaling_3d_value.text = "{0}%".format([GameManager.scaling_3d])
+	
+	if not ObjectPoolingManager.is_node_ready():
+		await ObjectPoolingManager.ready
+	max_pool_size_slider.value = ObjectPoolingManager.MAX_POOL_SIZE
+	max_pool_size_value.text = "{0}%".format([ObjectPoolingManager.MAX_POOL_SIZE])
 
 	_on_master_slider_value_changed(GameManager.master_audio)
 	_on_bgm_slider_value_changed(GameManager.bgm_audio)

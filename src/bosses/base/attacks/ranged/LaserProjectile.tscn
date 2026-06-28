@@ -50,7 +50,7 @@ material_override = SubResource("StandardMaterial3D_mrjv6")
 mesh = SubResource("ImmediateMesh_40o0e")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("3_y70d2")
-segments = 10
+segments = 3
 base_width = 0.1
 width_profile = SubResource("Curve_my72y")
 

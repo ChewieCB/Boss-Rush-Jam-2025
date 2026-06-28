@@ -1,11 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://crfnb1ar1e1ot"]
+[gd_scene load_steps=2 format=3 uid="uid://crfnb1ar1e1ot"]
 
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="1_i8kui"]
-[ext_resource type="PackedScene" uid="uid://c70h2xecs66jh" path="res://src/utils/singletons/ObjectPoolingManager.tscn" id="2_x4w20"]
 
 [node name="CommonObjectForMap" type="Node2D"]
 
 [node name="IdleDetector" parent="." instance=ExtResource("1_i8kui")]
-
-[node name="ObjectPoolingManager" parent="." instance=ExtResource("2_x4w20")]
-pooled_object_init_arr_size = Array[int]([50, 50])

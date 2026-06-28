@@ -43,7 +43,7 @@ func turn_on():
 	for elem in gpu_particles:
 		elem.emitting = true
 
-# Turn off while leaving left over particles disappear on their own.
+# Turn off like this left over particles disappear on their own.
 # Without `elem.lifetime = 1`, the left over particles will instantly disappear.
 func turn_off():
 	for elem in gpu_particles:
@@ -51,12 +51,6 @@ func turn_off():
 			elem.lifetime = 1
 			elem.emitting = false
 
-
-func smooth_turn_off():
-	for elem in gpu_particles:
-		elem.lifetime = 1
-		elem.one_shot = true
-		elem.emitting = false
 
 func queue_free_after_time():
 	turn_off_light = true
@@ -67,15 +61,16 @@ func queue_free_after_time():
 
 
 func activate():
-	process_mode = PROCESS_MODE_INHERIT
+	turn_off_light = false
 	turn_on()
+	visible = true
+	process_mode = PROCESS_MODE_PAUSABLE
 
 
-func deactivate():
+func deactivate(wait_time = 0):
 	turn_off_light = true
 	turn_off()
-	for elem in gpu_particles:
-		if elem:
-			elem.emitting = false
+	if wait_time > 0:
+		await get_tree().create_timer(wait_time).timeout
 	visible = false
 	process_mode = PROCESS_MODE_DISABLED

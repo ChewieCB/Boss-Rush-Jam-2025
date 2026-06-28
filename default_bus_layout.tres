@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=5 format=3 uid="uid://caquc2xndxqf8"]
+[gd_resource type="AudioBusLayout" load_steps=8 format=3 uid="uid://caquc2xndxqf8"]
 
 [sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_y8chw"]
 resource_name = "HighPassFilter"
@@ -11,10 +11,21 @@ resource_name = "LowPassFilter"
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_nmh0u"]
 resource_name = "LowPassFilter"
 
+[sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_bynkx"]
+resource_name = "HighPassFilter"
+cutoff_hz = 140.0
+
+[sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_7exm3"]
+resource_name = "HighPassFilter"
+cutoff_hz = 100.0
+
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_yhh7p"]
 resource_name = "Reverb"
 room_size = 1.0
 wet = 0.66
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_2d7nx"]
+resource_name = "Reverb"
 
 [resource]
 bus/1/name = &"BGM"
@@ -27,37 +38,49 @@ bus/1/effect/0/effect = SubResource("AudioEffectHighPassFilter_y8chw")
 bus/1/effect/0/enabled = false
 bus/1/effect/1/effect = SubResource("AudioEffectLowPassFilter_snhsh")
 bus/1/effect/1/enabled = false
-bus/2/name = &"SFX"
+bus/2/name = &"SFXControl"
 bus/2/solo = false
 bus/2/mute = false
 bus/2/bypass_fx = false
-bus/2/volume_db = -0.030508
+bus/2/volume_db = 0.0
 bus/2/send = &"Master"
-bus/2/effect/0/effect = SubResource("AudioEffectLowPassFilter_nmh0u")
-bus/2/effect/0/enabled = false
-bus/3/name = &"UI"
+bus/3/name = &"SFX"
 bus/3/solo = false
 bus/3/mute = false
 bus/3/bypass_fx = false
-bus/3/volume_db = 0.0
-bus/3/send = &"Master"
-bus/4/name = &"Ambience"
+bus/3/volume_db = -0.030508
+bus/3/send = &"SFXControl"
+bus/3/effect/0/effect = SubResource("AudioEffectLowPassFilter_nmh0u")
+bus/3/effect/0/enabled = false
+bus/3/effect/1/effect = SubResource("AudioEffectHighPassFilter_bynkx")
+bus/3/effect/1/enabled = true
+bus/4/name = &"UI"
 bus/4/solo = false
 bus/4/mute = false
 bus/4/bypass_fx = false
-bus/4/volume_db = -27.4604
-bus/4/send = &"SFX"
-bus/4/effect/0/effect = SubResource("AudioEffectReverb_yhh7p")
+bus/4/volume_db = 0.0
+bus/4/send = &"Master"
+bus/4/effect/0/effect = SubResource("AudioEffectHighPassFilter_7exm3")
 bus/4/effect/0/enabled = true
-bus/5/name = &"Gun"
+bus/5/name = &"Ambience"
 bus/5/solo = false
 bus/5/mute = false
 bus/5/bypass_fx = false
-bus/5/volume_db = -2.61025
+bus/5/volume_db = -27.4604
 bus/5/send = &"SFX"
-bus/6/name = &"DemoAudio"
+bus/5/effect/0/effect = SubResource("AudioEffectReverb_yhh7p")
+bus/5/effect/0/enabled = true
+bus/6/name = &"Gun"
 bus/6/solo = false
 bus/6/mute = false
 bus/6/bypass_fx = false
-bus/6/volume_db = -5.04538
-bus/6/send = &"Master"
+bus/6/volume_db = -2.61025
+bus/6/send = &"SFXControl"
+bus/6/effect/0/effect = SubResource("AudioEffectReverb_2d7nx")
+bus/6/effect/0/enabled = false
+bus/7/name = &"DemoAudio"
+bus/7/solo = false
+bus/7/mute = false
+bus/7/bypass_fx = false
+bus/7/volume_db = -5.04538
+bus/7/send = &"Master"

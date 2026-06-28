@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://dmwu7p20d2nwd"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="1_i4dtn"]
+[ext_resource type="Script" path="res://src/player/barrel/misc/colored_orb.gd" id="1_ia5eo"]
+[ext_resource type="AudioStream" uid="uid://dlfvffegwrud3" path="res://src/player/gun/assets/sfx/effects/sticky_bomb/New Member click 1.wav" id="2_ojwap"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_80o7t"]
+resource_local_to_scene = true
+transparency = 1
+albedo_color = Color(0.3, 0.7, 0, 0.573)
+
+[sub_resource type="SphereMesh" id="SphereMesh_07fht"]
+material = SubResource("StandardMaterial3D_80o7t")
+radius = 0.1
+height = 0.2
+radial_segments = 32
+rings = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oqn63"]
+resource_local_to_scene = true
+transparency = 1
+albedo_color = Color(0.545442, 0.924238, 0, 0.713726)
+emission_enabled = true
+emission = Color(0.545098, 0.92549, 0, 1)
+
+[sub_resource type="Curve" id="Curve_t2y1b"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="ColoredOrb" type="Node3D"]
+script = ExtResource("1_ia5eo")
+orb_consume_sfx = ExtResource("2_ojwap")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_07fht")
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_oqn63")
+cast_shadow = 0
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("1_i4dtn")
+segments = 3
+base_width = 0.1
+width_profile = SubResource("Curve_t2y1b")
+
+[node name="Lifetimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.322799, 0.944641, 0.22617, 1)
+light_energy = 0.5
+omni_range = 1.0
+
+[connection signal="timeout" from="Lifetimer" to="." method="_on_lifetimer_timeout"]

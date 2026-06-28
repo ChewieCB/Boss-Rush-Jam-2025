@@ -29,7 +29,7 @@ heal_barrier_prefab = ExtResource("5_bj72g")
 heal_amount = 2
 heal_interval = 5.0
 display_text_title = "Fortitude"
-display_text_tag = "Don't give up"
+display_text_tag = "Don't give up."
 display_text_desc = "Regain 2 hp every 5s"
 positive_desc = Array[String](["Recover health over time"])
 icon_id = 36
@@ -39,16 +39,16 @@ script = ExtResource("6_mqo2u")
 damage_modify_perc = 25.0
 crit_chance = 25.0
 display_text_title = "Death From Above"
-display_text_tag = "Fly up, look down"
+display_text_tag = "Fly up, look down."
 display_text_desc = "+25% damage when midair
-25% crit chance when shoot downward"
+25% crit chance when shooting downward"
 positive_desc = Array[String](["+25% damage while mid-air", "+25% crit chance while shooting at enemies below"])
 icon_id = 34
 
 [node name="TagAndShred" type="Node3D" parent="EffectContainer"]
 script = ExtResource("7_tbyy7")
 display_text_title = "Tag and Shred"
-display_text_tag = "Keep chipping at them
+display_text_tag = "Keep chipping at them.
 "
 display_text_desc = "-50% damage
 -40% projectile amount

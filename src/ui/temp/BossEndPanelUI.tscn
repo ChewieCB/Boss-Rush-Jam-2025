@@ -105,6 +105,5 @@ theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
 theme_override_fonts/normal_font = ExtResource("4_okr4h")
 theme_override_font_sizes/normal_font_size = 96
 bbcode_enabled = true
-text = "[center]Steal the heals[/center]"
 fit_content = true
 scroll_active = false

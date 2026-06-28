@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_eccsf"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_8iiph"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_khhtx"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_xhp4t"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/common_luck_trigger_tracker.gd" id="4_4ylkc"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/split_bullet_effect.gd" id="5_ai2fh"]
 
 [node name="TrickshotBarrel" type="Node3D"]
@@ -12,31 +12,39 @@ script = ExtResource("1_eccsf")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="Ricochet" type="Node3D" parent="EffectContainer"]
-script = ExtResource("3_8iiph")
-attribute = 9
-modify_value = 3.0
+script = ExtResource("3_khhtx")
 display_text_title = "Ricochet Bullet"
-display_text_tag = "Make stylish shot"
-display_text_desc = "+3 richochet count"
+display_text_tag = "Make stylish shots that bounce. "
+display_text_desc = "+3 ricochet count"
 positive_desc = Array[String](["Shots bounce off of surfaces"])
 negative_desc = Array[String](["Ricochet shots can hurt you too"])
 icon_id = 45
 luck_triggers = Array[int]([3])
 
+[node name="AddRicochet" type="Node3D" parent="EffectContainer/Ricochet"]
+script = ExtResource("3_8iiph")
+attribute = 9
+modify_value = 3.0
+
+[node name="LuckTriggerTracker" type="Node3D" parent="EffectContainer/Ricochet"]
+script = ExtResource("4_4ylkc")
+tracked_luck_trigger_ids = Array[int]([3])
+
 [node name="Homing" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_khhtx")
-display_text_title = "Homing bullet"
+display_text_title = "Homing Bullet"
 display_text_tag = "Skill issues solved!"
-display_text_desc = "+5 homing strength
+display_text_desc = "+3 homing strength
 -30% damage"
 positive_desc = Array[String](["Shots homing towards enemies"])
 negative_desc = Array[String](["-30% damage"])
 icon_id = 44
+luck_triggers = Array[int]([11, 12])
 
 [node name="SetHomingStrength" type="Node3D" parent="EffectContainer/Homing"]
-script = ExtResource("3_xhp4t")
+script = ExtResource("3_8iiph")
 attribute = 10
-new_value = 5.0
+modify_value = 3.0
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/Homing"]
 script = ExtResource("3_8iiph")
@@ -44,13 +52,16 @@ attribute = 1
 modify_value = -30.0
 is_perc = true
 
+[node name="LuckTriggerTracker" type="Node3D" parent="EffectContainer/Homing"]
+script = ExtResource("4_4ylkc")
+tracked_luck_trigger_ids = Array[int]([11, 12])
+
 [node name="Split" type="Node3D" parent="EffectContainer"]
 script = ExtResource("5_ai2fh")
-split_count = 3
-split_spread_radius = 90.0
 display_text_title = "Split Bullet"
 display_text_tag = "Extra bullets on impact!"
-display_text_desc = "Bullets splitted into 3 on impact"
+display_text_desc = "Bullets split into 3 weaker bullets on impact"
 positive_desc = Array[String](["Shots split into multiple sub-shots on impact"])
 negative_desc = Array[String](["Split shots can hurt you too"])
 icon_id = 46
+luck_triggers = Array[int]([10])

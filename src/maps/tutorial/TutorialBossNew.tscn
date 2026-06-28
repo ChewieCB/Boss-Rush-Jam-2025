@@ -1,4 +1,4 @@
-[gd_scene load_steps=391 format=4 uid="uid://bb3nslkfnfo81"]
+[gd_scene load_steps=390 format=4 uid="uid://bb3nslkfnfo81"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -68,15 +68,14 @@
 [ext_resource type="Material" uid="uid://cyn8dlvnmoe00" path="res://assets/textures/posters/crapshoot_logo.tres" id="75_vc447"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="77_xj60c"]
 [ext_resource type="Material" uid="uid://cvvjnot2ikmgg" path="res://assets/textures/floor/wrad_metal1.tres" id="78_72a70"]
-[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="78_iprpn"]
 [ext_resource type="PackedScene" uid="uid://cdjkynfg25alo" path="res://src/player/gun/vfx/SmokeVFX3D.tscn" id="79_hbkuw"]
+[ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="79_j5pa6"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="79_jne3r"]
 [ext_resource type="Material" uid="uid://ddqkn38etnjr1" path="res://assets/textures/posters/bigboss.tres" id="79_qa2kr"]
 [ext_resource type="PackedScene" uid="uid://cstu4hay3iips" path="res://src/maps/tutorial/triggers/SingleEffectTrigger.tscn" id="79_wgc81"]
 [ext_resource type="Material" uid="uid://dxuto5h6uh22o" path="res://assets/textures/posters/pitboss.tres" id="80_q7tk3"]
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="81_ojd6u"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="83_53s23"]
-[ext_resource type="AudioStream" uid="uid://dbcg2so3iy86c" path="res://src/bosses/tutorial/assets/sfx/Laser Charging.mp3" id="83_84pvg"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="84_udjkb"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_position_marker.gd" id="85_mbuj2"]
 [ext_resource type="PackedScene" uid="uid://b4jtd8erp77w7" path="res://src/maps/lobby/SlidingDoor.tscn" id="86_1uyek"]
@@ -152,17 +151,17 @@ close_trigger_count = 1
 timeout = 4.0
 timeout_on_close = true
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jn3i3"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yrvi5"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_42be0"]
-sky_material = SubResource("ProceduralSkyMaterial_jn3i3")
+[sub_resource type="Sky" id="Sky_kq7gs"]
+sky_material = SubResource("ProceduralSkyMaterial_yrvi5")
 
-[sub_resource type="Environment" id="Environment_vv125"]
+[sub_resource type="Environment" id="Environment_rsgtb"]
 background_mode = 1
 background_color = Color(0.13849, 0.1342, 0.22, 1)
-sky = SubResource("Sky_42be0")
+sky = SubResource("Sky_kq7gs")
 ambient_light_source = 2
 ambient_light_color = Color(0.137255, 0.133333, 0.219608, 1)
 ambient_light_energy = 3.0
@@ -174,6 +173,7 @@ volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.85, 0.9625, 1, 1)
 volumetric_fog_emission = Color(0.85098, 0.960784, 1, 1)
 volumetric_fog_emission_energy = 0.3
+volumetric_fog_temporal_reprojection_amount = 0.7
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vb4tn"]
 resource_local_to_scene = true
@@ -183,8 +183,8 @@ size = Vector3(10.8, 10, 16)
 resource_local_to_scene = true
 size = Vector3(10, 10, 10)
 
-[sub_resource type="FogMaterial" id="FogMaterial_7oy35"]
-density = 0.015
+[sub_resource type="FogMaterial" id="FogMaterial_bgtn8"]
+density = 0.004
 
 [sub_resource type="FogMaterial" id="FogMaterial_brnbk"]
 density = 0.02
@@ -5007,7 +5007,7 @@ shader_parameter/impact_falloff_sharpness = 1.0
 material = SubResource("ShaderMaterial_e5s8d")
 size = Vector3(2.05, 1.2, 0.6)
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "arena_2_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "electric_box_trigger", "spark_sfx_player", "door_spark_emitter", "door_trigger_highlight_mesh", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "arena_2_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "player_spawn_post_tutorial", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "cutscene_ui_layer", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "electric_box_trigger", "spark_sfx_player", "door_spark_emitter", "door_trigger_highlight_mesh", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
@@ -5018,12 +5018,14 @@ boss_intro_spawn = NodePath("Arena2IntroSpawn")
 boss_laser_spawn_markers = [NodePath("LaserSpawn1"), NodePath("LaserSpawn2")]
 sub_elevator_doors = [NodePath("FuncGodotMap/layer_6_collision/group_7979_BossElevatorCol/group_8054_BossElevatorSub/entity_229_SubElevatorDoors"), NodePath("FuncGodotMap/layer_6_collision/group_7982_BossElevatorCol/group_8050_BossElevatorSub/entity_248_SubElevatorDoors"), NodePath("FuncGodotMap/layer_6_collision/group_7985_BossElevatorCol/group_8052_BossElevatorSub/entity_267_SubElevatorDoors"), NodePath("FuncGodotMap/layer_6_collision/group_7988_BossElevatorCol/group_7987_BossElevatorSub/entity_286_SubElevatorDoors")]
 sub_elevator_lights = [NodePath("FuncGodotMap/layer_6_collision/group_7979_BossElevatorCol/group_8054_BossElevatorSub/entity_230_ElevatorLight"), NodePath("FuncGodotMap/layer_6_collision/group_7982_BossElevatorCol/group_8050_BossElevatorSub/entity_249_ElevatorLight"), NodePath("FuncGodotMap/layer_6_collision/group_7985_BossElevatorCol/group_8052_BossElevatorSub/entity_268_ElevatorLight"), NodePath("FuncGodotMap/layer_6_collision/group_7988_BossElevatorCol/group_7987_BossElevatorSub/entity_287_ElevatorLight")]
+player_spawn_post_tutorial = NodePath("PlayerSpawnPostTutorial")
 arena_2_floor_parent = NodePath("FuncGodotMap/layer_2_arena_2/group_7853_Arena2/group_7920_Arena2/group_7916_FloorWalkableArena2/entity_118_func_geo")
 arena_2_floor_mesh = NodePath("FuncGodotMap/layer_2_arena_2/group_7853_Arena2/group_7920_Arena2/group_7916_FloorWalkableArena2/entity_118_func_geo/entity_118_mesh_instance")
 arena_1_floor_shock_hazard = NodePath("ElectricHazardArea")
 pipe_particle_emitters = [NodePath("SmokeParticles"), NodePath("SmokeParticles2"), NodePath("SmokeParticles3"), NodePath("SmokeParticles4"), NodePath("SmokeParticles5")]
 sfx_pipe_creak_sfx = Array[AudioStream]([ExtResource("4_8uh3f"), ExtResource("5_bhynr")])
 sfx_pipe_steam_sfx = Array[AudioStream]([ExtResource("6_wvupw")])
+cutscene_ui_layer = NodePath("IntroCutsceneLayer")
 intro_boss_path = NodePath("Path3D")
 intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
 tutorial_end_boss_marker = NodePath("TutorialEndCutscenePosMarker")
@@ -5045,7 +5047,7 @@ floor_parent = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_79
 floor_mesh = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1/entity_7_func_geo/entity_7_mesh_instance")
 
 [node name="WorldEnvironment" parent="." index="1"]
-environment = SubResource("Environment_vv125")
+environment = SubResource("Environment_rsgtb")
 
 [node name="DirectionalLight3D" parent="." index="2"]
 visible = false
@@ -5376,7 +5378,7 @@ omni_attenuation = 2.0
 [node name="FogVolume" type="FogVolume" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 5, -33.2)
 size = Vector3(50, 16, 37)
-material = SubResource("FogMaterial_7oy35")
+material = SubResource("FogMaterial_bgtn8")
 
 [node name="FogVolume2" type="FogVolume" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 3.95, 29.8)
@@ -6658,7 +6660,7 @@ entProperties = {
 transform = Transform3D(-0.743145, 0, -0.669131, 0, 1, 0, 0.669131, 0, -0.743145, -52.8081, -1.82644, -40.9906)
 
 [node name="entity_230_ElevatorLight" parent="FuncGodotMap/layer_6_collision/group_7979_BossElevatorCol/group_8054_BossElevatorSub" index="3" instance=ExtResource("92_btaog")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -53.4194, 5.34188, -41.3781)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -53.4194, 5.34188, -41.3781)
 
 [node name="entity_231_func_detail_illusionary" type="Node3D" parent="FuncGodotMap/layer_6_collision/group_7979_BossElevatorCol/group_8054_BossElevatorSub" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.0925, 5.34191, -26.5)
@@ -6898,7 +6900,7 @@ entProperties = {
 transform = Transform3D(0.743145, 0, 0.669131, 0, 1, 0, -0.669131, 0, 0.743145, -19.1919, -1.82644, -23.6344)
 
 [node name="entity_268_ElevatorLight" parent="FuncGodotMap/layer_6_collision/group_7985_BossElevatorCol/group_8052_BossElevatorSub" index="3" instance=ExtResource("92_btaog")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -18.5806, 5.34188, -23.2469)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.5806, 5.34188, -23.2469)
 
 [node name="entity_269_func_detail_illusionary" type="Node3D" parent="FuncGodotMap/layer_6_collision/group_7985_BossElevatorCol/group_8052_BossElevatorSub" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7344, 5.34191, -13.0384)
@@ -7561,26 +7563,28 @@ libraries = {
 "": SubResource("AnimationLibrary_fd4ep")
 }
 
-[node name="Marker3D" type="Marker3D" parent="." index="13"]
+[node name="PlayerSpawnPostTutorial" type="Marker3D" parent="." index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, -1.5, -13.4)
+
+[node name="Marker3D" type="Marker3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 
-[node name="TutorialEndCutscenePosMarker" type="Marker3D" parent="." index="14"]
+[node name="TutorialEndCutscenePosMarker" type="Marker3D" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.8788, -0.555361, 15.5743)
 
-[node name="entity_11_PlayerRef" parent="." index="15" instance=ExtResource("84_udjkb")]
+[node name="entity_11_PlayerRef" parent="." index="16" instance=ExtResource("84_udjkb")]
 transform = Transform3D(1.94707e-07, 0, 1, 0, 1, 0, -1, 0, 1.94707e-07, -25.625, 1, 29.5)
 
-[node name="entity_187_TutorialBoss" parent="." index="16" node_paths=PackedStringArray("arena_1_center", "arena_2_center", "target") instance=ExtResource("88_ijdgk")]
+[node name="entity_187_TutorialBoss" parent="." index="17" node_paths=PackedStringArray("arena_1_center", "arena_2_center", "target") instance=ExtResource("88_ijdgk")]
 transform = Transform3D(-4.87884e-08, 0.0685851, 0.997591, -3.88497e-07, -0.997591, 0.0685851, 1, -3.84215e-07, 7.5316e-08, 0, 0, 0)
 arena_1_center = NodePath("../Arena1Center")
 arena_2_center = NodePath("../Arena2Center")
-sfx_laser_charging = Array[AudioStream]([ExtResource("83_84pvg")])
 target = NodePath("../entity_11_PlayerRef")
-barrel_to_drop = ExtResource("78_iprpn")
+barrel_to_drop = ExtResource("79_j5pa6")
 barrel_pickup_scene = ExtResource("79_jne3r")
 orbit_radius = 200.0
 
-[node name="Path3D" type="Path3D" parent="." index="17"]
+[node name="Path3D" type="Path3D" parent="." index="18"]
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
@@ -7588,33 +7592,35 @@ transform = Transform3D(-1.7321e-07, -0.87718, -0.480024, -5.96047e-08, 0.480024
 loop = false
 tilt_enabled = false
 
-[node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
+[node name="CutsceneCamera" type="Camera3D" parent="." index="19"]
+process_mode = 4
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
 current = true
 
-[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="19"]
+[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="20"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="20"]
+[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="21"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="21"]
+[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="22"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="22"]
+[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="23"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="23"]
+[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="24"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="24"]
+[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="25"]
 bus = &"SFX"
 
-[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="25"]
+[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="26"]
+volume_db = 3.0
 bus = &"SFX"
 
-[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="26"]
-layer = 3
+[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="27"]
+process_mode = 4
 
 [node name="Control" type="Control" parent="IntroCutsceneLayer" index="0"]
 layout_mode = 3
@@ -7676,70 +7682,70 @@ autowrap_mode = 3
 visible_characters = 0
 visible_ratio = 0.0
 
-[node name="PitBossIntro" type="Sprite3D" parent="." index="27"]
+[node name="PitBossIntro" type="Sprite3D" parent="." index="28"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")
 
-[node name="Arena1Center" type="Marker3D" parent="." index="28"]
+[node name="Arena1Center" type="Marker3D" parent="." index="29"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, 5.96046e-08, 29.6)
 
-[node name="Arena2Center" type="Marker3D" parent="." index="29"]
+[node name="Arena2Center" type="Marker3D" parent="." index="30"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, -0.8, -32.4)
 
-[node name="Arena2IntroSpawn" type="Marker3D" parent="." index="30"]
+[node name="Arena2IntroSpawn" type="Marker3D" parent="." index="31"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, 9.98676, -32.4)
 
-[node name="LaserSpawn1" type="Marker3D" parent="." index="31"]
+[node name="LaserSpawn1" type="Marker3D" parent="." index="32"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.1978, 2.72115, -32.4)
 
-[node name="LaserSpawn2" type="Marker3D" parent="." index="32"]
+[node name="LaserSpawn2" type="Marker3D" parent="." index="33"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.2206, 2.72115, -32.4)
 
-[node name="ElectricHazardArea" parent="." index="33" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
+[node name="ElectricHazardArea" parent="." index="34" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
 visible = false
 immune_bodies = [NodePath("../entity_187_TutorialBoss")]
 
-[node name="SmokeParticles" parent="." index="34" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles" parent="." index="35" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -34.8023, 7, 29.5)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles2" parent="." index="35" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles2" parent="." index="36" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.3023, 7, 39.6)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles2" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles3" parent="." index="36" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles3" parent="." index="37" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 36)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles3" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles4" parent="." index="37" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles4" parent="." index="38" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 23.2)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles4" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles5" parent="." index="38" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles5" parent="." index="39" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.4023, 7, 20.4)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles5" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SingleEffectTrigger" parent="." index="39" node_paths=PackedStringArray("connected_object") instance=ExtResource("79_wgc81")]
+[node name="SingleEffectTrigger" parent="." index="40" node_paths=PackedStringArray("connected_object") instance=ExtResource("79_wgc81")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0, 10)
-target_effect = ExtResource("78_iprpn")
-target_effect_id = 50
+target_effect = ExtResource("79_j5pa6")
+target_effect_id = 51
 connected_object = NodePath("../FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
 active = false
 
