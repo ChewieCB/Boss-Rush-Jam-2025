@@ -108,7 +108,7 @@ func refresh_display():
 	#reward_label.text = format_number_with_commas(reward_value)
 
 ## Max lv 15
-func set_risk_level(level: int):
+func set_risk_level(_level: int):
 	return
 	#for i in range(risk_level_container.get_child_count()):
 		#if i < level:
@@ -188,7 +188,7 @@ func _on_not_enough_chip_timer_timeout() -> void:
 	#start_button.set_text_color(Color.WHITE)
 
 func play_juicy_chip_sprite_anim():
-	return	
+	return
 	#if bet_sprite_scale_tween and bet_sprite_scale_tween.is_running():
 		#bet_sprite_scale_tween.stop()
 	#bet_sprite_scale_tween = get_tree().create_tween()

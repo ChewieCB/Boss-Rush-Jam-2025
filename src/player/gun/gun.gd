@@ -766,8 +766,6 @@ func _get_icon_texture(icon_id: int) -> CompressedTexture2D:
 
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
-	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
-
 	var mat: StandardMaterial3D = _barrel_materials[barrel_idx]
 	mat.albedo_color = Color.WHITE
 	mat.albedo_texture = _get_icon_texture(icon_id)
@@ -904,7 +902,6 @@ func reload(_already_spin_barrel = false):
 				LuckHandler.luck_cost_per_auto_spin * len(barrels_to_auto_spin)
 			)
 
-			var barrel_count: int = 0
 			for barrel in installed_barrels:
 				if barrel == null:
 					continue
@@ -1302,7 +1299,6 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 		await post_reload_anim_end
 		idle_state = idle_frame_state.get_current_node()
 
-	var anim_library_prefix: String = ""
 	var jam_state: String = ""
 	match idle_state:
 		"shotgun_idle":
