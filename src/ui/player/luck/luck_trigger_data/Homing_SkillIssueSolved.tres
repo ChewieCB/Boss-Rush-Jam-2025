@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://40ppl01ilsrm"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_by26m"]
+
+[resource]
+script = ExtResource("1_by26m")
+id = 12
+name = "Skill Issue Solved"
+desc = "+20 luck when you dont miss ANY bullets"
+message = ""

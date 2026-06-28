@@ -28,17 +28,29 @@ func _input(event: InputEvent) -> void:
 	super (event)
 	if visible:
 		var focused_ui: Control = null
-		if active_focus_idx >= 0 and current_focus_area:
+		if active_focus_idx >= 0 and current_focus_area and current_focus_area.get_child_count() > 0:
 			focused_ui = current_focus_area.get_child(active_focus_idx)
 		if event.is_action_pressed("ui_cancel"):
 			if focused_ui:
 				contextual_cancel(focused_ui.item_ui)
+			else:
+				contextual_cancel(null)
 			input_prompt_cancel.animate()
+
+		# Consume ui_page_up and ui_page_down to prevent focus lost
+		if event.is_action_pressed("ui_page_up"):
+			# Move focus to whatever makes sense — previous group, first item, etc.
+			get_viewport().set_input_as_handled()
+
+		elif event.is_action_pressed("ui_page_down"):
+			get_viewport().set_input_as_handled()
 
 
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = false):
 	if not visible and not forced:
 		return
+
+	barrel_info_region.show_barrel_overview(false)
 
 	for child in shop_gun_frame_container.get_children():
 		shop_gun_frame_container.remove_child(child)
@@ -115,6 +127,8 @@ func contextual_cancel(focused_ui: Control) -> void:
 		# Hovered Inventory UI -> Active Inventory Slot
 		else:
 			close()
+	elif focused_ui == null:
+		close()
 
 	input_prompt_cancel.update_text("Exit")
 	input_prompt_detail.update_text("Detail")
@@ -154,17 +168,19 @@ func get_inventory_focus(focus_idx: int = 0) -> Control:
 	current_focus_area = shop_barrel_container
 	# Update focus area modes
 	var inventory_barrel_items = shop_barrel_container.get_children()
+	var gun_frame_items = shop_gun_frame_container.get_children()
 	for slot in shop_gun_frame_container.get_children():
-		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
+		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for slot in inventory_barrel_items:
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for item in barrel_info_region.circle_ring.get_children():
 		item.focus_mode = FocusMode.FOCUS_NONE
 
-	# Fallback when no barrels in inventory
-	if inventory_barrel_items:
-		return inventory_barrel_items[focus_idx].button
-	#TODO
+	if inventory_barrel_items.size() > 0:
+		# Return item at focus_idx if exist, if not return at index 0
+		return inventory_barrel_items[min(focus_idx, inventory_barrel_items.size() - 1)].button
+	if gun_frame_items.size() > 0:
+		return gun_frame_items[min(focus_idx, gun_frame_items.size() - 1)].button
 	else:
 		return
 
@@ -317,7 +333,6 @@ func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunF
 
 	current_selected_item_ui = gun_frame_item_ui
 	# TODO: Add UI show gun frame stat
-	# barrel_info_region.set_barrel_data_resource(data)
 	SoundManager.play_ui_sound(sfx_click, "UI")
 
 

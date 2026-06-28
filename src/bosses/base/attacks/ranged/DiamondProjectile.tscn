@@ -20,6 +20,21 @@ emission = Color(0.57644, 0.921828, 1, 1)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Animation" id="Animation_tj7u5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_sw8va"]
 resource_name = "spin"
 length = 1.2
@@ -35,21 +50,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 1.5708), Vector3(0, 0, 3.14159), Vector3(0, 0, 4.71239), Vector3(0, 0, 6.26573)]
-}
-
-[sub_resource type="Animation" id="Animation_tj7u5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i6qei"]
@@ -83,7 +83,7 @@ top_level = true
 material_override = SubResource("StandardMaterial3D_usbrc")
 mesh = SubResource("ImmediateMesh_4htjv")
 script = ExtResource("2_11y2m")
-segments = 10
+segments = 3
 lifetime = 1.0
 base_width = 0.1
 width_profile = SubResource("Curve_ierie")

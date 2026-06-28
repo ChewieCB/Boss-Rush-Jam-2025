@@ -18,12 +18,21 @@ signal finished
 var current_radius: float = 0.0
 
 
-func _ready() -> void:
+func deactivate() -> void:
 	self.visible = false
+	collider.disabled = true
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func activate() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	collider.disabled = false
+	self.visible = true
 
 
 func start_shockwave(wipe_arc: bool = false) -> void:
-	self.visible = true
+	activate()
+	
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -42,7 +51,6 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	
 	await tween.finished
 	
-	self.visible = false
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -53,6 +61,8 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	
 	if free_on_finished:
 		self.queue_free()
+	
+	deactivate()
 
 
 func _set_arc_angle(angle: float) -> void:
@@ -69,6 +79,5 @@ func _on_body_entered(body: Node3D) -> void:
 			
 			var angle_threshold: float = cos(deg_to_rad(arc_angle / 2))
 			var dot_product: float = arc_facing_dir.dot(to_body_dir)
-			
 			if dot_product > angle_threshold:
 				body.health_component.damage(damage)

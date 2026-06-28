@@ -25,6 +25,7 @@ var center_pos: Vector3
 @export var chip_shots_per_burst: int = 4
 @export var num_bursts: int = 1
 @export var delay_between_burst: float = 0.6
+var chip_projectile_pool: Array = []
 # SFX
 @export var sfx_shoot_telegraph: Array[AudioStream]
 @export var sfx_shoot: Array[AudioStream]
@@ -40,6 +41,7 @@ var center_pos: Vector3
 @export var swipe_speed: float = 15.0
 @export var swipe_targeting_timeout: float = 2.0
 @onready var swipe_targeting_timer: Timer = $MeleeTargetingTimer
+var swipe_proj_pool: Array = []
 var active_arc_projectiles: Array = []
 # SFX
 @export var sfx_swipe: Array[AudioStream]
@@ -94,15 +96,18 @@ var nav_agent_rid: RID
 
 func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
-
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
-
-	debug_trajectory_mesh = MeshInstance3D.new()
-	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
-
+	
+	# TODO - remove or replace with array mesh
+	#debug_trajectory_mesh = MeshInstance3D.new()
+	#debug_trajectory_mesh.mesh = ImmediateMesh.new()
+	#get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
+	
+	_init_chip_projectiles()
+	_init_swipe_projectiles()
+	
 	if GameManager.boss_ante >= 1:
 		pass
 	if GameManager.boss_ante >= 2:
@@ -132,7 +137,8 @@ func orbit_target_in_group(delta: float) -> void:
 	var offset_z = sin(current_angle) * desired_distance
 	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
-	navigation_component.set_nav_target_position(orbit_pos)
+	if orbit_pos.distance_squared_to(navigation_component.nav_agent.target_position) > navigation_component.TARGET_POS_UPDATE_THRESHOLD:
+		navigation_component.set_nav_target_position(orbit_pos)
 
 
 func melee_approach(delta: float) -> void:
@@ -174,7 +180,8 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 		orbit_pos += wave_offset
 
 	# Pathfind to orbit_pos
-	navigation_component.set_nav_target_position(orbit_pos)
+	if orbit_pos.distance_squared_to(navigation_component.nav_agent.target_position) > navigation_component.TARGET_POS_UPDATE_THRESHOLD:
+		navigation_component.set_nav_target_position(orbit_pos)
 
 ## MOVEMENT UTILS
 #
@@ -269,8 +276,19 @@ func _on_attack_telegraph_state_exited() -> void:
 
 ## SMALL BLIND PROJECTILES
 
+func _init_chip_projectiles() -> void:
+	chip_projectile_pool.clear()
+	for i in range(chip_shots_per_burst * num_bursts):
+		var _proj = chip_projectile.instantiate()
+		scene_root.add_child.call_deferred(_proj)
+		#await get_tree().physics_frame
+		#_proj.deactivate()
+		chip_projectile_pool.push_back(_proj)
+
+
 func _on_small_blind_targeting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Targeting"
+	desired_distance = DESIRED_DISTANCE * 2
 	navigation_component.enable()
 
 	anim_player.play("substack/idle")
@@ -322,10 +340,10 @@ func _on_small_blind_shooting_state_entered() -> void:
 
 	for i in num_bursts:
 		for j in chip_shots_per_burst:
+			await get_tree().create_timer(delay_per_projectile).timeout
 			# HACK - break out of this loop if we've exited the state
 			if not $StateChart/Root/Phase/SmallBlindProjectile.active and not $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
 				return
-			await get_tree().create_timer(delay_per_projectile).timeout
 			# Animate shot
 			face_sprite.visible = true
 			var face_tween: Tween = get_tree().create_tween()
@@ -334,10 +352,10 @@ func _on_small_blind_shooting_state_entered() -> void:
 			sfx_player.stream = sfx_shoot.pick_random()
 			sfx_player.play()
 			#
-			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
+			fire_projectile_pooled(chip_projectile_pool, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
-
+		
 		await get_tree().create_timer(delay_between_burst).timeout
 
 	state_chart.send_event("stop_shooting")
@@ -355,15 +373,22 @@ func _on_small_blind_recover_state_entered() -> void:
 
 func _recover_state_entered() -> void:
 	anim_player.play("substack/RESET")
+	desired_distance = DESIRED_DISTANCE
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-
-	#navigation_component.enable()
-
 	state_chart.send_event("end_recovery")
 
 
 ## ARC SWIPE
+
+func _init_swipe_projectiles() -> void:
+	swipe_proj_pool.clear()
+	for i in range(num_swipes * 8):
+		var _proj = swipe_prefab.instantiate()
+		scene_root.add_child.call_deferred(_proj)
+		await get_tree().physics_frame
+		_proj.deactivate()
+		swipe_proj_pool.push_back(_proj)
 
 
 func _on_arc_swipe_targeting_state_entered() -> void:
@@ -469,7 +494,7 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 			await get_tree().create_timer(delay_between_swipe).timeout
 
 			spark(spark_marker.global_position)
-			anim_player.play("substack/slash_spark")
+			anim_player.play("substack/slawsh_spark")
 		sprite.flip_h = !sprite.flip_h
 
 	sprite.flip_h = false
@@ -480,12 +505,35 @@ func _spawn_arc_proj() -> void:
 	sfx_player.stream = sfx_swipe.pick_random()
 	sfx_player.play()
 	#
-	var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
+	var arc_proj := fire_projectile_pooled(swipe_proj_pool, projectile_spawn_marker.global_position)
 	arc_proj.rotation_degrees.z += randf_range(-10, 10)
 	arc_proj.velocity = (
 		arc_proj.get_arc_vector(target.global_position)
 	)
 	active_arc_projectiles.append(arc_proj)
+
+#
+#func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
+	#if len(sfx_arr) > 0:
+		#play_positional_sound(sfx_arr.pick_random())
+#
+	#var projectile = proj_pool.pop_front()
+	#if not projectile:
+		#return
+	#
+	#projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
+	#projectile.activate()
+	#projectile.global_position = spawn_pos
+	#var dir_to_target = spawn_pos.direction_to(target.global_position)
+	#var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	#projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
+	#
+	#return projectile
+
+
+#func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
+	#proj.deactivate()
+	#proj_pool.push_back(proj)
 
 
 func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:
@@ -577,8 +625,6 @@ func merge_to_pos(pos: Vector3, time: float, destroy_on_merge: bool = true) -> v
 func _on_split_rush_recover_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Recovering"
 	desired_distance = DESIRED_DISTANCE
-	health_component.died.emit()
-	health_component.has_died = true
 	state_chart.send_event("end_recovery")
 
 
@@ -611,13 +657,6 @@ func _on_place_your_bets_recover_state_entered() -> void:
 	await return_split_stack_to_center()
 	self.collision_layer = 4
 	state_chart.send_event("end_recovery")
-
-
-func _on_died() -> void:
-	state_chart.send_event("death")
-	state_chart.send_event("stop_moving")
-	state_chart.send_event("deactivate")
-	return
 
 
 func _on_melee_targeting_timer_timeout() -> void:
@@ -734,22 +773,22 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: floa
 	)
 
 	# Drawing
-	if debug:
-		var trajectory_points: Array = []
+	#if debug:
+		#var trajectory_points: Array = []
+#
+		#for i in range(1, 151):
+			#var t = time * float(i) / float(151)
+			#var x = start_pos.x + initial_velocity.x * t
+			#var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
+			#var z = start_pos.z + initial_velocity.z * t
+			#trajectory_points.append(Vector3(x, y, z))
 
-		for i in range(1, 151):
-			var t = time * float(i) / float(151)
-			var x = start_pos.x + initial_velocity.x * t
-			var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
-			var z = start_pos.z + initial_velocity.z * t
-			trajectory_points.append(Vector3(x, y, z))
-
-		debug_trajectory_mesh.mesh.clear_surfaces()
-		debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
-		for p in trajectory_points:
-			debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
-			debug_trajectory_mesh.mesh.surface_add_vertex(p)
-		debug_trajectory_mesh.mesh.surface_end()
+		#debug_trajectory_mesh.mesh.clear_surfaces()
+		#debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+		#for p in trajectory_points:
+			#debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
+			#debug_trajectory_mesh.mesh.surface_add_vertex(p)
+		#debug_trajectory_mesh.mesh.surface_end()
 
 	return [initial_velocity, time_up, time_down]
 
@@ -799,14 +838,11 @@ func spark(spark_pos: Vector3) -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	if not $StateChart/Root/Phase/SmallBlindProjectile.active or $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
-		super (new_health, prev_health)
-	else:
-		if new_health < prev_health:
-			state_chart.send_event("start_damage")
-			hurt_sfx_player.stream = sfx_hit.pick_random()
-			hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
-			hurt_sfx_player.play()
+	if new_health < prev_health:
+		state_chart.send_event("start_damage")
+		hurt_sfx_player.stream = sfx_hit.pick_random()
+		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
+		hurt_sfx_player.play()
 
 
 # TODO - have elemental effects carry between small stacks and big stacks

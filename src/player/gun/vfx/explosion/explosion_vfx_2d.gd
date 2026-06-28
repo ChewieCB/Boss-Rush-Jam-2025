@@ -7,6 +7,8 @@ class_name ExplosionVFX2D
 @onready var fire: GPUParticles3D = $Fire
 @onready var smoke: GPUParticles3D = $Smoke
 
+@onready var _root = get_tree().get_root()
+
 
 var count = 0
 
@@ -17,6 +19,11 @@ func _ready() -> void:
 	smoke.draw_pass_1.size = original_smoke_size
 	fire.finished.connect(check_count)
 	smoke.finished.connect(check_count)
+	explode()
+
+
+func explode() -> void:
+	activate()
 	smoke.emitting = true
 	fire.emitting = true
 
@@ -40,4 +47,21 @@ func check_count():
 	count += 1
 	if count >= 2:
 		finished.emit()
-		call_deferred('queue_free')
+
+
+func activate() -> void:
+	self.visible = true
+	if get_parent() != _root:
+		self.reparent(_root)
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func deactivate() -> void:
+	smoke.emitting = false
+	fire.emitting = false
+	self.visible = false
+	
+	if get_parent() != _root:
+		self.reparent(_root)
+	
+	self.process_mode = Node.PROCESS_MODE_DISABLED

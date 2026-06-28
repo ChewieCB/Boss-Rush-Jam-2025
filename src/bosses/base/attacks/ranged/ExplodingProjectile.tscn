@@ -30,7 +30,7 @@ material_override = SubResource("StandardMaterial3D_aih2w")
 mesh = SubResource("ImmediateMesh_rffdb")
 script = ExtResource("1_pms8u")
 distance = 1.0
-segments = 10
+segments = 3
 lifetime = 2.0
 width_profile = SubResource("Curve_oc45i")
 

@@ -1,6 +1,8 @@
 extends RigidBody3D
 class_name BombProjectile
 
+signal destroyed
+
 @export_group("Bomb Behaviour")
 @export var fuse_time: float = 1.0
 @export var fuse_variance: float = 1.4
@@ -16,6 +18,7 @@ class_name BombProjectile
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var timer: Timer = $Timer
+@onready var lifetime_timer: Timer = $LifetimeTimer
 @onready var explosion_area: Area3D = $ExplosionArea
 @onready var explosion_collider: CollisionShape3D = $ExplosionArea/CollisionShape3D
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -27,17 +30,23 @@ const TREMOR_INTENSITY = 0.5
 var body_state: PhysicsDirectBodyState3D
 
 
-func _ready() -> void:
-	explosion_collider.shape.radius = explosion_radius
-	timer.start(fuse_time)
-	var tween = get_tree().create_tween()
-	explosion_range_indicator.scale = Vector3.ONE * explosion_radius
-	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, fuse_time)
-
 func init(_damage: float, _fuse_time: float):
+	activate()
+	
+	mesh.scale = Vector3(4.0, 4.0, 4.0)
 	explosion_damage = _damage
+	explosion_collider.shape.radius = explosion_radius
+	
+	explosion_range_indicator.scale = Vector3.ONE * explosion_radius
+	mesh.mesh.surface_get_material(0).albedo_color.r = 0.298
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, fuse_time)
+	
 	fuse_time = _fuse_time
 	fuse_time += randf_range(0, fuse_variance)
+	timer.start(fuse_time)
+
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 	var spark_inst = spark_scene.instantiate()
@@ -55,7 +64,9 @@ func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 
 func destroy(explode: bool = true) -> void:
 	if explode:
+		explosion_collider.set_deferred("disabled", false)
 		explosion_area.set_deferred("monitoring", true)
+		# TODO - move to pools
 		var explosion_vfx = explosion_prefab.instantiate()
 		get_tree().get_root().add_child(explosion_vfx)
 		explosion_vfx.global_position = self.global_position
@@ -64,20 +75,24 @@ func destroy(explode: bool = true) -> void:
 		explosion_vfx.explode()
 		sfx_player.stream = sfx_bomb_explode.pick_random()
 		sfx_player.play()
+	
 	var tween = get_tree().create_tween()
 
 	# Hide the bomb
 	tween.tween_property(mesh, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
 	explosion_range_indicator.visible = false
 	burn_vfx.deactivate()
-	freeze = true
 	
-	# Wait for effect finished
-	if sfx_player.playing:
-		await sfx_player.finished
-	else:
-		await tween.finished
-	queue_free() 
+	await tween.finished
+	
+	destroyed.emit()
+	#deactivate() 
+	## Wait for effect finished
+	#if sfx_player.playing:
+		#await sfx_player.finished
+	#else:
+		#await tween.finished
+
 
 func _integrate_forces(state):
 	body_state = state
@@ -101,6 +116,36 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 		if body is Player:
 			body.player_camera.add_trauma(TREMOR_INTENSITY)
 
+
 func _on_lifetime_timer_timeout() -> void:
 	# Fall back in case something wrong
-	queue_free()
+	deactivate()
+	#queue_free()
+
+
+func activate() -> void:
+	explosion_collider.set_deferred("disabled", true)
+	explosion_area.monitoring = true
+	explosion_area.monitorable = true
+	self.freeze = false
+	self.visible = true
+	explosion_range_indicator.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	timer.start(fuse_time)
+	lifetime_timer.start()
+
+
+func deactivate() -> void:
+	lifetime_timer.stop()
+	timer.stop()
+	self.freeze = true
+	explosion_collider.set_deferred("disabled", true)
+	explosion_area.set_deferred("monitoring", false)
+	explosion_area.monitoring = false
+	explosion_area.monitorable = false
+	self.visible = false
+	explosion_range_indicator.visible = false
+	# Prevent cutoff
+	if sfx_player.playing:
+		await sfx_player.finished
+	self.process_mode = Node.PROCESS_MODE_DISABLED

@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgu7u4xfa2mfy"]
+
+[ext_resource type="Texture2D" uid="uid://doyroroqrxl6l" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Gun_Only.png" id="2_6d7ie"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1b42f"]
+friction = 0.64
+bounce = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_npndf"]
+radius = 1.0
+
+[node name="SlottyDeathGun" type="RigidBody3D"]
+collision_layer = 0
+collision_mask = 9
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 12.0
+physics_material_override = SubResource("PhysicsMaterial_1b42f")
+freeze = true
+
+[node name="GunOnlySprite" type="Sprite3D" parent="."]
+transform = Transform3D(1.05, 0, 0, 0, 1.05, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+layers = 2
+billboard = 2
+texture = ExtResource("2_6d7ie")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -0.3, 0)
+shape = SubResource("SphereShape3D_npndf")

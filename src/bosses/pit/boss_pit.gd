@@ -42,7 +42,6 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
 var unfair_fight_enabled = false
 @export_group("Attacks")
-@onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var electric_hazard_prefab: PackedScene
 @export var hurtbox_range_close: float = 3.5
 @export var hurtbox_range_far: float = 4.5

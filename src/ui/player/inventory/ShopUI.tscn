@@ -1,0 +1,446 @@
+[gd_scene load_steps=30 format=3 uid="uid://dxui67spyijhu"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/shop_ui.gd" id="1_j5xux"]
+[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="2_2niy2"]
+[ext_resource type="PackedScene" uid="uid://3ldvxjt8q5gk" path="res://src/ui/player/inventory/ShopGunFrameItemUI.tscn" id="3_6b57g"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="4_wvykx"]
+[ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="5_2txqk"]
+[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="6_laotd"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="7_ag3mq"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="8_liw3e"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="9_ajf4e"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="10_p5u2d"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="11_75vgm"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="12_yy762"]
+[ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="13_or7wt"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_onwa3"]
+[ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="15_7v2dv"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="16_kno7h"]
+[ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="17_3ru54"]
+[ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="18_ylgjj"]
+[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="19_cafxn"]
+[ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="20_0d6ii"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bfj2n"]
+random_pitch = 1.36
+streams_count = 2
+stream_0/stream = ExtResource("6_laotd")
+stream_1/stream = ExtResource("7_ag3mq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pve14"]
+shader = ExtResource("12_yy762")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 135.0
+shader_parameter/repeat_x = 14.2
+shader_parameter/repeat_y = 8.0
+shader_parameter/row_offset = 0.65
+shader_parameter/texture_to_scroll = ExtResource("13_or7wt")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
+shader = ExtResource("12_yy762")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 45.0
+shader_parameter/repeat_x = 14.2
+shader_parameter/repeat_y = 8.0
+shader_parameter/row_offset = 0.65
+shader_parameter/texture_to_scroll = ExtResource("15_7v2dv")
+
+[sub_resource type="Gradient" id="Gradient_gcfb7"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cxwao"]
+gradient = SubResource("Gradient_gcfb7")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.504274, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ex4kc"]
+bg_color = Color(0.792969, 0.788848, 0.725959, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="Animation" id="Animation_yyqcm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shopkeeper:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(208, -80)]
+}
+
+[sub_resource type="Animation" id="Animation_dro8h"]
+resource_name = "shopkeeper_idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shopkeeper:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 0.5),
+"update": 0,
+"values": [Vector2(208, -80), Vector2(208, -85), Vector2(208, -80), Vector2(208, -75), Vector2(208, -80)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ta718"]
+_data = {
+"RESET": SubResource("Animation_yyqcm"),
+"shopkeeper_idle": SubResource("Animation_dro8h")
+}
+
+[node name="ShopUI" type="Control" node_paths=PackedStringArray("scroll_container", "input_prompt_navigate", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "barrel_info_region")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j5xux")
+shop_title = "Yuya's Barrels"
+shop_barrel_item_ui_prefab = ExtResource("2_2niy2")
+shop_gun_frame_item_ui_prefab = ExtResource("3_6b57g")
+show_shop_first = true
+barrel_item_ui_prefab = ExtResource("4_wvykx")
+gun_frame_item_ui_prefab = ExtResource("5_2txqk")
+sfx_open = SubResource("AudioStreamRandomizer_bfj2n")
+sfx_click = ExtResource("8_liw3e")
+sfx_purchase = ExtResource("9_ajf4e")
+sfx_too_expensive = ExtResource("10_p5u2d")
+sfx_barrel_equip = ExtResource("11_75vgm")
+scroll_container = NodePath("MainRegion/BarrelShopUI/LeftRegion/ScrollContainer")
+input_prompt_navigate = NodePath("ControlHelp/HBoxContainer/InputPrompt1")
+input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
+input_prompt_cancel = NodePath("ControlHelp/HBoxContainer/InputPrompt3")
+input_prompt_detail = NodePath("ControlHelp/HBoxContainer/InputPrompt4")
+barrel_info_region = NodePath("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
+
+[node name="ShopBG" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_pve14")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_onwa3")
+
+[node name="ModifyBG" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_yd8qc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_onwa3")
+
+[node name="DarkenOverlay" type="TextureRect" parent="."]
+self_modulate = Color(0, 0, 0, 0.708)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_onwa3")
+
+[node name="FadeDarkBG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_cxwao")
+
+[node name="MainRegion" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 83.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BarrelShopUI" type="Control" parent="MainRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftRegion" type="Control" parent="MainRegion/BarrelShopUI"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 960.0
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelShopUI/LeftRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = -136.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="GunFrameLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Gun Frames"
+horizontal_alignment = 1
+
+[node name="GunFrameContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
+
+[node name="ShopGunFrameItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("3_6b57g")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Slot Rollers"
+horizontal_alignment = 1
+
+[node name="NormalContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 6
+
+[node name="ShopItemContainer6" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer7" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer8" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer9" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer10" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer11" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer12" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer13" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer14" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="ShopItemContainer15" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_2niy2")]
+layout_mode = 2
+
+[node name="CurrencyUI" parent="MainRegion/BarrelShopUI/LeftRegion" instance=ExtResource("16_kno7h")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -120.0
+offset_right = 105.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 6
+
+[node name="RightRegion" type="Control" parent="MainRegion/BarrelShopUI"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VendorAvatar" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 56.0
+offset_right = 848.0
+offset_bottom = 296.0
+color = Color(0, 0, 0, 1)
+
+[node name="ShopBG" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 733.0
+offset_bottom = 224.0
+texture = ExtResource("17_3ru54")
+expand_mode = 1
+
+[node name="Shopkeeper" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+layout_mode = 0
+offset_left = 208.0
+offset_top = -80.0
+offset_right = 536.0
+offset_bottom = 248.0
+texture = ExtResource("18_ylgjj")
+expand_mode = 3
+
+[node name="Chatbox" type="Panel" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 256.0
+offset_right = 736.0
+offset_bottom = 360.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ex4kc")
+
+[node name="ColorRect" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox"]
+layout_mode = 0
+offset_left = 424.0
+offset_top = -24.0
+offset_right = 464.0
+offset_bottom = 16.0
+rotation = 0.785397
+color = Color(0.792157, 0.788235, 0.72549, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 704.0
+offset_bottom = 96.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 26
+theme_override_font_sizes/bold_font_size = 30
+text = "Welcome to my store !"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+libraries = {
+"": SubResource("AnimationLibrary_ta718")
+}
+autoplay = "shopkeeper_idle"
+speed_scale = 0.5
+
+[node name="BarrelInfoRegion" parent="MainRegion/BarrelShopUI/RightRegion" instance=ExtResource("19_cafxn")]
+custom_minimum_size = Vector2(902, 364)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -959.0
+offset_top = -492.0
+offset_right = -57.0
+offset_bottom = -128.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ControlHelp" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -85.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -233.5
+offset_top = -24.0
+offset_right = 233.5
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="InputPrompt1" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
+layout_mode = 2
+input_action = "move_generic"
+prompt_text = "Navigate"
+
+[node name="InputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
+layout_mode = 2
+input_action = "ui_accept"
+prompt_text = "Select"
+
+[node name="InputPrompt3" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
+layout_mode = 2
+input_action = "ui_cancel"
+prompt_text = "Exit"
+
+[node name="InputPrompt4" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_0d6ii")]
+layout_mode = 2
+input_action = "inv_show_barrel_detail"
+prompt_text = "Detail"

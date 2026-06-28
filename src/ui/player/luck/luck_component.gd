@@ -63,7 +63,7 @@ func initialize_luck() -> void:
 
 
 func check_for_high_luck_buffs():
-	var player_base_stat = GameManager.player.base_stats
+	var player_base_stat = GameManager.player_base_stats
 	
 	if is_high_luck():
 		# Indicate high luck to player

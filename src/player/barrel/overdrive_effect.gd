@@ -39,9 +39,10 @@ func on_ammo_consumed():
 func gun_explode():
 	# Create explosion
 	var damage = int(GameManager.player.health_component.current_health * player_current_hp_explosion_dmg)
-	var explosion_inst: ExplosionDamageArea = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
+	var explosion_inst: ExplosionDamageArea = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	explosion_inst.init(damage)
-	explosion_inst.activate(GameManager.player.global_position)
+	explosion_inst.global_position = GameManager.player.global_position
+	explosion_inst.activate.call_deferred()
 	# Explosion SFX
 	var rand_pitch = randf_range(0.8, 1.2)
 	SoundManager.play_sound_with_pitch(explosion_sfx, rand_pitch)

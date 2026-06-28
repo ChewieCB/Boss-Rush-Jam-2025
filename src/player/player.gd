@@ -56,7 +56,10 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 
-@onready var ui_parent = $UI
+# UI
+
+@onready var player_ui: PlayerUI = $UI
+@export var _fallback_effect_icon_texture: CompressedTexture2D
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
@@ -84,6 +87,8 @@ var enemy_near_counter = 0
 var drunk_drift_timer: float = 0.0
 var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
+
+@onready var heal_vfx: GPUParticles3D = $HealCloudVFX
 
 signal movement_dashed
 signal movement_crouched
@@ -168,23 +173,7 @@ var is_in_menu = false:
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
-var base_stats = {
-	StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER: 1,
-	StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER: 1,
-	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
-	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
-	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
-	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
-	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
-	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
-	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
-	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0.05, # In decimal, so 0.5 = 50%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
-	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
-	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
-}
-var current_stats = base_stats.duplicate(true)
+var current_stats = GameManager.player_base_stats.duplicate(true)
 
 var dash_iframe_icon = preload("res://assets/sprite/status_icon/invincible.png")
 var cheat_death_icon = preload("res://assets/sprite/skilltree_icon/cheat_death.png")
@@ -200,6 +189,7 @@ var freecam: FreeCam
 func _ready():
 	GameManager.change_fmod_bgm_player_is_dead(false)
 	GameManager.player = self
+	
 	for mesh in debug_meshes.get_children():
 		mesh.visible = false
 	player_camera.set_fov(GameManager.camera_fov)
@@ -226,14 +216,14 @@ func _ready():
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
 	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
+	current_gun.magazine_size_changed.connect(stat_ui.radial_ui_center_node.update)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
-	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
-	current_gun.barrel_spin_stopped.connect(update_ammo_counter_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
+	
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
@@ -251,6 +241,7 @@ func _ready():
 
 	#debug_inventory_ui.has_custom_inventory = true
 	#debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
+	heal_vfx.deactivate()
 
 
 func _unhandled_input(event):
@@ -506,7 +497,8 @@ func show_barrel_effect_ui() -> void:
 
 	if current_gun.max_barrels == 0:
 		return
-
+	
+	barrel_detail_ui.process_mode = Node.PROCESS_MODE_INHERIT
 	barrel_ui_active = true
 
 	if barrel_ui_tween:
@@ -531,15 +523,15 @@ func show_barrel_effect_ui() -> void:
 func hide_barrel_effect_ui() -> void:
 	if not barrel_ui_active:
 		return
-
+	
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
-
+	
 	barrel_ui_tween = get_tree().create_tween()
-
+	
 	Engine.time_scale = 1.0
-
+	
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
@@ -548,56 +540,61 @@ func hide_barrel_effect_ui() -> void:
 		else:
 			# Fallback
 			effect_ui.modulate.a = 0.0
-	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
-	await barrel_ui_tween.finished
+	barrel_ui_tween.tween_callback(_disable_barrel_effect_ui)
+
+
+func _disable_barrel_effect_ui() -> void:
+	barrel_ui_active = false
+	barrel_detail_ui.queue_redraw()
+	barrel_detail_ui.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func update_barrel_effect_ui() -> void:
+	if not barrel_detail_ui.visible:
+		return
 	for i in range(current_gun.max_barrels):
-		var effect_ui = barrel_detail_ui.effect_boxes[i]
-		if i < current_gun.barrel_container.get_child_count():
-			#effect_ui.modulate.a = 1.0
-		#if current_gun.barrel_container.get_child_count() > 0:
-			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
-			if barrel is NullBarrel:
-				effect_ui.modulate.a = 0.0
-				effect_ui.name_label.text = ""
-				effect_ui.desc_label.text = ""
-				continue
-			var _effect: BaseBarrelEffect = barrel.get_active_effect()
+		_update_effect_ui.call_deferred(i)
 
-			if _effect.icon_id != -1:
-				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
-			else:
-				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/tmp-barrel-icon.png")
-			effect_ui.name_label.text = _effect.display_text_title
-			effect_ui.desc_label.text = _effect.display_text_tag
 
-			for container in effect_ui.positives_container.get_children():
-				container.queue_free()
-			for container in effect_ui.negatives_container.get_children():
-				container.queue_free()
-			effect_ui.clear_luck_triggers()
-
-			# effect_ui.add_neutral(_effect.display_text_desc)
-			for text in _effect.positive_desc:
-				effect_ui.add_positive(text)
-			for text in _effect.negative_desc:
-				effect_ui.add_negative(text)
-			for trigger_id in _effect.luck_triggers:
-				var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
-				var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
-				var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
-				effect_ui.add_luck_trigger(trigger_info.name, trigger_info.desc, is_discovered)
-
-		else:
+func _update_effect_ui(idx: int) -> void:
+	var effect_ui = barrel_detail_ui.effect_boxes[idx]
+	
+	if idx < current_gun.barrel_container.get_child_count():
+		var barrel: SpinBarrel = current_gun.barrel_container.get_child(idx)
+		if barrel is NullBarrel:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
-			effect_ui.desc_label.text = ""
+			effect_ui.tag_label.text = ""
+			effect_ui.effect_description_label.text = ""
+			return
+		
+		var _effect: BaseBarrelEffect = barrel.get_active_effect()
+		var _texture_cache: Dictionary = GameManager.effect_icon_texture_cache
+		if _effect.icon_id != -1:
+			effect_ui.icon_rect.texture = _texture_cache[_effect.icon_id]
+		else:
+			effect_ui.icon_rect.texture = _fallback_effect_icon_texture
+		effect_ui.name_label.text = _effect.display_text_title
+		effect_ui.tag_label.text = _effect.display_text_tag
+		effect_ui.effect_description_label.text = _effect.display_text_desc
+		
+		effect_ui.clear_luck_triggers.call_deferred()
+		
+		var _triggers = _effect.luck_triggers
+		for i in range(_triggers.size()):
+			var trigger_id = _triggers[i]
+			var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
+			var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
+			var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
+			effect_ui.update_luck_trigger.call_deferred(i, trigger_info.name, trigger_info.desc, is_discovered)
+	else:
+		effect_ui.modulate.a = 0.0
+		effect_ui.name_label.text = ""
+		effect_ui.tag_label.text = ""
 
 
-func toggle_anim_reticle(is_visible: bool) -> void:
-	ui_parent.toggle_aim_reticle(is_visible)
+func toggle_anim_reticle(_is_visible: bool) -> void:
+	player_ui.toggle_aim_reticle(_is_visible)
 
 
 func show_debug_label():
@@ -917,7 +914,7 @@ func check_if_has_status_effect_by_name(find_name: String):
 
 func apply_status_effects():
 	# Reset current stats to base stats.
-	current_stats = base_stats.duplicate(true)
+	current_stats = GameManager.player_base_stats.duplicate(true)
 
 	# Temporary storage for stacking.
 	var flat_modifiers = {}
@@ -1017,12 +1014,14 @@ func get_barrel_sprite_screen_positions() -> Array[Vector2]:
 
 
 func spin_barrels() -> void:
-	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading or current_gun.is_spinning:
+	if current_gun.installed_barrels == [null, null, null] or current_gun.is_reloading or current_gun.is_spinning:
 		return
 	# Check if we have enough chips
 	if GameManager.purchase_reroll():
 		cash_in_luck()
 		current_gun.spin_all_barrels()
+		GameManager.player.player_ui.start_heal_flash()
+		heal_vfx.activate()
 		# Provide small health buff (?)
 		var modified_reroll_heal_value = reroll_heal_value
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HIGH_ROLLER):
@@ -1169,6 +1168,7 @@ func _disable_freecam() -> void:
 
 
 func _enable_cutscene_cam() -> void:
+	toggle_anim_reticle(false)
 	controls_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
@@ -1193,6 +1193,7 @@ func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 		await camera_tween.finished
 
 	player_camera.camera.current = true
+	toggle_anim_reticle(true)
 	gun_container.visible = true
 
 

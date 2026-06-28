@@ -37,6 +37,22 @@ const BASE_FMOD_VOLUME = 5
 
 var pause_ui: PauseUI
 var setting_ui: SettingUI
+const player_base_stats = {
+	StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER: 1,
+	StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER: 1,
+	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
+	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
+	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
+	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
+	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
+	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0.05, # In decimal, so 0.5 = 50%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
+	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
+	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
+}
 var player: Player
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
@@ -55,6 +71,10 @@ var gun_customize_ui: InventoryUI
 var equipped_barrels: Array[Resource] = [null, null, null]
 var inventory_barrels: Array[Resource] = []
 var shop_barrels: Array[Resource] = []
+
+var effect_icon_texture_cache: Dictionary = {} # icon_id -> CompressedTexture2D
+@export var _effect_icon_texture_fallback: CompressedTexture2D
+
 
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
@@ -210,6 +230,9 @@ func _ready() -> void:
 			scaling_3d = 90.0
 			get_viewport().set_scaling_3d_scale(90 / 100.0)
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME
+	
+	for i in range(63):
+		effect_icon_texture_cache[i] = load("res://assets/sprite/effect_icons/%s.png" % [i])
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):

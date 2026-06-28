@@ -20,7 +20,7 @@ script = ExtResource("1_w6qw3")
 [node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Protective Barrier"
-display_text_tag = "Tough up!"
+display_text_tag = "Toughen up!"
 positive_desc = Array[String](["+25% damage resistance"])
 negative_desc = Array[String](["-20% move speed"])
 icon_id = 43
@@ -45,7 +45,7 @@ show_duration_ui = true
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Newton's Third Law"
-display_text_tag = "Safer Rocket Jump"
+display_text_tag = "Rocket jumps... but safe"
 positive_desc = Array[String](["Enables rocket-jumping knockback", "+25% damage"])
 negative_desc = Array[String](["-25% firerate"])
 icon_id = 42
@@ -70,7 +70,7 @@ max_range = 3.0
 [node name="BallBullet" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Ball Bullet"
-display_text_tag = "Massive ball!"
+display_text_tag = "Give your gun massive balls."
 display_text_desc = "Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed."
 positive_desc = Array[String](["Significantly higher damage", "Fires large projectile", "Adds richochet to projectile"])
 negative_desc = Array[String](["Slower firerate", "Slower projectile speed"])

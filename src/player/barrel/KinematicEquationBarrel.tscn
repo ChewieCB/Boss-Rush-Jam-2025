@@ -21,15 +21,21 @@ display_text_desc = "More damage with bullet flight time
 positive_desc = Array[String](["Damage increases the longer the round is in-flight"])
 negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 29
-
-[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
-script = ExtResource("3_b2svt")
+luck_triggers = Array[int]([13])
 
 [node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SlowRoller"]
 script = ExtResource("5_2xsnk")
 attribute = 3
 modify_value = -50.0
 is_perc = true
+
+[node name="ModifyLifetime" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("5_2xsnk")
+attribute = 14
+modify_value = 4.0
+
+[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("3_b2svt")
 
 [node name="LongShot" type="Node3D" parent="EffectContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0242209, 0, 0.0132322)

@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://mcpnb5i47ns6"]
+
+[ext_resource type="Texture2D" uid="uid://1nbmmdl2pdtv" path="res://src/bosses/slots/assets/Slotty_Death.png" id="9_n8o75"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pfqe1"]
+friction = 0.23
+bounce = 0.65
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_npndf"]
+radius = 2.0
+
+[node name="SlottyDeathTorso" type="RigidBody3D"]
+collision_layer = 0
+collision_mask = 9
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 15.0
+physics_material_override = SubResource("PhysicsMaterial_pfqe1")
+freeze = true
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+texture = ExtResource("9_n8o75")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_npndf")

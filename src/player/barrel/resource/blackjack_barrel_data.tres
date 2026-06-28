@@ -8,7 +8,7 @@
 script = ExtResource("3_inasw")
 barrel_id = 74
 barrel_name = "Blackjack"
-barrel_desc = "Grant you effect similar to its owner."
+barrel_desc = "Grant you effects similar to its owner."
 barrel_info_summary = "Grant you effect similar to its owner, Blackjack."
 barrel_image = ExtResource("1_2vd0e")
 barrel_cost = 1500

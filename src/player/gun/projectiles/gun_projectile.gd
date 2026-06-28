@@ -3,16 +3,17 @@ class_name GunProjectile
 
 @export var gravity_modifier = 0.0
 
-@onready var collider: Area3D = $Area3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var area: Area3D = $Area3D
+@onready var area_col: CollisionShape3D = $Area3D/CollisionShape3D
 @onready var trail: Trail3D = $Trail/Trail3D
 @onready var slowmo_trail: Trail3D = $Trail/Trail3DBulletTime
 
-
-@onready var homing_area: Area3D = $HomingArea3D
-@onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+@onready var ricochet_sfx_player: AudioStreamPlayer3D = $Ricochet3dAudio
+@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+@export var sfx_split: Array[AudioStream]
 
 
 # Gravity stuff
@@ -24,24 +25,84 @@ var gravity_accel = 0
 var gravity_free_timer = 0.2
 
 func _ready() -> void:
-	super ()
+	super()
+	init_color = mesh.mesh.surface_get_material(0).albedo_color
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 	gravity_free_timer += delta
+	if "slow_roll_lifetime_required" in misc_data:
+		if misc_data["slow_roll_lifetime_required"] <= life_time:
+			misc_data.erase("slow_roll_lifetime_required")
+			if "slow_roll_barrel_vfx_node_name" in misc_data:
+				activate_barrel_vfx(misc_data["slow_roll_barrel_vfx_node_name"])
+				misc_data.erase("slow_roll_barrel_vfx_node_name")
+
+
+func _activate_visuals() -> void:
+	mesh.visible = true
+	trail.visible = true
+	trail.emit = true
+	visible = true
+
+func _deactivate_visuals() -> void:
+	super()
+	color_changed_count = 0
+	change_bullet_color(init_color)
+	color_changed_count = 0
+	mesh.visible = false
+	trail.visible = false
+	trail.emit = false
+	slowmo_trail.visible = false
+	slowmo_trail.emit = false
+	await get_tree().create_timer(1).timeout
+	visible = false
+
+func _activate_physics() -> void:
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	trail.process_mode = Node.PROCESS_MODE_INHERIT
+	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
+
+	life_timer.start()
+
+	raycast.set_deferred("enabled", true)
+	raycast.call_deferred("force_raycast_update")
+	area_col.set_deferred("disabled", false)
+	area.set_deferred("monitoring", true)
+	area.set_deferred("monitorable", true)
+	
+
+func _deactivate_physics() -> void:
+	super()
+	trail.full_reset()
+	life_timer.stop()
+	
+	raycast.set_deferred("enabled", false)
+	area_col.set_deferred("disabled", true)
+	area.set_deferred("monitoring", false)
+	area.set_deferred("monitorable", false)
+	
+	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
+
 
 func _physics_process(delta: float) -> void:
-	if homing_locked_in and homing_target:
-		gravity_modifier = 0
-		gravity_accel = 0
-		# HACK catch for minions/boss sub-forms that die mid-flight
-		if not homing_target:
-			return
-		var target_pos = homing_target.global_position
-		if homing_target.has_node("BodyCenter"):
-			target_pos = homing_target.get_node("BodyCenter").global_position
-		var dir_to_target = global_position.direction_to(target_pos)
-		look_at(global_position + dir_to_target)
+	if homing_strength > 0 and GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var target_pos = target.global_position
+		if target.has_node("BodyCenter"):
+			target_pos = target.get_node("BodyCenter").global_position
+		var dist_to_target = global_position.distance_to(target_pos)
+		var homing_range = homing_strength * HOMING_RANGE_FACTOR
+		if dist_to_target <= homing_range:
+			var current_dir_vec = - transform.basis.z
+			var dir_to_target = global_position.direction_to(target_pos)
+			var new_dir = current_dir_vec.lerp(dir_to_target, homing_strength * HOMING_STRENGTH_FACTOR).normalized()
+			homing_curved_degrees += rad_to_deg(current_dir_vec.angle_to(new_dir))
+			look_at(global_position + new_dir)
 	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
 		var aiming_position = GunUtils.get_player_aiming_position()
 		var dir_to_target = global_position.direction_to(aiming_position)
@@ -50,7 +111,6 @@ func _physics_process(delta: float) -> void:
 	velocity = - transform.basis.z * projectile_speed * delta
 	global_position += velocity
 	travelled_distance += projectile_speed * delta
-
 
 	if gravity_modifier > 0 and gravity_free_timer > GRAVITY_IGNORE_AFTER_RICO_TIME:
 		gravity_accel += GRAVITY_FORCE * gravity_modifier * delta
@@ -63,48 +123,56 @@ func _physics_process(delta: float) -> void:
 		if dot < 0.99:
 			raycast.rotate_object_local(Vector3(1, 0, 0), pitch_angle)
 
-		if raycast.is_colliding():
-			hitscan_col_point = raycast.get_collision_point()
-			hitscan_col_normal = raycast.get_collision_normal()
-			found_hitscal_col = true
-		else:
-			found_hitscal_col = false
+	check_raycast_col()
+
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
-	if homing_strength > 0:
-		homing_area.monitoring = true
-		homing_collision_shape.shape.radius = homing_strength
+	look_at_from_position(start_pos, start_pos + dir)
+	if not is_ricochet_shot:
+		activate()
+	
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
 	damage = _damage
+	if GameManager.player:
+		crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	else:
+		crit_chance = GameManager.player_base_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
+	
+	trail.visible = true
+	check_raycast_col()
 
-	await get_tree().physics_frame
-	await get_tree().physics_frame
+	if splitted:
+		redshift_bullet()
 
-	if raycast.is_colliding():
-		hitscan_col_point = raycast.get_collision_point()
-		hitscan_col_normal = raycast.get_collision_normal()
-		found_hitscal_col = true
 
 func _on_life_timer_timeout() -> void:
-	if not keep_alive:
-		destroyed.emit(hit_boss)
-		stop_elemental_particles()
-		call_deferred("queue_free")
+	destroyed.emit(self, hit_boss)
+	finished.emit.call_deferred()
+
+var last_ricochet_sfx_time = 0
+const RICOCHET_SFX_COOLDOWN_MS = 100
+
+func play_ricochet_sfx():
+	var current_time = Time.get_ticks_msec()
+	if current_time - last_ricochet_sfx_time < RICOCHET_SFX_COOLDOWN_MS:
+		return
+	last_ricochet_sfx_time = current_time
+	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 func ricochet():
-	super ()
-	gravity_free_timer = 0
-	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
 	if is_ricochet_shot == false:
 		redshift_bullet()
-		is_ricochet_shot = true
-	
+	super()
+	gravity_free_timer = 0
+	found_hitscal_col = false
+
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
 	
@@ -119,15 +187,24 @@ func ricochet():
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
 
+
 func _on_area_3d_body_entered(body: Node3D) -> void:
-	if body is Player and time_ricochetted == 0:
-		on_player_contact.emit(self )
+	if not is_instance_valid(owner_gun):
 		return
+	
+	if body is Player:
+		on_player_contact.emit(self)
+		if time_ricochetted == 0:
+			return
+
+	check_raycast_col()
+	
 	var calculated_damage = calculate_bullet_damage()
+	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self )
-			#calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
+			before_damage_applied.emit(body, self)
+			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
@@ -146,27 +223,29 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			damage_applied.emit(calculated_damage, true, global_position)
 			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
-			create_spark(hitscan_col_point, hitscan_col_normal)
-			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_spark", hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_bullet_decal", hitscan_col_point, hitscan_col_normal)
 		else:
-			create_spark(global_position, Vector3.UP)
-			create_bullet_decal(global_position, Vector3.UP)
-	impacted.emit(self , true, global_position)
+			call_deferred("create_spark", global_position, Vector3.UP)
+			call_deferred("create_bullet_decal", global_position, Vector3.UP)
+	impacted.emit(self, true, global_position)
 
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		if not keep_alive:
-			stop_elemental_particles()
-			destroyed.emit(hit_boss)
-			call_deferred("queue_free")
+		destroyed.emit(self, hit_boss)
+		finished.emit.call_deferred()
 
+func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+	super(split_count, split_spread_radius, _has_pos, _pos)
 
-func _on_homing_area_3d_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D:
-		homing_locked_in = true
-		homing_target = body
-		homing_area.set_deferred("monitoring", false)
+func check_raycast_col():
+	if raycast.is_colliding():
+		hitscan_col_point = raycast.get_collision_point()
+		hitscan_col_normal = raycast.get_collision_normal()
+		found_hitscal_col = true
+	else:
+		found_hitscal_col = false
 
 func change_bullet_color(_new_color: Color):
 	super(_new_color)
@@ -181,18 +260,25 @@ func change_bullet_color(_new_color: Color):
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
 		trail.material_override.emission = _new_color
 
+
 func redshift_bullet():
 	var current_color = mesh.mesh.material.albedo_color
 	var redshifted_color = Color(
-		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
-		current_color.g * 0.7, # Reduce green
+		current_color.r + (1.0 - current_color.r) * 0.7, # Shift red towards 1.0,
+		current_color.g * 0.3, # Reduce green
 		current_color.b * 0.3, # Reduce blue significantly
 		current_color.a
 	)
 	change_bullet_color(redshifted_color)
 
+
 func switch_to_slowmo_bullet_trail():
-	super ()
+	super()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
+	slowmo_trail.emit = false
+	trail.clear_points()
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	slowmo_trail.visible = true
+	slowmo_trail.emit = true
+	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT

@@ -20,7 +20,6 @@ signal hide
 
 func _ready() -> void:
 	await get_owner().ready
-	#LuckHandler.modifier_message.connect(show_luck_modifier)
 	_set_high_luck_glow_progress(0.0)
 	GameManager.player_level_up.connect(update_high_luck_indicator)
 
