@@ -14,7 +14,7 @@ var available_gun_frames: Array
 # and avoid tangling any of the rest of this code up in it to prevent confusion.
 
 func _ready() -> void:
-	super ()
+	super()
 	init_equip_barrels()
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	super (event)
+	super(event)
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		var equipped_ui: BarrelEquipSlotUI = null
@@ -75,14 +75,14 @@ func open() -> void:
 		GameManager.equipped_gun_frame,
 		available_gun_frames,
 	)
-	super ()
+	super()
 
 
 func close() -> void:
 	for i in range(equip_barrel_container.get_child_count()):
 		var equip_ui = equip_barrel_container.get_child(i).item_ui
 		clear_item_ui_highlight(equip_ui)
-	super ()
+	super()
 
 
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced: bool = false):
@@ -117,7 +117,7 @@ func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced: b
 		if not barrel_data.is_archetype_barrel:
 			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
 			inventory_normal_barrel_container.add_child(item_inst)
-			item_inst.init(self , barrel_data)
+			item_inst.init(self, barrel_data)
 			item_inst.set_barrel_data(barrel_data, false, true)
 			item_inst.select_item.connect(_on_item_ui_select)
 			item_inst.interact_item.connect(_on_item_ui_interact)
@@ -274,7 +274,7 @@ func get_equip_slot_focus(slot_idx: int = -1) -> Control:
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for item in inventory_normal_barrel_container.get_children():
 		item.button.focus_mode = FocusMode.FOCUS_NONE
-	if slot_idx == -1:
+	if slot_idx == -1 or slot_idx >= GameManager.player.current_gun.barrel_count:
 		# Focus on leftmost equipped barrel,
 		# or the rightmost empty slot if no barrels are equipped.
 		var leftmost_barrel: ItemUI = null
@@ -450,12 +450,12 @@ func change_gun_frame(idx_diff: int) -> void:
 func _on_item_ui_button_pressed(ui: Control) -> void:
 	var parent: Control = ui.get_parent()
 	var ui_item: ItemUI = ui if ui is ItemUI else ui.item_ui
-	
+
 	if barrel_info_region.effect_detail_wheel.visible:
 		if current_selected_item_ui != null:
 			toggle_ui_focus_neighbors(current_selected_item_ui.button, true)
 		hide_effect_detail_view(ui_item if ui is ItemUI else ui)
-	
+
 	if ui.clicked_once:
 		active_focus_idx = parent.get_index() if parent is BarrelEquipSlotUI else ui.get_index()
 	if ui.is_equipped or ui.is_empty:
@@ -474,13 +474,13 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	super (item_ui, data)
+	super(item_ui, data)
 	if item_ui.get_parent() is BarrelEquipSlotUI:
 		input_prompt_tab_right.update_text("Move Barrel")
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	super (item_ui, data)
+	super(item_ui, data)
 	if item_ui.is_locked:
 		return
 

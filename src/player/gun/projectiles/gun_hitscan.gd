@@ -14,7 +14,7 @@ signal end_pos_set(pos: Vector3)
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 @onready var area_col: CollisionShape3D = $NearbyEnemyCheckArea3D/CollisionShape3D
 
-@onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+@onready var ricochet_sfx_player: AudioStreamPlayer3D = $Ricochet3dAudio
 
 var alpha = 1.0
 var end_pos
@@ -26,12 +26,10 @@ const BEAM_RANGE_IF_NOT_COLLIDE = 50
 
 
 func _ready():
-	super ()
+	super()
 	is_hitscan = true
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
-	if is_ricochet_shot:
-		redshift_bullet()
 	init_color = get_projectile_color()
 
 func _activate_visuals() -> void:
@@ -50,12 +48,15 @@ func _activate_physics() -> void:
 
 
 func _deactivate_visuals() -> void:
-	super ()
+	super()
 	self.visible = false
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", 0.0)
+	color_changed_count = 0
+	change_bullet_color(init_color)
+	color_changed_count = 0
 
 func _deactivate_physics() -> void:
-	super ()
+	super()
 	life_timer.stop()
 	
 	splitted = false
@@ -71,7 +72,7 @@ func _deactivate_physics() -> void:
 
 
 func _process(delta):
-	super (delta)
+	super(delta)
 	alpha -= delta * fade_speed
 	alpha = clamp(alpha, 0, 1)
 	mesh.mesh.material.set_shader_parameter("fade_multiplier", alpha)
@@ -147,7 +148,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		travelled_distance += start_pos.distance_to(end_pos)
 		
 		if target is BlockingDetectionArea:
-			var buffered_hit_pos: Vector3 = target._raycast_hit(self , end_pos)
+			var buffered_hit_pos: Vector3 = target._raycast_hit(self, end_pos)
 			end_pos_set.emit(buffered_hit_pos)
 			create_spark(buffered_hit_pos, hitscan_col_normal)
 			
@@ -166,7 +167,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			self.visible = true
 			return
 		
-		impacted.emit(self , true, hitscan_col_point)
+		impacted.emit(self, true, hitscan_col_point)
 		var calculated_damage = calculate_bullet_damage()
 		
 		if target is ChiptopedeSegmentCollision:
@@ -174,12 +175,20 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			target = target.parent
 		
 		if target is CharacterBody3D:
-			before_damage_applied.emit(target, self )
+			before_damage_applied.emit(target, self)
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
-			apply_damage_to_health_component(target.health_component, calculated_damage)
-			damage_applied.emit(calculated_damage, true, target.global_position)
-			hit_boss = true
 			call_deferred("create_blood_splatter", hitscan_col_point, hitscan_col_normal)
+			if target is Player:
+				on_player_contact.emit(self)
+				if time_ricochetted == 0:
+					return
+				else:
+					apply_damage_to_health_component(target.health_component, calculated_damage * 0.5) # Weaken ricochet dmg
+					damage_applied.emit(calculated_damage * 0.5, true, target.global_position)
+			else:
+				apply_damage_to_health_component(target.health_component, calculated_damage)
+				damage_applied.emit(calculated_damage, true, target.global_position)
+				hit_boss = true
 		else:
 			if "health_component" in target:
 				if target is Shield:
@@ -225,21 +234,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func play_ricochet_sfx():
-	var sfx = AudioStreamPlayer3D.new()
-	sfx.stream = ricochet_sfx.stream
-	sfx.stream = ricochet_sfx.stream
-	sfx.unit_size = ricochet_sfx.unit_size
-	sfx.max_distance = ricochet_sfx.max_distance
-	sfx.volume_db = ricochet_sfx.volume_db
-	sfx.attenuation_model = ricochet_sfx.attenuation_model
-	get_tree().root.add_child(sfx)
-	sfx.global_position = global_position
-	sfx.play()
-	sfx.finished.connect(sfx.queue_free)
+	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 
 func ricochet():
-	super ()
+	super()
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	
@@ -269,13 +268,17 @@ func get_projectile_color() -> Color:
 
 
 func _on_timer_timeout():
-	destroyed.emit(self , hit_boss)
+	destroyed.emit(self, hit_boss)
 	finished.emit.call_deferred()
 
+# func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+# 	if splitted:
+# 		return
+# 		play_ricochet_sfx()
 
 func split(split_count: int, split_spread_radius: float, has_pos: bool, _pos: Vector3):
 	var pos_hitscan: Vector3 = hitscan_col_point - current_dir * 0.01
-	super (split_count, split_spread_radius, has_pos, pos_hitscan)
+	super(split_count, split_spread_radius, has_pos, pos_hitscan)
 
 
 func redshift_bullet():
@@ -290,7 +293,7 @@ func redshift_bullet():
 
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		var current_mesh_color = mesh.mesh.material.get_shader_parameter("color")
 		var current_emission_color = mesh.mesh.material.get_shader_parameter("emission_color")

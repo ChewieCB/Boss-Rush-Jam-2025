@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://35lbaqwytewn"]
+[gd_scene load_steps=33 format=3 uid="uid://35lbaqwytewn"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/sticky_bomb_projectile.gd" id="1_oktax"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_c01wk"]
@@ -16,7 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://cj4t17atvmu7v" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitSmall.tscn" id="10_m0cuo"]
 [ext_resource type="Material" uid="uid://dnlcf8g207lx8" path="res://src/player/gun/projectiles/StickyBombProjectile.tres" id="10_ov5a0"]
 [ext_resource type="PackedScene" uid="uid://vpa0pjfgcoxj" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmitSmall.tscn" id="14_k6cjs"]
-[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="17_w06ht"]
+[ext_resource type="AudioStream" uid="uid://nsevw0dctc7c" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 1.mp3" id="19_3btnx"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="19_yujdn"]
+[ext_resource type="AudioStream" uid="uid://bp0ai5js54012" path="res://src/player/gun/assets/sfx/effects/Ricochet/Ricochet 2.mp3" id="20_r0qqi"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ynnlg"]
 resource_local_to_scene = true
@@ -35,21 +37,27 @@ random_pitch = 1.02
 streams_count = 1
 stream_0/stream = ExtResource("4_uf018")
 
-[sub_resource type="Gradient" id="Gradient_rnfdc"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_hxo0k"]
+random_pitch = 1.6
+streams_count = 2
+stream_0/stream = ExtResource("19_3btnx")
+stream_1/stream = ExtResource("20_r0qqi")
+
+[sub_resource type="Gradient" id="Gradient_xbl1o"]
 offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
 colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_20jdv"]
-gradient = SubResource("Gradient_rnfdc")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6gfk4"]
+gradient = SubResource("Gradient_xbl1o")
 
-[sub_resource type="Curve" id="Curve_2hdbn"]
+[sub_resource type="Curve" id="Curve_kwdgd"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_17vks"]
-curve = SubResource("Curve_2hdbn")
+[sub_resource type="CurveTexture" id="CurveTexture_jyj17"]
+curve = SubResource("Curve_kwdgd")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5xqqo"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_66n3q"]
 lifetime_randomness = 0.3
 angle_min = -30.0
 angle_max = 30.0
@@ -63,16 +71,16 @@ linear_accel_min = -5.0
 linear_accel_max = -5.0
 scale_min = 0.75
 scale_max = 1.25
-scale_curve = SubResource("CurveTexture_17vks")
-color_ramp = SubResource("GradientTexture1D_20jdv")
+scale_curve = SubResource("CurveTexture_jyj17")
+color_ramp = SubResource("GradientTexture1D_6gfk4")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_c6mrj"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fy0qs"]
 load_path = "res://.godot/imported/star.png-e13a19c003ac52e153eed2503d82e994.s3tc.ctex"
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgabl"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrcyx"]
 transparency = 1
 vertex_color_use_as_albedo = true
-albedo_texture = SubResource("CompressedTexture2D_c6mrj")
+albedo_texture = SubResource("CompressedTexture2D_fy0qs")
 emission_enabled = true
 rim_enabled = true
 billboard_mode = 3
@@ -81,8 +89,8 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="QuadMesh" id="QuadMesh_6ttkl"]
-material = SubResource("StandardMaterial3D_qgabl")
+[sub_resource type="QuadMesh" id="QuadMesh_rfebi"]
+material = SubResource("StandardMaterial3D_lrcyx")
 size = Vector2(0.2, 0.2)
 
 [node name="StickyBombProjectile" type="Node3D"]
@@ -157,6 +165,12 @@ stream = SubResource("AudioStreamRandomizer_13u20")
 volume_db = -6.0
 unit_size = 5.0
 
+[node name="RicochetSFXPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_hxo0k")
+volume_db = 3.0
+unit_size = 11.0
+bus = &"SFX"
+
 [node name="MinTimeBeforeStickAgainTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
@@ -164,17 +178,17 @@ one_shot = true
 [node name="BarrelVFXEffectContainer" type="Node3D" parent="."]
 
 [node name="SparklingEffect" type="Node3D" parent="BarrelVFXEffectContainer" node_paths=PackedStringArray("gpu_particles")]
-script = ExtResource("17_w06ht")
+visible = false
+script = ExtResource("19_yujdn")
 gpu_particles = [NodePath("Sparkling")]
 
 [node name="Sparkling" type="GPUParticles3D" parent="BarrelVFXEffectContainer/SparklingEffect"]
-visible = false
 amount = 16
 explosiveness = 0.2
 randomness = 0.2
 visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
-process_material = SubResource("ParticleProcessMaterial_5xqqo")
-draw_pass_1 = SubResource("QuadMesh_6ttkl")
+process_material = SubResource("ParticleProcessMaterial_66n3q")
+draw_pass_1 = SubResource("QuadMesh_rfebi")
 
 [connection signal="area_shape_entered" from="Area3D" to="." method="_on_area_3d_area_shape_entered"]
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

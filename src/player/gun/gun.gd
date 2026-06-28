@@ -225,10 +225,8 @@ func _init_barrel_materials() -> void:
 
 
 func equip_active() -> void:
-	#reset_modifier(true)
 	if GameManager.equipped_gun_frame:
 		set_stat_from_gun_frame()
-	#magazine_ammo_left = modified_magazine_size
 	muzzle_flash_light.light_energy = 0
 
 
@@ -531,10 +529,8 @@ func play_post_shot_anim() -> bool:
 
 func create_gun_attack(bullet_pool_type: ObjectPoolingManager.PooledObjectEnum, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
 	var bullet_inst: BaseBullet = null
-	var is_pooled: bool = false
 
 	bullet_inst = ObjectPoolingManager.get_pooled_object(bullet_pool_type)
-
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
 
@@ -553,15 +549,12 @@ func create_gun_attack(bullet_pool_type: ObjectPoolingManager.PooledObjectEnum, 
 	if not bullet_inst.is_connected("destroyed", check_barrel_effect_on_projectile_destroyed):
 		bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 
+	_init_bullet(bullet_inst, start_pos, direction, damage, proj_speed, max_range)
+
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
-
-	#if is_pooled:
-	_init_bullet(bullet_inst, start_pos, direction, damage, proj_speed, max_range)
-	#else:
-		#bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 
 func _init_bullet(_bullet: BaseBullet, start_pos, direction, damage, proj_speed, max_range) -> void:
@@ -806,9 +799,6 @@ func reload(_already_spin_barrel = false):
 
 	release_trigger()
 
-	#if not already_spin_barrel:
-		#reset_modifier(true)
-
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
@@ -937,7 +927,6 @@ func reload(_already_spin_barrel = false):
 
 
 func reload_no_anim() -> void:
-	#reset_modifier(true)
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue

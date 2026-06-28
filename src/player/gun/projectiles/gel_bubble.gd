@@ -21,7 +21,7 @@ var start_deflate = false
 var deflate_speed = 30
 
 func _ready() -> void:
-	super ()
+	super()
 	delayed = true
 	mesh_instance.visible = false
 	mesh_instance.scale = Vector3.ONE * 0.01
@@ -34,7 +34,7 @@ func _ready() -> void:
 	min_lifetime_before_can_be_aim_guided = 0.3
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 
 
 func _physics_process(delta: float) -> void:
@@ -87,7 +87,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		found_hitscal_col = true
 
 func ricochet():
-	super ()
+	super()
 	found_hitscal_col = false
 	is_ricochet_shot = true
 	
@@ -108,7 +108,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self )
+			before_damage_applied.emit(body, self)
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
@@ -122,7 +122,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			hit_boss = true
 	self.reparent.call_deferred(body)
-	impacted.emit(self , true, global_position)
+	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
@@ -143,7 +143,7 @@ func _on_life_timer_timeout() -> void:
 
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh_instance.mesh.material.albedo_color = mesh_instance.mesh.material.albedo_color.lerp(_new_color, 0.5)
 	else:

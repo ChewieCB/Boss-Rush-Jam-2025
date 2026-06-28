@@ -13,6 +13,7 @@ class_name GunProjectile
 
 @onready var ricochet_sfx_player: AudioStreamPlayer3D = $Ricochet3dAudio
 @onready var ricochet_sfx: AudioStreamPlayer3D = $Ricochet3dAudio
+@export var sfx_split: Array[AudioStream]
 
 
 # Gravity stuff
@@ -40,17 +41,20 @@ func _process(delta: float) -> void:
 
 func _activate_visuals() -> void:
 	mesh.visible = true
-	change_bullet_color(init_color)
 	trail.visible = true
 	trail.emit = true
 	visible = true
 
 func _deactivate_visuals() -> void:
 	super()
+	color_changed_count = 0
+	change_bullet_color(init_color)
+	color_changed_count = 0
 	mesh.visible = false
 	trail.visible = false
 	trail.emit = false
 	slowmo_trail.visible = false
+	slowmo_trail.emit = false
 	await get_tree().create_timer(1).timeout
 	visible = false
 
@@ -124,7 +128,8 @@ func _physics_process(delta: float) -> void:
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	look_at_from_position(start_pos, start_pos + dir)
-	activate()
+	if not is_ricochet_shot:
+		activate()
 	
 	life_timer.start()
 	projectile_speed = _speed
@@ -137,11 +142,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	
 	current_dir = dir
 	ricochet_count_left = ricochet_count
-	redshift_bullet()
 	look_at_from_position(start_pos, start_pos + dir)
 	
 	trail.visible = true
-	
 	check_raycast_col()
 
 	if splitted:
@@ -152,19 +155,24 @@ func _on_life_timer_timeout() -> void:
 	destroyed.emit(self, hit_boss)
 	finished.emit.call_deferred()
 
+var last_ricochet_sfx_time = 0
+const RICOCHET_SFX_COOLDOWN_MS = 100
+
 func play_ricochet_sfx():
+	var current_time = Time.get_ticks_msec()
+	if current_time - last_ricochet_sfx_time < RICOCHET_SFX_COOLDOWN_MS:
+		return
+	last_ricochet_sfx_time = current_time
 	SoundManager.instantiate_configured_player(global_position, ricochet_sfx_player)
 
 func ricochet():
+	# Redshift the bullet color after ricochet. Only do it once.
+	if is_ricochet_shot == false:
+		redshift_bullet()
 	super()
 	gravity_free_timer = 0
 	found_hitscal_col = false
-	# Redshift the bullet color after ricochet. Only do it once.
-	if is_ricochet_shot == false:
-		is_ricochet_shot = true
-	
-	play_ricochet_sfx()
-	
+
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
 	
@@ -178,11 +186,6 @@ func ricochet():
 	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 	raycast.rotation = Vector3.ZERO
 	gravity_accel = 0
-
-
-func split(split_count: int, split_spread_radius: float, has_pos: bool, pos: Vector3):
-	super(split_count, split_spread_radius, has_pos, pos)
-	# Maybe play a split SFX here
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
@@ -233,6 +236,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		destroyed.emit(self, hit_boss)
 		finished.emit.call_deferred()
 
+func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+	super(split_count, split_spread_radius, _has_pos, _pos)
 
 func check_raycast_col():
 	if raycast.is_colliding():
@@ -259,8 +264,8 @@ func change_bullet_color(_new_color: Color):
 func redshift_bullet():
 	var current_color = mesh.mesh.material.albedo_color
 	var redshifted_color = Color(
-		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
-		current_color.g * 0.7, # Reduce green
+		current_color.r + (1.0 - current_color.r) * 0.7, # Shift red towards 1.0,
+		current_color.g * 0.3, # Reduce green
 		current_color.b * 0.3, # Reduce blue significantly
 		current_color.a
 	)
@@ -271,7 +276,9 @@ func switch_to_slowmo_bullet_trail():
 	super()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
+	slowmo_trail.emit = false
 	trail.clear_points()
 	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	slowmo_trail.visible = true
+	slowmo_trail.emit = true
 	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT
