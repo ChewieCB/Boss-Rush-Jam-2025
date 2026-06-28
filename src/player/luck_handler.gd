@@ -58,6 +58,13 @@ func reset_luck_triggers() -> void:
 	trigger_discovered.emit()
 
 
+func update_luck_triggers_from_new_patch() -> void:
+	for trigger in luck_triggers:
+		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger.id]
+		if enum_str not in luck_trigger_dict:
+			luck_trigger_dict[enum_str] = false
+
+
 ## Modify luck
 func increase_luck(amount: float, message: String = "", type = LuckTriggerType.NORMAL) -> void:
 	amount *= GameManager.get_risk_luck_buildup_mult()

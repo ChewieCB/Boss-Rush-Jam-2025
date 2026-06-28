@@ -118,6 +118,7 @@ func load_game(slot_id):
 	LuckHandler.luck_trigger_dict = save_data.get("luck_trigger_dict", {})
 	if LuckHandler.luck_trigger_dict == {}:
 		LuckHandler.reset_luck_triggers()
+	LuckHandler.update_luck_triggers_from_new_patch()
 	
 	# Inventory & Shop
 	# These don't use save_data.get() since if it corrupted, it better to know about the error right away and not overwrite the save
