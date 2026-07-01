@@ -73,8 +73,6 @@ var inventory_barrels: Array[Resource] = []
 var shop_barrels: Array[Resource] = []
 
 var effect_icon_texture_cache: Dictionary = {} # icon_id -> CompressedTexture2D
-@export var _effect_icon_texture_fallback: CompressedTexture2D
-
 
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]

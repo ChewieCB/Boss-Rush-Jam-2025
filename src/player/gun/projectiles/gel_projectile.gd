@@ -30,7 +30,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 
 
 func _physics_process(delta: float) -> void:
@@ -86,7 +86,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		found_hitscal_col = true
 
 func ricochet():
-	super ()
+	super()
 	area.set_collision_mask_value(2, true)
 	found_hitscal_col = false
 	is_ricochet_shot = true
@@ -104,26 +104,7 @@ func ricochet():
 	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
-	if splitted:
-		return
-
-	var center_dir = - current_dir
-	var new_pos = global_position
-	if found_hitscal_col:
-		center_dir = hitscan_col_normal
-	if _has_pos:
-		new_pos = _pos
-
-	#for i in range(split_count):
-		#if not is_instance_valid(self ):
-			#return
-		#var new_inst = ObjectPoolingManager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
-		#var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
-		## Splitted bullet CAN NOT ricochet or split again
-		## explosion_inst.global_position = segment.global_position
-		#new_inst.activate(new_pos, new_dir)
-		#new_inst.splitted = true
-		#new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
+	super(split_count, split_spread_radius, _has_pos, _pos)
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
@@ -132,7 +113,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self )
+			before_damage_applied.emit(body, self)
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
@@ -147,7 +128,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			hit_boss = true
 	self.reparent.call_deferred(body)
 	sticked = true
-	impacted.emit(self , true, global_position)
+	impacted.emit(self, true, global_position)
 	life_timer.stop()
 	stick_timer.start(stick_time)
 	if found_hitscal_col:
@@ -183,7 +164,7 @@ func _on_stick_timer_timeout() -> void:
 		start_deflate = true
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh_instance.mesh.material.albedo_color = mesh_instance.mesh.material.albedo_color.lerp(_new_color, 0.5)
 	else:

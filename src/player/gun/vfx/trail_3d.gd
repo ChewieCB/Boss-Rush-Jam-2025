@@ -202,7 +202,7 @@ func _render_geometry(source: Array) -> void:
 		_vertex_array[vert_count] = vertices[0]
 		_vertex_array[vert_count + 1] = vertices[1]
 		_uv_array[vert_count] = Vector2(factor, 0)
-		_uv_array[vert_count + 1] - Vector2(factor, 1)
+		_uv_array[vert_count + 1] = Vector2(factor, 1)
 		vert_count += 2
 	
 	_mesh_arrays[Mesh.ARRAY_VERTEX] = _vertex_array.slice(0, vert_count)
