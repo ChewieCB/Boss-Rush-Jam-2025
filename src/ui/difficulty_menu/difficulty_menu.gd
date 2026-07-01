@@ -10,12 +10,12 @@ class_name DifficultyMenu
 
 @onready var risk_level_container: Container = $TitleRegion/HBoxContainer
 @onready var risk_item_container: Container = $LeftRegion/RiskContainer
-@onready var bet_value_label: Label = $RightRegion/Bet/BetInfo/BetValue
-@onready var reward_label: Label = $RightRegion/Reward/RewardInfo/RewardValue
+# @onready var bet_value_label: Label = $RightRegion/Bet/BetInfo/BetValue
+# @onready var reward_label: Label = $RightRegion/Reward/RewardInfo/RewardValue
 @onready var start_button: TemplateButton = $LeftRegion/HBoxContainer/StartButton
 @onready var not_enough_chip_timer: Timer = $NotEnoughChipTimer
-@onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
-@onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
+# @onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
+# @onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
 @onready var reset_risk_button: Button = $LeftRegion/ResetRiskButton
 @onready var target_quite_label: Label = $TitleRegion/TargetLabel/TargetQuoteLabel
 @onready var ante_card_container: Control = $RightRegion/AnteSection
