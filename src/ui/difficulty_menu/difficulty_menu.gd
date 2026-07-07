@@ -100,6 +100,7 @@ func refresh_display():
 
 	for i in range(ante_card_container.get_child_count()):
 		var ante_item: AnteItem = ante_card_container.get_child(i)
+		ante_item.ante_number = i + 1
 		ante_item.set_ante_label(boss_profile.ante_names[i])
 		if _ante_textures.size() > 0:
 			ante_item.set_ante_texture(_ante_textures[i])
