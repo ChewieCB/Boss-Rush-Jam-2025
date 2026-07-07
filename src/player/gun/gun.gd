@@ -211,7 +211,7 @@ func _ready() -> void:
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
 	else:
-		await reinstall_barrels()
+		reinstall_barrels()
 
 	is_jammed = false
 
@@ -1043,9 +1043,10 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 		barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
 		barrel_inst.owner_gun = self
 
-		var _null = barrel_container.get_child(slot_idx)
-		barrel_container.remove_child(_null)
-		null_barrel_pool.push_back(_null)
+		if slot_idx < barrel_container.get_child_count():
+			var _null = barrel_container.get_child(slot_idx)
+			barrel_container.remove_child(_null)
+			null_barrel_pool.push_back(_null)
 
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
@@ -1225,7 +1226,7 @@ func create_muzzle_flash_light():
 func _on_savefile_loaded():
 	if not reinstalled_barrel_from_savefile:
 		reinstalled_barrel_from_savefile = true
-		await reinstall_barrels()
+		reinstall_barrels()
 
 
 func check_if_archetype_barrel_installed() -> bool:
