@@ -65,25 +65,25 @@ func expand_button_size():
 	is_expanded = true
 	colour_rect.pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self , "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
+	tween.tween_property(self, "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
 
 
 func return_button_size():
 	is_expanded = false
 	colour_rect.pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
+	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)
 
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
 
 
-func _on_focus_entered(grab_focus: bool = true) -> void:
+func _on_focus_entered(_grab_focus: bool = true) -> void:
 	expand_button_size()
 	play_button_hover_sfx()
 	
-	if grab_focus:
+	if _grab_focus:
 		border_focus.visible = true
 		colour_rect.self_modulate = Color(1, 1, 1)
 
@@ -108,4 +108,4 @@ func _on_barrel_info_icon_mouse_exited() -> void:
 
 
 func _on_button_pressed() -> void:
-	clicked.emit(self )
+	clicked.emit(self)

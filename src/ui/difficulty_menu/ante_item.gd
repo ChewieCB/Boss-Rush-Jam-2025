@@ -79,21 +79,20 @@ func expand_button_size():
 		#return
 	pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self , "scale", Vector2(scale_factor, scale_factor), 0.1)
+	tween.tween_property(self, "scale", Vector2(scale_factor, scale_factor), 0.1)
 
 
 func return_button_size():
 	pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
+	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)
 
 func anim_button_pressed():
 	pivot_offset = size / 2
 	var tween = self.create_tween()
 	tween.set_parallel(false)
-	tween.tween_property(self , "scale", Vector2(0.7, 0.7), 0.1).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self , "scale", Vector2(1.0, 1.0), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-
+	tween.tween_property(self, "scale", Vector2(0.7, 0.7), 0.1).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 func _on_button_mouse_entered() -> void:
@@ -103,7 +102,7 @@ func _on_button_mouse_exited() -> void:
 	_on_button_focus_exited()
 
 
-func _on_button_focus_entered(grab_focus: bool = true) -> void:
+func _on_button_focus_entered(_grab_focus: bool = true) -> void:
 	play_button_hover_sfx()
 	expand_button_size()
 	border.modulate = Color("#e6c600")

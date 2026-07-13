@@ -10,12 +10,12 @@ class_name DifficultyMenu
 
 @onready var risk_level_container: Container = $TitleRegion/HBoxContainer
 @onready var risk_item_container: Container = $LeftRegion/RiskContainer
-@onready var bet_value_label: Label = $RightRegion/Bet/BetInfo/BetValue
-@onready var reward_label: Label = $RightRegion/Reward/RewardInfo/RewardValue
+# @onready var bet_value_label: Label = $RightRegion/Bet/BetInfo/BetValue
+# @onready var reward_label: Label = $RightRegion/Reward/RewardInfo/RewardValue
 @onready var start_button: TemplateButton = $LeftRegion/HBoxContainer/StartButton
 @onready var not_enough_chip_timer: Timer = $NotEnoughChipTimer
-@onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
-@onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
+# @onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
+# @onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
 @onready var reset_risk_button: Button = $LeftRegion/ResetRiskButton
 @onready var target_quite_label: Label = $TitleRegion/TargetLabel/TargetQuoteLabel
 @onready var ante_card_container: Control = $RightRegion/AnteSection
@@ -100,6 +100,7 @@ func refresh_display():
 
 	for i in range(ante_card_container.get_child_count()):
 		var ante_item: AnteItem = ante_card_container.get_child(i)
+		ante_item.ante_number = i + 1
 		ante_item.set_ante_label(boss_profile.ante_names[i])
 		if _ante_textures.size() > 0:
 			ante_item.set_ante_texture(_ante_textures[i])
@@ -108,7 +109,7 @@ func refresh_display():
 	#reward_label.text = format_number_with_commas(reward_value)
 
 ## Max lv 15
-func set_risk_level(level: int):
+func set_risk_level(_level: int):
 	return
 	#for i in range(risk_level_container.get_child_count()):
 		#if i < level:
@@ -188,7 +189,7 @@ func _on_not_enough_chip_timer_timeout() -> void:
 	#start_button.set_text_color(Color.WHITE)
 
 func play_juicy_chip_sprite_anim():
-	return	
+	return
 	#if bet_sprite_scale_tween and bet_sprite_scale_tween.is_running():
 		#bet_sprite_scale_tween.stop()
 	#bet_sprite_scale_tween = get_tree().create_tween()

@@ -101,7 +101,7 @@ func _on_lifetimer_timeout() -> void:
 
 
 func activate() -> void:
-	self.process_mode == Node.PROCESS_MODE_INHERIT
+	self.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 	self.visible = true
 	# Pick a random direction for the initial flight
@@ -119,5 +119,5 @@ func activate() -> void:
 func deactivate() -> void:
 	timer.stop()
 	self.visible = false
-	self.process_mode == Node.PROCESS_MODE_DISABLED
+	self.process_mode = Node.PROCESS_MODE_DISABLED
 	set_physics_process(false)

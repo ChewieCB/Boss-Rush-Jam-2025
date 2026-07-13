@@ -28,9 +28,6 @@ const CONTACT_DAMAGE = 1
 var sticked = false
 var explosion_damage = 0
 
-var _init_dir: Vector3
-var _init_start_pos: Vector3
-
 
 func _ready() -> void:
 	await get_parent().ready
@@ -204,14 +201,14 @@ func start_countdown() -> void:
 	impacted.emit(self, true, global_position)
 
 
-func damage_body(body: Node3D, damage: int = 0) -> void:
-	if damage == 0:
-		damage = calculate_bullet_damage()
+func damage_body(body: Node3D, calculated_damage: int = 0) -> void:
+	if calculated_damage == 0:
+		calculated_damage = calculate_bullet_damage()
 
 	before_damage_applied.emit(body, self)
-	damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
-	apply_damage_to_health_component(body.health_component, damage)
-	damage_applied.emit(damage, true, global_position)
+	calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
+	apply_damage_to_health_component(body.health_component, calculated_damage)
+	damage_applied.emit(calculated_damage, true, global_position)
 	hit_boss = true
 
 
@@ -224,7 +221,7 @@ func stick_bullet(body: Node3D) -> void:
 
 func enable_homing() -> void:
 	homing_area.collision_layer = 0
-	homing_area.collision_mask = pow(2, 3 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
+	homing_area.collision_mask = int(pow(2, 3 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1))
 	homing_collision_shape.set_deferred("disabled", false)
 	homing_area.set_deferred("monitoring", true)
 	homing_area.set_deferred("monitorable", true)
@@ -343,7 +340,6 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 		return
 	var tween := get_tree().create_tween()
 	_active_tweens.append(tween)
-	var reset_scale: float = 0.6
 	var max_scale: float = 1.2 + scale_mod
 	tween.set_parallel(false)
 	tween.tween_property(mesh, "scale", Vector3(max_scale, max_scale, max_scale), tick_time * 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)

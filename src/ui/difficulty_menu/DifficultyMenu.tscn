@@ -245,6 +245,7 @@ horizontal_alignment = 2
 autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TitleRegion"]
+visible = false
 layout_mode = 0
 offset_left = 64.0
 offset_top = 136.0

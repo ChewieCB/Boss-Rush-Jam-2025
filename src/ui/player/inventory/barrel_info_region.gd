@@ -56,7 +56,7 @@ var active_effect_detail_idx: int = 0
 func _ready() -> void:
 	circle_ring_center_pos = circle_ring_centerpoint.position
 	circle_ring_radius = - (circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
-	
+
 	_init_barrel_effect_ui()
 	show_barrel_overview(false)
 
@@ -92,23 +92,23 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 	barrel_name_label.text = "[b]%s[/b]" % [data.barrel_name]
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.barrel_info_summary]
 	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.barrel_desc
-	
+
 	gun_frame_icon_container.visible = false
-	
+
 	if is_locked:
 		for label in barrel_effect_list_labels:
 			label.visible = false
 		show_barrel_overview(true, true)
 		return
-	
+
 	for i in range(barrel_info_icon_effect_pool.size()):
 		var effect_info: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
 		var detail_label: EffectInfoListUI = barrel_effect_list_labels[i]
-		
+
 		if not effect_info.visible:
 			detail_label.visible = false
 			continue
-		
+
 		detail_label.visible = true
 		detail_label.icon.texture = effect_info.texture_rect.texture
 		detail_label.label.text = "[b]%s[/b]" % [effect_info.barrel_roll_data.title]
@@ -120,12 +120,12 @@ func set_gun_frame_overview_data(data: GunFrameResource, is_locked: bool = false
 	barrel_name_label.text = "[b]%s[/b]" % [data.frame_name]
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.flavour_text]
 	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.frame_description
-	
+
 	gun_frame_icon_container.visible = true
-	
+
 	for detail_label: EffectInfoListUI in barrel_effect_list_labels:
 		detail_label.visible = false
-	
+
 	if is_locked:
 		show_barrel_overview(true, true)
 		return
@@ -180,14 +180,14 @@ func _init_barrel_effect_ui() -> void:
 func populate_detail_circle_ui(target_barrel_data: BarrelDataResource) -> void:
 	var barrel_inst: SpinBarrel = target_barrel_data.barrel_prefab.instantiate()
 	add_child(barrel_inst)
-	
+
 	# Regen the barrel roll effects around the circle using the barrel data
 	current_effect_count = barrel_inst.get_number_of_barrel_effect()
 	var _wrap_focus = func(x: int): return wrapi(x, 0, current_effect_count)
 	var effect_icon_nodes = barrel_info_icon_effect_pool.duplicate()
 	effect_icon_nodes = effect_icon_nodes.slice(0, current_effect_count)
-	
-	# Instead of storing the positions of each node, place the first node at the top 
+
+	# Instead of storing the positions of each node, place the first node at the top
 	# of the circle - Vector2(0, RADIUS) - and then rotate this vector by ROTATION_STEP for
 	# each following node
 	var rotation_step: float = 2 * PI / current_effect_count
@@ -197,31 +197,31 @@ func populate_detail_circle_ui(target_barrel_data: BarrelDataResource) -> void:
 		if i >= current_effect_count:
 			ui.visible = false
 			continue
-		
+
 		var barrel_roll_data: Dictionary = barrel_inst.get_barrel_effect_data_at(i)
 		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(PI / 2 + (rotation_step * i))
 		ui.set_barrel_roll_data(barrel_roll_data)
 		ui.visible = true
-	
+
 	barrel_inst.queue_free()
 
 
 func cycle_effect_detail(hide_line: bool = false) -> void:
 	if is_instance_valid(spin_tween):
 		return
-	
+
 	# Null active icon to disable the line during spin
 	if not hide_line:
 		active_detail_icon = null
-	
+
 	active_effect_detail_idx = wrapi(
 		active_effect_detail_idx - 1,
 		0,
 		current_effect_count
 	)
-	
+
 	await rotate_circle_one_slot()
-	
+
 	active_detail_icon = barrel_info_icon_effect_pool[active_effect_detail_idx]
 	set_effect_detail_data(active_effect_detail_idx)
 	grab_detail_focus(active_effect_detail_idx)
@@ -231,25 +231,25 @@ func rotate_circle_one_slot() -> void:
 	effect_detail_spin_prompt.animate()
 	# Rotate all visible detail UI objects
 	var rotation_step = 2 * PI / current_effect_count
-	
+
 	spin_tween = get_tree().create_tween()
 	spin_tween.set_parallel(true) # .set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
 	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
 	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2 * PI, 0.23).set_ease(Tween.EASE_OUT)
-	
+
 	var scale_tween = self.create_tween()
 	scale_tween.set_parallel(false)
 	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(0.8, 0.8), 0.1)
 	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(1.1, 1.1), 0.12).set_ease(Tween.EASE_IN)
 	scale_tween.tween_property(circle_arrow_icon, "scale", Vector2(1.0, 1.0), 0.16).set_ease(Tween.EASE_OUT)
-	
+
 	for i in range(MAX_EFFECT_COUNT):
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
 		if not barrel_info_icon.visible:
 			continue
 		# TODO - tween the rotation with some bounce
 		spin_tween.tween_property(barrel_info_icon, "rotation", - (circle_ring_centerpoint.rotation + rotation_step), 0.23)
-	
+
 	await spin_tween.finished
 	spin_tween = null
 	return
@@ -265,7 +265,7 @@ func refresh_ui() -> void:
 	#  and clear them between refreshes
 	#for ui in barrel_info_icon_effect_pool:
 		#ui.visible = false
-	
+
 	# Spawn barrel prefab to get its data
 	#var barrel_inst: SpinBarrel = barrel_data.barrel_prefab.instantiate()
 	#add_child(barrel_inst)
@@ -287,7 +287,7 @@ func get_circle_positions(count: int) -> Array[Vector2]:
 		var x = circle_ring_center_pos.x + (circle_ring.size.x / 2) + circle_ring_radius * cos(barrel_info_icon_effect_angles[i] + angle)
 		var y = circle_ring_center_pos.y + (circle_ring.size.x / 2) + circle_ring_radius * sin(barrel_info_icon_effect_angles[i] + angle)
 		positions.append(Vector2(x, y))
-	
+
 	return positions
 
 
@@ -316,7 +316,7 @@ func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
 	if ui_idx == active_effect_detail_idx:
 		ui.play_button_hover_sfx()
 		return
-	
+
 	# FIXME - hovering over a new slot and cycling will set active icon to idx
 	active_detail_icon._on_focus_exited()
 	active_detail_icon = ui
@@ -326,7 +326,7 @@ func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
 func _on_effect_detail_focus_lost(ui: BarrelInfoIcon) -> void:
 	if ui.get_index() == active_effect_detail_idx:
 		return
-	
+
 	active_detail_icon = barrel_info_icon_effect_pool[active_effect_detail_idx]
 	active_detail_icon._on_focus_entered()
 	set_effect_detail_data(active_effect_detail_idx)
@@ -336,12 +336,12 @@ func _on_effect_detail_clicked(ui: BarrelInfoIcon) -> void:
 	var ui_idx: int = ui.get_index()
 	if ui_idx == active_effect_detail_idx:
 		return
-	
+
 	var rotations: int = wrapi(
 		active_effect_detail_idx - ui_idx,
 		0,
 		current_effect_count
 	)
-	
+
 	for i in range(rotations):
 		await cycle_effect_detail(true)

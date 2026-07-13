@@ -211,7 +211,7 @@ func _ready() -> void:
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
 	else:
-		await reinstall_barrels()
+		reinstall_barrels()
 
 	is_jammed = false
 
@@ -766,8 +766,6 @@ func _get_icon_texture(icon_id: int) -> CompressedTexture2D:
 
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
-	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
-
 	var mat: StandardMaterial3D = _barrel_materials[barrel_idx]
 	mat.albedo_color = Color.WHITE
 	mat.albedo_texture = _get_icon_texture(icon_id)
@@ -904,7 +902,6 @@ func reload(_already_spin_barrel = false):
 				LuckHandler.luck_cost_per_auto_spin * len(barrels_to_auto_spin)
 			)
 
-			var barrel_count: int = 0
 			for barrel in installed_barrels:
 				if barrel == null:
 					continue
@@ -1046,9 +1043,10 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 		barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
 		barrel_inst.owner_gun = self
 
-		var _null = barrel_container.get_child(slot_idx)
-		barrel_container.remove_child(_null)
-		null_barrel_pool.push_back(_null)
+		if slot_idx < barrel_container.get_child_count():
+			var _null = barrel_container.get_child(slot_idx)
+			barrel_container.remove_child(_null)
+			null_barrel_pool.push_back(_null)
 
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
@@ -1228,7 +1226,7 @@ func create_muzzle_flash_light():
 func _on_savefile_loaded():
 	if not reinstalled_barrel_from_savefile:
 		reinstalled_barrel_from_savefile = true
-		await reinstall_barrels()
+		reinstall_barrels()
 
 
 func check_if_archetype_barrel_installed() -> bool:
@@ -1302,7 +1300,6 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 		await post_reload_anim_end
 		idle_state = idle_frame_state.get_current_node()
 
-	var anim_library_prefix: String = ""
 	var jam_state: String = ""
 	match idle_state:
 		"shotgun_idle":

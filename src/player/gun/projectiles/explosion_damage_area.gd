@@ -30,7 +30,7 @@ func set_damage_radius(radius: float) -> void:
 	var new_shape := SphereShape3D.new()
 	new_shape.radius = radius
 	collision_shape.shape = new_shape
-	explosion_vfx.scale_factor = radius / 1.2  # Magic number - default area radius
+	explosion_vfx.scale_factor = radius / 1.2 # Magic number - default area radius
 
 
 func add_status_effect(status_effect: BossCore.BossStatusEffect) -> void:
@@ -58,7 +58,7 @@ func explode():
 	
 	explosion_vfx.explode()
 	get_tree().create_timer(LINGERING_DURATION).timeout.connect(
-		func(): 
+		func():
 			damage_disabled = true
 	)
 
@@ -106,7 +106,7 @@ func activate() -> void:
 	self.set_deferred("monitoring", true)
 	self.set_deferred("monitorable", true)
 	collision_shape.disabled = false
-	self.collision_mask = pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1)
+	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 3 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1) + pow(2, 7 - 1) + pow(2, 8 - 1))
 	self.visible = true
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	explode.call_deferred()

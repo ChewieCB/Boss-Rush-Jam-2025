@@ -18,14 +18,14 @@ const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 
 	if shopkeeper_chat.visible_ratio < 1.0:
 		shopkeeper_chat.visible_ratio += delta * SHOPKEEPER_CHAT_TEXT_SPEED
 
 
 func _input(event: InputEvent) -> void:
-	super (event)
+	super(event)
 	if visible:
 		var focused_ui: Control = null
 		if active_focus_idx >= 0 and current_focus_area and current_focus_area.get_child_count() > 0:
@@ -69,7 +69,7 @@ func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = 
 		if not barrel_data.is_archetype_barrel:
 			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
 			shop_barrel_container.add_child(shop_item_inst)
-			shop_item_inst.init(self , barrel_data)
+			shop_item_inst.init(self, barrel_data)
 			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 			shop_item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
@@ -81,7 +81,7 @@ func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = 
 	for gun_frame_data in GameManager.shop_gun_frames:
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
 		shop_gun_frame_container.add_child(shop_item_inst)
-		shop_item_inst.init(self , gun_frame_data)
+		shop_item_inst.init(self, gun_frame_data)
 		shop_item_inst.item_ui.select_item.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.item_ui.interact_item.connect(_on_gun_frame_item_ui_interact)
 		shop_item_inst.item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
@@ -210,7 +210,6 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 	var _ui: ItemUI = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	var _parent: Control = focused_ui.get_parent()
 	var ui_idx: int = focused_ui.get_index()
-	var parent_idx: int = _parent.get_index()
 
 	if _ui is GunFrameItemUI:
 		return
@@ -294,7 +293,7 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	super (item_ui, data)
+	super(item_ui, data)
 
 	if item_ui.is_locked:
 		return

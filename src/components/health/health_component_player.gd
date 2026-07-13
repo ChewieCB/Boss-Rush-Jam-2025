@@ -5,7 +5,7 @@ func _ready() -> void:
 	super()
 
 
-func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, detail_text: String = "") -> void:
+func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String = "") -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 
 	if enabled:

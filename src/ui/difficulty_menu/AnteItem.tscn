@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgdrie48ccxvw"]
+[gd_scene load_steps=6 format=3 uid="uid://bgdrie48ccxvw"]
 
 [ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="1_dsftp"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_3gy6e"]
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/ante_item.gd" id="2_a8k7o"]
-[ext_resource type="Texture2D" uid="uid://c33o1e80c6ouq" path="res://src/ui/difficulty_menu/boss_ante_images/mechanic/mechanic_ante_2_shock.png" id="2_ewsvx"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="5_kdfri"]
 [ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="5_qr8jw"]
 
@@ -37,7 +36,6 @@ grow_vertical = 2
 custom_minimum_size = Vector2(384, 560)
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("2_ewsvx")
 expand_mode = 1
 stretch_mode = 6
 
@@ -94,7 +92,6 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="DeselectedOverlay" type="ColorRect" parent="VBoxContainer/AnteItem"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -152,7 +149,8 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_bottom = 32
 
 [node name="Panel" type="Panel" parent="VBoxContainer/AnteLabelContainer"]
-custom_minimum_size = Vector2(160, 48)
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(320, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -172,12 +170,11 @@ offset_right = 96.0
 offset_bottom = 18.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0.901961, 0.776471, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 8
+theme_override_colors/font_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 30
-text = "?????????"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3

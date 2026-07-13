@@ -357,7 +357,6 @@ func init_equip_barrels() -> void:
 
 
 func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
-	var equip_slots = equip_barrel_container.get_children()
 	var slots_count = equip_barrel_container.get_child_count()
 
 	var _slot = equip_barrel_container.get_child(active_equip_idx).item_ui
@@ -382,8 +381,8 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 
 	GameManager.remove_barrel(selected_barrel_id)
 
-	var prev_idx_rev: int = remap(prev_idx, 0, 2, 2, 0)
-	var new_idx_rev: int = remap(new_idx, 0, 2, 2, 0)
+	var prev_idx_rev: int = int(remap(prev_idx, 0, 2, 2, 0))
+	var new_idx_rev: int = int(remap(new_idx, 0, 2, 2, 0))
 
 	if _new_idx_barrel:
 		var affected_barrel_id: int = _new_idx_barrel.barrel_id

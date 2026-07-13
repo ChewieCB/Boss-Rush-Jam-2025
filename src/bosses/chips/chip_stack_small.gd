@@ -747,7 +747,7 @@ func _on_charge_back_leaping_state_entered() -> void:
 	state_chart.send_event("end_leap")
 
 
-func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: float = chargeback_leap_height, debug: bool = false) -> Array:
+func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: float = chargeback_leap_height, _debug: bool = false) -> Array:
 	var start_pos = self.global_position
 	var highest_y = max(start_pos.y, goal_pos.y)
 	var apex_y = highest_y + charge_jump_height

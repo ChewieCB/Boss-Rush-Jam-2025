@@ -63,25 +63,25 @@ func _process(delta):
 	recover_rotation_velocity -= recover_rotation_velocity * (RECOIL_DAMPING_FACTOR / 2.0) * delta
 	var final_rotation_velocity = rotation_velocity + recover_rotation_velocity
 	rotation += final_rotation_velocity * delta
-	
+
 	# Drunk
 	drunk_intensity = lerp(drunk_intensity, target_drunk_intensity, delta * 2.0)
 	if drunk_intensity > 0.01:
 		drunk_sway_time += delta * drunk_sway_speed
-	
+
 		var sway_pitch: float = sin(drunk_sway_time) * drunk_sway_amount_deg * 0.25 * drunk_intensity
 		var sway_yaw: float = cos(drunk_sway_time * 1.5) * drunk_sway_amount_deg * 0.25 * drunk_intensity
 		var sway_roll: float = sin(drunk_sway_time * 0.6) * drunk_sway_amount_deg * drunk_intensity
-		
+
 		# Add some procedural jitter
 		# var noise_offset = get_noise_from_seed(Time.get_ticks_msec() * 0.001) * drunk_noise_intensity
-		
+
 		var wobble_vector := Vector3(
 			sway_pitch, # + noise_offset,
 			sway_yaw,
 			sway_roll * 0.25
 		)
-		
+
 		camera.rotation_degrees += wobble_vector
 
 

@@ -163,8 +163,7 @@ var last_leap_end_pos := Vector3.ZERO
 # Segment collision
 @onready var segment_hit_area: Area3D = $ChiptopedeSegmentHitArea
 var _segment_col_shapes: Array[CollisionShape3D] = []
-var _segment_health: Array[int] = []
-const SEGMENT_COLLISION_RADIUS: float = 4.0  # Aligns to ChiptopedeSegment mesh radius
+const SEGMENT_COLLISION_RADIUS: float = 4.0 # Aligns to ChiptopedeSegment mesh radius
 # Segment caching
 var despawned_pos := Vector3(0, -50, 0)
 var cached_segments: Array = []
@@ -319,7 +318,7 @@ func _ready() -> void:
 
 func activate() -> void:
 	print_debug("BossChips activate called")
-	super ()
+	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
@@ -1770,8 +1769,6 @@ func _on_chiptopede_shoot_shooting_state_entered() -> void:
 			chiptopede_sfx_player.stream = sfx_chiptopede_shoot.pick_random()
 			chiptopede_sfx_player.play()
 			var _spawn_pos: Vector3 = follow_nodes[0].global_position
-			var proj_inst = fire_projectile_pooled(chiptopede_projectile_pool, _spawn_pos)
-			#var proj_inst = fire_projectile(chiptopede_projectile, _spawn_pos)
 		await get_tree().create_timer(delay_between_burst).timeout
 
 	state_chart.send_event("stop_shooting")
@@ -2153,7 +2150,7 @@ func _create_segment_cache() -> Node3D:
 		var sphere := SphereShape3D.new()
 		sphere.radius = SEGMENT_COLLISION_RADIUS
 		shape.shape = sphere
-		shape.disabled = true  # Disable until we activate the segment
+		shape.disabled = true # Disable until we activate the segment
 		segment_hit_area.add_child(shape)
 		_segment_col_shapes.append(shape)
 
@@ -2573,8 +2570,7 @@ func rolling_chip_get_angles(n: int, spread: float) -> Array[float]:
 	return result
 
 func _on_unstable_split_timer_timeout() -> void:
-	for stack in active_stacks:
-		var chosen_hazard_s
+	pass
 
 
 func _on_chiptopede_segment_hit_area_area_entered(area: Area3D) -> void:
@@ -2586,7 +2582,7 @@ func _on_chiptopede_segment_hit_area_area_entered(area: Area3D) -> void:
 
 	# TODO - add small chip burst particles on hit
 
-func _on_chiptopede_segment_hit_area_area_shape_entered(area_rid: RID, area: Area3D, area_shape_idx: int, local_shape_idx: int) -> void:
+func _on_chiptopede_segment_hit_area_area_shape_entered(_area_rid: RID, area: Area3D, _area_shape_idx: int, local_shape_idx: int) -> void:
 	var _parent = area.get_parent()
 	var _segment = follow_nodes[local_shape_idx].get_child(0)
 	chiptopede_last_hit_segment = _segment
