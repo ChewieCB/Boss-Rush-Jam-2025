@@ -133,7 +133,7 @@ func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos:
 func on_projectile_destroyed(_projectile: BaseBullet, _hit_boss: bool):
 	return
 
-## Before bullet go out of barrel. Not take into account bullet effect yet.
+## After fire. Before bullet go out of barrel. Not take into account bullet effect yet.
 func on_gun_damage_calculation():
 	return
 
