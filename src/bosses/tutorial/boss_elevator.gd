@@ -340,6 +340,7 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 
 func _physics_process(_delta: float) -> void:
 	#super(delta)
+	debug_dist_label.text = str(velocity.length())
 	return
 
 
@@ -555,6 +556,33 @@ func backswipe() -> void:
 		sfx_player.play()
 
 
+### Movement animation
+
+func check_walk_anim() -> void:
+	if velocity.length() < 1.0:
+		if anim_player.current_animation == "elevator_boss/walk_idle_1":
+			_end_walking_anim()
+	elif velocity.length() >= 1.0:
+		if anim_player.current_animation != "elevator_boss/walk_idle_1":
+			_start_walking_anim()
+
+
+func _start_walking_anim() -> void:
+	# Set animation speed
+	anim_player.speed_scale = 1.0
+	# Set animation direction
+	if self.velocity.dot(-self.basis.z) > 0:
+		anim_player.play("elevator_boss/walk_idle_1")
+	else:
+		anim_player.play_backwards("elevator_boss/walk_idle_1")
+
+func _end_walking_anim() -> void:
+	# Reset animation speed
+	anim_player.speed_scale = 1.0
+	anim_player.play("elevator_boss/idle")
+	return
+
+
 #### Phase 1 | Melee Combo
 # TARGETING
 func _on_melee_combo_targeting_state_entered() -> void:
@@ -581,6 +609,8 @@ func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 		state_chart.send_event("start_attack")
 	#elif self.global_position.distance_to(target.global_position) > 12:
 		#select_attack()
+	
+	check_walk_anim()
 
 
 # SWIPE
@@ -612,6 +642,7 @@ func _on_melee_combo_swipe_state_entered() -> void:
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.6)
 	velocity.z = lerp(velocity.z, 0.0, 0.6)
+	check_walk_anim()
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -644,6 +675,7 @@ func _on_melee_combo_hook_state_entered() -> void:
 func _on_melee_combo_hook_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	check_walk_anim()
 
 
 func _on_melee_combo_backswing_state_entered() -> void:
@@ -667,6 +699,7 @@ func _on_melee_combo_backswing_state_entered() -> void:
 func _on_melee_combo_backswing_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	check_walk_anim()
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:
@@ -751,6 +784,7 @@ func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
 	#orbit_player(delta)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	check_walk_anim()
 
 
 #### Phase 1 | Line Slam
@@ -803,7 +837,7 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 
 
 func _on_ranged_nails_targeting_state_physics_processing(_delta: float) -> void:
-	return
+	check_walk_anim()
 
 
 func _on_ranged_nails_shooting_state_entered() -> void:
@@ -1533,10 +1567,12 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_physics_processing(delt
 	orbit_around_position(arena_1_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	check_walk_anim()
 
 
 func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
+	_end_walking_anim()
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
 	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30)
@@ -1612,6 +1648,7 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	check_walk_anim()
 	
 	if shock_floor_hazard_tutorial.damage_area.overlaps_body(self):
 		await get_tree().create_timer(0.4, false).timeout
@@ -1646,6 +1683,7 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delta: float) -> void:
 	velocity = Vector3.ZERO
+	check_walk_anim()
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 

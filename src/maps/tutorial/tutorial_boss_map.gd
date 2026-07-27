@@ -342,6 +342,7 @@ func _on_tutorial_finished() -> void:
 	var camera_goal_pos := Vector3(-36.2, 2.6, 20.4)
 	var camera_goal_rot := Vector3(-2.1, 0, 0)
 	#var final_transform = cutscene_camera.global_transform.looking_at(camera_goal_pos, Vector3.UP)
+	boss.anim_player.play("elevator_boss/walk_idle_1")
 	var boss_move_tween: Tween = get_tree().create_tween()
 	boss_move_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	boss_move_tween.tween_property(

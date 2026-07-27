@@ -1,4 +1,4 @@
-[gd_scene load_steps=269 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=278 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -125,6 +125,14 @@
 [ext_resource type="AudioStream" uid="uid://crmuqk0xvt1ak" path="res://src/bosses/tutorial/assets/sfx/LASER DISARMED.mp3" id="65_sxuab"]
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
+[ext_resource type="Texture2D" uid="uid://b2ihlithx0wyf" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_0.png" id="125_6pklb"]
+[ext_resource type="Texture2D" uid="uid://bjntvarc8y1ua" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_1.png" id="126_kae47"]
+[ext_resource type="Texture2D" uid="uid://dygoyomgows5p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_2.png" id="127_wn326"]
+[ext_resource type="Texture2D" uid="uid://d00ffqqe65cnq" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_3.png" id="128_31kuj"]
+[ext_resource type="Texture2D" uid="uid://c2gmtnmvq36gi" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_4.png" id="129_u02bm"]
+[ext_resource type="Texture2D" uid="uid://b7ofvbqyhrddb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_5.png" id="130_3di5n"]
+[ext_resource type="Texture2D" uid="uid://ce512kfxqu05w" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_6.png" id="131_rjfxe"]
+[ext_resource type="Texture2D" uid="uid://cakmturl4yvjj" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_7.png" id="132_14hj5"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -2385,6 +2393,24 @@ tracks/2/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 0.86, 0.7, 1), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_fekaf"]
+resource_name = "walk_idle_1"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("125_6pklb"), ExtResource("126_kae47"), ExtResource("127_wn326"), ExtResource("128_31kuj"), ExtResource("129_u02bm"), ExtResource("130_3di5n"), ExtResource("131_rjfxe"), ExtResource("132_14hj5")]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
@@ -2416,11 +2442,11 @@ _data = {
 "spin": SubResource("Animation_52j13"),
 "swipe": SubResource("Animation_eps3w"),
 "swipe_end": SubResource("Animation_6mcie"),
-"taunt": SubResource("Animation_50rbb")
+"taunt": SubResource("Animation_50rbb"),
+"walk_idle_1": SubResource("Animation_fekaf")
 }
 
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_7pmj2")]
-collision_mask = 11
 script = ExtResource("2_6u4e1")
 tutorial_health = 3600
 phase_1_health = 1200
@@ -4523,6 +4549,9 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
+[node name="DebugDistanceLabel" parent="." index="15"]
+visible = true
+
 [node name="AnimationPlayer" parent="." index="23"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -4564,6 +4593,7 @@ bus = &"SFX"
 unit_size = 35.0
 bus = &"SFX"
 
+[connection signal="state_exited" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_physics_processing"]

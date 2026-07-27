@@ -4812,8 +4812,8 @@ tracks/1/path = NodePath("entity_187_TutorialBoss/AnimationPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"clips": PackedStringArray("elevator_boss/intro", "elevator_boss/idle", "elevator_boss/impact_no_slam", "elevator_boss/intro"),
-"times": PackedFloat32Array(0, 0.0001, 0.6, 1.15)
+"clips": PackedStringArray("elevator_boss/walk_idle_1", "elevator_boss/impact_no_slam", "elevator_boss/walk_idle_1"),
+"times": PackedFloat32Array(0, 0.6, 1.15)
 }
 tracks/2/type = "value"
 tracks/2/imported = false
