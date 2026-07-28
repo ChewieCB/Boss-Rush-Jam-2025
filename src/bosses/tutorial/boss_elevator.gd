@@ -188,6 +188,12 @@ var shock_hazard_pool: Array[ElevatorShockHazard] = []
 
 var attack_interrupt: bool = false # Flag to interrupt loop-based attacks like the nailgun shots
 
+@onready var anim_tree = $AnimationTree
+@onready var anim_sm = anim_tree["parameters/mechanic_attack_states/playback"]
+@onready var walk_speed = anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"]
+@onready var melee_combo_sm = anim_tree["parameters/mechanic_attack_states/melee_combo/playback"]
+@onready var nails_anim_sm = anim_tree["parameters/mechanic_attack_states/nails/playback"]
+
 
 func _ready() -> void:
 	LoadingHandler.loading_started.connect(cleanup_pools)
