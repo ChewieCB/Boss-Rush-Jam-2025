@@ -190,9 +190,11 @@ var attack_interrupt: bool = false # Flag to interrupt loop-based attacks like t
 
 @onready var anim_tree = $AnimationTree
 @onready var anim_sm = anim_tree["parameters/mechanic_attack_states/playback"]
-@onready var walk_speed = anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"]
 @onready var melee_combo_sm = anim_tree["parameters/mechanic_attack_states/melee_combo/playback"]
+@onready var jump_slam_sm = anim_tree["parameters/mechanic_attack_states/jump_slam/playback"]
 @onready var nails_anim_sm = anim_tree["parameters/mechanic_attack_states/nails/playback"]
+@onready var laser_anim_sm = anim_tree["parameters/mechanic_attack_states/laser/playback"]
+@onready var shock_slam_sm = anim_tree["parameters/mechanic_attack_states/shock_slam/playback"]
 
 
 func _ready() -> void:
@@ -331,6 +333,10 @@ func _on_died() -> void:
 func cleanup_shock_hazards() -> void:
 	for hazard in shock_hazard_pool:
 		hazard.queue_free()
+
+
+func throw_tutorial_barrel() -> void:
+	anim_player.play("elevator_boss/throw_barrel")
 
 
 func _on_barrel_collected(data: BarrelDataResource) -> void:
@@ -564,29 +570,31 @@ func backswipe() -> void:
 
 ### Movement animation
 
-func check_walk_anim() -> void:
-	if velocity.length() < 1.0:
-		if anim_player.current_animation == "elevator_boss/walk_idle_1":
-			_end_walking_anim()
-	elif velocity.length() >= 1.0:
-		if anim_player.current_animation != "elevator_boss/walk_idle_1":
-			_start_walking_anim()
+func set_walk_speed(speed: float) -> void:
+	anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"] = speed
 
 
-func _start_walking_anim() -> void:
-	# Set animation speed
-	anim_player.speed_scale = 1.0
-	# Set animation direction
-	if self.velocity.dot(-self.basis.z) > 0:
-		anim_player.play("elevator_boss/walk_idle_1")
-	else:
-		anim_player.play_backwards("elevator_boss/walk_idle_1")
-
-func _end_walking_anim() -> void:
-	# Reset animation speed
-	anim_player.speed_scale = 1.0
-	anim_player.play("elevator_boss/idle")
-	return
+#func check_walk_anim() -> void:
+	#if velocity.length() < 1.0:
+		#if anim_player.current_animation == "elevator_boss/walk_idle_1":
+			#_end_walking_anim()
+	#elif velocity.length() >= 1.0:
+		#if anim_player.current_animation != "elevator_boss/walk_idle_1":
+			#_start_walking_anim()
+#
+#
+#func _start_walking_anim(speed: float = 1.0) -> void:
+	#set_walk_speed(speed)
+	#anim_sm.travel("walk")
+	### Set animation direction
+	##if self.velocity.dot(-self.basis.z) > 0:
+		##anim_player.play("elevator_boss/walk_idle_1")
+	##else:
+		##anim_player.play_backwards("elevator_boss/walk_idle_1")
+#
+#func _end_walking_anim() -> void:
+	#set_walk_speed(1.0)
+	#anim_sm.travel("idle")
 
 
 #### Phase 1 | Melee Combo
@@ -598,6 +606,7 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
+	anim_sm.travel("walk")
 	
 	if current_phase > 3 and active_sub_door:
 		await get_tree().create_timer(1.6, false).timeout
@@ -616,7 +625,7 @@ func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 	#elif self.global_position.distance_to(target.global_position) > 12:
 		#select_attack()
 	
-	check_walk_anim()
+	#check_walk_anim()
 
 
 # SWIPE
@@ -629,8 +638,10 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/swipe")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/swipe")
+	anim_sm.travel("melee_combo")
+	melee_combo_sm.travel("swipe")
+	#await anim_player.animation_finished
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_far
 	
@@ -640,15 +651,16 @@ func _on_melee_combo_swipe_state_entered() -> void:
 		if randf() < 0.5:
 			state_chart.send_event("melee_backstep")
 		else:
-			anim_player.play("elevator_boss/swipe_end")
-			await anim_player.animation_finished
+			melee_combo_sm.travel("swipe_end")
+			#anim_player.play("elevator_boss/swipe_end")
+			#await anim_player.animation_finished
 			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.6)
 	velocity.z = lerp(velocity.z, 0.0, 0.6)
-	check_walk_anim()
+	#check_walk_anim()
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -663,8 +675,9 @@ func _on_melee_combo_hook_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/kick")
-	await anim_player.animation_finished
+	melee_combo_sm.travel("kick")
+	#anim_player.play("elevator_boss/kick")
+	#await anim_player.animation_finished
 	
 	
 	if target in hurtbox.get_overlapping_bodies():
@@ -673,15 +686,16 @@ func _on_melee_combo_hook_state_entered() -> void:
 		if randf() < 0.5:
 			state_chart.send_event("melee_backstep")
 		else:
-			anim_player.play("elevator_boss/kick_end")
-			await anim_player.animation_finished
+			melee_combo_sm.travel("kick_end")
+			#anim_player.play("elevator_boss/kick_end")
+			#await anim_player.animation_finished
 			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_hook_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
-	check_walk_anim()
+	#check_walk_anim()
 
 
 func _on_melee_combo_backswing_state_entered() -> void:
@@ -693,8 +707,9 @@ func _on_melee_combo_backswing_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/backswipe")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/backswipe")
+	melee_combo_sm.travel("backswipe")
+	#await anim_player.animation_finished
 	
 	if randf() < 0.6:
 		state_chart.send_event("melee_backstep")
@@ -705,14 +720,15 @@ func _on_melee_combo_backswing_state_entered() -> void:
 func _on_melee_combo_backswing_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
-	check_walk_anim()
+	#check_walk_anim()
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
-	anim_player.play("elevator_boss/slam_jump_prep")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/slam_jump_prep")
+	anim_sm.travel("jump_slam")
+	await get_tree().create_timer(anim_player.get_animation("elevator_boss/slam_jump_prep").length).timeout
 	
 	# TODO - raycast this to make sure we don't overshoot
 	var goal_pos = self.global_position + self.basis.z * 5.0
@@ -730,7 +746,8 @@ func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> voi
 	if sfx_player:
 		sfx_player.stream = sfx_jump.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/slam_jump_up")
+	jump_slam_sm.travel("jump_up")
+	#anim_player.play("elevator_boss/slam_jump_up")
 	#await anim_player.animation_finished
 	vel_vertical = 0
 	self.velocity = jump_results[0]
@@ -741,8 +758,9 @@ func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> voi
 	# Subtract the time the jump down animation lasts so we can sync the impact
 	var hangtime: float = time_down - 0.15
 	await get_tree().create_timer(hangtime, false).timeout
-	anim_player.play("elevator_boss/slam_jump_down")
-	await anim_player.animation_finished
+	jump_slam_sm.travel("jump_down")
+	#anim_player.play("elevator_boss/slam_jump_down")
+	#await anim_player.animation_finished
 	return
 
 
@@ -756,10 +774,11 @@ func _on_melee_combo_slam_line_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_slam.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/slam_jump_impact")
+	jump_slam_sm.travel("jump_impact")
+	#anim_player.play("elevator_boss/slam_jump_impact")
 	#sfx_player.stream = sfx_slam.pick_random()
 	#sfx_player.play()
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("combo_end")
 
@@ -779,6 +798,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
+	anim_sm.travel("idle")
 	anim_player.play("RESET")
 	
 	select_attack()
@@ -790,7 +810,7 @@ func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
 	#orbit_player(delta)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
-	check_walk_anim()
+	#check_walk_anim()
 
 
 #### Phase 1 | Line Slam
@@ -828,6 +848,7 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	
 	desired_distance = 40
 	
+	anim_sm.travel("nails")
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	
@@ -835,15 +856,17 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_arm")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/ranged_arm")
+	#await anim_player.animation_finished
+	nails_anim_sm.travel("walk")
 	
 	await get_tree().create_timer(0.3, false).timeout
 	state_chart.send_event("start_shooting")
 
 
 func _on_ranged_nails_targeting_state_physics_processing(_delta: float) -> void:
-	check_walk_anim()
+	#check_walk_anim()
+	pass
 
 
 func _on_ranged_nails_shooting_state_entered() -> void:
@@ -869,8 +892,9 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 				attack_interrupt = false
 				return
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
-			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
-			anim_player.play(anim_name)
+			var anim_name = "shoot_%s" % ["l" if j % 2 == 0 else "r"]
+			nails_anim_sm.travel(anim_name)
+			#anim_player.play(anim_name)
 			var proj = fire_projectile_pooled(nail_proj_pool, spawn_marker.global_position, 0, sfx_nail_shot)
 			if not proj:
 				return
@@ -895,10 +919,12 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_unequip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_disarm")
+	nails_anim_sm.travel("disarm")
+	#anim_player.play("elevator_boss/ranged_disarm")
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-	anim_player.play("RESET")
+	anim_sm.travel("idle")
+	#anim_player.play("RESET")
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
@@ -943,9 +969,10 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	anim_player.play("RESET")
 	sprite.visible = true
 	sprite.modulate.a = 1.0
-	anim_player.play("elevator_boss/laser_arm")
+	anim_sm.travel("laser")
+	#anim_player.play("elevator_boss/laser_arm")
 	
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
@@ -965,7 +992,8 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = laser_charge_stream
 		sfx_player.play()
-	anim_player.play("elevator_boss/laser_telegraph")
+	laser_anim_sm.travel("telegraph")
+	#anim_player.play("elevator_boss/laser_telegraph")
 	
 	# AoE warning visual
 	if aoe_warn_decal:
@@ -1028,7 +1056,8 @@ func _on_laser_aoe_firing_state_entered() -> void:
 		sfx_player.stream = sfx_laser_shoot.pick_random()
 		sfx_player.play()
 	
-	anim_player.play("elevator_boss/laser_fire")
+	laser_anim_sm.travel("fire")
+	#anim_player.play("elevator_boss/laser_fire")
 	#laser_particles.emitting = false
 	var laser_inst: LaserAoE = laser_aoe_pool.pop_back()
 	laser_inst.global_position = laser_spawn.global_position
@@ -1039,7 +1068,7 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	await get_tree().physics_frame
 	laser_inst.fire_laser()
 	
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
 	
 	#laser_particles.visible = false
 	state_chart.send_event("stop_firing")
@@ -1051,8 +1080,9 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	
 	# Laser raises back up into ceiling
-	anim_player.play("elevator_boss/laser_disarm")
-	await anim_player.animation_finished
+	laser_anim_sm.travel("disarm")
+	#anim_player.play("elevator_boss/laser_disarm")
+	await get_tree().create_timer(anim_player.get_animation("elevator_boss/laser_disarm").length).timeout
 	
 	health_component.is_invincible = true
 	health_component.show_damage_text = false
@@ -1060,6 +1090,7 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	
+	anim_sm.travel("idle")
 	anim_player.play("RESET")
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -1426,6 +1457,9 @@ func trigger_pushback(
 
 
 func _on_intro_state_entered() -> void:
+	anim_tree.active = false
+	anim_player.active = true
+	
 	var space_state := get_world_3d().direct_space_state
 	var ray_query := PhysicsRayQueryParameters3D.create(self.global_position, self.global_position + Vector3.DOWN * 20.0)
 	var result = space_state.intersect_ray(ray_query)
@@ -1433,6 +1467,7 @@ func _on_intro_state_entered() -> void:
 		intro_drop_landed_y = result.position.y
 		#draw_debug_sphere(result.position, 0.5, Color.RED)
 	
+	await get_tree().physics_frame
 	_intro_drop()
 	await intro_drop_landed
 	
@@ -1446,7 +1481,8 @@ func _on_intro_state_entered() -> void:
 	
 	anim_player.play("elevator_boss/impact_no_slam")
 	await anim_player.animation_finished
-	anim_player.play("elevator_boss/idle")
+	
+	#anim_player.play("elevator_boss/idle")
 	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("start_phase_1")
 
@@ -1469,7 +1505,8 @@ func _on_arena_1_cutscene_state_entered() -> void:
 	shock_floor_hazard_tutorial.is_active = false
 	state_chart.send_event("stop_moving")
 	velocity = Vector3.ZERO
-	anim_player.play("elevator_boss/intro")
+	anim_sm.travel("intro")
+	#anim_player.play("elevator_boss/intro")
 
 
 func _on_arena_1_cutscene_state_physics_processing(_delta: float) -> void:
@@ -1532,10 +1569,13 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 			taunt_sfx = sfx_taunt_all.pick_random()
 	
 	# Scale the animation length to the sound
-	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / taunt_sfx.get_length()
+	var sfx_length: float = taunt_sfx.get_length()
+	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
 	SoundManager.play_sound(taunt_sfx, "SFX")
-	anim_player.play("elevator_boss/taunt")
-	await anim_player.animation_finished
+	anim_sm.travel("taunt")
+	#anim_player.play("elevator_boss/taunt")
+	#await anim_player.animation_finished
+	await get_tree().create_timer(sfx_length).timeout
 	anim_player.speed_scale = 1.0
 	
 	state_chart.send_event("end_taunt")
@@ -1561,8 +1601,11 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_arm")
-	await anim_player.animation_finished
+	anim_sm.travel("nails")
+	#anim_player.play("elevator_boss/ranged_arm")
+	#await anim_player.animation_finished
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = true
+	nails_anim_sm.travel("walk")
 	
 	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
 	await get_tree().create_timer(0.7, false).timeout
@@ -1573,12 +1616,12 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_physics_processing(delt
 	orbit_around_position(arena_1_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
-	check_walk_anim()
+	#check_walk_anim()
 
 
 func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
-	_end_walking_anim()
+	#_end_walking_anim()
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
 	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30)
@@ -1594,6 +1637,7 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_physics_processing(delta
 
 func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 	prev_attack = "strafing_nails"
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = false
 	state_chart.send_event("start_targeting")
 	_on_ranged_nails_recover_state_entered()
 
@@ -1632,6 +1676,7 @@ func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 	navigation_component.follow_target = true
 	state_chart.send_event("start_moving")
+	anim_sm.travel("walk")
 	shock_floor_hazard_tutorial.damage_per_tick = shock_damage_tutorial
 	prev_attack = "electrify_floor"
 	
@@ -1654,7 +1699,7 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
-	check_walk_anim()
+	#check_walk_anim()
 	
 	if shock_floor_hazard_tutorial.damage_area.overlaps_body(self):
 		await get_tree().create_timer(0.4, false).timeout
@@ -1668,28 +1713,32 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	
 	sfx_player.stream = sfx_electric_slam_buildup.pick_random()
 	sfx_player.play()
-	anim_player.play("elevator_boss/shock_slam_telegraph_start")
-	await anim_player.animation_finished
-	anim_player.play("elevator_boss/shock_slam_telegraph_loop")
-	await anim_player.animation_finished
+	
+	anim_sm.travel("shock_slam")
+	#anim_player.play("elevator_boss/shock_slam_telegraph_start")
+	#await anim_player.animation_finished
+	#anim_player.play("elevator_boss/shock_slam_telegraph_loop")
+	#await anim_player.animation_finished
 	#await get_tree().create_timer(0.3, false).timeout
 	#sfx_player.stream = sfx_electric_slam_telegraph.pick_random()
 	#sfx_player.play()
 	await _telegraph_attack()
 	
-	anim_player.play("elevator_boss/shock_slam_start")
-	await anim_player.animation_finished
+	shock_slam_sm.travel("slam_start")
+	#anim_player.play("elevator_boss/shock_slam_start")
+	#await anim_player.animation_finished
 	
 	await get_tree().create_timer(shock_duration_tutorial, false).timeout
 	
-	anim_player.play("elevator_boss/shock_slam_end")
-	await anim_player.animation_finished
+	shock_slam_sm.travel("slam_end")
+	#anim_player.play("elevator_boss/shock_slam_end")
+	#await anim_player.animation_finished
 	state_chart.send_event("end_shock")
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delta: float) -> void:
 	velocity = Vector3.ZERO
-	check_walk_anim()
+	#check_walk_anim()
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -1742,20 +1791,24 @@ func _on_tutorial_phase_2_melee_combo_swipe_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	
 	state_chart.send_event("start_targeting")
+	#anim_sm.travel("walk")
 	
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/swipe")
-	await anim_player.animation_finished
+	anim_sm.travel("melee_combo")
+	melee_combo_sm.travel("swipe")
+	#anim_player.play("elevator_boss/swipe")
+	#await anim_player.animation_finished
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_tutorial
 	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	else:
-		anim_player.play("elevator_boss/swipe_end")
-		await anim_player.animation_finished
+		melee_combo_sm.travel("swipe_end")
+		#anim_player.play("elevator_boss/swipe_end")
+		#await anim_player.animation_finished
 		state_chart.send_event("combo_end")
 
 
@@ -1768,15 +1821,17 @@ func _on_tutorial_phase_2_melee_combo_hook_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/kick")
-	await anim_player.animation_finished
+	melee_combo_sm.travel("kick")
+	#anim_player.play("elevator_boss/kick")
+	#await anim_player.animation_finished
 	
 	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_backswing")
 	else:
-		anim_player.play("elevator_boss/kick_end")
-		await anim_player.animation_finished
+		melee_combo_sm.travel("kick_end")
+		#anim_player.play("elevator_boss/kick_end")
+		#await anim_player.animation_finished
 		state_chart.send_event("combo_end")
 
 
@@ -1789,8 +1844,9 @@ func _on_tutorial_phase_2_melee_combo_backswing_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/backswipe")
-	await anim_player.animation_finished
+	melee_combo_sm.travel("backswipe")
+	#anim_player.play("elevator_boss/backswipe")
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("combo_end")
 
@@ -1846,8 +1902,9 @@ func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 		state_chart.send_event("end_wave")
 		return
 	
-	anim_player.play("elevator_boss/dash_wave")
-	await anim_player.animation_finished
+	anim_sm.travel("swipe_wave")
+	#anim_player.play("elevator_boss/dash_wave")
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("end_wave")
 
@@ -1950,7 +2007,8 @@ func _on_tutorial_phase_4_electrify_floor_slamming_state_entered() -> void:
 
 
 func _on_main_fight_state_entered() -> void:
-	anim_player.play("elevator_boss/intro")
+	anim_sm.travel("intro")
+	#anim_player.play("elevator_boss/intro")
 
 
 func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
@@ -1969,8 +2027,11 @@ func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_arm")
-	await anim_player.animation_finished
+	anim_sm.travel("nails")
+	#anim_player.play("elevator_boss/ranged_arm")
+	#await anim_player.animation_finished
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = true
+	nails_anim_sm.travel("walk")
 	
 	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
 	await get_tree().create_timer(0.6, false).timeout
@@ -2000,6 +2061,7 @@ func _on_tutorial_phase_4_strafing_nails_shooting_state_physics_processing(delta
 
 func _on_tutorial_phase_4_strafing_nails_recover_state_entered() -> void:
 	prev_attack = "strafing_nails"
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = false
 	state_chart.send_event("start_targeting")
 	_on_ranged_nails_recover_state_entered()
 
@@ -2040,8 +2102,9 @@ func _on_tutorial_phase_4_dash_wave_swipe_wave_state_entered() -> void:
 		state_chart.send_event("end_wave")
 		return
 	
-	anim_player.play("elevator_boss/dash_wave_fast")
-	await anim_player.animation_finished
+	anim_sm.travel("swipe_wave")
+	#anim_player.play("elevator_boss/dash_wave_fast")
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("end_wave")
 

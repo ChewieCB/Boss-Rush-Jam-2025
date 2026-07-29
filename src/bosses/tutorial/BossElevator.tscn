@@ -1,4 +1,4 @@
-[gd_scene load_steps=281 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=303 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -133,7 +133,26 @@
 [ext_resource type="Texture2D" uid="uid://b7ofvbqyhrddb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_5.png" id="130_3di5n"]
 [ext_resource type="Texture2D" uid="uid://ce512kfxqu05w" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_6.png" id="131_rjfxe"]
 [ext_resource type="Texture2D" uid="uid://cakmturl4yvjj" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_7.png" id="132_14hj5"]
+[ext_resource type="Texture2D" uid="uid://cmitv0qljggvt" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_0.png" id="133_ym8p7"]
+[ext_resource type="Texture2D" uid="uid://c3ysk7myowy2s" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_1.png" id="134_6cfr3"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://cbyxltj8nb4q8" path="res://src/bosses/tutorial/assets/animation_tree/OLDAnimTreeRoot.tres" id="134_ojm1l"]
+[ext_resource type="Texture2D" uid="uid://b287chthcdelo" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_2.png" id="135_k4cax"]
+[ext_resource type="Texture2D" uid="uid://g5h47add72if" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_3.png" id="136_xxv47"]
+[ext_resource type="Texture2D" uid="uid://df2au3jykx3yu" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_4.png" id="137_q4i82"]
+[ext_resource type="Texture2D" uid="uid://do6fnuf8ohrnf" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_5.png" id="138_2uwns"]
+[ext_resource type="Texture2D" uid="uid://bc084mwbiy6d5" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_6.png" id="139_r17ad"]
+[ext_resource type="Texture2D" uid="uid://b4xlhl6apl2as" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_7.png" id="140_8spqv"]
+[ext_resource type="Texture2D" uid="uid://0jqsenjk1gci" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_0.png" id="141_i7nbs"]
+[ext_resource type="Texture2D" uid="uid://dsk50hdo448lb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_1.png" id="142_h5une"]
+[ext_resource type="Texture2D" uid="uid://cnl3nihmuo8c5" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_2.png" id="143_uf837"]
+[ext_resource type="Texture2D" uid="uid://cwwxhcdjpnp1p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_3.png" id="144_u5evu"]
+[ext_resource type="Texture2D" uid="uid://buinirjjrof0f" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_4.png" id="145_0tdny"]
+[ext_resource type="Texture2D" uid="uid://h2x2t6kcdebk" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_5.png" id="146_fifgs"]
+[ext_resource type="Texture2D" uid="uid://banu5ttakbecx" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_6.png" id="147_mgcby"]
+[ext_resource type="Texture2D" uid="uid://o2ds1v8qgtg8" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_7.png" id="148_135ef"]
+[ext_resource type="Texture2D" uid="uid://cgooergjy3i7y" path="res://src/bosses/tutorial/assets/sprites/THROW_0.png" id="149_pgdap"]
+[ext_resource type="Texture2D" uid="uid://dqr212k4tuljm" path="res://src/bosses/tutorial/assets/sprites/THROW_2.png" id="150_iy7uj"]
+[ext_resource type="Texture2D" uid="uid://caew7woq52gtr" path="res://src/bosses/tutorial/assets/sprites/THROW_1.png" id="151_cqgah"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -1345,10 +1364,10 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.075, 0.125, 0.175, 0.225, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.075, 0.125, 0.175, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("31_6s54o"), ExtResource("30_1gnvj"), ExtResource("29_16jht"), ExtResource("28_i0kuu"), ExtResource("17_dmhhe"), ExtResource("16_ukgug")]
+"values": [ExtResource("31_6s54o"), ExtResource("30_1gnvj"), ExtResource("29_16jht"), ExtResource("28_i0kuu"), ExtResource("17_dmhhe")]
 }
 
 [sub_resource type="Animation" id="Animation_ywtcr"]
@@ -1628,6 +1647,119 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ex4gi"]
+resource_name = "laser_idle"
+length = 0.05
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("23_td4gs")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.5, 1.5, 1.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("LaserCollider:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:collision_mask")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("LaserCollider:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector3(0, 3.766, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_ua1dm"]
@@ -2478,9 +2610,10 @@ tracks/0/keys = {
 "values": [ExtResource("125_6pklb"), ExtResource("126_kae47"), ExtResource("127_wn326"), ExtResource("128_31kuj"), ExtResource("129_u02bm"), ExtResource("130_3di5n"), ExtResource("131_rjfxe"), ExtResource("132_14hj5")]
 }
 
-[sub_resource type="Animation" id="Animation_ex4gi"]
-resource_name = "laser_idle"
-length = 0.05
+[sub_resource type="Animation" id="Animation_5x5qg"]
+resource_name = "walk_ranged_temp"
+length = 0.8
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2489,106 +2622,59 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("23_td4gs")]
+"values": [ExtResource("133_ym8p7"), ExtResource("134_6cfr3"), ExtResource("135_k4cax"), ExtResource("136_xxv47"), ExtResource("137_q4i82"), ExtResource("138_2uwns"), ExtResource("139_r17ad"), ExtResource("140_8spqv")]
 }
-tracks/1/type = "value"
+
+[sub_resource type="Animation" id="Animation_imqkd"]
+resource_name = "walk_idle_2"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("141_i7nbs"), ExtResource("142_h5une"), ExtResource("143_uf837"), ExtResource("144_u5evu"), ExtResource("145_0tdny"), ExtResource("146_fifgs"), ExtResource("147_mgcby"), ExtResource("148_135ef")]
+}
+
+[sub_resource type="Animation" id="Animation_russa"]
+resource_name = "throw_barrel"
+length = 0.9
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("149_pgdap"), ExtResource("150_iy7uj"), ExtResource("151_cqgah"), ExtResource("150_iy7uj"), ExtResource("149_pgdap")]
+}
+tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:scale")
+tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(1.5, 1.5, 1.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite3D:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("LaserSpawn/LaserEndParticles:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("LaserCollider:disabled")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath(".:collision_mask")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [8]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("LaserCollider:position")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(0, 3.766, 0)]
+"values": [{
+"args": [Vector3(-35.9, 0, 20.7)],
+"method": &"drop_barrel"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
@@ -2625,7 +2711,10 @@ _data = {
 "swipe": SubResource("Animation_eps3w"),
 "swipe_end": SubResource("Animation_6mcie"),
 "taunt": SubResource("Animation_50rbb"),
-"walk_idle_1": SubResource("Animation_fekaf")
+"throw_barrel": SubResource("Animation_russa"),
+"walk_idle_1": SubResource("Animation_fekaf"),
+"walk_idle_2": SubResource("Animation_imqkd"),
+"walk_ranged_temp": SubResource("Animation_5x5qg")
 }
 
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_7pmj2")]
@@ -4731,9 +4820,6 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="DebugDistanceLabel" parent="." index="15"]
-visible = true
-
 [node name="AnimationPlayer" parent="." index="23"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -4776,10 +4862,12 @@ unit_size = 35.0
 bus = &"SFX"
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="36"]
+active = false
 tree_root = ExtResource("134_ojm1l")
+advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
 parameters/mechanic_attack_states/walk/walk_speed/scale = 1.0
-parameters/mechanic_attack_states/walk_taunt_TODO/walk_taunt_speed/scale = 1.0
+parameters/mechanic_attack_states/walk_taunt/walk_taunt_speed/scale = 1.0
 
 [connection signal="state_exited" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]

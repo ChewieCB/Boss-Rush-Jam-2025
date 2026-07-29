@@ -135,6 +135,9 @@ func _ready() -> void:
 		cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
 		#await ScreenTransition.transition_finished
 		player.stat_ui.show_all_ui()
+		boss.anim_tree.active = true
+		boss.anim_player.active = false
+		await get_tree().physics_frame
 
 
 func _input(event: InputEvent) -> void:
@@ -217,6 +220,10 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 	if is_cutscene_active:
 		$AnimationPlayer.play("mechanic_enter")
 		await $AnimationPlayer.animation_finished
+	
+	boss.anim_tree.active = true
+	boss.anim_player.active = false
+	await get_tree().physics_frame
 
 	LuckHandler.enabled = true
 	# We need to set these player vars AFTER the cutscene cam exits so they don't get re-set
@@ -342,7 +349,9 @@ func _on_tutorial_finished() -> void:
 	var camera_goal_pos := Vector3(-36.2, 2.6, 20.4)
 	var camera_goal_rot := Vector3(-2.1, 0, 0)
 	#var final_transform = cutscene_camera.global_transform.looking_at(camera_goal_pos, Vector3.UP)
-	boss.anim_player.play("elevator_boss/walk_idle_1")
+	boss.anim_tree.active = false
+	boss.anim_player.active = true
+	boss.anim_player.play("elevator_boss/walk_idle_2")
 	var boss_move_tween: Tween = get_tree().create_tween()
 	boss_move_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	boss_move_tween.tween_property(
