@@ -1,10 +1,11 @@
-[gd_scene load_steps=522 format=4 uid="uid://bcpcv8dc854s7"]
+[gd_scene load_steps=523 format=4 uid="uid://bcpcv8dc854s7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
 [ext_resource type="LightmapGIData" uid="uid://bwbog4mdr3cqx" path="res://src/maps/backroom/Backroom.lmbake" id="3_qbe7n"]
 [ext_resource type="PackedScene" uid="uid://dfpynfqwpew5x" path="res://src/ui/common/info_text/InfoBoxUI.tscn" id="6_e5lbx"]
 [ext_resource type="PackedScene" uid="uid://bcwjmyo4msefk" path="res://src/maps/lobby/ui/GameWinUI.tscn" id="7_7vejp"]
+[ext_resource type="PackedScene" uid="uid://7r730q45swgu" path="res://src/ui/slot_machine/SlotMachineUI.tscn" id="7_n6pj5"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="8_0ncek"]
 [ext_resource type="PackedScene" uid="uid://djcipi6xiw7yn" path="res://src/ui/difficulty_menu/DifficultyMenu.tscn" id="8_sfu20"]
 [ext_resource type="Texture2D" uid="uid://bhowy7oa70k85" path="res://src/env/decor/assets/stool.png" id="9_oxvqi"]
@@ -7480,7 +7481,6 @@ interior = true
 light_data = ExtResource("3_qbe7n")
 
 [node name="UI" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="InfoBoxUI" parent="UI" instance=ExtResource("6_e5lbx")]
 visible = false
@@ -7490,6 +7490,8 @@ visible = false
 
 [node name="DifficultyMenu" parent="UI" instance=ExtResource("8_sfu20")]
 visible = false
+
+[node name="SlotMachineUI" parent="UI" instance=ExtResource("7_n6pj5")]
 
 [node name="DEBUG_FreeCam" parent="." instance=ExtResource("20_afrti")]
 
