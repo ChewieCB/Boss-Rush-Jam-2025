@@ -1,4 +1,4 @@
-[gd_scene load_steps=303 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=304 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -934,7 +934,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(-7.45058e-09, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("35_aa4xm"), ExtResource("73_0d1k8")]
+"values": [ExtResource("72_gxdkx"), ExtResource("73_0d1k8")]
 }
 
 [sub_resource type="Animation" id="Animation_ffby2"]
@@ -1008,10 +1008,10 @@ tracks/5/path = NodePath("SmokeParticles:emitting")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_vamcx"]
@@ -1037,10 +1037,28 @@ tracks/1/path = NodePath("SmokeParticles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_i2sc7"]
+resource_name = "hurt"
+length = 0.1
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-7.45058e-09),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [ExtResource("72_gxdkx")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
@@ -1048,7 +1066,8 @@ _data = {
 "RESET": SubResource("Animation_8e3f2"),
 "death": SubResource("Animation_dshkv"),
 "drop_smoke": SubResource("Animation_ffby2"),
-"drop_smoke_enter": SubResource("Animation_vamcx")
+"drop_smoke_enter": SubResource("Animation_vamcx"),
+"hurt": SubResource("Animation_i2sc7")
 }
 
 [sub_resource type="Animation" id="Animation_85u7l"]
@@ -1262,6 +1281,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("16_ukgug")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_jt2i0"]
@@ -2592,60 +2623,6 @@ tracks/2/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 0.86, 0.7, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_fekaf"]
-resource_name = "walk_idle_1"
-length = 0.8
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("125_6pklb"), ExtResource("126_kae47"), ExtResource("127_wn326"), ExtResource("128_31kuj"), ExtResource("129_u02bm"), ExtResource("130_3di5n"), ExtResource("131_rjfxe"), ExtResource("132_14hj5")]
-}
-
-[sub_resource type="Animation" id="Animation_5x5qg"]
-resource_name = "walk_ranged_temp"
-length = 0.8
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("133_ym8p7"), ExtResource("134_6cfr3"), ExtResource("135_k4cax"), ExtResource("136_xxv47"), ExtResource("137_q4i82"), ExtResource("138_2uwns"), ExtResource("139_r17ad"), ExtResource("140_8spqv")]
-}
-
-[sub_resource type="Animation" id="Animation_imqkd"]
-resource_name = "walk_idle_2"
-length = 0.8
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("141_i7nbs"), ExtResource("142_h5une"), ExtResource("143_uf837"), ExtResource("144_u5evu"), ExtResource("145_0tdny"), ExtResource("146_fifgs"), ExtResource("147_mgcby"), ExtResource("148_135ef")]
-}
-
 [sub_resource type="Animation" id="Animation_russa"]
 resource_name = "throw_barrel"
 length = 0.9
@@ -2675,6 +2652,60 @@ tracks/1/keys = {
 "args": [Vector3(-35.9, 0, 20.7)],
 "method": &"drop_barrel"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_fekaf"]
+resource_name = "walk_idle_1"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("125_6pklb"), ExtResource("126_kae47"), ExtResource("127_wn326"), ExtResource("128_31kuj"), ExtResource("129_u02bm"), ExtResource("130_3di5n"), ExtResource("131_rjfxe"), ExtResource("132_14hj5")]
+}
+
+[sub_resource type="Animation" id="Animation_imqkd"]
+resource_name = "walk_idle_2"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("141_i7nbs"), ExtResource("142_h5une"), ExtResource("143_uf837"), ExtResource("144_u5evu"), ExtResource("145_0tdny"), ExtResource("146_fifgs"), ExtResource("147_mgcby"), ExtResource("148_135ef")]
+}
+
+[sub_resource type="Animation" id="Animation_5x5qg"]
+resource_name = "walk_ranged_temp"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("133_ym8p7"), ExtResource("134_6cfr3"), ExtResource("135_k4cax"), ExtResource("136_xxv47"), ExtResource("137_q4i82"), ExtResource("138_2uwns"), ExtResource("139_r17ad"), ExtResource("140_8spqv")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
@@ -2953,6 +2984,7 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
+enabled = true
 metadata/_edit_group_ = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
@@ -4866,6 +4898,7 @@ active = false
 tree_root = ExtResource("134_ojm1l")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
+parameters/hurt_blend/blend_amount = 0.0
 parameters/mechanic_attack_states/walk/walk_speed/scale = 1.0
 parameters/mechanic_attack_states/walk_taunt/walk_taunt_speed/scale = 1.0
 

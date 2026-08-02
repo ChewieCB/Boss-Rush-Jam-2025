@@ -411,6 +411,8 @@ func _on_tutorial_finished() -> void:
 	electric_box_trigger.active = true
 	boss.state_chart.send_event("start_main_fight")
 	boss.current_phase = 4
+	boss.anim_tree.active = true
+	boss.anim_player.active = false
 
 
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
