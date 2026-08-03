@@ -869,7 +869,7 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 		sfx_player.play()
 	#anim_player.play("elevator_boss/ranged_arm")
 	#await anim_player.animation_finished
-	nails_anim_sm.travel("walk")
+	#nails_anim_sm.travel("walk")
 	
 	await get_tree().create_timer(0.3, false).timeout
 	state_chart.send_event("start_shooting")
@@ -1082,6 +1082,7 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	#await anim_player.animation_finished
 	
 	#laser_particles.visible = false
+	await get_tree().create_timer(1.0, false).timeout
 	state_chart.send_event("stop_firing")
 
 
@@ -1119,7 +1120,7 @@ func _on_laser_aoe_recover_state_entered() -> void:
 func _on_laser_aoe_drop_to_melee_state_entered() -> void:
 	anim_player.play("RESET")
 	sprite.visible = true
-	#anim_player.play("drop_smoke_enter")
+	velocity = Vector3.ZERO
 	anim_sm.travel("drop_smoke_enter")
 	
 	#await anim_player.animation_finished
@@ -1208,6 +1209,7 @@ func _on_smokescreen_smoke_state_entered() -> void:
 func _on_smokescreen_move_no_smoke_state_entered() -> void:
 	# Retreat back into elevator
 	if prev_attack == "start_dual_nails_attack":
+		anim_sm.travel("walk")
 		var tween = get_tree().create_tween()
 		var forward_dir: Vector3 = - active_sub_door.basis.z
 		var peek_pos: Vector3 = self.global_position - forward_dir * 3
@@ -1215,6 +1217,7 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 			self, "global_position", peek_pos, 0.5
 		).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		await tween.finished
+		anim_sm.travel("idle")
 		
 		# Close the doors
 		active_sub_light.yellow()
@@ -1225,13 +1228,16 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 		# TODO - configure delay and SFX for door opening
 		await get_tree().create_timer(0.3, false).timeout
 	
+	sprite.modulate = Color("#ffffff")
+	
 	match next_attack:
 		"start_dual_nails_attack":
 			# Move the boss to a new spawn point and turn to face the player
 			active_spawn = get_elevator_spawn_no_repeats()
 			self.global_position = active_spawn.global_position
 			self.global_rotation = active_spawn.global_rotation
-			anim_sm.travel("idle")
+			anim_sm.travel("nails")
+			nails_anim_sm.travel("idle")
 			prev_attack = next_attack
 			state_chart.send_event("open_doors")
 		
@@ -1253,13 +1259,13 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
 	await get_tree().create_timer(0.1, false).timeout
-	nails_anim_sm.travel("walk")
 	# Trigger the sub elevator doors to open
 	active_sub_door.open()
 	
 	await active_sub_door.anim_player.animation_finished
 	
 	# Move the boss out of the elevator to fire
+	nails_anim_sm.travel("walk")
 	var tween = get_tree().create_tween()
 	var forward_dir: Vector3 = - active_sub_door.basis.z
 	var peek_pos: Vector3 = self.global_position + forward_dir * 3.5
