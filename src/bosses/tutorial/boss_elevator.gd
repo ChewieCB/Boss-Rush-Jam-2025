@@ -1724,7 +1724,6 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(del
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	state_chart.send_event("start_targeting")
-	anim_sm.travel("idle")
 	
 	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	await get_tree().create_timer(0.6, false).timeout
