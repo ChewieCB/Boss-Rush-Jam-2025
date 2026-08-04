@@ -3008,7 +3008,6 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
-enabled = true
 metadata/_edit_group_ = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
