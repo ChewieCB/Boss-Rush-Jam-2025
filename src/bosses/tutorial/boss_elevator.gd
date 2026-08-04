@@ -35,6 +35,7 @@ signal end_smoke
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
+var is_being_tweened: bool = false
 
 var boss_origin: Node
 var elevator_spawns: Array[Node]
@@ -91,7 +92,7 @@ var sfx_taunt_phase_3_active: Array[AudioStream] = sfx_taunt_phase_3
 var sfx_taunt_phase_4_active: Array[AudioStream] = sfx_taunt_phase_4
 @export var sfx_taunt_phase_5: Array[AudioStream]
 var sfx_taunt_phase_5_active: Array[AudioStream] = sfx_taunt_phase_5
-var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3 + sfx_taunt_phase_4 + sfx_taunt_phase_5
+@onready var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3 + sfx_taunt_phase_4 + sfx_taunt_phase_5
 # TODO - combine these in a resource class
 @export var sfx_player_defeated_taunt: Array[AudioStream]
 @export var player_defeated_taunt_captions: Array[String]
@@ -190,7 +191,6 @@ var attack_interrupt: bool = false # Flag to interrupt loop-based attacks like t
 
 @onready var anim_tree = $AnimationTree
 @onready var anim_sm = anim_tree["parameters/mechanic_attack_states/playback"]
-@onready var amim_hurt_blend = anim_tree["parameters/hurt_blend/blend_amount"]
 @onready var melee_combo_sm = anim_tree["parameters/mechanic_attack_states/melee_combo/playback"]
 @onready var jump_slam_sm = anim_tree["parameters/mechanic_attack_states/jump_slam/playback"]
 @onready var nails_anim_sm = anim_tree["parameters/mechanic_attack_states/nails/playback"]
@@ -229,6 +229,8 @@ func _ready() -> void:
 	
 	for i in range(max_sequential_ranged_phases):
 		_init_laser_aoe()
+	
+	anim_tree["parameters/mechanic_attack_states/nails/walk/Add2/add_amount"] = 1.0
 
 
 func cleanup_pools() -> void:
@@ -304,20 +306,20 @@ func _on_stagger() -> void:
 	
 	if hurt_sprite:
 		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
-			amim_hurt_blend = 1.0
+			anim_tree["parameters/hurt_blend/blend_amount"] = 1.0
 			hurt_frame_timer.start(hurt_frame_window)
 
 
 func force_stagger() -> void:
 	if hurt_sprite:
 		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-			amim_hurt_blend = 1.0
+			anim_tree["parameters/hurt_blend/blend_amount"] = 1.0
 			sprite.texture = hurt_sprite
 			hurt_frame_timer.start(hurt_frame_window)
 
 
 func _on_hurt_frame_timer_timeout() -> void:
-	amim_hurt_blend = 0.0
+	anim_tree["parameters/hurt_blend/blend_amount"] = 0.0
 	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
 
 
@@ -516,6 +518,8 @@ func select_attack_phase_5() -> void:
 					var tween = get_tree().create_tween()
 					var forward_dir: Vector3 = - active_sub_door.basis.z
 					var peek_pos: Vector3 = self.global_position + forward_dir * 2
+					anim_sm.travel("walk")
+					is_being_tweened = true
 					tween.tween_property(
 						self, "global_position", peek_pos, 0.2
 					).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -523,6 +527,9 @@ func select_attack_phase_5() -> void:
 					active_sub_door.close()
 					tween.parallel().tween_callback(active_sub_light.red).set_delay(1.2)  # door.close() anim length
 					await tween.finished
+					is_being_tweened = false
+					velocity = Vector3.ZERO
+					anim_sm.travel("idle")
 				# TODO - intro slam state to handle dropping from high up
 				previous_phase = "melee_phase"
 				health_component.is_invincible = false
@@ -618,13 +625,6 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
 	anim_sm.travel("walk")
-	
-	if current_phase > 3 and active_sub_door:
-		await get_tree().create_timer(1.6, false).timeout
-		active_sub_light.yellow()
-		active_sub_door.close()
-		await active_sub_door.anim_player.animation_finished
-		active_sub_light.red()
 
 
 func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
@@ -635,8 +635,6 @@ func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 		state_chart.send_event("start_attack")
 	#elif self.global_position.distance_to(target.global_position) > 12:
 		#select_attack()
-	
-	#check_walk_anim()
 
 
 # SWIPE
@@ -888,7 +886,10 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 	state_chart.send_event("stop_shooting")
 
 
-func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float, shot_speed: float = 50.0) -> void:
+func shoot_nail_projectile(
+	bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float, 
+	shot_speed: float = 50.0, anim_handler: Callable = _handle_nails_anim_idle
+	) -> void:
 	for i in range(bursts):
 		for j in range(shot_per_burst):
 			# Catch to stop projectiles firing if the boss is killed mid-attack
@@ -903,8 +904,7 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 				attack_interrupt = false
 				return
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
-			var anim_name = "shoot_%s" % ["l" if j % 2 == 0 else "r"]
-			nails_anim_sm.travel(anim_name)
+			anim_handler.call(j)
 			#anim_player.play(anim_name)
 			var proj = fire_projectile_pooled(nail_proj_pool, spawn_marker.global_position, 0, sfx_nail_shot)
 			if not proj:
@@ -916,6 +916,14 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 				sfx_player.play()
 			proj.init(nail_damage * GameManager.get_risk_dmg_mult())
 		await get_tree().create_timer(delay_per_burst, false).timeout
+
+func _handle_nails_anim_idle(j: int) -> void:
+	var anim_name = "shoot_%s" % ["l" if j % 2 == 0 else "r"]
+	nails_anim_sm.travel(anim_name)
+
+func _handle_nails_anim_walking(j: int) -> void:
+	anim_tree["parameters/mechanic_attack_states/nails/walk/shoot_dir/blend_amount"] = 0 if j % 2 == 0 else 1
+	anim_tree["parameters/mechanic_attack_states/nails/walk/nail_shot/request"] = AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE
 
 
 func _on_ranged_nails_shooting_state_physics_processing(_delta: float) -> void:
@@ -979,7 +987,7 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	
 	anim_player.play("RESET")
 	sprite.visible = true
-	sprite.modulate.a = 1.0
+	sprite.modulate = Color("#ffffff")
 	anim_sm.travel("laser")
 	#anim_player.play("elevator_boss/laser_arm")
 	
@@ -1172,6 +1180,7 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	# Emit a large amount of smoke particles that conceal the boss,
 	# fade/hide the boss sprite, and disable boss collisions with player 
 	# and projectiles
+	await taunt()
 	anim_sm.travel("drop_smoke")
 	health_component.is_invincible = true
 	health_component.show_damage_text = false
@@ -1188,7 +1197,6 @@ func _on_smokescreen_smoke_state_entered() -> void:
 			state_event = "open_doors"
 			# TODO - configure delay and SFX for door opening
 			active_sub_light.yellow()
-			sprite.modulate.a = 1.0
 		"start_laser_aoe_attack":
 			new_spawn = get_furthest_laser_spawn()
 			state_event = "start_no_smoke"
@@ -1213,10 +1221,13 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 		var tween = get_tree().create_tween()
 		var forward_dir: Vector3 = - active_sub_door.basis.z
 		var peek_pos: Vector3 = self.global_position - forward_dir * 3
+		is_being_tweened = true
 		tween.tween_property(
 			self, "global_position", peek_pos, 0.5
 		).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		await tween.finished
+		is_being_tweened = false
+		velocity = Vector3.ZERO
 		anim_sm.travel("idle")
 		
 		# Close the doors
@@ -1228,16 +1239,13 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 		# TODO - configure delay and SFX for door opening
 		await get_tree().create_timer(0.3, false).timeout
 	
-	sprite.modulate = Color("#ffffff")
-	
 	match next_attack:
 		"start_dual_nails_attack":
 			# Move the boss to a new spawn point and turn to face the player
 			active_spawn = get_elevator_spawn_no_repeats()
 			self.global_position = active_spawn.global_position
 			self.global_rotation = active_spawn.global_rotation
-			anim_sm.travel("nails")
-			nails_anim_sm.travel("idle")
+			anim_sm.travel("idle")
 			prev_attack = next_attack
 			state_chart.send_event("open_doors")
 		
@@ -1265,15 +1273,17 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	await active_sub_door.anim_player.animation_finished
 	
 	# Move the boss out of the elevator to fire
-	nails_anim_sm.travel("walk")
+	anim_sm.travel("walk")
 	var tween = get_tree().create_tween()
 	var forward_dir: Vector3 = - active_sub_door.basis.z
 	var peek_pos: Vector3 = self.global_position + forward_dir * 3.5
+	is_being_tweened = true
 	tween.tween_property(
 		self, "global_position", peek_pos, 0.5
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tween.finished
-	nails_anim_sm.travel("idle")
+	is_being_tweened = false
+	anim_sm.travel("idle")
 	
 	prev_attack = next_attack
 	state_chart.send_event(next_attack)
@@ -1563,6 +1573,11 @@ func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 
 
 func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
+	await taunt()
+	state_chart.send_event("end_taunt")
+
+
+func taunt() -> void:
 	# Pick a random taunt sound
 	var taunt_sfx: AudioStream
 	match current_phase:
@@ -1601,7 +1616,7 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 	await get_tree().create_timer(sfx_length, false).timeout
 	anim_player.speed_scale = 1.0
 	
-	state_chart.send_event("end_taunt")
+	return
 
 func _on_tutorial_phase_1_taunt_taunting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
@@ -1647,7 +1662,7 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
 	#_end_walking_anim()
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
-	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30)
+	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30, _handle_nails_anim_walking)
 	
 	state_chart.send_event("stop_shooting")
 
@@ -2070,7 +2085,7 @@ func _on_tutorial_phase_4_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
-	await shoot_nail_projectile(2, 8, 0.35, 0.6, 55)
+	await shoot_nail_projectile(2, 8, 0.35, 0.6, 55, _handle_nails_anim_walking)
 	
 	state_chart.send_event("stop_shooting")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=304 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=310 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -125,6 +125,7 @@
 [ext_resource type="AudioStream" uid="uid://crmuqk0xvt1ak" path="res://src/bosses/tutorial/assets/sfx/LASER DISARMED.mp3" id="65_sxuab"]
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
+[ext_resource type="Texture2D" uid="uid://dyqem8rv1515n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_idle_top.png" id="84_siud8"]
 [ext_resource type="Texture2D" uid="uid://b2ihlithx0wyf" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_0.png" id="125_6pklb"]
 [ext_resource type="Texture2D" uid="uid://bjntvarc8y1ua" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_1.png" id="126_kae47"]
 [ext_resource type="Texture2D" uid="uid://dygoyomgows5p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_2.png" id="127_wn326"]
@@ -133,26 +134,28 @@
 [ext_resource type="Texture2D" uid="uid://b7ofvbqyhrddb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_5.png" id="130_3di5n"]
 [ext_resource type="Texture2D" uid="uid://ce512kfxqu05w" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_6.png" id="131_rjfxe"]
 [ext_resource type="Texture2D" uid="uid://cakmturl4yvjj" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_7.png" id="132_14hj5"]
-[ext_resource type="Texture2D" uid="uid://cmitv0qljggvt" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_0.png" id="133_ym8p7"]
-[ext_resource type="Texture2D" uid="uid://c3ysk7myowy2s" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_1.png" id="134_6cfr3"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://cbyxltj8nb4q8" path="res://src/bosses/tutorial/assets/animation_tree/OLDAnimTreeRoot.tres" id="134_ojm1l"]
-[ext_resource type="Texture2D" uid="uid://b287chthcdelo" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_2.png" id="135_k4cax"]
-[ext_resource type="Texture2D" uid="uid://g5h47add72if" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_3.png" id="136_xxv47"]
-[ext_resource type="Texture2D" uid="uid://df2au3jykx3yu" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_4.png" id="137_q4i82"]
-[ext_resource type="Texture2D" uid="uid://do6fnuf8ohrnf" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_5.png" id="138_2uwns"]
-[ext_resource type="Texture2D" uid="uid://bc084mwbiy6d5" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_6.png" id="139_r17ad"]
-[ext_resource type="Texture2D" uid="uid://b4xlhl6apl2as" path="res://src/bosses/tutorial/assets/sprites/walk/nails_walk_temp/temp_nails_walk_7.png" id="140_8spqv"]
 [ext_resource type="Texture2D" uid="uid://0jqsenjk1gci" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_0.png" id="141_i7nbs"]
 [ext_resource type="Texture2D" uid="uid://dsk50hdo448lb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_1.png" id="142_h5une"]
 [ext_resource type="Texture2D" uid="uid://cnl3nihmuo8c5" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_2.png" id="143_uf837"]
+[ext_resource type="Texture2D" uid="uid://cneqh80ph4lyr" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_0.png" id="144_op6ct"]
 [ext_resource type="Texture2D" uid="uid://cwwxhcdjpnp1p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_3.png" id="144_u5evu"]
 [ext_resource type="Texture2D" uid="uid://buinirjjrof0f" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_4.png" id="145_0tdny"]
+[ext_resource type="Texture2D" uid="uid://do7yirkmonvx1" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_1.png" id="145_4055j"]
+[ext_resource type="Texture2D" uid="uid://mr68c6lcrbda" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_2.png" id="146_f074h"]
 [ext_resource type="Texture2D" uid="uid://h2x2t6kcdebk" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_5.png" id="146_fifgs"]
+[ext_resource type="Texture2D" uid="uid://b8qveq7c2fl7n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_3.png" id="147_lpk1w"]
 [ext_resource type="Texture2D" uid="uid://banu5ttakbecx" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_6.png" id="147_mgcby"]
 [ext_resource type="Texture2D" uid="uid://o2ds1v8qgtg8" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_7.png" id="148_135ef"]
+[ext_resource type="Texture2D" uid="uid://cia6p4jq0m0qg" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_4.png" id="148_oeqix"]
+[ext_resource type="Texture2D" uid="uid://cel67don7cnbg" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_5.png" id="149_b0gbw"]
 [ext_resource type="Texture2D" uid="uid://cgooergjy3i7y" path="res://src/bosses/tutorial/assets/sprites/THROW_0.png" id="149_pgdap"]
 [ext_resource type="Texture2D" uid="uid://dqr212k4tuljm" path="res://src/bosses/tutorial/assets/sprites/THROW_2.png" id="150_iy7uj"]
+[ext_resource type="Texture2D" uid="uid://di6s5q1j0bal5" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_6.png" id="150_vwx8v"]
 [ext_resource type="Texture2D" uid="uid://caew7woq52gtr" path="res://src/bosses/tutorial/assets/sprites/THROW_1.png" id="151_cqgah"]
+[ext_resource type="Texture2D" uid="uid://dlpqmmivn5fqt" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_7.png" id="151_wqtli"]
+[ext_resource type="Texture2D" uid="uid://db7u3pgu44c4w" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_l.png" id="153_m4crw"]
+[ext_resource type="Texture2D" uid="uid://xqv3cge5mt8o" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_r.png" id="154_lmkqu"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -919,6 +922,18 @@ tracks/17/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
 
 [sub_resource type="Animation" id="Animation_dshkv"]
 resource_name = "death"
@@ -948,7 +963,7 @@ tracks/0/path = NodePath("Sprite3D:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.0333333, 1.1, 1.4),
+"times": PackedFloat32Array(0, 0.6, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -960,7 +975,7 @@ tracks/1/path = NodePath("DebugAnimPivot:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(1.4),
+"times": PackedFloat32Array(0.7),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
@@ -972,7 +987,7 @@ tracks/2/path = NodePath("DebugRangedPivot:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(1.4),
+"times": PackedFloat32Array(0.7),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
@@ -984,7 +999,7 @@ tracks/3/path = NodePath(".:collision_mask")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.3),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [19]
@@ -996,7 +1011,7 @@ tracks/4/path = NodePath(".:collision_layer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.3),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
@@ -1008,10 +1023,22 @@ tracks/5/path = NodePath("SmokeParticles:emitting")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 1.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [true, false]
+"values": [false, true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:texture")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("149_pgdap"), ExtResource("151_cqgah"), ExtResource("150_iy7uj"), ExtResource("149_pgdap")]
 }
 
 [sub_resource type="Animation" id="Animation_vamcx"]
@@ -1928,6 +1955,30 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [null, ExtResource("84_siud8")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_kr3rw"]
 resource_name = "ranged_disarm"
@@ -1944,6 +1995,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("23_m0iiy"), ExtResource("43_r6ljj")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("84_siud8"), null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_tf56t"]
@@ -1974,6 +2049,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [ExtResource("23_m0iiy"), ExtResource("24_hgqui"), ExtResource("23_m0iiy")]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
 
 [sub_resource type="Animation" id="Animation_imvni"]
 resource_name = "ranged_shoot_r"
@@ -2002,6 +2089,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [ExtResource("23_m0iiy"), ExtResource("25_pns3b"), ExtResource("23_m0iiy")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
 }
 
 [sub_resource type="Animation" id="Animation_qyeng"]
@@ -2729,7 +2828,154 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("133_ym8p7"), ExtResource("134_6cfr3"), ExtResource("135_k4cax"), ExtResource("136_xxv47"), ExtResource("137_q4i82"), ExtResource("138_2uwns"), ExtResource("139_r17ad"), ExtResource("140_8spqv")]
+"values": [ExtResource("144_op6ct"), ExtResource("145_4055j"), ExtResource("146_f074h"), ExtResource("147_lpk1w"), ExtResource("148_oeqix"), ExtResource("149_b0gbw"), ExtResource("150_vwx8v"), ExtResource("151_wqtli")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_k5vv4"]
+resource_name = "ranged_shoot_l_split"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugRangedPivot/PivotL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(0.241484, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("84_siud8"), ExtResource("153_m4crw"), ExtResource("84_siud8")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_i6ee8"]
+resource_name = "ranged_shoot_r_split"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugRangedPivot/PivotR:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(0.241, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("84_siud8"), ExtResource("154_lmkqu"), ExtResource("84_siud8")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_vllqq"]
+resource_name = "nails_idle_split"
+length = 0.01
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("84_siud8")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("84_siud8")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
@@ -2749,10 +2995,13 @@ _data = {
 "laser_idle": SubResource("Animation_ex4gi"),
 "laser_telegraph": SubResource("Animation_ua1dm"),
 "nails_idle": SubResource("Animation_6u8u7"),
+"nails_idle_split": SubResource("Animation_vllqq"),
 "ranged_arm": SubResource("Animation_pm884"),
 "ranged_disarm": SubResource("Animation_kr3rw"),
 "ranged_shoot_l": SubResource("Animation_tf56t"),
+"ranged_shoot_l_split": SubResource("Animation_k5vv4"),
 "ranged_shoot_r": SubResource("Animation_imvni"),
+"ranged_shoot_r_split": SubResource("Animation_i6ee8"),
 "shock_slam_end": SubResource("Animation_qyeng"),
 "shock_slam_start": SubResource("Animation_gmqna"),
 "shock_slam_start_main": SubResource("Animation_gr8eh"),
@@ -2885,6 +3134,13 @@ angle_speed = 0.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.208356, 0)
 offset = Vector2(0, 256)
 texture = ExtResource("16_ukgug")
+
+[node name="NailShotSprite" type="Sprite3D" parent="Sprite3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0804853, 0)
+layers = 2
+sorting_offset = 1.0
+offset = Vector2(0, 256)
+billboard = 2
 
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -4922,6 +5178,11 @@ tree_root = ExtResource("134_ojm1l")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
 parameters/hurt_blend/blend_amount = 0.0
+parameters/mechanic_attack_states/nails/walk/Add2/add_amount = 1.0
+parameters/mechanic_attack_states/nails/walk/nail_shot/active = false
+parameters/mechanic_attack_states/nails/walk/nail_shot/internal_active = false
+parameters/mechanic_attack_states/nails/walk/nail_shot/request = 0
+parameters/mechanic_attack_states/nails/walk/shoot_dir/blend_amount = 1.0
 parameters/mechanic_attack_states/walk/walk_speed/scale = 1.0
 parameters/mechanic_attack_states/walk_taunt/walk_taunt_speed/scale = 1.0
 
