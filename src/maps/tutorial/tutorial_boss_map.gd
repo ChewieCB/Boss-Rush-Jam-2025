@@ -345,7 +345,9 @@ func _on_tutorial_finished() -> void:
 
 	# Move boss to doorway - dynamic cutscene tween
 	var move_pos: Vector3 = tutorial_end_boss_marker.global_position
-	var move_time: float = boss.global_position.distance_to(move_pos) / boss.MAX_SPEED
+	var move_time: float = boss.global_position.distance_to(move_pos) / boss.move_speed + 0.2
+	boss.set_cutscene_nav_position(move_pos)
+	
 	var camera_goal_pos := Vector3(-36.2, 2.6, 20.4)
 	var camera_goal_rot := Vector3(-2.1, 0, 0)
 	#var final_transform = cutscene_camera.global_transform.looking_at(camera_goal_pos, Vector3.UP)
@@ -354,17 +356,22 @@ func _on_tutorial_finished() -> void:
 	boss.anim_player.play("elevator_boss/walk_idle_2")
 	var boss_move_tween: Tween = get_tree().create_tween()
 	boss_move_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
-	boss_move_tween.tween_property(
-		boss, "global_position", move_pos, move_time
-	)
+	#boss_move_tween.tween_property(
+		#boss, "global_position", move_pos, move_time
+	#)
 	boss_move_tween.tween_property(
 		cutscene_camera, "global_rotation_degrees", camera_goal_rot, move_time
 	)
 	boss_move_tween.tween_property(
 		cutscene_camera, "global_position", camera_goal_pos, move_time
 	)
-
+	
 	await boss_move_tween.finished
+	
+	var final_move_tween = get_tree().create_tween()
+	final_move_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	final_move_tween.tween_property(boss, "global_position", move_pos, 0.2)
+	await final_move_tween.finished
 
 	# Play fixed cutscene
 	$AnimationPlayer.play("tutorial_end_1")
@@ -408,7 +415,6 @@ func _on_tutorial_finished() -> void:
 	cutscene_ui_layer.visible = false
 	cutscene_ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
-	electric_box_trigger.active = true
 	boss.state_chart.send_event("start_main_fight")
 	boss.current_phase = 4
 	boss.anim_tree.active = true
@@ -439,7 +445,10 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	# Trigger spin tutorial prompt
 	GameManager.is_free_reroll = true
 	show_tutorial_panel(tutorial_6_trigger_spin)
-
+	
+	await player.current_gun.barrel_spin_started
+	
+	electric_box_trigger.active = true
 	while electric_box_trigger.active:
 		await get_tree().create_timer(randf_range(1.0, 1.8)).timeout
 		# Spark the electrical box

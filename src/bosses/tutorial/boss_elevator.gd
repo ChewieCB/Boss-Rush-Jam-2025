@@ -1602,8 +1602,22 @@ func _on_arena_1_cutscene_state_entered() -> void:
 
 func _on_arena_1_cutscene_state_physics_processing(_delta: float) -> void:
 	pass
-	#velocity.y -= GRAVITY * delta
-	#move_and_slide()
+
+
+func _on_arena_1_transition_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+## Transition cutscene from tutorial to main fight, handle cutscene pathfinding
+
+func set_cutscene_nav_position(goal_pos: Vector3) -> void:
+	navigation_component.follow_target = false
+	navigation_component.enable()
+	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
+	navigation_component.set_nav_target_position(nav_pos)
+	
+
 
 ### =============================================================
 ### TUTORIAL PHASES
@@ -1780,6 +1794,7 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 		#await get_tree().create_timer(1.0).timeout
 		#state_chart.send_event("start_slam")
 	
+	# TODO - re-implement this
 	# Pick a point on the lower floor mesh to move to
 	#var center_pos: Vector3 = arena_1_center.global_position
 	#var dir_from_center: Vector3 = center_pos.direction_to(self.global_position)

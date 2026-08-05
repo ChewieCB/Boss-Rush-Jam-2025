@@ -4,6 +4,7 @@ class_name SingleEffectTrigger
 signal triggered
 
 var applied_effects = []
+@export var accept_any: bool = false
 @export var target_effect: BarrelDataResource
 @export var target_effect_id: int
 @export var health_component: HealthComponent
@@ -14,20 +15,28 @@ var applied_effects = []
 
 func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 	if active:
+		if accept_any:
+			trigger()
+			return
+		
 		for barrel in installed_barrels:
 			if barrel == null:
 				continue
 			var current_effect = barrel.get_active_effect()
 			if current_effect.icon_id == target_effect_id:
-				triggered.emit()
-				activate()
-				active = false
-				#self.process_mode = Node.PROCESS_MODE_DISABLED
-				self.set_deferred("monitoring", false)
-				self.set_deferred("monitorable", false)
-				$CollisionShape3D.set_deferred("disabled", true)
-				$ElectricSpark2.visible = false
-				$ElectricSpark2.process_mode = Node.PROCESS_MODE_DISABLED
+				trigger()
+
+
+func trigger() -> void:
+	triggered.emit()
+	activate()
+	active = false
+	#self.process_mode = Node.PROCESS_MODE_DISABLED
+	self.set_deferred("monitoring", false)
+	self.set_deferred("monitorable", false)
+	$CollisionShape3D.set_deferred("disabled", true)
+	$ElectricSpark2.visible = false
+	$ElectricSpark2.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func activate() -> void:

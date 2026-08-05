@@ -4720,6 +4720,8 @@ parameters/mechanic_attack_states/walk_taunt/walk_taunt_speed/scale = 1.0
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" to="." method="_on_tutorial_phase_3_dash_wave_swipe_wave_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Recover" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Transition" to="." method="_on_arena_1_transition_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Arena1Transition" to="." method="_on_arena_1_transition_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/MainFight" to="." method="_on_main_fight_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/MainFight/Inactive" to="." method="_on_inactive_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/MainFight/Phase4" to="." method="_on_phase_4_state_entered"]
