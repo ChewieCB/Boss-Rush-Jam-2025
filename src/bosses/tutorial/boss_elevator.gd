@@ -167,6 +167,7 @@ var laser_target_pos: Vector3
 @export var sfx_laser_charging: Array[AudioStream]
 @export var sfx_laser_shoot: Array[AudioStream]
 @export var sfx_laser_disarm: Array[AudioStream]
+var laser_sfx_player: AudioStreamPlayer3D
 
 @export_subgroup("Electrify Floor")
 # Tutorial
@@ -278,14 +279,14 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if current_phase != 3:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				force_stagger()
+				stagger_anim()
 				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_3")
 		elif new_health <= tutorial_phase_2_health_threshold:
 			if current_phase != 2:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				force_stagger()
+				stagger_anim()
 				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_2")
 	else:
@@ -293,7 +294,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if current_phase != 5:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				force_stagger()
+				stagger_anim()
 				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_5")
 
@@ -304,23 +305,50 @@ func _on_stagger() -> void:
 	if next_attack == "start_laser_aoe_attack":
 		return
 	
+	stagger_anim()
+
+
+func stagger_anim() -> void:
 	if hurt_sprite:
 		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
 			anim_tree["parameters/hurt_blend/blend_amount"] = 1.0
 			hurt_frame_timer.start(hurt_frame_window)
 
 
-func force_stagger() -> void:
-	if hurt_sprite:
-		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-			anim_tree["parameters/hurt_blend/blend_amount"] = 1.0
-			sprite.texture = hurt_sprite
-			hurt_frame_timer.start(hurt_frame_window)
-
-
 func _on_hurt_frame_timer_timeout() -> void:
 	anim_tree["parameters/hurt_blend/blend_amount"] = 0.0
 	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
+
+
+func _on_health_dead_state_entered() -> void:
+	anim_sm.travel("death")
+	
+	if aoe_warn_decal:
+		var aoe_tween := get_tree().create_tween()
+		aoe_tween.tween_property(
+			aoe_warn_decal,
+			"modulate:a",
+			0.0,
+			0.8
+		)
+		aoe_tween.tween_callback(
+			func():
+				aoe_warn_decal.queue_free()
+				aoe_warn_decal = null
+		)
+	
+	if laser_sfx_player:
+		if laser_sfx_player.is_playing():
+			laser_sfx_player.stop()
+			laser_sfx_player = null
+
+
+
+func _death_anim_finished() -> void:
+	death_anim_finished.emit()
+	anim_tree.active = false
+	anim_player.active = false
+	sprite.modulate = Color.DARK_SLATE_BLUE
 
 
 func _on_died() -> void:
@@ -334,7 +362,7 @@ func _on_died() -> void:
 		state_chart.send_event("tutorial_arena_1_finished")
 	else:
 		died.emit()
-		anim_player.play("RESET")
+		#anim_player.play("RESET")
 		state_chart.send_event("death")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
@@ -1006,11 +1034,11 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	
 	state_chart.send_event("attack_buildup")
 	# FIXME - why is the audio borked?
-	var sfx_player = get_available_sfx_player()
+	laser_sfx_player = get_available_sfx_player()
 	var laser_charge_stream: AudioStream = sfx_laser_charging.pick_random()
-	if sfx_player:
-		sfx_player.stream = laser_charge_stream
-		sfx_player.play()
+	if laser_sfx_player:
+		laser_sfx_player.stream = laser_charge_stream
+		laser_sfx_player.play()
 	laser_anim_sm.travel("telegraph")
 	#anim_player.play("elevator_boss/laser_telegraph")
 	
@@ -1042,8 +1070,9 @@ func _on_laser_aoe_charging_state_entered() -> void:
 		func():
 			state_chart.send_event("stop_moving")
 			await get_tree().create_timer(laser_hold_time, false).timeout
-			# FIXME 
-			sfx_player.stop()
+			if laser_sfx_player:
+				laser_sfx_player.stop()
+				laser_sfx_player = null
 			TURN_SPEED_FAST = _cached_turn_speed
 			state_chart.send_event("start_firing")
 	).set_delay(laser_charge_stream.get_length())
@@ -1157,6 +1186,7 @@ func _intro_drop() -> void:
 
 func _on_smokescreen_idle_state_entered() -> void:
 	state_chart.send_event("stop_moving")
+	anim_sm.travel("idle")
 	
 	var ranged_attacks = [
 		"start_dual_nails_attack",
@@ -1168,6 +1198,10 @@ func _on_smokescreen_idle_state_entered() -> void:
 		ranged_attacks.erase(prev_attack)
 	
 	next_attack = ranged_attacks.pick_random()
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
 	
 	if active_spawn:
 		if self.global_position.distance_to(active_spawn.global_position) < 4:
@@ -1181,6 +1215,11 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	# fade/hide the boss sprite, and disable boss collisions with player 
 	# and projectiles
 	await taunt()
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
+	
 	anim_sm.travel("drop_smoke")
 	health_component.is_invincible = true
 	health_component.show_damage_text = false
@@ -1188,6 +1227,13 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	#await anim_player.animation_finished
 	await get_tree().create_timer(3.0, false).timeout
 	#anim_player.play("RESET")
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		health_component.is_invincible = false
+		health_component.show_damage_text = true
+		return
+	
 	
 	var new_spawn: Node
 	var state_event: String = ""
@@ -1210,6 +1256,10 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
 	
 	state_chart.send_event(state_event)
 
@@ -1272,6 +1322,10 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	
 	await active_sub_door.anim_player.animation_finished
 	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
+	
 	# Move the boss out of the elevator to fire
 	anim_sm.travel("walk")
 	var tween = get_tree().create_tween()
@@ -1284,6 +1338,10 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	await tween.finished
 	is_being_tweened = false
 	anim_sm.travel("idle")
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
 	
 	prev_attack = next_attack
 	state_chart.send_event(next_attack)
@@ -1967,6 +2025,7 @@ func _on_tutorial_phase_3_dash_wave_state_physics_processing(delta: float) -> vo
 func _on_phase_4_state_entered() -> void:
 	# TODO - move this to intro state
 	health_component.max_health = main_health
+	block_hurt_frame = true  # Prevent stagger on health init
 	health_component.initialize_health()
 	health_ui.clear_sub_health_bars()
 	health_ui.init_boss_health_ui(main_health, 2)
@@ -1974,6 +2033,7 @@ func _on_phase_4_state_entered() -> void:
 	
 	attack_interrupt = false
 	shock_floor_hazard_tutorial.is_active = false
+	block_hurt_frame = false
 	current_phase = 4
 	phase_4_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_4.pick_random(), "SFX")
@@ -2156,3 +2216,10 @@ func _on_phase_5_state_entered() -> void:
 	SoundManager.play_sound(sfx_taunt_phase_5.pick_random(), "SFX")
 	
 	select_attack()
+
+
+func _on_inactive_state_physics_processing(delta: float) -> void:
+	velocity.x = 0
+	velocity.z = 0
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
