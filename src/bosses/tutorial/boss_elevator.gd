@@ -311,6 +311,8 @@ func _on_stagger() -> void:
 func stagger_anim() -> void:
 	if hurt_sprite:
 		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
+			velocity = Vector3.ZERO
+			navigation_component.disable()
 			anim_tree["parameters/hurt_blend/blend_amount"] = 1.0
 			hurt_frame_timer.start(hurt_frame_window)
 
@@ -318,6 +320,8 @@ func stagger_anim() -> void:
 func _on_hurt_frame_timer_timeout() -> void:
 	anim_tree["parameters/hurt_blend/blend_amount"] = 0.0
 	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
+	navigation_component.enable()
+	stagger_end.emit()
 
 
 func _on_health_dead_state_entered() -> void:
@@ -541,7 +545,6 @@ func select_attack_phase_5() -> void:
 				ranged_phase_count = 0
 				attack_interrupt = true
 				# We move into the melee phase, so trigger a random melee attack
-				# TODO - shove boss out towards middle if elevator nails attack
 				if prev_attack == "start_dual_nails_attack":
 					var tween = get_tree().create_tween()
 					var forward_dir: Vector3 = - active_sub_door.basis.z
@@ -777,6 +780,7 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 
 
 func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> void:
+	block_hurt_frame = true
 	var jump_results = charge_back_jump(pos, height, debug)
 	
 	var sfx_player = get_available_sfx_player()
@@ -798,6 +802,7 @@ func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> voi
 	jump_slam_sm.travel("jump_down")
 	#anim_player.play("elevator_boss/slam_jump_down")
 	#await anim_player.animation_finished
+	block_hurt_frame = false
 	return
 
 
@@ -923,14 +928,21 @@ func shoot_nail_projectile(
 			# Catch to stop projectiles firing if the boss is killed mid-attack
 			if self.health_component.current_health == 0:
 				return
+			
 			if attack_interrupt == true:
 				attack_interrupt = false
 				return
+			
 			await get_tree().create_timer(delay_per_proj, false).timeout
+			
 			# Alternate firing between each gun
 			if attack_interrupt == true:
 				attack_interrupt = false
 				return
+			
+			if not hurt_frame_timer.is_stopped():
+				await stagger_end
+			
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
 			anim_handler.call(j)
 			#anim_player.play(anim_name)
@@ -1186,6 +1198,7 @@ func _intro_drop() -> void:
 
 func _on_smokescreen_idle_state_entered() -> void:
 	state_chart.send_event("stop_moving")
+	velocity = Vector3.ZERO
 	anim_sm.travel("idle")
 	
 	var ranged_attacks = [
@@ -1313,6 +1326,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
+	sprite.modulate = Color.WHITE
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
@@ -1680,9 +1694,11 @@ func taunt() -> void:
 	
 	# Scale the animation length to the sound
 	var sfx_length: float = taunt_sfx.get_length()
-	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
 	SoundManager.play_sound(taunt_sfx, "SFX")
-	anim_sm.travel("taunt")
+	# Don't taunt if we're in laser form
+	if next_attack != "start_laser_aoe_attack":
+		anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
+		anim_sm.travel("taunt")
 	#anim_player.play("elevator_boss/taunt")
 	#await anim_player.animation_finished
 	await get_tree().create_timer(sfx_length, false).timeout
@@ -2234,6 +2250,9 @@ func _on_phase_5_state_entered() -> void:
 
 
 func _on_inactive_state_physics_processing(delta: float) -> void:
+	if next_attack == "start_laser_aoe_attack":
+		return
+	
 	velocity.x = 0
 	velocity.z = 0
 	velocity.y -= GRAVITY * delta

@@ -535,15 +535,19 @@ func _align_player_camera_to_cutscene_camera() -> void:
 
 func _on_player_death() -> void:
 	if GameManager.tutorial_completed:
-		# TODO - play kicked back to lobby cutscene with boss VO
-		#
+		boss.attack_interrupt = true
+		boss.state_chart.send_event("deactivate")
+		if boss.next_attack != "start_laser_aoe_attack":
+			boss.state_chart.send_event("start_targeting")
+		boss.velocity = Vector3.ZERO
+		boss.taunt()
 		boss.cleanup_shock_hazards()
 		win_ui.lose()
 		show_end_panel()
 	else:
 		# Put the boss in a passive state while we play the tutorial
 		boss.state_chart.send_event("player_defeated_reset")
-
+		
 		if boss.current_phase > 3:
 			GameManager.tutorial_completed = true
 			_on_player_death()

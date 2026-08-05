@@ -5,6 +5,7 @@ class_name BossCore
 signal died
 signal death_anim_finished
 signal inactive_loaded
+signal stagger_end
 ## Emit after collected the barrel,
 ## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.
@@ -829,6 +830,7 @@ func _on_dps_window_timer_timeout() -> void:
 func _on_hurt_frame_timer_timeout() -> void:
 	sprite.texture = base_sprite
 	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
+	stagger_end.emit()
 
 
 ## STATUS EFFECTS
