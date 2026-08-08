@@ -135,6 +135,9 @@ func _ready() -> void:
 		cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
 		#await ScreenTransition.transition_finished
 		player.stat_ui.show_all_ui()
+		boss.anim_tree.active = true
+		boss.anim_player.active = false
+		await get_tree().physics_frame
 
 
 func _input(event: InputEvent) -> void:
@@ -217,6 +220,10 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 	if is_cutscene_active:
 		$AnimationPlayer.play("mechanic_enter")
 		await $AnimationPlayer.animation_finished
+	
+	boss.anim_tree.active = true
+	boss.anim_player.active = false
+	await get_tree().physics_frame
 
 	LuckHandler.enabled = true
 	# We need to set these player vars AFTER the cutscene cam exits so they don't get re-set
@@ -338,23 +345,33 @@ func _on_tutorial_finished() -> void:
 
 	# Move boss to doorway - dynamic cutscene tween
 	var move_pos: Vector3 = tutorial_end_boss_marker.global_position
-	var move_time: float = boss.global_position.distance_to(move_pos) / boss.MAX_SPEED
+	var move_time: float = boss.global_position.distance_to(move_pos) / boss.move_speed + 0.2
+	boss.set_cutscene_nav_position(move_pos)
+	
 	var camera_goal_pos := Vector3(-36.2, 2.6, 20.4)
 	var camera_goal_rot := Vector3(-2.1, 0, 0)
 	#var final_transform = cutscene_camera.global_transform.looking_at(camera_goal_pos, Vector3.UP)
+	boss.anim_tree.active = false
+	boss.anim_player.active = true
+	boss.anim_player.play("elevator_boss/walk_idle_2")
 	var boss_move_tween: Tween = get_tree().create_tween()
 	boss_move_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
-	boss_move_tween.tween_property(
-		boss, "global_position", move_pos, move_time
-	)
+	#boss_move_tween.tween_property(
+		#boss, "global_position", move_pos, move_time
+	#)
 	boss_move_tween.tween_property(
 		cutscene_camera, "global_rotation_degrees", camera_goal_rot, move_time
 	)
 	boss_move_tween.tween_property(
 		cutscene_camera, "global_position", camera_goal_pos, move_time
 	)
-
+	
 	await boss_move_tween.finished
+	
+	var final_move_tween = get_tree().create_tween()
+	final_move_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	final_move_tween.tween_property(boss, "global_position", move_pos, 0.2)
+	await final_move_tween.finished
 
 	# Play fixed cutscene
 	$AnimationPlayer.play("tutorial_end_1")
@@ -398,9 +415,10 @@ func _on_tutorial_finished() -> void:
 	cutscene_ui_layer.visible = false
 	cutscene_ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	cutscene_camera.process_mode = Node.PROCESS_MODE_DISABLED
-	electric_box_trigger.active = true
 	boss.state_chart.send_event("start_main_fight")
 	boss.current_phase = 4
+	boss.anim_tree.active = true
+	boss.anim_player.active = false
 
 
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
@@ -427,7 +445,10 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	# Trigger spin tutorial prompt
 	GameManager.is_free_reroll = true
 	show_tutorial_panel(tutorial_6_trigger_spin)
-
+	
+	await player.current_gun.barrel_spin_started
+	
+	electric_box_trigger.active = true
 	while electric_box_trigger.active:
 		await get_tree().create_timer(randf_range(1.0, 1.8)).timeout
 		# Spark the electrical box
@@ -514,15 +535,19 @@ func _align_player_camera_to_cutscene_camera() -> void:
 
 func _on_player_death() -> void:
 	if GameManager.tutorial_completed:
-		# TODO - play kicked back to lobby cutscene with boss VO
-		#
+		boss.attack_interrupt = true
+		boss.state_chart.send_event("deactivate")
+		if boss.next_attack != "start_laser_aoe_attack":
+			boss.state_chart.send_event("start_targeting")
+		boss.velocity = Vector3.ZERO
+		boss.taunt()
 		boss.cleanup_shock_hazards()
 		win_ui.lose()
 		show_end_panel()
 	else:
 		# Put the boss in a passive state while we play the tutorial
 		boss.state_chart.send_event("player_defeated_reset")
-
+		
 		if boss.current_phase > 3:
 			GameManager.tutorial_completed = true
 			_on_player_death()

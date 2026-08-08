@@ -81,7 +81,7 @@ func _wait_for_navigation_setup() -> void:
 func _physics_process(_delta) -> void:
 	if is_enabled():
 		if not use_legacy_nav:
-			# Stagger group navigation updates by group pozsition
+			# Stagger group navigation updates by group position
 			if group_size != -1 and group_idx != -1:
 				if Engine.get_physics_frames() % group_size != group_idx:
 					return

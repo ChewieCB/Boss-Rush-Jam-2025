@@ -35,6 +35,7 @@ signal end_smoke
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
+var is_being_tweened: bool = false
 
 var boss_origin: Node
 var elevator_spawns: Array[Node]
@@ -91,7 +92,7 @@ var sfx_taunt_phase_3_active: Array[AudioStream] = sfx_taunt_phase_3
 var sfx_taunt_phase_4_active: Array[AudioStream] = sfx_taunt_phase_4
 @export var sfx_taunt_phase_5: Array[AudioStream]
 var sfx_taunt_phase_5_active: Array[AudioStream] = sfx_taunt_phase_5
-var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3 + sfx_taunt_phase_4 + sfx_taunt_phase_5
+@onready var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3 + sfx_taunt_phase_4 + sfx_taunt_phase_5
 # TODO - combine these in a resource class
 @export var sfx_player_defeated_taunt: Array[AudioStream]
 @export var player_defeated_taunt_captions: Array[String]
@@ -166,6 +167,7 @@ var laser_target_pos: Vector3
 @export var sfx_laser_charging: Array[AudioStream]
 @export var sfx_laser_shoot: Array[AudioStream]
 @export var sfx_laser_disarm: Array[AudioStream]
+var laser_sfx_player: AudioStreamPlayer3D
 
 @export_subgroup("Electrify Floor")
 # Tutorial
@@ -187,6 +189,14 @@ var shock_hazard_pool: Array[ElevatorShockHazard] = []
 @export var sfx_electric_fadeout: Array[AudioStream]
 
 var attack_interrupt: bool = false # Flag to interrupt loop-based attacks like the nailgun shots
+
+@onready var anim_tree = $AnimationTree
+@onready var anim_sm = anim_tree["parameters/mechanic_attack_states/playback"]
+@onready var melee_combo_sm = anim_tree["parameters/mechanic_attack_states/melee_combo/playback"]
+@onready var jump_slam_sm = anim_tree["parameters/mechanic_attack_states/jump_slam/playback"]
+@onready var nails_anim_sm = anim_tree["parameters/mechanic_attack_states/nails/playback"]
+@onready var laser_anim_sm = anim_tree["parameters/mechanic_attack_states/laser/playback"]
+@onready var shock_slam_sm = anim_tree["parameters/mechanic_attack_states/shock_slam/playback"]
 
 
 func _ready() -> void:
@@ -220,6 +230,8 @@ func _ready() -> void:
 	
 	for i in range(max_sequential_ranged_phases):
 		_init_laser_aoe()
+	
+	anim_tree["parameters/mechanic_attack_states/nails/walk/Add2/add_amount"] = 1.0
 
 
 func cleanup_pools() -> void:
@@ -267,14 +279,14 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if current_phase != 3:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				force_stagger()
+				stagger_anim()
 				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_3")
 		elif new_health <= tutorial_phase_2_health_threshold:
 			if current_phase != 2:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				force_stagger()
+				stagger_anim()
 				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_2")
 	else:
@@ -282,7 +294,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if current_phase != 5:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				force_stagger()
+				stagger_anim()
 				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_5")
 
@@ -292,14 +304,55 @@ func _on_stagger() -> void:
 		return
 	if next_attack == "start_laser_aoe_attack":
 		return
-	super ()
+	
+	stagger_anim()
 
 
-func force_stagger() -> void:
+func stagger_anim() -> void:
 	if hurt_sprite:
-		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-			sprite.texture = hurt_sprite
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
+			velocity = Vector3.ZERO
+			navigation_component.disable()
+			anim_tree["parameters/hurt_blend/blend_amount"] = 1.0
 			hurt_frame_timer.start(hurt_frame_window)
+
+
+func _on_hurt_frame_timer_timeout() -> void:
+	anim_tree["parameters/hurt_blend/blend_amount"] = 0.0
+	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
+	navigation_component.enable()
+	stagger_end.emit()
+
+
+func _on_health_dead_state_entered() -> void:
+	anim_sm.travel("death")
+	
+	if aoe_warn_decal:
+		var aoe_tween := get_tree().create_tween()
+		aoe_tween.tween_property(
+			aoe_warn_decal,
+			"modulate:a",
+			0.0,
+			0.8
+		)
+		aoe_tween.tween_callback(
+			func():
+				aoe_warn_decal.queue_free()
+				aoe_warn_decal = null
+		)
+	
+	if laser_sfx_player:
+		if laser_sfx_player.is_playing():
+			laser_sfx_player.stop()
+			laser_sfx_player = null
+
+
+
+func _death_anim_finished() -> void:
+	death_anim_finished.emit()
+	anim_tree.active = false
+	anim_player.active = false
+	sprite.modulate = Color.DARK_SLATE_BLUE
 
 
 func _on_died() -> void:
@@ -313,7 +366,7 @@ func _on_died() -> void:
 		state_chart.send_event("tutorial_arena_1_finished")
 	else:
 		died.emit()
-		anim_player.play("RESET")
+		#anim_player.play("RESET")
 		state_chart.send_event("death")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
@@ -325,6 +378,10 @@ func _on_died() -> void:
 func cleanup_shock_hazards() -> void:
 	for hazard in shock_hazard_pool:
 		hazard.queue_free()
+
+
+func throw_tutorial_barrel() -> void:
+	anim_player.play("elevator_boss/throw_barrel")
 
 
 func _on_barrel_collected(data: BarrelDataResource) -> void:
@@ -340,6 +397,7 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 
 func _physics_process(_delta: float) -> void:
 	#super(delta)
+	debug_dist_label.text = str(velocity.length())
 	return
 
 
@@ -487,11 +545,12 @@ func select_attack_phase_5() -> void:
 				ranged_phase_count = 0
 				attack_interrupt = true
 				# We move into the melee phase, so trigger a random melee attack
-				# TODO - shove boss out towards middle if elevator nails attack
 				if prev_attack == "start_dual_nails_attack":
 					var tween = get_tree().create_tween()
 					var forward_dir: Vector3 = - active_sub_door.basis.z
 					var peek_pos: Vector3 = self.global_position + forward_dir * 2
+					anim_sm.travel("walk")
+					is_being_tweened = true
 					tween.tween_property(
 						self, "global_position", peek_pos, 0.2
 					).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -499,6 +558,9 @@ func select_attack_phase_5() -> void:
 					active_sub_door.close()
 					tween.parallel().tween_callback(active_sub_light.red).set_delay(1.2)  # door.close() anim length
 					await tween.finished
+					is_being_tweened = false
+					velocity = Vector3.ZERO
+					anim_sm.travel("idle")
 				# TODO - intro slam state to handle dropping from high up
 				previous_phase = "melee_phase"
 				health_component.is_invincible = false
@@ -555,6 +617,35 @@ func backswipe() -> void:
 		sfx_player.play()
 
 
+### Movement animation
+
+func set_walk_speed(speed: float) -> void:
+	anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"] = speed
+
+
+#func check_walk_anim() -> void:
+	#if velocity.length() < 1.0:
+		#if anim_player.current_animation == "elevator_boss/walk_idle_1":
+			#_end_walking_anim()
+	#elif velocity.length() >= 1.0:
+		#if anim_player.current_animation != "elevator_boss/walk_idle_1":
+			#_start_walking_anim()
+#
+#
+#func _start_walking_anim(speed: float = 1.0) -> void:
+	#set_walk_speed(speed)
+	#anim_sm.travel("walk")
+	### Set animation direction
+	##if self.velocity.dot(-self.basis.z) > 0:
+		##anim_player.play("elevator_boss/walk_idle_1")
+	##else:
+		##anim_player.play_backwards("elevator_boss/walk_idle_1")
+#
+#func _end_walking_anim() -> void:
+	#set_walk_speed(1.0)
+	#anim_sm.travel("idle")
+
+
 #### Phase 1 | Melee Combo
 # TARGETING
 func _on_melee_combo_targeting_state_entered() -> void:
@@ -564,13 +655,7 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
-	
-	if current_phase > 3 and active_sub_door:
-		await get_tree().create_timer(1.6, false).timeout
-		active_sub_light.yellow()
-		active_sub_door.close()
-		await active_sub_door.anim_player.animation_finished
-		active_sub_light.red()
+	anim_sm.travel("walk")
 
 
 func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
@@ -593,8 +678,10 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/swipe")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/swipe")
+	anim_sm.travel("melee_combo")
+	melee_combo_sm.travel("swipe")
+	#await anim_player.animation_finished
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_far
 	
@@ -604,14 +691,16 @@ func _on_melee_combo_swipe_state_entered() -> void:
 		if randf() < 0.5:
 			state_chart.send_event("melee_backstep")
 		else:
-			anim_player.play("elevator_boss/swipe_end")
-			await anim_player.animation_finished
+			melee_combo_sm.travel("swipe_end")
+			#anim_player.play("elevator_boss/swipe_end")
+			#await anim_player.animation_finished
 			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.6)
 	velocity.z = lerp(velocity.z, 0.0, 0.6)
+	#check_walk_anim()
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -626,8 +715,9 @@ func _on_melee_combo_hook_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/kick")
-	await anim_player.animation_finished
+	melee_combo_sm.travel("kick")
+	#anim_player.play("elevator_boss/kick")
+	#await anim_player.animation_finished
 	
 	
 	if target in hurtbox.get_overlapping_bodies():
@@ -636,14 +726,16 @@ func _on_melee_combo_hook_state_entered() -> void:
 		if randf() < 0.5:
 			state_chart.send_event("melee_backstep")
 		else:
-			anim_player.play("elevator_boss/kick_end")
-			await anim_player.animation_finished
+			melee_combo_sm.travel("kick_end")
+			#anim_player.play("elevator_boss/kick_end")
+			#await anim_player.animation_finished
 			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_hook_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	#check_walk_anim()
 
 
 func _on_melee_combo_backswing_state_entered() -> void:
@@ -655,8 +747,9 @@ func _on_melee_combo_backswing_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/backswipe")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/backswipe")
+	melee_combo_sm.travel("backswipe")
+	#await anim_player.animation_finished
 	
 	if randf() < 0.6:
 		state_chart.send_event("melee_backstep")
@@ -667,13 +760,15 @@ func _on_melee_combo_backswing_state_entered() -> void:
 func _on_melee_combo_backswing_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	#check_walk_anim()
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
-	anim_player.play("elevator_boss/slam_jump_prep")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/slam_jump_prep")
+	anim_sm.travel("jump_slam")
+	await get_tree().create_timer(anim_player.get_animation("elevator_boss/slam_jump_prep").length, false).timeout
 	
 	# TODO - raycast this to make sure we don't overshoot
 	var goal_pos = self.global_position + self.basis.z * 5.0
@@ -685,13 +780,15 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 
 
 func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> void:
+	block_hurt_frame = true
 	var jump_results = charge_back_jump(pos, height, debug)
 	
 	var sfx_player = get_available_sfx_player()
 	if sfx_player:
 		sfx_player.stream = sfx_jump.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/slam_jump_up")
+	jump_slam_sm.travel("jump_up")
+	#anim_player.play("elevator_boss/slam_jump_up")
 	#await anim_player.animation_finished
 	vel_vertical = 0
 	self.velocity = jump_results[0]
@@ -702,8 +799,10 @@ func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> voi
 	# Subtract the time the jump down animation lasts so we can sync the impact
 	var hangtime: float = time_down - 0.15
 	await get_tree().create_timer(hangtime, false).timeout
-	anim_player.play("elevator_boss/slam_jump_down")
-	await anim_player.animation_finished
+	jump_slam_sm.travel("jump_down")
+	#anim_player.play("elevator_boss/slam_jump_down")
+	#await anim_player.animation_finished
+	block_hurt_frame = false
 	return
 
 
@@ -717,10 +816,11 @@ func _on_melee_combo_slam_line_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_slam.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/slam_jump_impact")
+	jump_slam_sm.travel("jump_impact")
+	#anim_player.play("elevator_boss/slam_jump_impact")
 	#sfx_player.stream = sfx_slam.pick_random()
 	#sfx_player.play()
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("combo_end")
 
@@ -740,6 +840,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
+	anim_sm.travel("idle")
 	anim_player.play("RESET")
 	
 	select_attack()
@@ -751,6 +852,7 @@ func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
 	#orbit_player(delta)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	#check_walk_anim()
 
 
 #### Phase 1 | Line Slam
@@ -788,6 +890,7 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	
 	desired_distance = 40
 	
+	anim_sm.travel("nails")
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	
@@ -795,15 +898,17 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_arm")
-	await anim_player.animation_finished
+	#anim_player.play("elevator_boss/ranged_arm")
+	#await anim_player.animation_finished
+	#nails_anim_sm.travel("walk")
 	
 	await get_tree().create_timer(0.3, false).timeout
 	state_chart.send_event("start_shooting")
 
 
 func _on_ranged_nails_targeting_state_physics_processing(_delta: float) -> void:
-	return
+	#check_walk_anim()
+	pass
 
 
 func _on_ranged_nails_shooting_state_entered() -> void:
@@ -814,23 +919,33 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 	state_chart.send_event("stop_shooting")
 
 
-func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float, shot_speed: float = 50.0) -> void:
+func shoot_nail_projectile(
+	bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float, 
+	shot_speed: float = 50.0, anim_handler: Callable = _handle_nails_anim_idle
+	) -> void:
 	for i in range(bursts):
 		for j in range(shot_per_burst):
 			# Catch to stop projectiles firing if the boss is killed mid-attack
 			if self.health_component.current_health == 0:
 				return
+			
 			if attack_interrupt == true:
 				attack_interrupt = false
 				return
+			
 			await get_tree().create_timer(delay_per_proj, false).timeout
+			
 			# Alternate firing between each gun
 			if attack_interrupt == true:
 				attack_interrupt = false
 				return
+			
+			if not hurt_frame_timer.is_stopped():
+				await stagger_end
+			
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
-			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
-			anim_player.play(anim_name)
+			anim_handler.call(j)
+			#anim_player.play(anim_name)
 			var proj = fire_projectile_pooled(nail_proj_pool, spawn_marker.global_position, 0, sfx_nail_shot)
 			if not proj:
 				return
@@ -841,6 +956,14 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 				sfx_player.play()
 			proj.init(nail_damage * GameManager.get_risk_dmg_mult())
 		await get_tree().create_timer(delay_per_burst, false).timeout
+
+func _handle_nails_anim_idle(j: int) -> void:
+	var anim_name = "shoot_%s" % ["l" if j % 2 == 0 else "r"]
+	nails_anim_sm.travel(anim_name)
+
+func _handle_nails_anim_walking(j: int) -> void:
+	anim_tree["parameters/mechanic_attack_states/nails/walk/shoot_dir/blend_amount"] = 0 if j % 2 == 0 else 1
+	anim_tree["parameters/mechanic_attack_states/nails/walk/nail_shot/request"] = AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE
 
 
 func _on_ranged_nails_shooting_state_physics_processing(_delta: float) -> void:
@@ -855,10 +978,12 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_unequip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_disarm")
+	nails_anim_sm.travel("disarm")
+	#anim_player.play("elevator_boss/ranged_disarm")
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-	anim_player.play("RESET")
+	anim_sm.travel("idle")
+	#anim_player.play("RESET")
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
@@ -902,10 +1027,11 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	
 	anim_player.play("RESET")
 	sprite.visible = true
-	sprite.modulate.a = 1.0
-	anim_player.play("elevator_boss/laser_arm")
+	sprite.modulate = Color("#ffffff")
+	anim_sm.travel("laser")
+	#anim_player.play("elevator_boss/laser_arm")
 	
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
@@ -920,12 +1046,13 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	
 	state_chart.send_event("attack_buildup")
 	# FIXME - why is the audio borked?
-	var sfx_player = get_available_sfx_player()
+	laser_sfx_player = get_available_sfx_player()
 	var laser_charge_stream: AudioStream = sfx_laser_charging.pick_random()
-	if sfx_player:
-		sfx_player.stream = laser_charge_stream
-		sfx_player.play()
-	anim_player.play("elevator_boss/laser_telegraph")
+	if laser_sfx_player:
+		laser_sfx_player.stream = laser_charge_stream
+		laser_sfx_player.play()
+	laser_anim_sm.travel("telegraph")
+	#anim_player.play("elevator_boss/laser_telegraph")
 	
 	# AoE warning visual
 	if aoe_warn_decal:
@@ -955,8 +1082,9 @@ func _on_laser_aoe_charging_state_entered() -> void:
 		func():
 			state_chart.send_event("stop_moving")
 			await get_tree().create_timer(laser_hold_time, false).timeout
-			# FIXME 
-			sfx_player.stop()
+			if laser_sfx_player:
+				laser_sfx_player.stop()
+				laser_sfx_player = null
 			TURN_SPEED_FAST = _cached_turn_speed
 			state_chart.send_event("start_firing")
 	).set_delay(laser_charge_stream.get_length())
@@ -988,7 +1116,8 @@ func _on_laser_aoe_firing_state_entered() -> void:
 		sfx_player.stream = sfx_laser_shoot.pick_random()
 		sfx_player.play()
 	
-	anim_player.play("elevator_boss/laser_fire")
+	laser_anim_sm.travel("fire")
+	#anim_player.play("elevator_boss/laser_fire")
 	#laser_particles.emitting = false
 	var laser_inst: LaserAoE = laser_aoe_pool.pop_back()
 	laser_inst.global_position = laser_spawn.global_position
@@ -999,9 +1128,10 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	await get_tree().physics_frame
 	laser_inst.fire_laser()
 	
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
 	
 	#laser_particles.visible = false
+	await get_tree().create_timer(1.0, false).timeout
 	state_chart.send_event("stop_firing")
 
 
@@ -1011,8 +1141,9 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	
 	# Laser raises back up into ceiling
-	anim_player.play("elevator_boss/laser_disarm")
-	await anim_player.animation_finished
+	laser_anim_sm.travel("disarm")
+	#anim_player.play("elevator_boss/laser_disarm")
+	await get_tree().create_timer(anim_player.get_animation("elevator_boss/laser_disarm").length, false).timeout
 	
 	health_component.is_invincible = true
 	health_component.show_damage_text = false
@@ -1020,6 +1151,7 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	
+	anim_sm.travel("idle")
 	anim_player.play("RESET")
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -1037,9 +1169,11 @@ func _on_laser_aoe_recover_state_entered() -> void:
 func _on_laser_aoe_drop_to_melee_state_entered() -> void:
 	anim_player.play("RESET")
 	sprite.visible = true
-	anim_player.play("drop_smoke_enter")
+	velocity = Vector3.ZERO
+	anim_sm.travel("drop_smoke_enter")
 	
-	await anim_player.animation_finished
+	#await anim_player.animation_finished
+	await get_tree().create_timer(2.0, false).timeout
 	
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
@@ -1064,6 +1198,8 @@ func _intro_drop() -> void:
 
 func _on_smokescreen_idle_state_entered() -> void:
 	state_chart.send_event("stop_moving")
+	velocity = Vector3.ZERO
+	anim_sm.travel("idle")
 	
 	var ranged_attacks = [
 		"start_dual_nails_attack",
@@ -1076,6 +1212,10 @@ func _on_smokescreen_idle_state_entered() -> void:
 	
 	next_attack = ranged_attacks.pick_random()
 	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
+	
 	if active_spawn:
 		if self.global_position.distance_to(active_spawn.global_position) < 4:
 			state_chart.send_event("start_no_smoke")
@@ -1087,12 +1227,26 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	# Emit a large amount of smoke particles that conceal the boss,
 	# fade/hide the boss sprite, and disable boss collisions with player 
 	# and projectiles
-	anim_player.play("drop_smoke")
+	await taunt()
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
+	
+	anim_sm.travel("drop_smoke")
 	health_component.is_invincible = true
 	health_component.show_damage_text = false
 	
-	await anim_player.animation_finished
-	anim_player.play("RESET")
+	#await anim_player.animation_finished
+	await get_tree().create_timer(3.0, false).timeout
+	#anim_player.play("RESET")
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		health_component.is_invincible = false
+		health_component.show_damage_text = true
+		return
+	
 	
 	var new_spawn: Node
 	var state_event: String = ""
@@ -1102,7 +1256,6 @@ func _on_smokescreen_smoke_state_entered() -> void:
 			state_event = "open_doors"
 			# TODO - configure delay and SFX for door opening
 			active_sub_light.yellow()
-			sprite.modulate.a = 1.0
 		"start_laser_aoe_attack":
 			new_spawn = get_furthest_laser_spawn()
 			state_event = "start_no_smoke"
@@ -1117,19 +1270,28 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
+	
 	state_chart.send_event(state_event)
 
 
 func _on_smokescreen_move_no_smoke_state_entered() -> void:
 	# Retreat back into elevator
 	if prev_attack == "start_dual_nails_attack":
+		anim_sm.travel("walk")
 		var tween = get_tree().create_tween()
 		var forward_dir: Vector3 = - active_sub_door.basis.z
 		var peek_pos: Vector3 = self.global_position - forward_dir * 3
+		is_being_tweened = true
 		tween.tween_property(
 			self, "global_position", peek_pos, 0.5
 		).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		await tween.finished
+		is_being_tweened = false
+		velocity = Vector3.ZERO
+		anim_sm.travel("idle")
 		
 		# Close the doors
 		active_sub_light.yellow()
@@ -1146,6 +1308,7 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 			active_spawn = get_elevator_spawn_no_repeats()
 			self.global_position = active_spawn.global_position
 			self.global_rotation = active_spawn.global_rotation
+			anim_sm.travel("idle")
 			prev_attack = next_attack
 			state_chart.send_event("open_doors")
 		
@@ -1163,6 +1326,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
+	sprite.modulate = Color.WHITE
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
@@ -1172,14 +1336,26 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	
 	await active_sub_door.anim_player.animation_finished
 	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
+	
 	# Move the boss out of the elevator to fire
+	anim_sm.travel("walk")
 	var tween = get_tree().create_tween()
 	var forward_dir: Vector3 = - active_sub_door.basis.z
 	var peek_pos: Vector3 = self.global_position + forward_dir * 3.5
+	is_being_tweened = true
 	tween.tween_property(
 		self, "global_position", peek_pos, 0.5
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tween.finished
+	is_being_tweened = false
+	anim_sm.travel("idle")
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		return
 	
 	prev_attack = next_attack
 	state_chart.send_event(next_attack)
@@ -1386,6 +1562,9 @@ func trigger_pushback(
 
 
 func _on_intro_state_entered() -> void:
+	anim_tree.active = false
+	anim_player.active = true
+	
 	var space_state := get_world_3d().direct_space_state
 	var ray_query := PhysicsRayQueryParameters3D.create(self.global_position, self.global_position + Vector3.DOWN * 20.0)
 	var result = space_state.intersect_ray(ray_query)
@@ -1393,6 +1572,7 @@ func _on_intro_state_entered() -> void:
 		intro_drop_landed_y = result.position.y
 		#draw_debug_sphere(result.position, 0.5, Color.RED)
 	
+	await get_tree().physics_frame
 	_intro_drop()
 	await intro_drop_landed
 	
@@ -1406,7 +1586,8 @@ func _on_intro_state_entered() -> void:
 	
 	anim_player.play("elevator_boss/impact_no_slam")
 	await anim_player.animation_finished
-	anim_player.play("elevator_boss/idle")
+	
+	#anim_player.play("elevator_boss/idle")
 	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("start_phase_1")
 
@@ -1429,13 +1610,28 @@ func _on_arena_1_cutscene_state_entered() -> void:
 	shock_floor_hazard_tutorial.is_active = false
 	state_chart.send_event("stop_moving")
 	velocity = Vector3.ZERO
-	anim_player.play("elevator_boss/intro")
+	anim_sm.travel("intro")
+	#anim_player.play("elevator_boss/intro")
 
 
 func _on_arena_1_cutscene_state_physics_processing(_delta: float) -> void:
 	pass
-	#velocity.y -= GRAVITY * delta
-	#move_and_slide()
+
+
+func _on_arena_1_transition_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+## Transition cutscene from tutorial to main fight, handle cutscene pathfinding
+
+func set_cutscene_nav_position(goal_pos: Vector3) -> void:
+	navigation_component.follow_target = false
+	navigation_component.enable()
+	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
+	navigation_component.set_nav_target_position(nav_pos)
+	
+
 
 ### =============================================================
 ### TUTORIAL PHASES
@@ -1463,6 +1659,11 @@ func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 
 
 func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
+	await taunt()
+	state_chart.send_event("end_taunt")
+
+
+func taunt() -> void:
 	# Pick a random taunt sound
 	var taunt_sfx: AudioStream
 	match current_phase:
@@ -1492,13 +1693,18 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 			taunt_sfx = sfx_taunt_all.pick_random()
 	
 	# Scale the animation length to the sound
-	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / taunt_sfx.get_length()
+	var sfx_length: float = taunt_sfx.get_length()
 	SoundManager.play_sound(taunt_sfx, "SFX")
-	anim_player.play("elevator_boss/taunt")
-	await anim_player.animation_finished
+	# Don't taunt if we're in laser form
+	if next_attack != "start_laser_aoe_attack":
+		anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
+		anim_sm.travel("taunt")
+	#anim_player.play("elevator_boss/taunt")
+	#await anim_player.animation_finished
+	await get_tree().create_timer(sfx_length, false).timeout
 	anim_player.speed_scale = 1.0
 	
-	state_chart.send_event("end_taunt")
+	return
 
 func _on_tutorial_phase_1_taunt_taunting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
@@ -1521,8 +1727,11 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_arm")
-	await anim_player.animation_finished
+	anim_sm.travel("nails")
+	#anim_player.play("elevator_boss/ranged_arm")
+	#await anim_player.animation_finished
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = true
+	nails_anim_sm.travel("walk")
 	
 	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
 	await get_tree().create_timer(0.7, false).timeout
@@ -1533,13 +1742,15 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_physics_processing(delt
 	orbit_around_position(arena_1_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	#check_walk_anim()
 
 
 func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
+	#_end_walking_anim()
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
-	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30)
+	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30, _handle_nails_anim_walking)
 	
 	state_chart.send_event("stop_shooting")
 
@@ -1552,6 +1763,7 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_physics_processing(delta
 
 func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 	prev_attack = "strafing_nails"
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = false
 	state_chart.send_event("start_targeting")
 	_on_ranged_nails_recover_state_entered()
 
@@ -1590,6 +1802,7 @@ func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 	navigation_component.follow_target = true
 	state_chart.send_event("start_moving")
+	anim_sm.travel("walk")
 	shock_floor_hazard_tutorial.damage_per_tick = shock_damage_tutorial
 	prev_attack = "electrify_floor"
 	
@@ -1597,6 +1810,7 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 		#await get_tree().create_timer(1.0).timeout
 		#state_chart.send_event("start_slam")
 	
+	# TODO - re-implement this
 	# Pick a point on the lower floor mesh to move to
 	#var center_pos: Vector3 = arena_1_center.global_position
 	#var dir_from_center: Vector3 = center_pos.direction_to(self.global_position)
@@ -1620,27 +1834,32 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(del
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	state_chart.send_event("start_targeting")
+	
 	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	await get_tree().create_timer(0.6, false).timeout
 	
 	sfx_player.stream = sfx_electric_slam_buildup.pick_random()
 	sfx_player.play()
-	anim_player.play("elevator_boss/shock_slam_telegraph_start")
-	await anim_player.animation_finished
-	anim_player.play("elevator_boss/shock_slam_telegraph_loop")
-	await anim_player.animation_finished
+	
+	anim_sm.travel("shock_slam")
+	#anim_player.play("elevator_boss/shock_slam_telegraph_start")
+	#await anim_player.animation_finished
+	#anim_player.play("elevator_boss/shock_slam_telegraph_loop")
+	#await anim_player.animation_finished
 	#await get_tree().create_timer(0.3, false).timeout
 	#sfx_player.stream = sfx_electric_slam_telegraph.pick_random()
 	#sfx_player.play()
 	await _telegraph_attack()
 	
-	anim_player.play("elevator_boss/shock_slam_start")
-	await anim_player.animation_finished
+	shock_slam_sm.travel("slam_start")
+	#anim_player.play("elevator_boss/shock_slam_start")
+	#await anim_player.animation_finished
 	
 	await get_tree().create_timer(shock_duration_tutorial, false).timeout
 	
-	anim_player.play("elevator_boss/shock_slam_end")
-	await anim_player.animation_finished
+	shock_slam_sm.travel("slam_end")
+	#anim_player.play("elevator_boss/shock_slam_end")
+	#await anim_player.animation_finished
 	state_chart.send_event("end_shock")
 
 
@@ -1698,20 +1917,24 @@ func _on_tutorial_phase_2_melee_combo_swipe_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	
 	state_chart.send_event("start_targeting")
+	#anim_sm.travel("walk")
 	
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/swipe")
-	await anim_player.animation_finished
+	anim_sm.travel("melee_combo")
+	melee_combo_sm.travel("swipe")
+	#anim_player.play("elevator_boss/swipe")
+	#await anim_player.animation_finished
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_tutorial
 	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	else:
-		anim_player.play("elevator_boss/swipe_end")
-		await anim_player.animation_finished
+		melee_combo_sm.travel("swipe_end")
+		#anim_player.play("elevator_boss/swipe_end")
+		#await anim_player.animation_finished
 		state_chart.send_event("combo_end")
 
 
@@ -1724,15 +1947,17 @@ func _on_tutorial_phase_2_melee_combo_hook_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/kick")
-	await anim_player.animation_finished
+	melee_combo_sm.travel("kick")
+	#anim_player.play("elevator_boss/kick")
+	#await anim_player.animation_finished
 	
 	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_backswing")
 	else:
-		anim_player.play("elevator_boss/kick_end")
-		await anim_player.animation_finished
+		melee_combo_sm.travel("kick_end")
+		#anim_player.play("elevator_boss/kick_end")
+		#await anim_player.animation_finished
 		state_chart.send_event("combo_end")
 
 
@@ -1745,8 +1970,9 @@ func _on_tutorial_phase_2_melee_combo_backswing_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/backswipe")
-	await anim_player.animation_finished
+	melee_combo_sm.travel("backswipe")
+	#anim_player.play("elevator_boss/backswipe")
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("combo_end")
 
@@ -1802,8 +2028,9 @@ func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 		state_chart.send_event("end_wave")
 		return
 	
-	anim_player.play("elevator_boss/dash_wave")
-	await anim_player.animation_finished
+	anim_sm.travel("swipe_wave")
+	#anim_player.play("elevator_boss/dash_wave")
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("end_wave")
 
@@ -1829,6 +2056,7 @@ func _on_tutorial_phase_3_dash_wave_state_physics_processing(delta: float) -> vo
 func _on_phase_4_state_entered() -> void:
 	# TODO - move this to intro state
 	health_component.max_health = main_health
+	block_hurt_frame = true  # Prevent stagger on health init
 	health_component.initialize_health()
 	health_ui.clear_sub_health_bars()
 	health_ui.init_boss_health_ui(main_health, 2)
@@ -1836,6 +2064,7 @@ func _on_phase_4_state_entered() -> void:
 	
 	attack_interrupt = false
 	shock_floor_hazard_tutorial.is_active = false
+	block_hurt_frame = false
 	current_phase = 4
 	phase_4_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_4.pick_random(), "SFX")
@@ -1906,7 +2135,8 @@ func _on_tutorial_phase_4_electrify_floor_slamming_state_entered() -> void:
 
 
 func _on_main_fight_state_entered() -> void:
-	anim_player.play("elevator_boss/intro")
+	anim_sm.travel("intro")
+	#anim_player.play("elevator_boss/intro")
 
 
 func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
@@ -1925,8 +2155,11 @@ func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_arm")
-	await anim_player.animation_finished
+	anim_sm.travel("nails")
+	#anim_player.play("elevator_boss/ranged_arm")
+	#await anim_player.animation_finished
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = true
+	nails_anim_sm.travel("walk")
 	
 	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
 	await get_tree().create_timer(0.6, false).timeout
@@ -1943,7 +2176,7 @@ func _on_tutorial_phase_4_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
-	await shoot_nail_projectile(2, 8, 0.35, 0.6, 55)
+	await shoot_nail_projectile(2, 8, 0.35, 0.6, 55, _handle_nails_anim_walking)
 	
 	state_chart.send_event("stop_shooting")
 
@@ -1956,6 +2189,7 @@ func _on_tutorial_phase_4_strafing_nails_shooting_state_physics_processing(delta
 
 func _on_tutorial_phase_4_strafing_nails_recover_state_entered() -> void:
 	prev_attack = "strafing_nails"
+	#anim_tree["parameters/mechanic_attack_states/nails/conditions/is_strafing"] = false
 	state_chart.send_event("start_targeting")
 	_on_ranged_nails_recover_state_entered()
 
@@ -1996,8 +2230,9 @@ func _on_tutorial_phase_4_dash_wave_swipe_wave_state_entered() -> void:
 		state_chart.send_event("end_wave")
 		return
 	
-	anim_player.play("elevator_boss/dash_wave_fast")
-	await anim_player.animation_finished
+	anim_sm.travel("swipe_wave")
+	#anim_player.play("elevator_boss/dash_wave_fast")
+	#await anim_player.animation_finished
 	
 	state_chart.send_event("end_wave")
 
@@ -2012,3 +2247,13 @@ func _on_phase_5_state_entered() -> void:
 	SoundManager.play_sound(sfx_taunt_phase_5.pick_random(), "SFX")
 	
 	select_attack()
+
+
+func _on_inactive_state_physics_processing(delta: float) -> void:
+	if next_attack == "start_laser_aoe_attack":
+		return
+	
+	velocity.x = 0
+	velocity.z = 0
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
