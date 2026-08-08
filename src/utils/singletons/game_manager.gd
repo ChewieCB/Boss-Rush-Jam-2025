@@ -57,8 +57,6 @@ var player: Player
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: Node3D
-
-# Temporary singleton
 var gun_customize_ui: InventoryUI
 
 @onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
@@ -123,17 +121,7 @@ var selected_level_path: String
 var selected_boss_id: BossCore.BossIdEnum
 var bet_value = 0
 var reward_value = 0
-var risk_modifier_level_dict = {
-	RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
-	RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
-	RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
-	RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
-	RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
-	RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
-	RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
-	RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
-	RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
-}
+var risk_modifier_level_dict = _default_risk_modifier_level_dict()
 var boss_ante = 0
 var risk_level = 0:
 	set(value):
@@ -290,24 +278,33 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: i
 	if equipped_count >= player.current_gun.max_barrels:
 		return "Can not equip more barrels"
 
+	# No explicit slot requested: fill the first empty slot instead of
+	# silently landing on equipped_barrels[-1] (last slot, negative index).
+	if slot_idx == -1:
+		slot_idx = equipped_barrels.find(null)
+		if slot_idx == -1:
+			return "Can not equip more barrels"
+	elif equipped_barrels[slot_idx] != null:
+		return "Slot already occupied"
+
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
 			found_data = data
-	if found_data:
-		# Check if already equipped archetype
-		for barrel in equipped_barrels:
-			if barrel == null:
-				continue
-			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
-				return "Can only equip 1 archetype barrel"
+	if not found_data:
+		return "Barrel not found in inventory"
 
-		inventory_barrels.erase(found_data)
-		equipped_barrels[slot_idx] = found_data
-		refresh_shop_ui.emit()
-		GameManager.player.current_gun.install_barrel(found_data, slot_idx)
-		#if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
-			#return "Warning: archetype barrel isn't installed in first slot"
+	# Check if already equipped archetype
+	for barrel in equipped_barrels:
+		if barrel == null:
+			continue
+		if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
+			return "Can only equip 1 archetype barrel"
+
+	inventory_barrels.erase(found_data)
+	equipped_barrels[slot_idx] = found_data
+	refresh_shop_ui.emit()
+	player.current_gun.install_barrel(found_data, slot_idx)
 	return ""
 
 
@@ -327,11 +324,13 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 				barrel_idx = i
 				break
 
-	if found_data:
-		GameManager.player.current_gun.remove_barrel(barrel_idx)
-		equipped_barrels[barrel_idx] = null
-		inventory_barrels.append(found_data)
-		refresh_shop_ui.emit()
+	if not found_data:
+		return "Barrel not equipped"
+
+	player.current_gun.remove_barrel(barrel_idx)
+	equipped_barrels[barrel_idx] = null
+	inventory_barrels.append(found_data)
+	refresh_shop_ui.emit()
 	return ""
 
 
@@ -491,8 +490,8 @@ func get_boss_chip_amount_drop_multiplier() -> float:
 #endregion
 
 #region Risk modifier
-func reset_difficulty_modifier():
-	risk_modifier_level_dict = {
+func _default_risk_modifier_level_dict() -> Dictionary:
+	return {
 		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
 		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
 		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
@@ -503,6 +502,9 @@ func reset_difficulty_modifier():
 		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
 		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
 	}
+
+func reset_difficulty_modifier():
+	risk_modifier_level_dict = _default_risk_modifier_level_dict()
 	risk_level = 0
 	boss_ante = 0
 	bet_value = 0
