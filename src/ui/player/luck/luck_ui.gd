@@ -61,7 +61,7 @@ func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 		luck_bar.value = new_luck
 	else:
 		luck_gain_bar.value = new_luck
-	
+
 	timer.start()
 
 

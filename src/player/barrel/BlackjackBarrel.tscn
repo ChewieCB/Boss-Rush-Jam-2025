@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bue0axdtvr84v"]
+[gd_scene load_steps=9 format=3 uid="uid://bue0axdtvr84v"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fwfl1"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_3b88v"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_ftmnu"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_0sxmc"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_rbhad"]
+[ext_resource type="Script" path="res://src/player/barrel/bloody_scalpel_effect.gd" id="7_74atl"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/twenty_one_effect.gd" id="7_q0vm4"]
 
 [node name="BlackjackBarrel" type="Node3D"]
@@ -36,15 +37,18 @@ new_value = 1.0
 script = ExtResource("2_3b88v")
 display_text_title = "Bloody Scalpel"
 display_text_tag = "Sharp and cut like butter"
-positive_desc = Array[String](["Applies bleed status", "Double projectile count"])
+display_text_desc = "Apply bleed status and add 4 bullets per shot
+-50% damage
+Increase spread horizontally"
+positive_desc = Array[String](["Add Bleed status", "Add 4 bullets per shot"])
 negative_desc = Array[String](["Increase spread horizontally", "-50% damage"])
 icon_id = 53
+luck_triggers = Array[int]([16])
 
-[node name="DoubleProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+[node name="AddProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("4_0sxmc")
 attribute = 2
-modify_value = 100.0
-is_perc = true
+modify_value = 4.0
 
 [node name="ReduceDamage" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("4_0sxmc")
@@ -55,7 +59,7 @@ is_perc = true
 [node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("4_0sxmc")
 attribute = 7
-modify_value = 2.0
+modify_value = 4.0
 
 [node name="IncreaseSpreadHorizontalBias" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("4_0sxmc")
@@ -68,10 +72,14 @@ status_effect = 5
 change_color = true
 new_color = Color(0.644531, 0.00711507, 0, 1)
 
+[node name="BloodyScalpelEffect" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("7_74atl")
+
 [node name="CatchTwentyOneEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("7_q0vm4")
 display_text_title = "Catch Twenty-One"
 display_text_tag = "A nice suprise whenever the number 21 appear"
+display_text_desc = "Something good, or bad, when you deal 21 damage, or have 21 bullets left, or..."
 positive_desc = Array[String](["Something may happen if you deal 21 damage, or have 21 bullets, ..."])
 negative_desc = Array[String](["The surprise isn’t necessarily beneficial"])
 icon_id = 54

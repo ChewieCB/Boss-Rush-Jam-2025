@@ -189,7 +189,7 @@ var freecam: FreeCam
 func _ready():
 	GameManager.change_fmod_bgm_player_is_dead(false)
 	GameManager.player = self
-	
+
 	for mesh in debug_meshes.get_children():
 		mesh.visible = false
 	player_camera.set_fov(GameManager.camera_fov)
@@ -223,7 +223,7 @@ func _ready():
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
-	
+
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
@@ -253,7 +253,7 @@ func _unhandled_input(event):
 
 	if is_in_menu:
 		return
-	
+
 	# Ignore touchpad / gyro events
 	if event is InputEventScreenTouch \
 	or event is InputEventScreenDrag \
@@ -351,12 +351,12 @@ func _process(delta):
 			status.duration -= delta
 			if status.duration <= 0:
 				remove_status_effect(status)
-	
+
 	object_to_be_interacted = null
 	interact_ui.visible = false
 	#
 	if aim_ray.is_colliding() and not is_in_menu:
-		# TODO - refactor the interactible system to have an inheritable 
+		# TODO - refactor the interactible system to have an inheritable
 		# template class with these methods/features for consistency.
 		# https://gnarled-hand.codecks.io/card/2xo-refactor-the-interactible-system-to-have-an-inheritable-template-class-with
 		var interact_col = aim_ray.get_collider()
@@ -367,7 +367,7 @@ func _process(delta):
 			interact_col.global_position.distance_to(global_position) <= _dist:
 				object_to_be_interacted = interact_col
 				interact_ui.visible = true
-					
+
 				if interact_col.has_method("get_interact_text"):
 					interact_ui.show_custom_text(interact_col.get_interact_text())
 				else:
@@ -497,7 +497,7 @@ func show_barrel_effect_ui() -> void:
 
 	if current_gun.max_barrels == 0:
 		return
-	
+
 	barrel_detail_ui.process_mode = Node.PROCESS_MODE_INHERIT
 	barrel_ui_active = true
 
@@ -507,7 +507,7 @@ func show_barrel_effect_ui() -> void:
 
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
-	
+
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if current_gun.barrel_container.get_child(i) is not NullBarrel:
@@ -523,15 +523,15 @@ func show_barrel_effect_ui() -> void:
 func hide_barrel_effect_ui() -> void:
 	if not barrel_ui_active:
 		return
-	
+
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
-	
+
 	barrel_ui_tween = get_tree().create_tween()
-	
+
 	Engine.time_scale = 1.0
-	
+
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
@@ -558,7 +558,7 @@ func update_barrel_effect_ui() -> void:
 
 func _update_effect_ui(idx: int) -> void:
 	var effect_ui = barrel_detail_ui.effect_boxes[idx]
-	
+
 	if idx < current_gun.barrel_container.get_child_count():
 		var barrel: SpinBarrel = current_gun.barrel_container.get_child(idx)
 		if barrel is NullBarrel:
@@ -567,7 +567,7 @@ func _update_effect_ui(idx: int) -> void:
 			effect_ui.tag_label.text = ""
 			effect_ui.effect_description_label.text = ""
 			return
-		
+
 		var _effect: BaseBarrelEffect = barrel.get_active_effect()
 		var _texture_cache: Dictionary = GameManager.effect_icon_texture_cache
 		if _effect.icon_id != -1:
@@ -577,9 +577,9 @@ func _update_effect_ui(idx: int) -> void:
 		effect_ui.name_label.text = _effect.display_text_title
 		effect_ui.tag_label.text = _effect.display_text_tag
 		effect_ui.effect_description_label.text = _effect.display_text_desc
-		
+
 		effect_ui.clear_luck_triggers.call_deferred()
-		
+
 		var _triggers = _effect.luck_triggers
 		for i in range(_triggers.size()):
 			var trigger_id = _triggers[i]
