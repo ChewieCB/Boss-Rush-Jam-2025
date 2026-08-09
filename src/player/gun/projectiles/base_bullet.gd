@@ -347,7 +347,7 @@ func apply_damage_to_health_component(health_component: HealthComponent, damage_
 	const CRIT_TEXT_COLOR = Color(1, 0.24, 0)
 	if is_crit:
 		SoundManager.play_sound(sfx_crit.pick_random(), "Gun")
-		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
+		health_component.damage(damage_value, self.global_position, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
 	else:
 		health_component.damage(damage_value)
 

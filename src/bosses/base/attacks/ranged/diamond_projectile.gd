@@ -20,7 +20,7 @@ var rot: Vector3
 var diamond_homing_speed = projectile_speed
 
 func _ready() -> void:
-	super ()
+	super()
 	homing_delay_timer.start(homing_delay)
 
 func init(_damage: float, _speed: float):

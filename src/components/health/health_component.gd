@@ -49,7 +49,8 @@ func _ready() -> void:
 	initialize_health()
 
 
-func damage(_damage: float, color: Color = Color.WHITE, text_scale_pop: float = 1.3, detail_text: String = "") -> void:
+func damage(_damage: float, _damage_pos: Vector3 = Vector3.ZERO, 
+color: Color = Color.WHITE, text_scale_pop: float = 1.3, detail_text: String = "") -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 	if enabled:
 		if not is_invincible:

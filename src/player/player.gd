@@ -200,7 +200,8 @@ func _ready():
 	stat_ui.luck_component = luck_component
 
 	health_component.show_damage_text = false
-	health_component.health_changed.connect(_on_health_changed)
+	#health_component.health_changed.connect(_on_health_changed)
+	health_component.player_damage.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	health_component.is_owned_by_player = true
 
@@ -806,34 +807,35 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 			jump(0.8)
 
 
-func _on_health_changed(new_health: float, prev_health: float) -> void:
-	if new_health < prev_health:
-		state_chart.send_event("start_damage")
-		InputHelper.rumble_large()
-		SoundManager.play_sound(sfx_hurt.pick_random())
-		if new_health > 0:
-			state_chart.send_event("end_damage")
-			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
-				var buff_value = 0
-				var buff_time = 0
-				match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]):
-					1:
-						buff_value = 0.15
-						buff_time = 2
-					2:
-						buff_value = 0.15
-						buff_time = 3
-					3:
-						buff_value = 0.3
-						buff_time = 3
-					4:
-						buff_value = 0.3
-						buff_time = 5
-				# Only need 1 to display duration
-				GameManager.create_and_add_status_effect("Double Down (Min damage)", "double_down_min_buff",
-					StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
-				GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
-					StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
+func _on_health_changed(damage: float, damage_pos: Vector3) -> void:
+	state_chart.send_event("start_damage")
+	hurt_overlay.add_damage_dir_marker(damage_pos)
+	InputHelper.rumble_large()
+	SoundManager.play_sound(sfx_hurt.pick_random())
+	
+	if health_component.current_health > 0:
+		state_chart.send_event("end_damage")
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
+			var buff_value = 0
+			var buff_time = 0
+			match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]):
+				1:
+					buff_value = 0.15
+					buff_time = 2
+				2:
+					buff_value = 0.15
+					buff_time = 3
+				3:
+					buff_value = 0.3
+					buff_time = 3
+				4:
+					buff_value = 0.3
+					buff_time = 5
+			# Only need 1 to display duration
+			GameManager.create_and_add_status_effect("Double Down (Min damage)", "double_down_min_buff",
+				StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
+			GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
+				StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
 
 
 func _on_died() -> void:

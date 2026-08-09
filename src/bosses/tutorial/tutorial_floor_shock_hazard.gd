@@ -31,6 +31,8 @@ var stopped_moving = false
 var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
 var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 
+var fired_by: Node3D
+
 func _ready() -> void:
 	#is_active = true
 	pass
@@ -53,7 +55,7 @@ func trigger_effect() -> void:
 		for body in bodies_inside:
 			if body in immune_bodies:
 				continue
-			body.health_component.damage(initial_damage)
+			body.health_component.damage(initial_damage, fired_by.global_position)
 			#if damage_per_tick > 0:
 				#body.health_component.damage(damage_per_tick)
 			

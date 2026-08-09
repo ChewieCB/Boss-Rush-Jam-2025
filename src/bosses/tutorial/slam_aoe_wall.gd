@@ -20,6 +20,7 @@ var max_range: float
 var tween: Tween
 
 var has_hit_player: bool = false
+var fired_by: Node3D
 
 
 func _ready() -> void:
@@ -114,6 +115,7 @@ func deactivate() -> void:
 	self.visible = false
 	slam_particles.emitting = false
 	slam_particles.is_on_floor = false
+	fired_by = null
 	
 	if tween:
 		if tween.is_running():
@@ -159,7 +161,7 @@ func _on_wave_collision(
 			else:
 				SoundManager.play_sound(sfx_flame_wall_hit.pick_random(), "SFX")
 				InputHelper.rumble_medium()
-				body.health_component.damage(aoe_damage)
+				body.health_component.damage(aoe_damage, fired_by.global_position)
 				trigger_pushback(body, 10.0, self, pushback_radius)
 				_end_wall()
 				return

@@ -20,6 +20,7 @@ var max_range: float
 var tween: Tween
 
 var has_hit_player: bool = false
+var fired_by: Node3D
 
 
 func init(_width: float, _height: float, _damage: int, _max_range: float) -> void:
@@ -56,6 +57,7 @@ func send_line(
 func _end_line() -> void:
 	# TODO - fade out mesh material
 	deactivate()
+	fired_by = null
 	finished.emit()
 
 
@@ -125,7 +127,7 @@ func _on_wave_collision(
 			else:
 				SoundManager.play_sound(sfx_flame_wall_hit.pick_random(), "SFX")
 				InputHelper.rumble_medium()
-				body.health_component.damage(aoe_damage)
+				body.health_component.damage(aoe_damage, fired_by.global_position)
 				trigger_pushback(body, 10.0, self, pushback_radius)
 				return
 		

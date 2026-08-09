@@ -338,6 +338,7 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
+	projectile.fired_by = self
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
 	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
@@ -367,6 +368,7 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 	if not projectile.finished.is_connected(_cleanup_proj):
 		projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
 	projectile.global_position = spawn_pos
+	projectile.fired_by = self
 	projectile.activate()
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
@@ -377,6 +379,7 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 
 func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
 	proj.deactivate()
+	proj.fired_by = null
 	proj_pool.push_back(proj)
 
 
@@ -941,7 +944,7 @@ func take_bleed_burst_damage() -> void:
 	const BLEED_DMG_MAX_HP_PERC = 0.04
 	const BLEED_DMG_FLAT = 100
 	var bleed_dmg = int(health_component.max_health * BLEED_DMG_MAX_HP_PERC + BLEED_DMG_FLAT)
-	health_component.damage(bleed_dmg, Color.DARK_RED)
+	health_component.damage(bleed_dmg, self.global_position, Color.DARK_RED)
 	sprite.modulate = Color.DARK_RED
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -953,7 +956,7 @@ func _on_burning_timer_timeout() -> void:
 	# (0.3% max hp dmg per tick and flat 25)
 	# With 20 ticks, 6% max hp and 500 flat damage
 	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
-	health_component.damage(burn_dmg, Color.ORANGE)
+	health_component.damage(burn_dmg, self.global_position, Color.ORANGE)
 	sprite.modulate = Color.ORANGE
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -965,7 +968,7 @@ func _on_poisoned_timer_timeout() -> void:
 	# (2% max hp dmg per tick and flat 140)
 	# With 4 ticks, 8% max hp and 560 flat damage
 	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
-	health_component.damage(poison_dmg, Color.WEB_GREEN)
+	health_component.damage(poison_dmg, self.global_position, Color.WEB_GREEN)
 	sprite.modulate = Color.WEB_GREEN
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE

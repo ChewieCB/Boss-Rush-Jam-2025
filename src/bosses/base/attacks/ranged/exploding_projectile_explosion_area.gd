@@ -7,6 +7,8 @@ class_name ExplosionDamageProjectileArea
 @export var radius: float = 1.0
 @export var pushback_scale: float = 1.0
 
+var fired_by: Node3D
+
 
 func init(_damage: int, _radius: float, _pushback_scale: float = 1.0):
 	self.damage = _damage
@@ -27,4 +29,4 @@ func query() -> void:
 			if body is Player:
 				body.apply_impulse_to_player(global_position.direction_to(body.global_position) * damage * pushback_scale)
 		if "health_component" in body:
-			body.health_component.damage(damage)
+			body.health_component.damage(damage, fired_by.global_position)

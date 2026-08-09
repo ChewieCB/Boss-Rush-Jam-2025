@@ -1,12 +1,28 @@
-[gd_scene load_steps=17 format=3 uid="uid://bjaq7wtuojgjb"]
+[gd_scene load_steps=19 format=3 uid="uid://bjaq7wtuojgjb"]
 
 [ext_resource type="Script" path="res://src/ui/player/hurt_screen/hurt_overlay.gd" id="1_46sc2"]
 [ext_resource type="Shader" path="res://assets/shaders/blur_vignette.gdshader" id="1_ovsjd"]
+[ext_resource type="Shader" path="res://src/ui/player/hurt_screen/directional_damage_indicator.gdshader" id="2_lhucw"]
 [ext_resource type="Shader" path="res://assets/shaders/vignette.gdshader" id="2_xhspb"]
 [ext_resource type="Texture2D" uid="uid://bxdks60f0n75y" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay V2.png" id="3_qnulk"]
 [ext_resource type="Texture2D" uid="uid://dqr10nkw51o64" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Blood Cloud Blood Overlay V2.png" id="4_nh1ch"]
 [ext_resource type="Texture2D" uid="uid://bcam3ekfkj7n1" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay.png" id="5_1hqwy"]
 [ext_resource type="Shader" path="res://src/ui/player/hurt_screen/stun.gdshader" id="7_r3k8y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_42wcf"]
+shader = ExtResource("2_lhucw")
+shader_parameter/segment_color = Color(1, 0.17, 0.17, 1)
+shader_parameter/background_color = Color(0.310617, 0.310617, 0.310617, 0)
+shader_parameter/outer_radius = 0.398
+shader_parameter/thickness = 0.124
+shader_parameter/taper = 0.034
+shader_parameter/active_arcs_count = 0
+shader_parameter/start_angles_degrees = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/arc_spans_degrees = PackedFloat32Array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/arc_alpha = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/arc_ring_span = 58.753
+shader_parameter/arc_ring_thickness = 0.024
+shader_parameter/arc_ring_gap = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ikw13"]
 shader = ExtResource("7_r3k8y")
@@ -316,6 +332,21 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_46sc2")
+
+[node name="DamageDirectionMarkers" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_42wcf")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="StunShader" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
