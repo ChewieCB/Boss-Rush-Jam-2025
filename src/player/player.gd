@@ -201,8 +201,8 @@ func _ready():
 	stat_ui.luck_component = luck_component
 
 	health_component.show_damage_text = false
-	#health_component.health_changed.connect(_on_health_changed)
-	health_component.player_damage.connect(_on_health_changed)
+	health_component.health_changed.connect(_on_health_changed)
+	health_component.player_damage.connect(_on_player_damage)
 	health_component.died.connect(_on_died)
 	health_component.is_owned_by_player = true
 
@@ -808,8 +808,9 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 			jump(0.8)
 
 
-func _on_health_changed(damage: float, damage_pos: Vector3) -> void:
+func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 	state_chart.send_event("start_damage")
+	
 	hurt_overlay.add_damage_dir_marker(damage_pos)
 	InputHelper.rumble_large()
 	SoundManager.play_sound(sfx_hurt.pick_random())
@@ -837,6 +838,20 @@ func _on_health_changed(damage: float, damage_pos: Vector3) -> void:
 				StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
 			GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
 				StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
+
+
+func _on_health_changed(current_health: float, prev_health: float) -> void:
+	var current_health_ratio: float = current_health / health_component.max_health
+	var health_hurt_opacity = remap(current_health_ratio, 0.5, 0.0, 0.0, 0.4)
+	if current_health_ratio <= 0.5:
+		hurt_overlay.update_base_hurt_opacity(health_hurt_opacity)
+		if not hurt_overlay.anim_player.current_animation == "low_health_throb":
+			hurt_overlay.anim_player.play("low_health_throb")
+	else:
+		hurt_overlay.update_base_hurt_opacity(0.0)
+		hurt_overlay.anim_player.stop()
+		hurt_overlay.anim_player.play("RESET")
+		#hurt_overlay.low_health_tween.kill()
 
 
 func _on_died() -> void:

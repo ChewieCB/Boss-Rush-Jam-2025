@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bjaq7wtuojgjb"]
+[gd_scene load_steps=31 format=3 uid="uid://bjaq7wtuojgjb"]
 
 [ext_resource type="Script" path="res://src/ui/player/hurt_screen/hurt_overlay.gd" id="1_46sc2"]
 [ext_resource type="Shader" path="res://assets/shaders/blur_vignette.gdshader" id="1_ovsjd"]
@@ -17,6 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://bhhl5mwn6ljwc" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Overlay V3.png" id="9_r0gl4"]
 [ext_resource type="Texture2D" uid="uid://bnvilii7i3a4y" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Overlay.png" id="10_gqxip"]
 [ext_resource type="Texture2D" uid="uid://b48r73f8roulp" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay V3.png" id="12_vts24"]
+[ext_resource type="Texture2D" uid="uid://dsmqmuys5r4j4" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Smear Overlay V2.png" id="17_o31l4"]
+[ext_resource type="Texture2D" uid="uid://byg2lf8dx8p3n" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Smear Overlay V3.png" id="18_do8a7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_42wcf"]
 shader = ExtResource("2_lhucw")
@@ -67,7 +69,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HurtFlash/HurtVignette:modulate")
+tracks/1/path = NodePath("LowHealthOverlay/HurtVignette:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -148,6 +150,30 @@ tracks/7/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("LowHealthOverlay:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("LowHealthOverlay:scale")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_jrtqo"]
 resource_name = "dead"
@@ -226,7 +252,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HurtFlash/HurtVignette:modulate")
+tracks/1/path = NodePath("LowHealthOverlay/HurtVignette:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -278,7 +304,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HurtFlash/HurtVignette:modulate")
+tracks/0/path = NodePath("LowHealthOverlay/HurtVignette:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -300,11 +326,41 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_1vdu8"]
+resource_name = "low_health_throb"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LowHealthOverlay:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.2),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.545098), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LowHealthOverlay:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.72529e-09, 0.6, 1.2),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ahuvs"]
 _data = {
 "RESET": SubResource("Animation_sfdsr"),
 "dead": SubResource("Animation_jrtqo"),
 "hurt": SubResource("Animation_fklgp"),
+"low_health_throb": SubResource("Animation_1vdu8"),
 "revive": SubResource("Animation_1p6qf"),
 "stun": SubResource("Animation_k1lnr")
 }
@@ -375,16 +431,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HurtVignette" type="ColorRect" parent="HurtFlash"]
-material = SubResource("ShaderMaterial_64x3u")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
 [node name="BloodSplatter" type="TextureRect" parent="HurtFlash"]
 layout_mode = 1
 anchors_preset = 15
@@ -398,12 +444,68 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="LowHealthOverlay" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(960, 540)
+
+[node name="HurtVignette" type="ColorRect" parent="LowHealthOverlay"]
+material = SubResource("ShaderMaterial_64x3u")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HurtColor" type="ColorRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.65, 0.1404, 0.013, 0.486275)
+
+[node name="BloodSmear1" type="TextureRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("17_o31l4")
+expand_mode = 3
+
+[node name="BloodSmear2" type="TextureRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.14159
+pivot_offset = Vector2(960, 540)
+mouse_filter = 2
+texture = ExtResource("18_do8a7")
+expand_mode = 3
+
+[node name="BloodSmear3" type="TextureRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_gqxip")
+expand_mode = 3
 
 [node name="BloodDead" type="Control" parent="."]
 visible = false

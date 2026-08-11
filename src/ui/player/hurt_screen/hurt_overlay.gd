@@ -2,7 +2,7 @@ extends Control
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
-@onready var vignette: ColorRect = $HurtFlash/HurtVignette
+@onready var vignette: ColorRect = $LowHealthOverlay/HurtVignette
 @onready var stun_shader: ColorRect = $StunShader
 @onready var damage_dir_markers: ColorRect = $DamageDirectionMarkers
 @onready var player: Player = get_parent().get_parent()
@@ -11,6 +11,9 @@ var hit_trackers: Array[Node3D] = []
 
 @onready var hurt_blood: TextureRect = $HurtFlash/BloodSplatter
 @export var hurt_blood_textures: Array[Texture]
+@onready var low_health_overlay: Control = $LowHealthOverlay
+
+var low_health_tween: Tween
 
 
 func _ready() -> void:
@@ -37,6 +40,46 @@ func hurt(damage_pos: Vector3 = Vector3.INF) -> void:
 	
 	if damage_pos != Vector3.INF:
 		add_damage_dir_marker(damage_pos)
+
+
+func update_base_hurt_opacity(alpha: float) -> void:
+	low_health_overlay.modulate.a = alpha
+	var reset_anim: Animation = anim_player.get_animation("RESET")
+	reset_anim.track_set_key_value(6, 0, Color(1, 1, 1, alpha))
+	var hurt_anim: Animation = anim_player.get_animation("hurt")
+	hurt_anim.track_set_key_value(0, 1, Color(1, 1, 1, alpha))
+	var death_anim: Animation = anim_player.get_animation("death")
+	hurt_anim.track_set_key_value(2, 0, Color(1, 1, 1, alpha))
+	var low_health_anim: Animation = anim_player.get_animation("low_health_throb")
+	# Opacity
+	low_health_anim.track_set_key_value(0, 0, Color(1, 1, 1, alpha/2))
+	low_health_anim.track_set_key_value(0, 1, Color(1, 1, 1, alpha))
+	low_health_anim.track_set_key_value(0, 2, Color(1, 1, 1, alpha/2))
+	# Scale
+	low_health_anim.track_set_key_value(1, 1, Color(1, 1, 1, 1.0 + alpha))
+	# Vignette radius
+	tween_low_health_anim(1.0)
+
+
+func tween_low_health_anim(radius: float) -> void:
+	if low_health_tween:
+		low_health_tween.kill()
+	
+	low_health_tween = get_tree().create_tween()
+	low_health_tween.set_parallel(false)
+	low_health_tween.set_loops()
+	low_health_tween.tween_method(
+		set_vignette_radius, radius, radius * 0.75, 0.6
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	low_health_tween.tween_method(
+		set_vignette_radius, radius * 0.75, radius, 0.6
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
+
+
+func set_vignette_radius(radius: float = 1.0) -> void:
+	# Ratio is 1.0 outer to 0.74 inner
+	vignette.material.set_shader_parameter("inner_radius", radius * 0.74)
+	vignette.material.set_shader_parameter("outer_radius", radius * 1.0)
 
 
 func get_marker_dir(source_pos: Vector3) -> float:
@@ -135,6 +178,8 @@ func dead() -> void:
 	
 	hurt_blood.texture = hurt_blood_textures.pick_random()
 	anim_player.play("dead")
+	low_health_overlay.modulate.a = 0.5
+	low_health_overlay.scale = Vector2.ONE
 
 
 func revive() -> void:
