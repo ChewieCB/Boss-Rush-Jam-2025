@@ -103,6 +103,7 @@ const GRAVITY: float = 30
 const FALL_SPEED_TO_SHAKE_CAMERA: float = 15
 const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
+const HURT_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const BULLET_SPAWN_POS_VARIATION: float = 10.0
@@ -853,6 +854,9 @@ func _on_health_hurt_state_entered() -> void:
 	LuckHandler.time_since_last_hurt = 0.0
 	LuckHandler.last_hurt_mult = 0
 	hurt_overlay.hurt()
+	# TODO - scale shake and rumble to damage amount
+	player_camera.add_trauma(HURT_TRAUMA)
+	InputHelper.rumble_small()
 
 
 func _on_health_dead_state_entered() -> void:
@@ -876,6 +880,7 @@ func _on_health_dead_state_exited() -> void:
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+
 
 func add_status_effect(new_status: StatusEffect):
 	# Check if already exist, then refresh it instead of add new

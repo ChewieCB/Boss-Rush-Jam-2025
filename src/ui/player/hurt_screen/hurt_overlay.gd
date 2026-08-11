@@ -2,12 +2,15 @@ extends Control
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
-@onready var vignette: ColorRect = $HurtVignette
+@onready var vignette: ColorRect = $HurtFlash/HurtVignette
 @onready var stun_shader: ColorRect = $StunShader
 @onready var damage_dir_markers: ColorRect = $DamageDirectionMarkers
 @onready var player: Player = get_parent().get_parent()
 var active_damage_markers: Array = []
 var hit_trackers: Array[Node3D] = []
+
+@onready var hurt_blood: TextureRect = $HurtFlash/BloodSplatter
+@export var hurt_blood_textures: Array[Texture]
 
 
 func _ready() -> void:
@@ -29,6 +32,7 @@ func hurt(damage_pos: Vector3 = Vector3.INF) -> void:
 	if GameManager.hide_hurt_overlay:
 		return
 	
+	hurt_blood.texture = hurt_blood_textures.pick_random()
 	anim_player.play("hurt")
 	
 	if damage_pos != Vector3.INF:
@@ -128,6 +132,8 @@ func stun(stun_time: float) -> void:
 func dead() -> void:
 	if GameManager.hide_hurt_overlay:
 		return
+	
+	hurt_blood.texture = hurt_blood_textures.pick_random()
 	anim_player.play("dead")
 
 

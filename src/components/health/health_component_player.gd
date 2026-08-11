@@ -34,5 +34,7 @@ _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String 
 					player.luck_component.current_luck = 0
 					return
 			
+			health_changed.emit(current_health - _damage, current_health)
 			current_health -= _damage
 			player_damage.emit(_damage, _damage_pos)
+			

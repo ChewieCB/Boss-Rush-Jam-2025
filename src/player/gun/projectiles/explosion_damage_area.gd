@@ -83,7 +83,7 @@ func _on_body_entered(body: Node3D, is_disabled: bool = damage_disabled) -> void
 			if body.has_method("apply_status_buildup"):
 				body.apply_status_buildup(status_effect, 10000)
 		
-		body.health_component.damage(damage, text_colour)
+		body.health_component.damage(damage, self.global_position, text_colour)
 		explosive_damage.emit(damage, body)
 		
 		if body is Player:
