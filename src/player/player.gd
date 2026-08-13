@@ -217,6 +217,7 @@ func _ready():
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.gun_shot.connect(func(): stat_ui.anim_ammo_ui_scale(1.1))
 	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
 	current_gun.magazine_size_changed.connect(stat_ui.radial_ui_center_node.update)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
@@ -812,7 +813,8 @@ func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 	state_chart.send_event("start_damage")
 	
 	hurt_overlay.add_damage_dir_marker(damage_pos)
-	InputHelper.rumble_large()
+	stat_ui.anim_health_ui_scale(1.4)  # TODO - scale to damage
+	InputHelper.rumble_large()  # TODO - scale to damage
 	SoundManager.play_sound(sfx_hurt.pick_random())
 	
 	if health_component.current_health > 0:
@@ -845,6 +847,9 @@ func _on_health_changed(current_health: float, prev_health: float) -> void:
 	var health_hurt_opacity = remap(current_health_ratio, 1.0, 0.0, 0.0, 1.0)
 	var anim_speed: float = remap(current_health_ratio, 1.0, 0.0, 1.0, 1.8)
 	hurt_overlay.update_low_health_anim(health_hurt_opacity, anim_speed)
+	# Health bar shake on heal
+	if current_health > prev_health:
+		stat_ui.anim_health_ui_scale(1.2)
 
 
 func _on_died() -> void:
@@ -1073,6 +1078,7 @@ func cash_in_luck() -> void:
 	luck_bar_ui.cash_in_luck()
 	# Animate the luck bar draining
 	luck_component.disable()
+	stat_ui.anim_luck_ui_scale(1.5, 0.75)
 	var tween = get_tree().create_tween()
 	tween.tween_property(
 		luck_bar_ui.luck_bar, "value", 0, luck_redeem_time
