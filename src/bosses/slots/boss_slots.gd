@@ -579,6 +579,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 			var proj: BaseBossProjectile = fire_projectile_pooled(coin_proj_pool, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			#var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
+			proj.fired_by = self
 			anim_player.play("ranged_shot_spin_shoot")
 			await anim_player.animation_finished
 			anim_player.play("ranged_shot_spin")
