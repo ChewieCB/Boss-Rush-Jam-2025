@@ -51,9 +51,9 @@ void fragment() {
     if (angle < 0.0) {
         angle += 2.0 * PI;
     }
-	
+
 	float main_taper_t = clamp((dist - inner_radius) / max(taper, 0.0001), 0.0, 1.0);
-	
+
 	float main_uncovered = 1.0;
 	float indicator_uncovered = 1.0;
 
@@ -61,12 +61,12 @@ void fragment() {
 		if (arc_spans_degrees[i] == 0.0) {
 			continue;
 		}
-		
+
         float start_rad = radians(start_angles_degrees[i]);
 		float span_rad = radians(arc_spans_degrees[i]);
 		float mid_rad = normalize_angle(start_rad + span_rad * 0.5);
 		float this_alpha = clamp(arc_alpha[i], 0.0, 1.0);
-		
+
 		float tapered_main_span_rad = span_rad * (1.0 - main_taper_t);
 
 		if (main_ring_mask > 0.0) {
@@ -85,7 +85,7 @@ void fragment() {
 			}
         }
     }
-	
+
 	float main_alpha = 1.0 - main_uncovered;
 	float indicator_alpha = 1.0 - indicator_uncovered;
 
@@ -93,6 +93,6 @@ void fragment() {
 		main_ring_mask * main_alpha + indicator_ring_mask * indicator_alpha,
 		0.0, 1.0
 	);
-	
+
     COLOR = mix(background_color, segment_color, final_mask);
 }

@@ -305,9 +305,6 @@ color = Color(0.472, 0.826, 0, 0)
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
 
-[node name="LowHealthOverlay" parent="UI/HurtOverlay" index="3"]
-modulate = Color(1, 1, 1, 0)
-
 [node name="InteractUI" type="HBoxContainer" parent="UI"]
 anchors_preset = 8
 anchor_left = 0.5

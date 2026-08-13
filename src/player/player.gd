@@ -842,16 +842,8 @@ func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 
 func _on_health_changed(current_health: float, prev_health: float) -> void:
 	var current_health_ratio: float = current_health / health_component.max_health
-	var health_hurt_opacity = remap(current_health_ratio, 0.5, 0.0, 0.0, 0.4)
-	if current_health_ratio <= 0.5:
-		hurt_overlay.update_base_hurt_opacity(health_hurt_opacity)
-		if not hurt_overlay.anim_player.current_animation == "low_health_throb":
-			hurt_overlay.anim_player.play("low_health_throb")
-	else:
-		hurt_overlay.update_base_hurt_opacity(0.0)
-		hurt_overlay.anim_player.stop()
-		hurt_overlay.anim_player.play("RESET")
-		#hurt_overlay.low_health_tween.kill()
+	var health_hurt_opacity = remap(current_health_ratio, 1.0, 0.0, 0.0, 1.0)
+	hurt_overlay.update_low_health_anim(health_hurt_opacity)
 
 
 func _on_died() -> void:

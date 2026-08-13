@@ -1,6 +1,7 @@
 extends Control
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var anim_tree: AnimationTree = $AnimationTree
 
 @onready var vignette: ColorRect = $LowHealthOverlay/HurtVignette
 @onready var stun_shader: ColorRect = $StunShader
@@ -36,50 +37,27 @@ func hurt(damage_pos: Vector3 = Vector3.INF) -> void:
 		return
 	
 	hurt_blood.texture = hurt_blood_textures.pick_random()
-	anim_player.play("hurt")
+	anim_tree["parameters/hurt_shot/request"] = AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE
 	
 	if damage_pos != Vector3.INF:
 		add_damage_dir_marker(damage_pos)
 
 
-func update_base_hurt_opacity(alpha: float) -> void:
-	low_health_overlay.modulate.a = alpha
-	var reset_anim: Animation = anim_player.get_animation("RESET")
-	reset_anim.track_set_key_value(6, 0, Color(1, 1, 1, alpha))
-	var hurt_anim: Animation = anim_player.get_animation("hurt")
-	hurt_anim.track_set_key_value(0, 1, Color(1, 1, 1, alpha))
-	var death_anim: Animation = anim_player.get_animation("death")
-	hurt_anim.track_set_key_value(2, 0, Color(1, 1, 1, alpha))
-	var low_health_anim: Animation = anim_player.get_animation("low_health_throb")
-	# Opacity
-	low_health_anim.track_set_key_value(0, 0, Color(1, 1, 1, alpha/2))
-	low_health_anim.track_set_key_value(0, 1, Color(1, 1, 1, alpha))
-	low_health_anim.track_set_key_value(0, 2, Color(1, 1, 1, alpha/2))
-	# Scale
-	low_health_anim.track_set_key_value(1, 1, Color(1, 1, 1, 1.0 + alpha))
-	# Vignette radius
-	tween_low_health_anim(1.0)
-
-
-func tween_low_health_anim(radius: float) -> void:
-	if low_health_tween:
-		low_health_tween.kill()
+func update_low_health_anim(base_alpha: float, speed: float = 1.0) -> void:
+	anim_tree["parameters/low_health_blend/blend_amount"] = base_alpha
 	
-	low_health_tween = get_tree().create_tween()
-	low_health_tween.set_parallel(false)
-	low_health_tween.set_loops()
-	low_health_tween.tween_method(
-		set_vignette_radius, radius, radius * 0.75, 0.6
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	low_health_tween.tween_method(
-		set_vignette_radius, radius * 0.75, radius, 0.6
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
-
-
-func set_vignette_radius(radius: float = 1.0) -> void:
-	# Ratio is 1.0 outer to 0.74 inner
-	vignette.material.set_shader_parameter("inner_radius", radius * 0.74)
-	vignette.material.set_shader_parameter("outer_radius", radius * 1.0)
+	if base_alpha == 0.0:
+		return
+	
+	# Opacity
+	# Transparency should go LOW -> HIGH -> LOW
+	var low_alpha: float = 0.545
+	var high_alpha: float = 1.0
+	var low_health_anim: Animation = anim_player.get_animation("low_health_throb")
+	low_health_anim.track_set_key_value(0, 0, Color(1, 1, 1, low_alpha * base_alpha))
+	low_health_anim.track_set_key_value(0, 1, Color(1, 1, 1, high_alpha * base_alpha))
+	low_health_anim.track_set_key_value(0, 2, Color(1, 1, 1, low_alpha * base_alpha))
+	anim_tree["parameters/low_health_speed/scale"] = speed
 
 
 func get_marker_dir(source_pos: Vector3) -> float:
@@ -177,12 +155,18 @@ func dead() -> void:
 		return
 	
 	hurt_blood.texture = hurt_blood_textures.pick_random()
-	anim_player.play("dead")
-	low_health_overlay.modulate.a = 0.5
-	low_health_overlay.scale = Vector2.ONE
+	anim_tree["parameters/death_transition/transition_request"] =  "dead"
+	anim_tree["parameters/low_health_blend/blend_amount"] =  1.0
+	anim_tree["parameters/low_health_seek/seek_request"] =  0.5
+	anim_tree["parameters/low_health_speed/scale"] =  0.0
 
 
 func revive() -> void:
 	if GameManager.hide_hurt_overlay:
 		return
-	anim_player.play("revive")
+	#anim_player.play("revive")
+	anim_tree["parameters/death_transition/transition_request"] =  "dead"
+	anim_tree["parameters/low_health_blend/blend_amount"] =  0.0
+	anim_tree["parameters/low_health_seek/seek_request"] =  0.0
+	anim_tree["parameters/low_health_speed/scale"] =  0.0
+	#update_low_health_anim(0.0)
