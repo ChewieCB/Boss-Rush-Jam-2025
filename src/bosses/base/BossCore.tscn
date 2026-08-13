@@ -113,6 +113,7 @@ text_effect_location = NodePath("../DamageTextMarker")
 nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="UI" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="HealthUI" type="Control" parent="UI"]
 layout_mode = 3
