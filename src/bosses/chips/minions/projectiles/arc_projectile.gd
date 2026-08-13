@@ -16,6 +16,7 @@ signal finished
 #var debug_trajectory_mesh: MeshInstance3D
 
 var velocity := Vector3.ZERO
+var fired_by: Node3D
 
 
 func _ready() -> void:

@@ -9,6 +9,8 @@ signal finished
 @export var projectile_damage: float = 10.0
 @export var projectile_speed: float = 50.0
 
+var fired_by: Node3D
+
 
 func init(_damage: float):
 	projectile_damage = _damage
