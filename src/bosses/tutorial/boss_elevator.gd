@@ -161,7 +161,7 @@ var laser_aoe_pool: Array = []
 var aoe_warn_decal: Decal
 var laser_target_pos: Vector3
 @export var laser_aoe_marker: CompressedTexture2D
-@onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
+@onready var laser_particles: GPUParticles3D = $LaserSpawn/LaserEndParticles
 # SFX
 @export var sfx_laser_arm: Array[AudioStream]
 @export var sfx_laser_charging: Array[AudioStream]
@@ -212,7 +212,7 @@ func _ready() -> void:
 	sfx_taunt_phase_2_active.shuffle()
 	sfx_taunt_phase_3_active.shuffle()
 	#
-	for i in range((num_bursts + 1 )* shots_per_burst):
+	for i in range((num_bursts + 1) * shots_per_burst):
 		_init_nail_proj()
 	for i in range(3):
 		_init_aoe_line()
@@ -264,6 +264,21 @@ func activate() -> void:
 	print_debug("BossCore activate called")
 	SoundManager.play_sound(sfx_awaken, "SFX")
 	state_chart.send_event("start_intro")
+
+
+func hit_effect_sprite_flash():
+	sprite.material_override.set_shader_parameter("active", true)
+	super()
+	sprite.material_override.set_shader_parameter("active", true)
+	
+	var tween = create_tween()
+	tween.set_parallel(false)
+	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
+	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
+	
+	await tween.finished
+	
+	sprite.material_override.set_shader_parameter("active", false)
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:

@@ -135,6 +135,7 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
 ## So hurt frame doesnt override telegraph frames
 var block_hurt_frame = false
+var hit_tween: Tween
 
 @export_group("Phase")
 @export var current_phase: int = 1
@@ -222,7 +223,17 @@ func _ready() -> void:
 	print_debug("BossCore ready")
 	_original_sprite_position = sprite.position
 	_original_sprite_modulate = sprite.modulate
+	sprite.texture_changed.connect(_update_hit_shader.bind(sprite))
+	sprite.material_override.set_shader_parameter("tex", sprite.texture)
+	sprite.material_override.set_shader_parameter("active", false)
+	for child in sprite.get_children():
+		if child is Sprite3D:
+			child.texture_changed.connect(_update_hit_shader.bind(child))
+			child.material_override.set_shader_parameter("tex", child.texture)
+			child.material_override.set_shader_parameter("active", false)
+	
 	randomize()
+	
 	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
@@ -665,45 +676,38 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 
 ### HEALTH --------------------------------
 #### HIT
-func hit_effect_sprite_shake():
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_SINE)
-	tween.set_ease(Tween.EASE_OUT)
-	var shake_time = 6
-	for i in range(shake_time):
-		var offset = Vector3(
-			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
-			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
-			0
-		)
-		tween.tween_property(
-			sprite,
-			"position",
-			_original_sprite_position + offset,
-			hit_effect_shake_duration / shake_time
-		)
-	tween.tween_property(self, "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
+func _update_hit_shader(_sprite: Sprite3D) -> void:
+	_sprite.material_override.set_shader_parameter("tex", _sprite.texture)
+
 
 func hit_effect_sprite_flash():
+	sprite.material_override.set_shader_parameter("active", true)
+	for child in sprite.get_children():
+		if is_instance_valid(child):
+			if child is Sprite3D:
+				child.material_override.set_shader_parameter("active", true)
+	
 	var tween = create_tween()
-	tween.tween_property(sprite, "modulate", Color.RED, hit_effect_flash_duration)
-	tween.tween_property(sprite, "modulate", _original_sprite_modulate, hit_effect_flash_duration)
+	tween.set_parallel(false)
+	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
+	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
+	
+	await tween.finished
+	
+	sprite.material_override.set_shader_parameter("active", false)
+	for child in sprite.get_children():
+		if child is Sprite3D:
+			child.material_override.set_shader_parameter("active", false)
 
-func play_sprite_hit_effect() -> void:
-	# TODO: Add a SpriteHolder so we can modify sprite position and scale without
-	# affecting AnimationPlayer.
-	# hit_effect_sprite_shake()
-	# hit_effect_sprite_flash()
-	pass
 
 func _on_health_hit_state_entered() -> void:
-	play_sprite_hit_effect()
-	sprite.modulate = Color.RED
-	await get_tree().create_timer(0.05).timeout
+	hit_effect_sprite_flash()
 	state_chart.send_event("end_damage")
 
+
 func _on_health_hit_state_exited() -> void:
-	sprite.modulate = Color.WHITE
+	pass
+	#sprite.modulate = Color.WHITE
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:

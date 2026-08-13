@@ -136,23 +136,15 @@ func remove_status_ui(status_to_remove: StatusEffect):
 
 func anim_health_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
 	var health_bar = $MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer
-	_anim_ui_elem_scale(health_bar, amount, speed_scale)
+	UIUtils.anim_ui_elem_scale(health_bar, amount, speed_scale)
 
 func anim_luck_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
 	var luck_bar = $MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer
-	_anim_ui_elem_scale(luck_bar, amount, speed_scale)
+	UIUtils.anim_ui_elem_scale(luck_bar, amount, speed_scale)
 
 func anim_ammo_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
 	var ammo_ui = $MarginContainer/HBoxContainer/CircularUIContainer
-	_anim_ui_elem_scale(ammo_ui, amount, speed_scale)
-
-
-func _anim_ui_elem_scale(elem: Control, amount: float = 1.1, speed_scale: float = 1.0) -> void:
-	elem.pivot_offset = elem.size / 2
-	var shake_tween: Tween = get_tree().create_tween()
-	shake_tween.set_parallel(false)
-	shake_tween.tween_property(elem, "scale", Vector2(amount, amount), 0.05 * speed_scale)
-	shake_tween.tween_property(elem, "scale", Vector2.ONE, 0.08 * speed_scale)
+	UIUtils.anim_ui_elem_scale(ammo_ui, amount, speed_scale)
 
 
 func show_health_ui() -> void:

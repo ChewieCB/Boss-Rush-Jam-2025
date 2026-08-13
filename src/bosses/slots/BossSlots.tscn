@@ -1,4 +1,4 @@
-[gd_scene load_steps=221 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=223 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -83,6 +83,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 [ext_resource type="Texture2D" uid="uid://c40sn6u84htf2" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_No_Gun.png" id="74_lmlvi"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="75_5w0xk"]
 [ext_resource type="PackedScene" uid="uid://mcpnb5i47ns6" path="res://src/bosses/slots/death_rigid_bodies/SlottyDeathTorso.tscn" id="77_f2kfk"]
 [ext_resource type="PackedScene" uid="uid://4oxspbiiuf3p" path="res://src/bosses/slots/death_rigid_bodies/SlottyDeathCoin.tscn" id="78_i4mws"]
 [ext_resource type="PackedScene" uid="uid://cgu7u4xfa2mfy" path="res://src/bosses/slots/death_rigid_bodies/SlottyDeathGun.tscn" id="79_x7qgj"]
@@ -168,6 +169,14 @@ shader_parameter/extend_distance = 0.0
 shader_parameter/impact_points = null
 shader_parameter/impact_size = 1.0
 shader_parameter/impact_falloff_sharpness = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yqb4b"]
+render_priority = 0
+shader = ExtResource("75_5w0xk")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 1.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_n623y"]
 radius = 3.1
@@ -2021,6 +2030,7 @@ texture = ExtResource("4_6oj0s")
 transform = Transform3D(1.01626, 0.264044, 0, -0.264044, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
+material_override = SubResource("ShaderMaterial_yqb4b")
 billboard = 2
 texture = ExtResource("66_h52w4")
 

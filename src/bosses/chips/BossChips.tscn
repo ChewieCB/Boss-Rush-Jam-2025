@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=99 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -81,6 +81,15 @@
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="65_skpgp"]
 [ext_resource type="Script" path="res://src/bosses/chips/chiptopede_segment_hit_area.gd" id="66_8jaam"]
 [ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="66_ih6eo"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="66_vyv8o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0slk"]
+render_priority = 0
+shader = ExtResource("66_vyv8o")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 2.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
 radius = 2.9
@@ -277,7 +286,6 @@ _data = {
 }
 
 [node name="BossChips" instance=ExtResource("1_xyff2")]
-collision_mask = 11
 script = ExtResource("2_2er6y")
 phase_2_health_percentage_trigger = 0.5
 slam_aoe_decal = ExtResource("3_vww1n")
@@ -387,6 +395,7 @@ TURN_SPEED_SLOW = 6.0
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.62621, 0)
+material_override = SubResource("ShaderMaterial_g0slk")
 render_priority = 1
 texture = ExtResource("13_lqof8")
 
