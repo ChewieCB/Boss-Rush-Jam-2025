@@ -13,9 +13,10 @@ script = ExtResource("1_v4d5e")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="SlowRoller" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Slow Roller"
-display_text_tag = "Oh, the anticipation!"
+display_text_tag = "Play with your target"
 display_text_desc = "More damage with bullet flight time
 -50% projectile speed"
 positive_desc = Array[String](["Damage increases the longer the round is in-flight"])
@@ -39,9 +40,10 @@ script = ExtResource("3_b2svt")
 
 [node name="LongShot" type="Node3D" parent="EffectContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0242209, 0, 0.0132322)
+visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Long Shot"
-display_text_tag = "Oh, the separation!"
+display_text_tag = "Keep distance"
 display_text_desc = "More damage with distance
 -50% spread"
 positive_desc = Array[String](["Shots from further away do more damage", "-50% bullets spread"])
@@ -60,18 +62,17 @@ is_perc = true
 [node name="SnapCall" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
-display_text_tag = "Oh, the attraction!"
+display_text_tag = "Transfer momentum"
 display_text_desc = "More damage with bullet speed
-+25% projectile speed"
-positive_desc = Array[String](["Damage increased with projectile speed", "+25% projectile speed"])
-negative_desc = Array[String](["Does not affect hitscan shots"])
+Bullet gain projectile speed based on your momentum
+Convert hitscan shot to projectile"
+positive_desc = Array[String](["Damage increased with projectile speed", "Bullet gain projectile speed based on player momentum"])
+negative_desc = Array[String](["Convert hitscan shot to projectile"])
 icon_id = 30
+
+[node name="SetProjectile" type="Node3D" parent="EffectContainer/SnapCall"]
+script = ExtResource("5_2xsnk")
+attribute = 6
 
 [node name="SnapCallEffect" type="Node3D" parent="EffectContainer/SnapCall"]
 script = ExtResource("6_t0qlc")
-
-[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SnapCall"]
-script = ExtResource("5_2xsnk")
-attribute = 3
-modify_value = 25.0
-is_perc = true
