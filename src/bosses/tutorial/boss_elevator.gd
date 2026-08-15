@@ -161,7 +161,7 @@ var laser_aoe_pool: Array = []
 var aoe_warn_decal: Decal
 var laser_target_pos: Vector3
 @export var laser_aoe_marker: CompressedTexture2D
-@onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
+@onready var laser_particles: GPUParticles3D = $LaserSpawn/LaserEndParticles
 # SFX
 @export var sfx_laser_arm: Array[AudioStream]
 @export var sfx_laser_charging: Array[AudioStream]
@@ -212,7 +212,7 @@ func _ready() -> void:
 	sfx_taunt_phase_2_active.shuffle()
 	sfx_taunt_phase_3_active.shuffle()
 	#
-	for i in range((num_bursts + 1 )* shots_per_burst):
+	for i in range((num_bursts + 1) * shots_per_burst):
 		_init_nail_proj()
 	for i in range(3):
 		_init_aoe_line()
@@ -264,6 +264,21 @@ func activate() -> void:
 	print_debug("BossCore activate called")
 	SoundManager.play_sound(sfx_awaken, "SFX")
 	state_chart.send_event("start_intro")
+
+
+func hit_effect_sprite_flash():
+	sprite.material_override.set_shader_parameter("active", true)
+	super()
+	sprite.material_override.set_shader_parameter("active", true)
+	
+	var tween = create_tween()
+	tween.set_parallel(false)
+	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
+	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
+	
+	await tween.finished
+	
+	sprite.material_override.set_shader_parameter("active", false)
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
@@ -576,7 +591,7 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 	if target in hurtbox.get_overlapping_bodies():
 		#sfx_player.stream = sfx_melee.pick_random()
 		#sfx_player.play()
-		target.health_component.damage(damage)
+		target.health_component.damage(damage, self.global_position)
 		if stun:
 			target.stun(1.2)
 
@@ -586,7 +601,7 @@ func swipe() -> void:
 	var sfx_arr: Array[AudioStream] = sfx_swipe_miss
 	if target.global_position.distance_to(self.global_position) < 5.0:
 		sfx_arr = sfx_swipe
-		target.health_component.damage(swipe_damage)
+		target.health_component.damage(swipe_damage, self.global_position)
 	
 	if sfx_player:
 		sfx_player.stream = sfx_arr.pick_random()
@@ -598,7 +613,7 @@ func hook() -> void:
 	var sfx_arr: Array[AudioStream] = sfx_swipe_miss
 	if target.global_position.distance_to(self.global_position) < 5.0:
 		sfx_arr = sfx_kick
-		target.health_component.damage(hook_damage)
+		target.health_component.damage(hook_damage, self.global_position)
 	
 	if sfx_player:
 		sfx_player.stream = sfx_arr.pick_random()
@@ -610,7 +625,7 @@ func backswipe() -> void:
 	var sfx_arr: Array[AudioStream] = sfx_swipe_miss
 	if target.global_position.distance_to(self.global_position) < 5.0:
 		sfx_arr = sfx_backswipe
-		target.health_component.damage(backswipe_damage)
+		target.health_component.damage(backswipe_damage, self.global_position)
 	
 	if sfx_player:
 		sfx_player.stream = sfx_arr.pick_random()
@@ -1471,6 +1486,7 @@ func spawn_aoe_line(
 	_slam_line.init(width, height, damage, max_range)
 	_slam_line.global_position = area_pos
 	_slam_line.global_basis = self.global_basis
+	_slam_line.fired_by = self
 	_slam_line.activate()
 	
 	await get_tree().physics_frame
@@ -1517,6 +1533,7 @@ func spawn_aoe_wall(
 	_slam_wall.init(width, height, thickness, damage, max_range)
 	_slam_wall.global_position = area_pos
 	_slam_wall.global_basis = self.global_basis
+	_slam_wall.fired_by = self
 	_slam_wall.activate()
 	
 	await get_tree().physics_frame
@@ -1545,7 +1562,7 @@ func _on_wave_collision(
 		
 		SoundManager.play_sound(sfx_wave_impact.pick_random(), "SFX")
 		InputHelper.rumble_medium()
-		body.health_component.damage(aoe_damage)
+		body.health_component.damage(aoe_damage, self.global_position)
 		trigger_pushback(10.0, pushback_source, pushback_radius)
 
 
@@ -1877,6 +1894,7 @@ func _play_shock_impact_sfx() -> void:
 
 func start_floor_shock() -> void:
 	shock_floor_hazard_tutorial.is_active = true
+	shock_floor_hazard_tutorial.fired_by = self
 	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	sfx_player.stream = sfx_electric_fadeout.pick_random()
 	sfx_player.play()
@@ -1885,6 +1903,7 @@ func start_floor_shock() -> void:
 
 func end_floor_shock() -> void:
 	shock_floor_hazard_tutorial.is_active = false
+	shock_floor_hazard_tutorial.fired_by = null
 
 
 func place_floor_shock() -> ElevatorShockHazard:

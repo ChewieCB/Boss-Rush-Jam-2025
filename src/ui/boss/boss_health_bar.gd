@@ -86,6 +86,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 					# Move on to the next bar
 					continue
 				else:
+					child.anim_health_ui_scale(1.05)
 					# Decrease the bar value
 					child.health_bar.value -= diff
 					diff = 0.0

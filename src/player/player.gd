@@ -103,6 +103,7 @@ const GRAVITY: float = 30
 const FALL_SPEED_TO_SHAKE_CAMERA: float = 15
 const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
+const HURT_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const BULLET_SPAWN_POS_VARIATION: float = 10.0
@@ -201,6 +202,7 @@ func _ready():
 
 	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
+	health_component.player_damage.connect(_on_player_damage)
 	health_component.died.connect(_on_died)
 	health_component.is_owned_by_player = true
 
@@ -215,6 +217,7 @@ func _ready():
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.gun_shot.connect(func(): stat_ui.anim_ammo_ui_scale(1.1))
 	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
 	current_gun.magazine_size_changed.connect(stat_ui.radial_ui_center_node.update)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
@@ -806,34 +809,48 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 			jump(0.8)
 
 
-func _on_health_changed(new_health: float, prev_health: float) -> void:
-	if new_health < prev_health:
-		state_chart.send_event("start_damage")
-		InputHelper.rumble_large()
-		SoundManager.play_sound(sfx_hurt.pick_random())
-		if new_health > 0:
-			state_chart.send_event("end_damage")
-			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
-				var buff_value = 0
-				var buff_time = 0
-				match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]):
-					1:
-						buff_value = 0.15
-						buff_time = 2
-					2:
-						buff_value = 0.15
-						buff_time = 3
-					3:
-						buff_value = 0.3
-						buff_time = 3
-					4:
-						buff_value = 0.3
-						buff_time = 5
-				# Only need 1 to display duration
-				GameManager.create_and_add_status_effect("Double Down (Min damage)", "double_down_min_buff",
-					StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
-				GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
-					StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
+func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
+	state_chart.send_event("start_damage")
+
+	hurt_overlay.add_damage_dir_marker(damage_pos)
+	stat_ui.anim_health_ui_scale(1.4)  # TODO - scale to damage
+	InputHelper.rumble_large()  # TODO - scale to damage
+	player_camera.add_trauma(0.2)  # TODO - scale to damage
+	SoundManager.play_sound(sfx_hurt.pick_random())
+
+	if health_component.current_health > 0:
+		state_chart.send_event("end_damage")
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
+			var buff_value = 0
+			var buff_time = 0
+			match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]):
+				1:
+					buff_value = 0.15
+					buff_time = 2
+				2:
+					buff_value = 0.15
+					buff_time = 3
+				3:
+					buff_value = 0.3
+					buff_time = 3
+				4:
+					buff_value = 0.3
+					buff_time = 5
+			# Only need 1 to display duration
+			GameManager.create_and_add_status_effect("Double Down (Min damage)", "double_down_min_buff",
+				StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
+			GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
+				StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
+
+
+func _on_health_changed(current_health: float, prev_health: float) -> void:
+	var current_health_ratio: float = current_health / health_component.max_health
+	var health_hurt_opacity = remap(current_health_ratio, 1.0, 0.0, 0.0, 1.0)
+	var anim_speed: float = remap(current_health_ratio, 1.0, 0.0, 1.0, 1.8)
+	hurt_overlay.update_low_health_anim(health_hurt_opacity, anim_speed)
+	# Health bar shake on heal
+	if current_health > prev_health:
+		stat_ui.anim_health_ui_scale(1.2)
 
 
 func _on_died() -> void:
@@ -851,6 +868,9 @@ func _on_health_hurt_state_entered() -> void:
 	LuckHandler.time_since_last_hurt = 0.0
 	LuckHandler.last_hurt_mult = 0
 	hurt_overlay.hurt()
+	# TODO - scale shake and rumble to damage amount
+	player_camera.add_trauma(HURT_TRAUMA)
+	InputHelper.rumble_small()
 
 
 func _on_health_dead_state_entered() -> void:
@@ -874,6 +894,7 @@ func _on_health_dead_state_exited() -> void:
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+
 
 func add_status_effect(new_status: StatusEffect):
 	# Check if already exist, then refresh it instead of add new
@@ -1058,6 +1079,7 @@ func cash_in_luck() -> void:
 	luck_bar_ui.cash_in_luck()
 	# Animate the luck bar draining
 	luck_component.disable()
+	stat_ui.anim_luck_ui_scale(1.5, 0.75)
 	var tween = get_tree().create_tween()
 	tween.tween_property(
 		luck_bar_ui.luck_bar, "value", 0, luck_redeem_time

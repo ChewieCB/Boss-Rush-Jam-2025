@@ -52,6 +52,7 @@ interior = true
 light_data = ExtResource("2_yfo4x")
 
 [node name="UI" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="BossDefeatedUI" parent="UI" instance=ExtResource("3_ysao1")]
 

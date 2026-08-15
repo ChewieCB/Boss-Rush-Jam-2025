@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d2bkclnaxx7pb"]
+
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="1_nbwun"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_nbwun")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4

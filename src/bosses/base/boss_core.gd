@@ -135,6 +135,7 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
 ## So hurt frame doesnt override telegraph frames
 var block_hurt_frame = false
+var hit_tween: Tween
 
 @export_group("Phase")
 @export var current_phase: int = 1
@@ -212,9 +213,11 @@ var time_elapsed: float = 0
 var vel_vertical: float = 0
 
 # Hit effect
-var hit_effect_shake_strength = 0.08
-var hit_effect_shake_duration = 0.12
-var hit_effect_flash_duration = 0.08
+@export_group("Hit effects")
+@export var hit_effect_shake_strength: float = 0.08
+@export var hit_effect_shake_duration: float = 0.12
+@export var hit_effect_flash_duration: float = 0.08
+@export var hit_effect_squash: Vector2 = Vector2(0.1, 0)
 var _original_sprite_position: Vector3
 var _original_sprite_modulate: Color
 
@@ -222,7 +225,17 @@ func _ready() -> void:
 	print_debug("BossCore ready")
 	_original_sprite_position = sprite.position
 	_original_sprite_modulate = sprite.modulate
+	sprite.texture_changed.connect(_update_hit_shader.bind(sprite))
+	sprite.material_override.set_shader_parameter("tex", sprite.texture)
+	sprite.material_override.set_shader_parameter("active", false)
+	for child in sprite.get_children():
+		if child is Sprite3D:
+			child.texture_changed.connect(_update_hit_shader.bind(child))
+			child.material_override.set_shader_parameter("tex", child.texture)
+			child.material_override.set_shader_parameter("active", false)
+	
 	randomize()
+	
 	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
@@ -338,6 +351,7 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
+	projectile.fired_by = self
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
 	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
@@ -367,6 +381,7 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 	if not projectile.finished.is_connected(_cleanup_proj):
 		projectile.finished.connect(_cleanup_proj.bind(projectile, proj_pool))
 	projectile.global_position = spawn_pos
+	projectile.fired_by = self
 	projectile.activate()
 	var dir_to_target = spawn_pos.direction_to(target.global_position)
 	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
@@ -377,6 +392,7 @@ func fire_projectile_pooled(proj_pool: Array, spawn_pos: Vector3, spread: float 
 
 func _cleanup_proj(proj: Area3D, proj_pool: Array) -> void:
 	proj.deactivate()
+	proj.fired_by = null
 	proj_pool.push_back(proj)
 
 
@@ -662,45 +678,71 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 
 ### HEALTH --------------------------------
 #### HIT
-func hit_effect_sprite_shake():
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_SINE)
-	tween.set_ease(Tween.EASE_OUT)
-	var shake_time = 6
-	for i in range(shake_time):
-		var offset = Vector3(
-			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
-			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
-			0
-		)
-		tween.tween_property(
-			sprite,
-			"position",
-			_original_sprite_position + offset,
-			hit_effect_shake_duration / shake_time
-		)
-	tween.tween_property(self, "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
+func _update_hit_shader(_sprite: Sprite3D) -> void:
+	_sprite.material_override.set_shader_parameter("tex", _sprite.texture)
+
+func _update_squash(squash: Vector2, _sprite: Sprite3D = sprite) -> void:
+	_sprite.material_override.set_shader_parameter("deform", squash)
+	
+
 
 func hit_effect_sprite_flash():
+	sprite.material_override.set_shader_parameter("active", true)
+	for child in sprite.get_children():
+		if is_instance_valid(child):
+			if child is Sprite3D:
+				child.material_override.set_shader_parameter("active", true)
+	
 	var tween = create_tween()
-	tween.tween_property(sprite, "modulate", Color.RED, hit_effect_flash_duration)
-	tween.tween_property(sprite, "modulate", _original_sprite_modulate, hit_effect_flash_duration)
+	tween.set_parallel(false)
+	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
+	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
+	
+	await tween.finished
+	
+	sprite.material_override.set_shader_parameter("active", false)
+	for child in sprite.get_children():
+		if child is Sprite3D:
+			child.material_override.set_shader_parameter("active", false)
 
-func play_sprite_hit_effect() -> void:
-	# TODO: Add a SpriteHolder so we can modify sprite position and scale without
-	# affecting AnimationPlayer.
-	# hit_effect_sprite_shake()
-	# hit_effect_sprite_flash()
-	pass
+
+func hit_effect_sprite_squash(duration: float, squash: Vector2):
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_method(_update_squash, Vector2.ZERO, squash, duration / 2)
+	for child in sprite.get_children():
+		if is_instance_valid(child):
+			if child is Sprite3D:
+				tween.tween_method(
+					_update_squash.bind(child), 
+					Vector2.ZERO, squash, 
+					duration / 2
+				)
+	
+	tween.chain()
+	
+	tween.set_parallel(true)
+	tween.tween_method(_update_squash, squash, Vector2.ZERO, duration / 2)
+	for child in sprite.get_children():
+		if is_instance_valid(child):
+			if child is Sprite3D:
+				tween.tween_method(
+					_update_squash.bind(child), 
+					squash, Vector2.ZERO,
+					duration / 2
+				)
+
 
 func _on_health_hit_state_entered() -> void:
-	play_sprite_hit_effect()
-	sprite.modulate = Color.RED
-	await get_tree().create_timer(0.05).timeout
+	hit_effect_sprite_flash()
+	hit_effect_sprite_squash(0.5, hit_effect_squash)
+	InputHelper.rumble_small()
 	state_chart.send_event("end_damage")
 
+
 func _on_health_hit_state_exited() -> void:
-	sprite.modulate = Color.WHITE
+	pass
+	#sprite.modulate = Color.WHITE
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:
@@ -941,7 +983,7 @@ func take_bleed_burst_damage() -> void:
 	const BLEED_DMG_MAX_HP_PERC = 0.04
 	const BLEED_DMG_FLAT = 100
 	var bleed_dmg = int(health_component.max_health * BLEED_DMG_MAX_HP_PERC + BLEED_DMG_FLAT)
-	health_component.damage(bleed_dmg, Color.DARK_RED)
+	health_component.damage(bleed_dmg, self.global_position, Color.DARK_RED)
 	sprite.modulate = Color.DARK_RED
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -953,7 +995,7 @@ func _on_burning_timer_timeout() -> void:
 	# (0.3% max hp dmg per tick and flat 25)
 	# With 20 ticks, 6% max hp and 500 flat damage
 	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
-	health_component.damage(burn_dmg, Color.ORANGE)
+	health_component.damage(burn_dmg, self.global_position, Color.ORANGE)
 	sprite.modulate = Color.ORANGE
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -965,7 +1007,7 @@ func _on_poisoned_timer_timeout() -> void:
 	# (2% max hp dmg per tick and flat 140)
 	# With 4 ticks, 8% max hp and 560 flat damage
 	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
-	health_component.damage(poison_dmg, Color.WEB_GREEN)
+	health_component.damage(poison_dmg, self.global_position, Color.WEB_GREEN)
 	sprite.modulate = Color.WEB_GREEN
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE

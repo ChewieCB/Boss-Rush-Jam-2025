@@ -10,6 +10,8 @@ signal finished
 @export var projectile_damage: float = 10.0
 @export var projectile_speed: float = 50.0
 
+var fired_by: Node3D
+
 # TODO - rework this using the gun projectile so we can get impacts and ricochets
 
 func init(_damage: float):
@@ -52,7 +54,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		body.health_component.damage(projectile_damage)
+		body.health_component.damage(projectile_damage, fired_by.global_position)
 	# TODO - make this have collision exception based on who fired it
 	elif body is BossCore:
 		pass

@@ -1,4 +1,4 @@
-[gd_scene load_steps=285 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=289 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -125,6 +125,7 @@
 [ext_resource type="AudioStream" uid="uid://crmuqk0xvt1ak" path="res://src/bosses/tutorial/assets/sfx/LASER DISARMED.mp3" id="65_sxuab"]
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="84_s600r"]
 [ext_resource type="Texture2D" uid="uid://dyqem8rv1515n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_idle_top.png" id="84_siud8"]
 [ext_resource type="Texture2D" uid="uid://b2ihlithx0wyf" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_0.png" id="125_6pklb"]
 [ext_resource type="Texture2D" uid="uid://bjntvarc8y1ua" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_1.png" id="126_kae47"]
@@ -156,6 +157,84 @@
 [ext_resource type="Texture2D" uid="uid://dlpqmmivn5fqt" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_7.png" id="151_wqtli"]
 [ext_resource type="Texture2D" uid="uid://db7u3pgu44c4w" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_l.png" id="153_m4crw"]
 [ext_resource type="Texture2D" uid="uid://xqv3cge5mt8o" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_r.png" id="154_lmkqu"]
+
+[sub_resource type="Shader" id="Shader_dj5p2"]
+code = "shader_type spatial;
+render_mode unshaded, cull_disabled, depth_draw_opaque, depth_prepass_alpha;
+// Remove unshaded if you want shading
+// Replace cull_disabled if you want to only show one side (cull_front, cull_back)
+// Reference for depth ::: https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/spatial_shader.html#render-modes
+
+// Hit flash
+uniform bool active = false; // Sets pixels to flash color when true
+uniform vec4 flash_color: source_color = vec4(1.0,1.0,1.0,1.0); // The color to use when active
+uniform bool y_billboard = false; // Enables Y-Billboarding when true
+uniform sampler2D tex: source_color; // A copy of the texture for the Sprite3D or AnimatedSprite3D
+uniform float scale = 1.0;
+
+// Squash and stretch
+uniform vec2 deform = vec2(0, 0);
+uniform float deform_h_scale = 5.0;
+uniform float knockback_scale = 0.4;
+
+void vertex() {
+	VERTEX *= scale;
+	
+	vec2 deform_strength = abs(deform);
+	float deform_h = min(deform_strength.x, deform_strength.y);
+	float sprite_width = abs(VERTEX.x);
+	if (sign(VERTEX.y) != sign(deform.y)) {
+		VERTEX.x += deform_h * deform_h_scale * sprite_width;// * sign(deform.x);
+	}
+	vec2 deform_scale = 1.0 - deform_strength;
+	vec3 vertex_cached = VERTEX;
+	VERTEX.x = vertex_cached.x * deform_scale.x / deform_scale.y;
+	VERTEX.y = vertex_cached.y * deform_scale.y / deform_scale.x;
+	VERTEX.y += deform.y * sprite_width * knockback_scale;
+	
+	// You can comment out this function if you don't need billboarding
+	if (y_billboard == true) {
+		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)), 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))), 0.0), MODEL_MATRIX[3]);
+	}
+	else {
+		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
+	}
+	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
+}
+
+void fragment() {
+	vec4 col = texture(tex, UV);
+	vec4 set_col = col;
+	if(active == true) {
+		set_col = flash_color;
+	}
+	ALBEDO = vec3(set_col.r,set_col.g,set_col.b);
+	ALPHA = col.a;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jcrvj"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_dj5p2")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/tex = ExtResource("16_ukgug")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6fu0d"]
+render_priority = 0
+shader = ExtResource("84_s600r")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 2.0
+shader_parameter/knockback_scale = 0.2
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -3043,17 +3122,19 @@ telegraph_time = 0.6
 projectile_scene = null
 delay_per_projectile = 0.2
 angle_speed = 0.5
+hit_effect_squash = Vector2(0.08, 0)
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.208356, 0)
+material_override = SubResource("ShaderMaterial_jcrvj")
 offset = Vector2(0, 256)
 texture = ExtResource("16_ukgug")
 
 [node name="NailShotSprite" type="Sprite3D" parent="Sprite3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0804853, 0)
-visible = false
 layers = 2
 sorting_offset = 1.0
+material_override = SubResource("ShaderMaterial_6fu0d")
 offset = Vector2(0, 256)
 billboard = 2
 

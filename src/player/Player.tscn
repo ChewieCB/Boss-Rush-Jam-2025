@@ -494,6 +494,8 @@ text = "Saving..."
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
+top_level = true
+z_index = 2
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1
@@ -554,6 +556,12 @@ script = ExtResource("8_dkhcu")
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Hurt")
 event = &"start_damage"
+delay_in_seconds = "0.0"
+
+[node name="toDead" type="Node" parent="StateChart/Root/Health/Idle"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Dead")
+event = &"death"
 delay_in_seconds = "0.0"
 
 [node name="Hurt" type="Node" parent="StateChart/Root/Health"]

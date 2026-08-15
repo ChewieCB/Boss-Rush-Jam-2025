@@ -1063,7 +1063,7 @@ func _on_bust_exploding_state_entered() -> void:
 	for emitter in emitters:
 		play_positional_sound(sfx_bust_explosions.pick_random())
 		emitter.explode()
-		self.health_component.damage(bust_self_damage * randf_range(0.7, 1.3) / emitters.size(), Color.RED)
+		self.health_component.damage(bust_self_damage * randf_range(0.7, 1.3) / emitters.size(), self.global_position, Color.RED)
 		await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
 
 	await get_tree().create_timer(0.3).timeout

@@ -40,6 +40,7 @@ func _ready() -> void:
 	if luck_component:
 		luck_bar_ui.init_luck_ui(luck_component.current_luck, luck_component.max_luck)
 		luck_component.luck_changed.connect(luck_bar_ui._on_luck_changed)
+		luck_component.luck_changed.connect(func(current, prev): if current > prev: anim_luck_ui_scale(1.2))
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
 		luck_component.high_luck_entered.connect(luck_bar_ui._on_high_luck_entered)
 		luck_component.high_luck_exited.connect(luck_bar_ui._on_high_luck_exited)
@@ -131,6 +132,19 @@ func remove_status_ui(status_to_remove: StatusEffect):
 	for child in _status_container.get_children():
 		if child.status_effect == status_to_remove:
 			child.remove()
+
+
+func anim_health_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
+	var health_bar = $MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer
+	UIUtils.anim_ui_elem_scale(health_bar, amount, speed_scale)
+
+func anim_luck_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
+	var luck_bar = $MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer
+	UIUtils.anim_ui_elem_scale(luck_bar, amount, speed_scale)
+
+func anim_ammo_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
+	var ammo_ui = $MarginContainer/HBoxContainer/CircularUIContainer
+	UIUtils.anim_ui_elem_scale(ammo_ui, amount, speed_scale)
 
 
 func show_health_ui() -> void:

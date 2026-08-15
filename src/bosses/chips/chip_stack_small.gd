@@ -100,6 +100,10 @@ func _ready() -> void:
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
 	
+	sprite.texture_changed.connect(_update_hit_shader.bind(sprite))
+	sprite.material_override.set_shader_parameter("tex", sprite.texture)
+	sprite.material_override.set_shader_parameter("active", false)
+	
 	# TODO - remove or replace with array mesh
 	#debug_trajectory_mesh = MeshInstance3D.new()
 	#debug_trajectory_mesh.mesh = ImmediateMesh.new()
@@ -343,22 +347,29 @@ func _on_small_blind_shooting_state_entered() -> void:
 			await get_tree().create_timer(delay_per_projectile).timeout
 			# HACK - break out of this loop if we've exited the state
 			if not $StateChart/Root/Phase/SmallBlindProjectile.active and not $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
+				face_sprite.visible = false
 				return
 			# Animate shot
 			face_sprite.visible = true
 			var face_tween: Tween = get_tree().create_tween()
-			face_tween.tween_property(face_sprite, "scale", Vector3(1.2, 1.2, 1.0), 0.2).set_ease(Tween.EASE_OUT)
+			face_tween.tween_method(_scale_shader_sprite.bind(face_sprite), 1.0, 1.2, 0.2).set_ease(Tween.EASE_OUT)
+			#face_tween.tween_property(face_sprite, "scale", Vector3(1.2, 1.2, 1.0), 0.2).set_ease(Tween.EASE_OUT)
 			#
 			sfx_player.stream = sfx_shoot.pick_random()
 			sfx_player.play()
 			#
 			fire_projectile_pooled(chip_projectile_pool, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
-			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
+			face_tween.chain().tween_method(_scale_shader_sprite.bind(face_sprite), 1.2, 1.0, 0.1).set_ease(Tween.EASE_IN)
+			#face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
 		
 		await get_tree().create_timer(delay_between_burst).timeout
 
 	state_chart.send_event("stop_shooting")
+
+
+func _scale_shader_sprite(_scale: float, _sprite: Sprite3D) -> void:
+	_sprite.material_override.set_shader_parameter("scale", _scale)
 
 
 func _on_small_blind_shooting_state_physics_processing(_delta: float) -> void:
@@ -851,7 +862,7 @@ func take_bleed_burst_damage() -> void:
 	const BLEED_DMG_MAX_HP_PERC = 0.04
 	const BLEED_DMG_FLAT = 100
 	var bleed_dmg = int(big_stack.health_component.max_health * BLEED_DMG_MAX_HP_PERC + BLEED_DMG_FLAT)
-	health_component.damage(bleed_dmg, Color.DARK_RED)
+	health_component.damage(bleed_dmg, self.global_position, Color.DARK_RED)
 	sprite.modulate = Color.DARK_RED
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -863,7 +874,7 @@ func _on_burning_timer_timeout() -> void:
 	# (0.3% max hp dmg per tick and flat 25)
 	# With 20 ticks, 6% max hp and 500 flat damage
 	var burn_dmg = int(big_stack.health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
-	health_component.damage(burn_dmg, Color.ORANGE)
+	health_component.damage(burn_dmg, self.global_position, Color.ORANGE)
 	sprite.modulate = Color.ORANGE
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -875,7 +886,7 @@ func _on_poisoned_timer_timeout() -> void:
 	# (2% max hp dmg per tick and flat 140)
 	# With 4 ticks, 8% max hp and 560 flat damage
 	var poison_dmg = int(big_stack.health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
-	health_component.damage(poison_dmg, Color.WEB_GREEN)
+	health_component.damage(poison_dmg, self.global_position, Color.WEB_GREEN)
 	sprite.modulate = Color.WEB_GREEN
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE

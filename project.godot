@@ -48,6 +48,7 @@ LuckHandler="*res://src/player/LuckHandler.tscn"
 FmodManager="*res://addons/fmod/FmodManager.gd"
 InputHelper="*res://addons/input_helper/input_helper.gd"
 SoundManager="*res://addons/sound_manager/sound_manager.gd"
+UIUtils="*res://src/utils/ui_utils.gd"
 
 [debug]
 

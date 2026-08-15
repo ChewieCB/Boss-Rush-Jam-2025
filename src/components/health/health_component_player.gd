@@ -1,11 +1,13 @@
 extends HealthComponent
 
+signal player_damage(damage: float, damage_pos: Vector3)
 
 func _ready() -> void:
 	super()
 
 
-func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String = "") -> void:
+func damage(_damage: float, _damage_pos: Vector3 = Vector3.ZERO, 
+_color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String = "") -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 
 	if enabled:
@@ -31,5 +33,8 @@ func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float 
 					current_health = 1
 					player.luck_component.current_luck = 0
 					return
-
+			
+			health_changed.emit(current_health - _damage, current_health)
 			current_health -= _damage
+			player_damage.emit(_damage, _damage_pos)
+			

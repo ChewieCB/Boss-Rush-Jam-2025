@@ -1,12 +1,39 @@
-[gd_scene load_steps=17 format=3 uid="uid://bjaq7wtuojgjb"]
+[gd_scene load_steps=46 format=3 uid="uid://bjaq7wtuojgjb"]
 
 [ext_resource type="Script" path="res://src/ui/player/hurt_screen/hurt_overlay.gd" id="1_46sc2"]
 [ext_resource type="Shader" path="res://assets/shaders/blur_vignette.gdshader" id="1_ovsjd"]
+[ext_resource type="Shader" path="res://src/ui/player/hurt_screen/directional_damage_indicator.gdshader" id="2_lhucw"]
 [ext_resource type="Shader" path="res://assets/shaders/vignette.gdshader" id="2_xhspb"]
 [ext_resource type="Texture2D" uid="uid://bxdks60f0n75y" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay V2.png" id="3_qnulk"]
+[ext_resource type="Texture2D" uid="uid://bci8ln2u5l7r2" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Blood Cloud Blood Overlay V3.png" id="3_syllw"]
+[ext_resource type="Texture2D" uid="uid://dgb1ts3cx01np" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Blood Cloud Blood Overlay.png" id="4_fxgpc"]
 [ext_resource type="Texture2D" uid="uid://dqr10nkw51o64" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Blood Cloud Blood Overlay V2.png" id="4_nh1ch"]
+[ext_resource type="Texture2D" uid="uid://bc3b514dy41cu" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Bloody Debris Overlay V2.png" id="5_1dlhj"]
 [ext_resource type="Texture2D" uid="uid://bcam3ekfkj7n1" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay.png" id="5_1hqwy"]
+[ext_resource type="Texture2D" uid="uid://dtkds5exg2to7" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Bloody Debris Overlay V3.png" id="6_mprmg"]
+[ext_resource type="Texture2D" uid="uid://dlby7vrawtyyi" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Bloody Debris Overlay.png" id="7_bmyds"]
 [ext_resource type="Shader" path="res://src/ui/player/hurt_screen/stun.gdshader" id="7_r3k8y"]
+[ext_resource type="Texture2D" uid="uid://dfoumfwg8eqny" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Overlay V2.png" id="8_uy1th"]
+[ext_resource type="Texture2D" uid="uid://bhhl5mwn6ljwc" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Overlay V3.png" id="9_r0gl4"]
+[ext_resource type="Texture2D" uid="uid://bnvilii7i3a4y" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Overlay.png" id="10_gqxip"]
+[ext_resource type="Texture2D" uid="uid://b48r73f8roulp" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay V3.png" id="12_vts24"]
+[ext_resource type="Texture2D" uid="uid://dsmqmuys5r4j4" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Smear Overlay V2.png" id="17_o31l4"]
+[ext_resource type="Texture2D" uid="uid://byg2lf8dx8p3n" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Smear Overlay V3.png" id="18_do8a7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_42wcf"]
+shader = ExtResource("2_lhucw")
+shader_parameter/segment_color = Color(1, 0.17, 0.17, 1)
+shader_parameter/background_color = Color(0.310617, 0.310617, 0.310617, 0)
+shader_parameter/outer_radius = 0.398
+shader_parameter/thickness = 0.124
+shader_parameter/taper = 0.034
+shader_parameter/active_arcs_count = 0
+shader_parameter/start_angles_degrees = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/arc_spans_degrees = PackedFloat32Array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/arc_alpha = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/arc_ring_span = 58.753
+shader_parameter/arc_ring_thickness = 0.024
+shader_parameter/arc_ring_gap = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ikw13"]
 shader = ExtResource("7_r3k8y")
@@ -21,16 +48,16 @@ shader_parameter/blur_outer = 0.965
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_64x3u"]
 shader = ExtResource("2_xhspb")
-shader_parameter/alpha = 0.405
-shader_parameter/inner_radius = 0.74
-shader_parameter/outer_radius = 1.0
+shader_parameter/alpha = 0.21
+shader_parameter/inner_radius = 0.825
+shader_parameter/outer_radius = 0.82
 
 [sub_resource type="Animation" id="Animation_sfdsr"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HurtBlur:modulate")
+tracks/0/path = NodePath("StunShader:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -42,7 +69,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HurtVignette:modulate")
+tracks/1/path = NodePath("HurtFlash:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -54,7 +81,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("BloodSplatter:modulate")
+tracks/2/path = NodePath("BloodDead:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -66,7 +93,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("BloodDead1:modulate")
+tracks/3/path = NodePath("LowHealthOverlay:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -78,26 +105,50 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("BloodDead2:modulate")
+tracks/4/path = NodePath("LowHealthOverlay:scale")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Vector2(1, 1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("StunShader:modulate")
+tracks/5/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/inner_radius")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [0.825]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/outer_radius")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.82]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.21]
 }
 
 [sub_resource type="Animation" id="Animation_jrtqo"]
@@ -107,165 +158,196 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HurtBlur:modulate")
+tracks/0/path = NodePath("BloodDead/BloodDead1:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(2.14),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("HurtVignette:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1.62),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("BloodSplatter:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1.93),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("BloodDead1:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.1, 0.3),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1.79, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("BloodDead2:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.1, 0.5),
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BloodDead/BloodDead2:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(3.36, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-
-[sub_resource type="Animation" id="Animation_fklgp"]
-resource_name = "hurt"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HurtBlur:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 1),
-"transitions": PackedFloat32Array(2.14, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("HurtVignette:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.1, 1),
-"transitions": PackedFloat32Array(1.62, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("BloodSplatter:modulate")
+tracks/2/path = NodePath("HurtFlash:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.1, 1),
-"transitions": PackedFloat32Array(1.93, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(3.35, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_1p6qf"]
-resource_name = "revive"
-length = 0.3
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HurtBlur:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(0.59362, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("HurtVignette:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(0.59362, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("BloodSplatter:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(0.59362, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("BloodDead1:modulate")
+tracks/3/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/alpha")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(-7.45058e-09, 0.3),
-"transitions": PackedFloat32Array(0.59362, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(3.34, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [0.405, 0.4]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("BloodDead2:modulate")
+tracks/4/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/inner_radius")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(-7.45058e-09, 0.3),
-"transitions": PackedFloat32Array(0.59362, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(3.34, 1),
+"update": 0,
+"values": [0.67, 0.825]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/outer_radius")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(3.34, 1),
+"update": 0,
+"values": [1.415, 0.82]
+}
+
+[sub_resource type="Animation" id="Animation_fklgp"]
+resource_name = "hurt"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HurtFlash:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.92, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1vdu8"]
+resource_name = "low_health_throb"
+length = 2.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LowHealthOverlay:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 0.277392),
+"update": 0,
+"values": [Color(1, 1, 1, 0.545098), Color(1, 1, 1, 1), Color(1, 1, 1, 0.545098)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LowHealthOverlay:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.72529e-09, 1.2, 2.4),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 1),
+"update": 0,
+"values": [Vector2(1.15, 1.15), Vector2(1, 1), Vector2(1.15, 1.15)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/inner_radius")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 2.46229),
+"update": 0,
+"values": [0.67, 0.615, 0.67]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/outer_radius")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 2.46229),
+"update": 0,
+"values": [1.415, 0.935, 1.415]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("LowHealthOverlay/HurtVignette:material:shader_parameter/alpha")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(2.46229, 0.277392, 2.46229),
+"update": 0,
+"values": [0.405, 0.34, 0.405]
+}
+
+[sub_resource type="Animation" id="Animation_jcajd"]
+resource_name = "revive_"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BloodDead/BloodDead1:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.435275, 1.79),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BloodDead/BloodDead2:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.435275, 3.36),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HurtFlash:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.435275, 3.35),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
@@ -276,7 +358,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HurtVignette:modulate")
+tracks/0/path = NodePath("LowHealthOverlay/HurtVignette:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -303,9 +385,90 @@ _data = {
 "RESET": SubResource("Animation_sfdsr"),
 "dead": SubResource("Animation_jrtqo"),
 "hurt": SubResource("Animation_fklgp"),
-"revive": SubResource("Animation_1p6qf"),
+"low_health_throb": SubResource("Animation_1vdu8"),
+"revive": SubResource("Animation_jcajd"),
 "stun": SubResource("Animation_k1lnr")
 }
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_y0ilv"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_b5n83"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xwaml"]
+animation = &"dead"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_06p0h"]
+input_0/name = "reset"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "dead"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "revive"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uw5eg"]
+animation = &"hurt"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_egno0"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_865ss"]
+animation = &"low_health_throb"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_fn3dd"]
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_3ccgl"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_60gfa"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pkf1m"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mnmf3"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gxynv"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yi52d"]
+animation = &"revive"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_um1ba"]
+graph_offset = Vector2(-373.62, -159.607)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_b5n83")
+nodes/Add2/position = Vector2(480, 160)
+"nodes/Add2 2/node" = SubResource("AnimationNodeAdd2_y0ilv")
+"nodes/Add2 2/position" = Vector2(240, -60)
+nodes/dead/node = SubResource("AnimationNodeAnimation_xwaml")
+nodes/dead/position = Vector2(-20, 500)
+nodes/death_transition/node = SubResource("AnimationNodeTransition_06p0h")
+nodes/death_transition/position = Vector2(240, 340)
+nodes/hurt/node = SubResource("AnimationNodeAnimation_uw5eg")
+nodes/hurt/position = Vector2(-240, 240)
+nodes/hurt_shot/node = SubResource("AnimationNodeOneShot_egno0")
+nodes/hurt_shot/position = Vector2(-40, 100)
+nodes/low_health/node = SubResource("AnimationNodeAnimation_865ss")
+nodes/low_health/position = Vector2(-720, -80)
+nodes/low_health_blend/node = SubResource("AnimationNodeBlend2_fn3dd")
+nodes/low_health_blend/position = Vector2(-60, -160)
+nodes/low_health_seek/node = SubResource("AnimationNodeTimeSeek_3ccgl")
+nodes/low_health_seek/position = Vector2(-500, -80)
+nodes/low_health_speed/node = SubResource("AnimationNodeTimeScale_60gfa")
+nodes/low_health_speed/position = Vector2(-300, -80)
+nodes/output/position = Vector2(680, 180)
+nodes/reset/node = SubResource("AnimationNodeAnimation_gxynv")
+nodes/reset/position = Vector2(-22.0053, 367.557)
+"nodes/reset 2/node" = SubResource("AnimationNodeAnimation_pkf1m")
+"nodes/reset 2/position" = Vector2(-240, 100)
+"nodes/reset 3/node" = SubResource("AnimationNodeAnimation_mnmf3")
+"nodes/reset 3/position" = Vector2(-260, -240)
+nodes/revive/node = SubResource("AnimationNodeAnimation_yi52d")
+nodes/revive/position = Vector2(-20, 640)
+node_connections = [&"Add2", 0, &"Add2 2", &"Add2", 1, &"death_transition", &"Add2 2", 0, &"low_health_blend", &"Add2 2", 1, &"hurt_shot", &"death_transition", 0, &"reset", &"death_transition", 1, &"dead", &"death_transition", 2, &"revive", &"hurt_shot", 0, &"reset 2", &"hurt_shot", 1, &"hurt", &"low_health_blend", 0, &"reset 3", &"low_health_blend", 1, &"low_health_speed", &"low_health_seek", 0, &"low_health", &"low_health_speed", 0, &"low_health_seek", &"output", 0, &"Add2"]
 
 [node name="HurtOverlay" type="Control"]
 layout_mode = 3
@@ -316,6 +479,22 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_46sc2")
+hurt_blood_textures = Array[Texture]([ExtResource("4_nh1ch"), ExtResource("3_syllw"), ExtResource("4_fxgpc"), ExtResource("5_1dlhj"), ExtResource("6_mprmg"), ExtResource("7_bmyds"), ExtResource("8_uy1th"), ExtResource("9_r0gl4"), ExtResource("10_gqxip"), ExtResource("3_qnulk"), ExtResource("12_vts24"), ExtResource("5_1hqwy")])
+
+[node name="DamageDirectionMarkers" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_42wcf")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="StunShader" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -329,8 +508,25 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0.301961)
 
-[node name="HurtBlur" type="ColorRect" parent="."]
+[node name="HurtFlash" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HurtColor" type="ColorRect" parent="HurtFlash"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.65, 0.1404, 0.013, 0.486275)
+
+[node name="HurtBlur" type="ColorRect" parent="HurtFlash"]
 material = SubResource("ShaderMaterial_g1tba")
 layout_mode = 1
 anchors_preset = 15
@@ -340,19 +536,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HurtVignette" type="ColorRect" parent="."]
-modulate = Color(1, 1, 1, 0)
-material = SubResource("ShaderMaterial_64x3u")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="BloodSplatter" type="TextureRect" parent="."]
-modulate = Color(1, 1, 1, 0)
+[node name="BloodSplatter" type="TextureRect" parent="HurtFlash"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -364,7 +548,7 @@ texture = ExtResource("3_qnulk")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="BloodDead1" type="TextureRect" parent="."]
+[node name="LowHealthOverlay" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -372,16 +556,92 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(960, 540)
+
+[node name="HurtVignette" type="ColorRect" parent="LowHealthOverlay"]
+modulate = Color(0, 0, 0, 1)
+material = SubResource("ShaderMaterial_64x3u")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("4_nh1ch")
+
+[node name="HurtColor" type="ColorRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.65, 0.14, 0.013, 0.667)
+
+[node name="BloodSmear1" type="TextureRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("17_o31l4")
 expand_mode = 3
 
-[node name="BloodDead2" type="TextureRect" parent="."]
+[node name="BloodSmear2" type="TextureRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.14159
+pivot_offset = Vector2(960, 540)
+mouse_filter = 2
+texture = ExtResource("18_do8a7")
+expand_mode = 3
+
+[node name="BloodSmear3" type="TextureRect" parent="LowHealthOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_gqxip")
+expand_mode = 3
+
+[node name="BloodDead" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BloodDead1" type="TextureRect" parent="BloodDead"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 31.1111
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_nh1ch")
+expand_mode = 3
+
+[node name="BloodDead2" type="TextureRect" parent="BloodDead"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 31.1111
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -392,3 +652,18 @@ expand_mode = 3
 libraries = {
 "": SubResource("AnimationLibrary_ahuvs")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeBlendTree_um1ba")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Add2/add_amount = 1.0
+"parameters/Add2 2/add_amount" = 1.0
+parameters/death_transition/current_state = "reset"
+parameters/death_transition/transition_request = ""
+parameters/death_transition/current_index = 0
+parameters/hurt_shot/active = false
+parameters/hurt_shot/internal_active = false
+parameters/hurt_shot/request = 0
+parameters/low_health_blend/blend_amount = 0.0
+parameters/low_health_seek/seek_request = -1.0
+parameters/low_health_speed/scale = 1.0

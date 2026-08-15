@@ -20,6 +20,8 @@ var hitscan_col_point: Vector3 = Vector3.ZERO
 var hitscan_col_normal: Vector3 = Vector3.ZERO
 var life_time = 0
 
+var fired_by: Node3D
+
 func _ready() -> void:
 	current_dir = - global_transform.basis.z.normalized()
 	raycast.look_at(raycast.global_position + current_dir)
@@ -78,7 +80,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		body.health_component.damage(projectile_damage)
+		body.health_component.damage(projectile_damage, fired_by.global_position if fired_by else Vector3.ZERO)
 	# TODO - make this have collision exception based on who fired it
 	elif body is BossCore:
 		pass

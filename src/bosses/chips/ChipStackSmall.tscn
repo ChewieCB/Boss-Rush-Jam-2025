@@ -1,9 +1,10 @@
-[gd_scene load_steps=31 format=3 uid="uid://d4e4xmrpy84ly"]
+[gd_scene load_steps=33 format=3 uid="uid://d4e4xmrpy84ly"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="1_2elh3"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_c2ut8"]
 [ext_resource type="Texture2D" uid="uid://cinxupsks16c" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Idle.png" id="3_dt1a4"]
 [ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="3_gfll1"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="4_a4gln"]
 [ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="4_kqvls"]
 [ext_resource type="Texture2D" uid="uid://d2mmtop6o6fcq" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_2_smear.png" id="6_at2ir"]
 [ext_resource type="Texture2D" uid="uid://0bxtnb3qg155" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_1_prep.png" id="6_pjt7e"]
@@ -14,6 +15,18 @@
 [ext_resource type="Texture2D" uid="uid://c5cuj7hh8hdn8" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_1.png" id="12_3je8d"]
 [ext_resource type="Texture2D" uid="uid://dk00mb76wmtgj" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_2.png" id="13_0xybe"]
 [ext_resource type="Texture2D" uid="uid://255ikrmsrq1q" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_3.png" id="14_3qhq8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_47cyo"]
+render_priority = 0
+shader = ExtResource("4_a4gln")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = false
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/tex = ExtResource("3_dt1a4")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hexvc"]
 transparency = 1
@@ -237,72 +250,15 @@ point_count = 13
 collision_layer = 64
 collision_mask = 77
 script = ExtResource("1_2elh3")
-DESIRED_DISTANCE = null
-wave_amplitude = null
-wave_frequency = null
-time_elapsed = null
-idle_radius = null
-angle_speed = null
-orbit_angle = null
-orbit_radius = null
-chip_shots_per_burst = null
-num_bursts = null
-delay_between_burst = null
-num_swipes = null
-delay_between_swipe = null
-swipe_damage = null
-swipe_range = null
-swipe_radius = null
-swipe_height_scale = null
-swipe_speed = null
-swipe_targeting_timeout = null
-chargeback_targeting_time = null
-chargeback_damage = null
-sfx_chip_shot = null
-arena_radius = null
-split_rush_targeting_time = null
-charge_speed = null
-marker_target_idx = null
-jump_height = null
-jump_time = null
-jump_hang_time = null
-drop_time = null
-boss_id = null
-chip_spawn_chance = null
-chip_spawn_force = null
-chip_spawn_dps_threshold = null
-chip_spawn_mult_cap = null
-dps_dealt_window = null
 navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
 base_sprite = ExtResource("3_dt1a4")
 hurt_sprite = ExtResource("3_gfll1")
-death_sprites = null
-hurt_frame_window = null
-hurt_frame_cooldown = null
-current_phase = null
-attack_targeting_time = null
-attack_recovery_time = null
-telegraph_time = null
-charge_force = null
-projectiles_per_phase = null
-delay_per_projectile = null
-max_projectile_rounds = null
-area_damage = null
-areas_per_phase = null
-area_spawn_time = null
-delay_per_area = null
-max_area_rounds = null
-area_size = null
-area_rings = null
-MAX_SPEED = null
-FRICTION = null
-TURN_SPEED_FAST = null
-TURN_SPEED_SLOW = null
-GRAVITY = null
+hit_effect_squash = Vector2(0.2, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+material_override = SubResource("ShaderMaterial_47cyo")
 billboard = 2
 texture = ExtResource("3_dt1a4")
 
