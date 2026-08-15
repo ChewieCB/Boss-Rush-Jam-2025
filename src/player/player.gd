@@ -811,12 +811,13 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 
 func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 	state_chart.send_event("start_damage")
-	
+
 	hurt_overlay.add_damage_dir_marker(damage_pos)
 	stat_ui.anim_health_ui_scale(1.4)  # TODO - scale to damage
 	InputHelper.rumble_large()  # TODO - scale to damage
+	player_camera.add_trauma(0.2)  # TODO - scale to damage
 	SoundManager.play_sound(sfx_hurt.pick_random())
-	
+
 	if health_component.current_health > 0:
 		state_chart.send_event("end_damage")
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):

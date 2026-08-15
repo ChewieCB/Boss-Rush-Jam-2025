@@ -116,7 +116,7 @@ func update_damage_dir_markers(delta: float) -> void:
 			var _new_angle = get_marker_dir(source.global_position)
 			start_angles[idx] = rad_to_deg(_new_angle)
 			arc_spans[idx] = 8.0
-			arc_alphas[idx] = lerp(arc_alphas[idx], 0.0, delta * 2.0)
+			arc_alphas[idx] = lerp(arc_alphas[idx], 0.0, delta * 3.0)
 		else:
 			start_angles[idx] = 0.0
 			arc_spans[idx] = 0.0

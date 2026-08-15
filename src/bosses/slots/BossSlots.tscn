@@ -1,4 +1,4 @@
-[gd_scene load_steps=223 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=224 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -169,6 +169,15 @@ shader_parameter/extend_distance = 0.0
 shader_parameter/impact_points = null
 shader_parameter/impact_size = 1.0
 shader_parameter/impact_falloff_sharpness = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hpt6a"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("75_5w0xk")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yqb4b"]
 render_priority = 0
@@ -2007,6 +2016,7 @@ TURN_SPEED_SLOW = 10.0
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
+material_override = SubResource("ShaderMaterial_hpt6a")
 texture = ExtResource("5_wqq5t")
 
 [node name="SlotIcons" type="Node3D" parent="Sprite3D" index="0"]

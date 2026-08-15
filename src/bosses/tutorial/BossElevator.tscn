@@ -1,4 +1,4 @@
-[gd_scene load_steps=287 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=288 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -157,6 +157,15 @@
 [ext_resource type="Texture2D" uid="uid://dlpqmmivn5fqt" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_7.png" id="151_wqtli"]
 [ext_resource type="Texture2D" uid="uid://db7u3pgu44c4w" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_l.png" id="153_m4crw"]
 [ext_resource type="Texture2D" uid="uid://xqv3cge5mt8o" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_r.png" id="154_lmkqu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jcrvj"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("84_s600r")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/scale = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k7awo"]
 render_priority = 0
@@ -3055,6 +3064,7 @@ angle_speed = 0.5
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.208356, 0)
+material_override = SubResource("ShaderMaterial_jcrvj")
 offset = Vector2(0, 256)
 texture = ExtResource("16_ukgug")
 
