@@ -2021,7 +2021,7 @@ delay_per_projectile = 0.2
 TURN_SPEED_FAST = 12.0
 TURN_SPEED_SLOW = 10.0
 GRAVITY = 0.0
-hit_effect_squash = Vector2(0.25, 0)
+hit_effect_squash = Vector2(0.18, 0)
 
 [node name="Sprite3D" parent="." index="0"]
 material_override = SubResource("ShaderMaterial_hpt6a")
