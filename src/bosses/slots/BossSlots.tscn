@@ -178,6 +178,10 @@ shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
 shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/tex = ExtResource("5_wqq5t")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yqb4b"]
 render_priority = 0
@@ -186,6 +190,9 @@ shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
 shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_n623y"]
 radius = 3.1
@@ -2014,6 +2021,7 @@ delay_per_projectile = 0.2
 TURN_SPEED_FAST = 12.0
 TURN_SPEED_SLOW = 10.0
 GRAVITY = 0.0
+hit_effect_squash = Vector2(0.25, 0)
 
 [node name="Sprite3D" parent="." index="0"]
 material_override = SubResource("ShaderMaterial_hpt6a")

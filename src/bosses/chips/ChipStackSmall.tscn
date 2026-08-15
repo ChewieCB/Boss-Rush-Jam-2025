@@ -23,6 +23,10 @@ shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = false
 shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/tex = ExtResource("3_dt1a4")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hexvc"]
 transparency = 1
@@ -250,6 +254,7 @@ navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
 base_sprite = ExtResource("3_dt1a4")
 hurt_sprite = ExtResource("3_gfll1")
+hit_effect_squash = Vector2(0.2, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)

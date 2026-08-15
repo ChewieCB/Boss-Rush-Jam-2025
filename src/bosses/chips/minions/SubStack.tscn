@@ -50,6 +50,9 @@ shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
 shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ftjr0"]
 render_priority = 0
@@ -58,6 +61,9 @@ shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
 shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
 shader_parameter/tex = ExtResource("12_pln03")
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]

@@ -213,9 +213,11 @@ var time_elapsed: float = 0
 var vel_vertical: float = 0
 
 # Hit effect
-var hit_effect_shake_strength = 0.08
-var hit_effect_shake_duration = 0.12
-var hit_effect_flash_duration = 0.08
+@export_group("Hit effects")
+@export var hit_effect_shake_strength: float = 0.08
+@export var hit_effect_shake_duration: float = 0.12
+@export var hit_effect_flash_duration: float = 0.08
+@export var hit_effect_squash: Vector2 = Vector2(0.1, 0)
 var _original_sprite_position: Vector3
 var _original_sprite_modulate: Color
 
@@ -679,6 +681,10 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 func _update_hit_shader(_sprite: Sprite3D) -> void:
 	_sprite.material_override.set_shader_parameter("tex", _sprite.texture)
 
+func _update_squash(squash: Vector2, _sprite: Sprite3D = sprite) -> void:
+	_sprite.material_override.set_shader_parameter("deform", squash)
+	
+
 
 func hit_effect_sprite_flash():
 	sprite.material_override.set_shader_parameter("active", true)
@@ -700,8 +706,37 @@ func hit_effect_sprite_flash():
 			child.material_override.set_shader_parameter("active", false)
 
 
+func hit_effect_sprite_squash(duration: float, squash: Vector2):
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_method(_update_squash, Vector2.ZERO, squash, duration / 2)
+	for child in sprite.get_children():
+		if is_instance_valid(child):
+			if child is Sprite3D:
+				tween.tween_method(
+					_update_squash.bind(child), 
+					Vector2.ZERO, squash, 
+					duration / 2
+				)
+	
+	tween.chain()
+	
+	tween.set_parallel(true)
+	tween.tween_method(_update_squash, squash, Vector2.ZERO, duration / 2)
+	for child in sprite.get_children():
+		if is_instance_valid(child):
+			if child is Sprite3D:
+				tween.tween_method(
+					_update_squash.bind(child), 
+					squash, Vector2.ZERO,
+					duration / 2
+				)
+
+
 func _on_health_hit_state_entered() -> void:
 	hit_effect_sprite_flash()
+	hit_effect_sprite_squash(0.5, hit_effect_squash)
+	InputHelper.rumble_small()
 	state_chart.send_event("end_damage")
 
 

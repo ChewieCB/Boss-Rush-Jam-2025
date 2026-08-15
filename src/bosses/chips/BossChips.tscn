@@ -90,6 +90,10 @@ shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
 shader_parameter/scale = 2.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 5.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/tex = ExtResource("13_lqof8")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
 radius = 2.9
@@ -392,6 +396,7 @@ projectile_scene = null
 delay_per_projectile = 0.6
 TURN_SPEED_FAST = 9.0
 TURN_SPEED_SLOW = 6.0
+hit_effect_squash = Vector2(0.2, 0)
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.62621, 0)
