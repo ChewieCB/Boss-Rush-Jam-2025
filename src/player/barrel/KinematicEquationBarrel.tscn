@@ -62,13 +62,14 @@ is_perc = true
 [node name="SnapCall" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
-display_text_tag = "Transfer momentum"
+display_text_tag = "Transfer your speed"
 display_text_desc = "More damage with bullet speed
-Bullet gain projectile speed based on your momentum
+Bullet gain projectile speed based on your speed
 Convert hitscan shot to projectile"
 positive_desc = Array[String](["Damage increased with projectile speed", "Bullet gain projectile speed based on player momentum"])
 negative_desc = Array[String](["Convert hitscan shot to projectile"])
 icon_id = 30
+luck_triggers = Array[int]([15])
 
 [node name="SetProjectile" type="Node3D" parent="EffectContainer/SnapCall"]
 script = ExtResource("5_2xsnk")

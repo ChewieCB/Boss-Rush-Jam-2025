@@ -31,3 +31,7 @@ func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
 	if projectile.projectile_speed < speed_threshold:
 		perc_changed = - perc_changed
 	projectile.damage += round(projectile.damage * (perc_changed / 100))
+
+	if projectile.projectile_speed >= HIGH_SPEED_THRESHOLD:
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.SNAP_CALL__HIGH_SPEED)
+		LuckHandler.increase_luck(4, "+4 Snap Called!")
