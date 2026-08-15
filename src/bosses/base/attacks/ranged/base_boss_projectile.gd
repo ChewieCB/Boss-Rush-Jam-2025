@@ -80,7 +80,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		body.health_component.damage(projectile_damage, fired_by.global_position if fired_by.global_position else Vector3.ZERO)
+		body.health_component.damage(projectile_damage, fired_by.global_position if fired_by else Vector3.ZERO)
 	# TODO - make this have collision exception based on who fired it
 	elif body is BossCore:
 		pass
