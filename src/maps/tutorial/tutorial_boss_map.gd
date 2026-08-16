@@ -258,14 +258,15 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	# TODO - re-enable when we have a main fight intro
 	#boss.activate()
 
-	boss.health_ui.clear_sub_health_bars()
 	match boss.current_phase:
 		4:
-			boss.health_ui.init_boss_health_ui(boss.main_health, 2)
+			boss.phase_count = 2
 			boss.state_chart.send_event("start_tutorial_phase_4")
 		5:
-			boss.health_ui.init_boss_health_ui(boss.phase_5_health, 1)
+			boss.phase_count = 2
 			boss.state_chart.send_event("start_tutorial_phase_5")
+		_:
+			boss.phase_count = 3
 
 	boss.health_ui.show_ui()
 

@@ -65,7 +65,7 @@ _data = {
 "death": SubResource("Animation_dshkv")
 }
 
-[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("elemental_emitting_vfx", "navigation_component", "health_component")]
+[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("elemental_emitting_vfx", "navigation_component", "health_component", "health_ui")]
 process_mode = 1
 collision_layer = 4
 collision_mask = 11
@@ -79,6 +79,7 @@ health_component = NodePath("HealthComponent")
 attack_recovery_time = 0.65
 projectile_scene = ExtResource("2_s3pnh")
 delay_per_projectile = 0.3
+health_ui = NodePath("UI/HealthUI/BossHealthContainer")
 hit_effect_flash_duration = 0.06
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -116,7 +117,6 @@ text_effect_location = NodePath("../DamageTextMarker")
 nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="UI" type="CanvasLayer" parent="."]
-layer = 2
 
 [node name="HealthUI" type="Control" parent="UI"]
 layout_mode = 3

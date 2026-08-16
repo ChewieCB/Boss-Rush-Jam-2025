@@ -9,20 +9,16 @@ class_name BossHealthBar
 
 @onready var name_label: Label = $VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer2/Label
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+
 @onready var status_container: Container = $VBoxContainer/StatusContainer
 
-@export var total_health: float
-@export var sub_bar_count: int = 1
-@export var sub_health_bars_container: HBoxContainer
-@export var sub_health_bar_prefab: PackedScene
+@onready var phase_icon_container: HBoxContainer = $VBoxContainer/HBoxContainer/PhaseIcons/HBoxContainer
+@export var phase_icon_prefab: PackedScene
 
-# TODO - save the health bar margin container as a separate scene, add a hbox container and instance a health bar per-phase as needed
-#
-# the health pool should be split across the health bars as determined by per-phase health
-#`
-# keep track of the current phase health bar and decrement/increment that
-#
-# once a health bar is depleted, it can't be re-filled by healing the boss, so the max health is reduced after each phase
+@export_category("Health Phases")
+@export var phase_health_arr: Array[int]
+var ui_current_health: int
+
 
 func _ready() -> void:
 	super()
@@ -38,114 +34,79 @@ func _ready() -> void:
 	check_after_setting_changed()
 
 
-func init_boss_health_ui(max_health: int, sub_health_bars: int) -> void:
-	total_health = max_health
-	sub_bar_count = sub_health_bars
-	for i in range(sub_health_bars):
-		add_sub_health_bar(max_health / sub_bar_count)
-
-
-func add_sub_health_bar(_health: int) -> BossSubHealthBar:
-	var _bar = sub_health_bar_prefab.instantiate()
-	sub_health_bars_container.add_child(_bar)
-	#sub_health_bars_container.move_child(_bar, 0)
-	_bar.init_bars(_health)
-	
-	
-	return _bar
-
-
-func clear_sub_health_bars() -> void:
-	for child in sub_health_bars_container.get_children():
-		child.queue_free()
-		sub_health_bars_container.remove_child(child)
-		
+func _on_timer_timeout():
+	var tween: Tween = get_tree().create_tween()
+	tween = get_tree().create_tween()
+	tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(damage_bar, "value", health_bar.value, 0.4)
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	var diff = prev_health - new_health
-	var overspill: float = 0.0
+	ui_current_health -= diff
 	
-	var health_bars = sub_health_bars_container.get_children()
-	health_bars.reverse()
+	if new_health <= 0:
+		ui_current_health = 0
 	
-	if new_health < prev_health:
-		for child in health_bars:
-			if child == null:
-				continue
-			child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
-			# If we have health left on the bar
-			if child.health_bar.value > 0:
-				# Figure out how much health we can take
-				if diff > child.health_bar.value:
-					# Store the extra damage this bar can't remove
-					overspill = diff - child.health_bar.value
-					# Zero the bar
-					child.health_bar.value = 0
-					diff = 0.0
-					# Move on to the next bar
-					continue
-				else:
-					child.anim_health_ui_scale(1.05)
-					# Decrease the bar value
-					child.health_bar.value -= diff
-					diff = 0.0
-					# If we have overspill, also apply this
-					if overspill < child.health_bar.value:
-						child.health_bar.value -= overspill
-						overspill = 0.0
-						continue
-					else:
-						overspill -= child.health_bar.value
-						child.health_bar.value = 0.0
-						continue
-			else:
-				child.damage_bar.value = child.health_bar.value
-		timer.start()
-	else:
-		for child in health_bars:
-			if child == null:
-				continue
-			if not child is BossSubHealthBar:
-				continue
-			child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
-			# If we have health left on the bar, update it
-			if child.health_bar.value > 0:
-				if child.health_bar.value >= int(new_health):
-					continue
-				child.damage_bar.value = int(new_health)
-				await get_tree().create_timer(0.3).timeout
-				if child == null:
-					continue
-				if "health_bar" in child:
-					if child.health_bar == null:
-						continue
-					var tween: Tween = get_tree().create_tween()
-					tween.tween_property(child.health_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-					await tween.finished
-					child.health_bar.value = int(new_health)
-			else:
-				child.damage_bar.value = child.health_bar.value
-
-
-func _on_timer_timeout():
-	var health_bars = sub_health_bars_container.get_children()
-	health_bars.reverse()
+	anim_health_ui_scale(1.05)
 	
-	for child in health_bars:
-		# If we have health left on the bar, update it
-		if child.health_bar.value > 0:
-			child.damage_bar.value = child.health_bar.value
+	var tween: Tween = get_tree().create_tween()
+	tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(health_bar, "value", ui_current_health, 0.4)
+	health_label.text = "%s/%s" % [ui_current_health + diff, health_bar.max_value]
+	
+	timer.start()
 
 
-func _on_max_health_changed(new_max_health: float, _prev_max_health: float) -> void:
-	total_health = int(new_max_health)
-	clear_sub_health_bars()
-	init_boss_health_ui(int(new_max_health), sub_bar_count)
+func init_boss_health_ui(phase_count: int = phase_health_arr.size()) -> void:
+	var new_health: int = phase_health_arr.pop_front()
+	if new_health:
+		init_health_bar(new_health)
+		clear_phase_markers()
+		init_phase_markers(phase_count)
+
+func next_health_bar() -> void:
+	var new_health: int = phase_health_arr.pop_front()
+	if new_health:
+		init_health_bar(new_health)
+
+func init_health_bar(max_health: int) -> void:
+	ui_current_health = max_health
+	health_bar.max_value = max_health
+	damage_bar.max_value = max_health
+	health_label.text = "%s/%s" % [max_health, max_health]
+	
+	anim_health_ui_scale(1.25)
+	
+	var tween: Tween = get_tree().create_tween()
+	tween.set_parallel(true)
+	tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(health_bar, "value", max_health, 0.4)
+	tween.tween_property(damage_bar, "value", max_health, 0.4)
+
+
+func init_phase_markers(count: int) -> void:
+	for i in range(count):
+		var phase_icon = phase_icon_prefab.instantiate()
+		phase_icon_container.add_child(phase_icon)
+
+func clear_phase_markers() -> void:
+	for child in phase_icon_container.get_children():
+		child.queue_free()
+
+func empty_phase_marker(idx: int) -> void:
+	var icon = phase_icon_container.get_child(idx)
+	icon.get_child(1).modulate = Color.DIM_GRAY
+	# TODO - add some juice and particle effects when a phase is done 
+	UIUtils.anim_ui_elem_scale(icon, 1.2)
 
 
 func check_after_setting_changed():
 	visible = not GameManager.hide_ui
+
+
+func anim_health_ui_scale(amount: float = 1.1, speed_scale: float = 1.0) -> void:
+	UIUtils.anim_ui_elem_scale(health_bar, amount, speed_scale)
 
 
 func show_ui() -> void:

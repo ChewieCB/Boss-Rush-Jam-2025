@@ -17,12 +17,6 @@ signal end_smoke
 
 @export_category("Health Phases")
 @export var tutorial_health: int = 5400
-@export var phase_1_health: int = 1800
-@export var phase_2_health: int = 1800
-@export var phase_3_health: int = 1800
-@export var main_health: int = 8000
-@export var phase_4_health: int = 4000
-@export var phase_5_health: int = 4000
 @onready var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
 @onready var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
 @onready var phase_5_health_threshold: int = main_health - phase_4_health
@@ -202,10 +196,12 @@ var attack_interrupt: bool = false # Flag to interrupt loop-based attacks like t
 func _ready() -> void:
 	LoadingHandler.loading_started.connect(cleanup_pools)
 	super()
+	
 	health_component.max_health = tutorial_health
 	health_component.initialize_health()
-	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(tutorial_health, 3)
+	
+	health_ui.phase_health_arr = [phase_1_health, phase_2_health, phase_3_health]
+	health_ui.init_boss_health_ui()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	#
 	sfx_taunt_phase_1_active.shuffle()
@@ -282,7 +278,7 @@ func hit_effect_sprite_flash():
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super (new_health, prev_health)
+	super(new_health, prev_health)
 	# TODO - proper phased health trigger implementation
 	
 	# Can't heal your way into a previous phase
@@ -372,6 +368,7 @@ func _death_anim_finished() -> void:
 
 func _on_died() -> void:
 	attack_interrupt = true
+	health_ui.empty_phase_marker(0)
 	
 	if current_phase < 4:
 		# Tutorial win cutscene trigger
@@ -1791,6 +1788,8 @@ func _on_tutorial_phase_2_state_entered() -> void:
 	attack_interrupt = true
 	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 2
+	health_ui.empty_phase_marker(-1)
+	health_ui.next_health_bar()
 	tutorial_phase_2_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
 
@@ -2000,6 +1999,8 @@ func _on_tutorial_phase_3_state_entered() -> void:
 	attack_interrupt = false
 	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 3
+	health_ui.empty_phase_marker(-2)
+	health_ui.next_health_bar()
 	tutorial_phase_3_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_3.pick_random(), "SFX")
 
@@ -2077,8 +2078,8 @@ func _on_phase_4_state_entered() -> void:
 	health_component.max_health = main_health
 	block_hurt_frame = true  # Prevent stagger on health init
 	health_component.initialize_health()
-	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(main_health, 2)
+	health_ui.phase_health_arr = [phase_4_health, phase_5_health]
+	health_ui.init_boss_health_ui()
 	health_ui.show_ui()
 	
 	attack_interrupt = false
@@ -2259,6 +2260,8 @@ func _on_tutorial_phase_4_dash_wave_swipe_wave_state_entered() -> void:
 func _on_phase_5_state_entered() -> void:
 	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 5
+	health_ui.empty_phase_marker(-1)
+	health_ui.next_health_bar()
 	melee_phase_count = 0
 	ranged_phase_count = 0
 	attack_interrupt = false
