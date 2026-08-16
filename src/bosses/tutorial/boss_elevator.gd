@@ -1339,6 +1339,9 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	sprite.modulate = Color.WHITE
+	sprite.modulate.a = 1.0
+	sprite.material_override.set_shader_parameter("tex_alpha", 1.0)
+	sprite.get_child(0).material_override.set_shader_parameter("tex_alpha", 1.0)
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening

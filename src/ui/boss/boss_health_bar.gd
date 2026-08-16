@@ -66,7 +66,7 @@ func init_boss_health_ui(phase_count: int = phase_health_arr.size()) -> void:
 		init_phase_markers(phase_count)
 
 func next_health_bar() -> void:
-	var new_health: int = phase_health_arr.pop_front()
+	var new_health = phase_health_arr.pop_front()
 	if new_health:
 		init_health_bar(new_health)
 
@@ -98,7 +98,7 @@ func empty_phase_marker(idx: int) -> void:
 	var icon = phase_icon_container.get_child(idx)
 	icon.get_child(1).modulate = Color.DIM_GRAY
 	# TODO - add some juice and particle effects when a phase is done 
-	UIUtils.anim_ui_elem_scale(icon, 1.2)
+	UIUtils.anim_ui_elem_scale(icon, 1.8)
 
 
 func check_after_setting_changed():

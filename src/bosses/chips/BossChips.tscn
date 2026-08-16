@@ -89,6 +89,7 @@ shader = ExtResource("66_vyv8o")
 shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
 shader_parameter/scale = 2.0
 shader_parameter/deform = Vector2(0, 0)
 shader_parameter/deform_h_scale = 5.0
