@@ -96,6 +96,10 @@ func _on_lobby_button_pressed() -> void:
 	
 	parent_canvaslayer.layer = 1
 	if not GameManager.tutorial_completed:
+		# Fully restart the BGM event so it doesn't stay stuck mid-loop when
+		# the tutorial (and its music state) is restarted
+		GameManager.main_bgm_emitter.stop()
+		GameManager.main_bgm_emitter.play()
 		LoadingHandler.start_loading(
 			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
 			"Tutorial"
