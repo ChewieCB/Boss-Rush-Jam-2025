@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://d0r4ffbfi8w5y"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_vmebd"]
+
+[resource]
+script = ExtResource("1_vmebd")
+id = 15
+name = "Snap Called"
+desc = "+4 luck on a bullet with high projectile speed"
+message = ""

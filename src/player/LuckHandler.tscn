@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dyak3rklcc1gg"]
+[gd_scene load_steps=19 format=3 uid="uid://dyak3rklcc1gg"]
 
 [ext_resource type="Script" path="res://src/player/luck_handler.gd" id="1_718cx"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="2_0f31e"]
@@ -17,10 +17,11 @@
 [ext_resource type="Resource" uid="uid://40ppl01ilsrm" path="res://src/ui/player/luck/luck_trigger_data/Homing_SkillIssueSolved.tres" id="15_ko8f2"]
 [ext_resource type="Resource" uid="uid://dey11d26bgf3i" path="res://src/ui/player/luck/luck_trigger_data/SlowRoller_HighTravelTime.tres" id="16_2jmo3"]
 [ext_resource type="Resource" uid="uid://dg6hdlqvaqxh4" path="res://src/ui/player/luck/luck_trigger_data/BloodyScalpel_FullCut.tres" id="17_ov6w1"]
+[ext_resource type="Resource" uid="uid://d0r4ffbfi8w5y" path="res://src/ui/player/luck/luck_trigger_data/SnapCall_HighSpeed.tres" id="17_rvbwm"]
 
 [node name="LuckHandler" type="Node"]
 script = ExtResource("1_718cx")
-luck_triggers = Array[ExtResource("2_0f31e")]([ExtResource("3_45r3b"), ExtResource("4_awui0"), ExtResource("5_67a7k"), ExtResource("6_tshfl"), ExtResource("8_s5dy7"), ExtResource("7_diksw"), ExtResource("9_ew7qh"), ExtResource("10_3bi80"), ExtResource("11_gk8jg"), ExtResource("12_q73gr"), ExtResource("13_7jkcv"), ExtResource("14_88gt3"), ExtResource("15_ko8f2"), ExtResource("16_2jmo3"), ExtResource("16_2jmo3"), ExtResource("16_2jmo3"), ExtResource("17_ov6w1")])
+luck_triggers = Array[ExtResource("2_0f31e")]([ExtResource("3_45r3b"), ExtResource("4_awui0"), ExtResource("5_67a7k"), ExtResource("6_tshfl"), ExtResource("8_s5dy7"), ExtResource("7_diksw"), ExtResource("9_ew7qh"), ExtResource("10_3bi80"), ExtResource("11_gk8jg"), ExtResource("12_q73gr"), ExtResource("13_7jkcv"), ExtResource("14_88gt3"), ExtResource("15_ko8f2"), ExtResource("16_2jmo3"), ExtResource("16_2jmo3"), ExtResource("17_rvbwm"), ExtResource("17_ov6w1")])
 
 [node name="LuckDecayTimer" type="Timer" parent="."]
 process_callback = 0
