@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://csako334djny6"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_5yx4q"]
+
+[resource]
+script = ExtResource("1_5yx4q")
+id = 14
+name = "Long Shot"
+desc = "+5 luck on a bullet hit after travelled for some  distance"
+message = ""

@@ -6,5 +6,5 @@
 script = ExtResource("1_cd1ha")
 id = 13
 name = "Slow Rolling"
-desc = "+10 luck on a bullet hit after travelled for some time"
+desc = "+8 luck on a bullet hit after travelled for some time"
 message = ""
