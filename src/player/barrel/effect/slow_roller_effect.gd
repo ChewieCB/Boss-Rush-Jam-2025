@@ -15,13 +15,6 @@ func on_projectile_spawn(projectile: BaseBullet):
 	projectile.misc_data["slow_roll_barrel_vfx_node_name"] = "SparklingEffect"
 
 func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
-	var dist_diff = abs(lifetime_threshold - projectile.life_time)
-	var perc_changed = dist_diff * dmg_modify_perc_per_sec
-	if projectile.life_time < lifetime_threshold:
-		perc_changed = - perc_changed
-	projectile.damage += round(projectile.damage * (perc_changed / 100))
-
-
 	# Change the threshold based on boss level
 	match (GameManager.selected_boss_id):
 		BossCore.BossIdEnum.BARTENDER:
@@ -31,6 +24,11 @@ func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
 		BossCore.BossIdEnum.CHIPS:
 			max_travel_time_threshold = 4
 
+	var dist_diff = abs(lifetime_threshold - projectile.life_time)
+	var perc_changed = dist_diff * dmg_modify_perc_per_sec
+	if projectile.life_time < lifetime_threshold:
+		perc_changed = - perc_changed
+	projectile.damage += round(projectile.damage * (perc_changed / 100))
 
 	if projectile.life_time >= HIGH_TRAVEL_TIME_THRESHOLD:
 		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.SLOW_ROLLER__HIGH_TRAVEL_TIME)
