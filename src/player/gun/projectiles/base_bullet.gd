@@ -122,6 +122,7 @@ func reset_bullet_stats() -> void:
 	min_lifetime_before_can_be_aim_guided = 0.2
 	homing_curved_degrees = 0
 	life_time = 0
+	travelled_distance = 0
 	misc_data = {}
 
 

@@ -40,7 +40,6 @@ script = ExtResource("3_b2svt")
 
 [node name="LongShot" type="Node3D" parent="EffectContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0242209, 0, 0.0132322)
-visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Long Shot"
 display_text_tag = "Keep distance"
@@ -49,6 +48,7 @@ display_text_desc = "More damage with distance
 positive_desc = Array[String](["Shots from further away do more damage", "-50% bullets spread"])
 negative_desc = Array[String](["Close range shots do less damage"])
 icon_id = 28
+luck_triggers = Array[int]([14])
 
 [node name="LongshotEffect" type="Node3D" parent="EffectContainer/LongShot"]
 script = ExtResource("5_12stn")
@@ -60,6 +60,7 @@ modify_value = -50.0
 is_perc = true
 
 [node name="SnapCall" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
 display_text_tag = "Transfer your speed"
