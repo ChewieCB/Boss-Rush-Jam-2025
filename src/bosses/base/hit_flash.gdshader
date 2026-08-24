@@ -19,7 +19,7 @@ uniform float knockback_scale = 0.4;
 
 void vertex() {
 	VERTEX *= scale;
-	
+
 	vec2 deform_strength = abs(deform);
 	float deform_h = min(deform_strength.x, deform_strength.y);
 	float sprite_width = abs(VERTEX.x);
@@ -31,7 +31,7 @@ void vertex() {
 	VERTEX.x = vertex_cached.x * deform_scale.x / deform_scale.y;
 	VERTEX.y = vertex_cached.y * deform_scale.y / deform_scale.x;
 	VERTEX.y += deform.y * sprite_width * knockback_scale;
-	
+
 	// You can comment out this function if you don't need billboarding
 	if (y_billboard == true) {
 		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)), 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))), 0.0), MODEL_MATRIX[3]);

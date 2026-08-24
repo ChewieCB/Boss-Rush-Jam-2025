@@ -438,7 +438,7 @@ animation = &"RESET"
 animation = &"revive"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_um1ba"]
-graph_offset = Vector2(-373.62, -159.607)
+graph_offset = Vector2(-391.62, 180.393)
 nodes/Add2/node = SubResource("AnimationNodeAdd2_b5n83")
 nodes/Add2/position = Vector2(480, 160)
 "nodes/Add2 2/node" = SubResource("AnimationNodeAdd2_y0ilv")

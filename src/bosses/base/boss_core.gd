@@ -709,13 +709,6 @@ func hit_effect_sprite_flash():
 			if child is Sprite3D:
 				child.material_override.set_shader_parameter("active", true)
 	
-	var tween = create_tween()
-	tween.set_parallel(false)
-	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
-	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
-	
-	await tween.finished
-	
 	sprite.material_override.set_shader_parameter("active", false)
 	for child in sprite.get_children():
 		if child is Sprite3D:

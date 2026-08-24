@@ -562,6 +562,7 @@ func _on_player_death() -> void:
 		cutscene_camera.process_mode = Node.PROCESS_MODE_INHERIT
 		cutscene_camera.global_transform = player.player_camera.global_transform
 		player._enable_cutscene_cam()
+		player.hurt_overlay.update_low_health_anim(0.0, 1.0)
 
 		# Lerp cutscene camera to boss
 		var camera_tween: Tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
