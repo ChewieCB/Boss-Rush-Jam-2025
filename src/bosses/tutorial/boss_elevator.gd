@@ -410,7 +410,6 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 func _physics_process(_delta: float) -> void:
 	#super(delta)
 	debug_dist_label.text = str(velocity.length())
-	return
 
 
 func select_attack() -> void:
@@ -635,27 +634,18 @@ func set_walk_speed(speed: float) -> void:
 	anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"] = speed
 
 
-#func check_walk_anim() -> void:
-	#if velocity.length() < 1.0:
-		#if anim_player.current_animation == "elevator_boss/walk_idle_1":
-			#_end_walking_anim()
-	#elif velocity.length() >= 1.0:
-		#if anim_player.current_animation != "elevator_boss/walk_idle_1":
-			#_start_walking_anim()
-#
-#
-#func _start_walking_anim(speed: float = 1.0) -> void:
-	#set_walk_speed(speed)
-	#anim_sm.travel("walk")
-	### Set animation direction
-	##if self.velocity.dot(-self.basis.z) > 0:
-		##anim_player.play("elevator_boss/walk_idle_1")
-	##else:
-		##anim_player.play_backwards("elevator_boss/walk_idle_1")
-#
-#func _end_walking_anim() -> void:
-	#set_walk_speed(1.0)
-	#anim_sm.travel("idle")
+func set_walk_state(state: String, speed: float = 1.0) -> void:
+	var current_state: String
+	# Walk state
+	current_state = anim_tree["parameters/mechanic_attack_states/walk/walk_state/current_state"]
+	if state != current_state:
+		anim_tree["parameters/mechanic_attack_states/walk/walk_state/transition_request"] = state
+		anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"] = speed
+	# Nails state
+	current_state = anim_tree["parameters/mechanic_attack_states/nails/walk/walk_state/current_state"]
+	if state != current_state:
+		anim_tree["parameters/mechanic_attack_states/nails/walk/walk_state/transition_request"] = state
+		anim_tree["parameters/mechanic_attack_states/nails/walk/walk_speed/scale"] = speed
 
 
 #### Phase 1 | Melee Combo
@@ -667,6 +657,7 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
+	set_walk_state("forward")
 	anim_sm.travel("walk")
 
 
@@ -1744,6 +1735,8 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
+	
+	set_walk_state("strafe")
 	anim_sm.travel("nails")
 	#anim_player.play("elevator_boss/ranged_arm")
 	#await anim_player.animation_finished
@@ -1821,6 +1814,7 @@ func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 	navigation_component.follow_target = true
 	state_chart.send_event("start_moving")
+	set_walk_state("forward")
 	anim_sm.travel("walk")
 	shock_floor_hazard_tutorial.damage_per_tick = shock_damage_tutorial
 	prev_attack = "electrify_floor"

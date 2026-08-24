@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjn2o67pdp6xu"
-path.s3tc="res://.godot/imported/nails_idle_bottom.png-7e1810b3f607a3f8ae2a83d4129d085b.s3tc.ctex"
+uid="uid://buq8ar844lek"
+path.s3tc="res://.godot/imported/Repair_legs_strafe_6.png-929517107d355314f7cee5b5d67f1ef2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/bosses/tutorial/assets/sprites/nails_split/nails_idle_bottom.png"
-dest_files=["res://.godot/imported/nails_idle_bottom.png-7e1810b3f607a3f8ae2a83d4129d085b.s3tc.ctex"]
+source_file="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_6.png"
+dest_files=["res://.godot/imported/Repair_legs_strafe_6.png-929517107d355314f7cee5b5d67f1ef2.s3tc.ctex"]
 
 [params]
 
