@@ -17,6 +17,8 @@ uniform vec2 deform = vec2(0, 0);
 uniform float deform_h_scale = 5.0;
 uniform float knockback_scale = 0.4;
 
+uniform float depth_bias : hint_range(-1.0, 1.0) = 0.0; // small negative = pull toward camera
+
 void vertex() {
 	VERTEX *= scale;
 
@@ -40,10 +42,13 @@ void vertex() {
 		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
 	}
 	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
+	
+	VERTEX.z += depth_bias;
 }
 
 void fragment() {
 	vec4 col = texture(tex, UV);
+	
 	vec4 set_col = col;
 	if(active == true) {
 		set_col = flash_color;

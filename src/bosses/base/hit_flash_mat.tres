@@ -1,6 +1,7 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d2bkclnaxx7pb"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://d2bkclnaxx7pb"]
 
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="1_nbwun"]
+[ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="2_xwjjo"]
 
 [resource]
 resource_local_to_scene = true
@@ -14,3 +15,5 @@ shader_parameter/scale = 1.0
 shader_parameter/deform = Vector2(0, 0)
 shader_parameter/deform_h_scale = 1.0
 shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
+shader_parameter/tex = ExtResource("2_xwjjo")

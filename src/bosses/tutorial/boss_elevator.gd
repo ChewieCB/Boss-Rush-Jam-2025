@@ -226,8 +226,6 @@ func _ready() -> void:
 	
 	for i in range(max_sequential_ranged_phases):
 		_init_laser_aoe()
-	
-	anim_tree["parameters/mechanic_attack_states/nails/walk/Add2/add_amount"] = 1.0
 
 
 func cleanup_pools() -> void:
@@ -260,21 +258,6 @@ func activate() -> void:
 	print_debug("BossCore activate called")
 	SoundManager.play_sound(sfx_awaken, "SFX")
 	state_chart.send_event("start_intro")
-
-
-func hit_effect_sprite_flash():
-	sprite.material_override.set_shader_parameter("active", true)
-	super()
-	sprite.material_override.set_shader_parameter("active", true)
-	
-	var tween = create_tween()
-	tween.set_parallel(false)
-	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
-	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
-	
-	await tween.finished
-	
-	sprite.material_override.set_shader_parameter("active", false)
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
@@ -641,6 +624,7 @@ func set_walk_state(state: String, speed: float = 1.0) -> void:
 	if state != current_state:
 		anim_tree["parameters/mechanic_attack_states/walk/walk_state/transition_request"] = state
 		anim_tree["parameters/mechanic_attack_states/walk/walk_speed/scale"] = speed
+
 	# Nails state
 	current_state = anim_tree["parameters/mechanic_attack_states/nails/walk/walk_state/current_state"]
 	if state != current_state:
@@ -1736,7 +1720,7 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
 	
-	set_walk_state("strafe")
+	set_walk_state("strafe_right")
 	anim_sm.travel("nails")
 	#anim_player.play("elevator_boss/ranged_arm")
 	#await anim_player.animation_finished
@@ -2172,6 +2156,8 @@ func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
 	if sfx_player:
 		sfx_player.stream = sfx_nail_equip.pick_random()
 		sfx_player.play()
+	
+	set_walk_state("strafe_right")
 	anim_sm.travel("nails")
 	#anim_player.play("elevator_boss/ranged_arm")
 	#await anim_player.animation_finished

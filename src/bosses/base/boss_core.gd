@@ -136,6 +136,7 @@ var debug_trajectory_mesh: MeshInstance3D
 # const HIT_EFFECT_INITIAL_VALUE = 0.4
 # const HIT_EFFECT_FADE_SPEED = 1.5
 @export_subgroup("Hurt Frame")
+@export var hit_material: ShaderMaterial
 # TODO - make this an actual stagger that delays/interrupts attacks?
 @export var hurt_frame_window: float = 0.6
 @export var hurt_frame_cooldown: float = 1.5
@@ -235,14 +236,6 @@ func _ready() -> void:
 	print_debug("BossCore ready")
 	_original_sprite_position = sprite.position
 	_original_sprite_modulate = sprite.modulate
-	sprite.texture_changed.connect(_update_hit_shader.bind(sprite))
-	sprite.material_override.set_shader_parameter("tex", sprite.texture)
-	sprite.material_override.set_shader_parameter("active", false)
-	for child in sprite.get_children():
-		if child is Sprite3D:
-			child.texture_changed.connect(_update_hit_shader.bind(child))
-			child.material_override.set_shader_parameter("tex", child.texture)
-			child.material_override.set_shader_parameter("active", false)
 	
 	randomize()
 	
@@ -276,6 +269,8 @@ func _ready() -> void:
 	if owner:
 		await owner.ready
 	
+	init_hit_flash_shader()
+	
 	# Cheat/debug flags
 	if GameManager.CHEAT_oneshot:
 		await get_tree().physics_frame
@@ -284,6 +279,21 @@ func _ready() -> void:
 		health_component.current_health = 1
 		
 	print_debug("BossCore ready end")
+
+
+func init_hit_flash_shader() -> void:
+	# Load and connect hit shader to sprite materials
+	var depth_bias: float = 0.0
+	for _sprite in [sprite] + sprite.get_children():
+		if _sprite is Sprite3D:
+			var mat = hit_material.duplicate()
+			_sprite.material_override = mat
+			_sprite.material_override.set_shader_parameter("depth_bias", depth_bias)
+			_sprite.material_override.set_shader_parameter("scale", sprite.scale.x)
+			_sprite.texture_changed.connect(_update_hit_shader.bind(_sprite))
+			_sprite.material_override.set_shader_parameter("tex", _sprite.texture)
+			_sprite.material_override.set_shader_parameter("active", false)
+			depth_bias += 0.01
 
 
 # func _process(delta: float) -> void:
@@ -703,16 +713,13 @@ func _update_squash(squash: Vector2, _sprite: Sprite3D = sprite) -> void:
 
 
 func hit_effect_sprite_flash():
-	sprite.material_override.set_shader_parameter("active", true)
-	for child in sprite.get_children():
-		if is_instance_valid(child):
-			if child is Sprite3D:
-				child.material_override.set_shader_parameter("active", true)
-	
-	sprite.material_override.set_shader_parameter("active", false)
-	for child in sprite.get_children():
-		if child is Sprite3D:
-			child.material_override.set_shader_parameter("active", false)
+	for _sprite in [sprite] + sprite.get_children():
+		if _sprite is Sprite3D and is_instance_valid(_sprite):
+			_sprite.material_override.set_shader_parameter("active", true)
+			get_tree().create_timer(0.05).timeout.connect(
+				func():
+					_sprite.material_override.set_shader_parameter("active", false)
+			)
 
 
 func hit_effect_sprite_squash(duration: float, squash: Vector2):

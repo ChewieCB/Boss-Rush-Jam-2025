@@ -399,6 +399,7 @@ func _on_tutorial_finished() -> void:
 	await $AnimationPlayer.animation_finished
 
 	# Tween the camera back
+	# TODO - make the player now face the final cutscene camera position
 	player.player_camera.rotation.y = 0
 	player.player_camera.rotation.z = 0
 	var camera_tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)

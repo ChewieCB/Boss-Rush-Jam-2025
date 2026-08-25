@@ -76,6 +76,7 @@ barrel_pickup_scene = ExtResource("2_5bmmu")
 sfx_slowmo = ExtResource("4_rbx6b")
 navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
+hit_material = ExtResource("6_6f4dl")
 attack_recovery_time = 0.65
 projectile_scene = ExtResource("2_s3pnh")
 delay_per_projectile = 0.3
@@ -85,7 +86,6 @@ hit_effect_flash_duration = 0.06
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 layers = 2
-material_override = ExtResource("6_6f4dl")
 billboard = 2
 texture = ExtResource("6_04mqs")
 

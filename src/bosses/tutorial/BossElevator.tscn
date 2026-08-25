@@ -1,4 +1,4 @@
-[gd_scene load_steps=289 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=305 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -127,6 +127,7 @@
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="84_s600r"]
 [ext_resource type="Texture2D" uid="uid://dyqem8rv1515n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_idle_top.png" id="84_siud8"]
+[ext_resource type="Material" uid="uid://d2bkclnaxx7pb" path="res://src/bosses/base/hit_flash_mat.tres" id="85_0tkhf"]
 [ext_resource type="Texture2D" uid="uid://b2ihlithx0wyf" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_0.png" id="125_6pklb"]
 [ext_resource type="Texture2D" uid="uid://bjntvarc8y1ua" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_1.png" id="126_kae47"]
 [ext_resource type="Texture2D" uid="uid://dygoyomgows5p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_2.png" id="127_wn326"]
@@ -136,98 +137,42 @@
 [ext_resource type="Texture2D" uid="uid://ce512kfxqu05w" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_6.png" id="131_rjfxe"]
 [ext_resource type="Texture2D" uid="uid://cakmturl4yvjj" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_7.png" id="132_14hj5"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://cbyxltj8nb4q8" path="res://src/bosses/tutorial/assets/animation_tree/OLDAnimTreeRoot.tres" id="134_ojm1l"]
-[ext_resource type="Texture2D" uid="uid://0jqsenjk1gci" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_0.png" id="141_i7nbs"]
-[ext_resource type="Texture2D" uid="uid://dsk50hdo448lb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_1.png" id="142_h5une"]
-[ext_resource type="Texture2D" uid="uid://cnl3nihmuo8c5" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_2.png" id="143_uf837"]
-[ext_resource type="Texture2D" uid="uid://cneqh80ph4lyr" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_0.png" id="144_op6ct"]
-[ext_resource type="Texture2D" uid="uid://cwwxhcdjpnp1p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_3.png" id="144_u5evu"]
-[ext_resource type="Texture2D" uid="uid://buinirjjrof0f" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_4.png" id="145_0tdny"]
-[ext_resource type="Texture2D" uid="uid://do7yirkmonvx1" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_1.png" id="145_4055j"]
-[ext_resource type="Texture2D" uid="uid://mr68c6lcrbda" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_2.png" id="146_f074h"]
-[ext_resource type="Texture2D" uid="uid://h2x2t6kcdebk" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_5.png" id="146_fifgs"]
-[ext_resource type="Texture2D" uid="uid://b8qveq7c2fl7n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_3.png" id="147_lpk1w"]
-[ext_resource type="Texture2D" uid="uid://banu5ttakbecx" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_6.png" id="147_mgcby"]
-[ext_resource type="Texture2D" uid="uid://o2ds1v8qgtg8" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_7.png" id="148_135ef"]
-[ext_resource type="Texture2D" uid="uid://cia6p4jq0m0qg" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_4.png" id="148_oeqix"]
-[ext_resource type="Texture2D" uid="uid://cel67don7cnbg" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_5.png" id="149_b0gbw"]
+[ext_resource type="Texture2D" uid="uid://br353ulgqq66w" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs1.png" id="145_n8ofe"]
+[ext_resource type="Texture2D" uid="uid://cek2mmnewejpk" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs2.png" id="146_6c17b"]
+[ext_resource type="Texture2D" uid="uid://cr2gis14kbul4" path="res://src/bosses/tutorial/assets/sprites/walk/upper_idle_2.png" id="146_d1dta"]
+[ext_resource type="Texture2D" uid="uid://soyrrtp0dd5i" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs3.png" id="147_vt155"]
+[ext_resource type="Texture2D" uid="uid://dbbb2itk1t3px" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs4.png" id="148_fmtrp"]
+[ext_resource type="Texture2D" uid="uid://dlqrqe3p4ne1c" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs5.png" id="149_6cbky"]
 [ext_resource type="Texture2D" uid="uid://cgooergjy3i7y" path="res://src/bosses/tutorial/assets/sprites/THROW_0.png" id="149_pgdap"]
+[ext_resource type="Texture2D" uid="uid://vxydpfr72h74" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs6.png" id="150_igbie"]
 [ext_resource type="Texture2D" uid="uid://dqr212k4tuljm" path="res://src/bosses/tutorial/assets/sprites/THROW_2.png" id="150_iy7uj"]
-[ext_resource type="Texture2D" uid="uid://di6s5q1j0bal5" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_6.png" id="150_vwx8v"]
 [ext_resource type="Texture2D" uid="uid://caew7woq52gtr" path="res://src/bosses/tutorial/assets/sprites/THROW_1.png" id="151_cqgah"]
-[ext_resource type="Texture2D" uid="uid://dlpqmmivn5fqt" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_walk_bottom_7.png" id="151_wqtli"]
-[ext_resource type="Texture2D" uid="uid://db7u3pgu44c4w" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_l.png" id="153_m4crw"]
-[ext_resource type="Texture2D" uid="uid://xqv3cge5mt8o" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_top_fire_r.png" id="154_lmkqu"]
+[ext_resource type="Texture2D" uid="uid://be66t53nnaooq" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs7.png" id="151_lvs30"]
+[ext_resource type="Texture2D" uid="uid://dc10puk3xfva0" path="res://src/bosses/tutorial/assets/sprites/walk/legs_walk/Legs8.png" id="152_00knk"]
+[ext_resource type="Texture2D" uid="uid://cql1i5gga1gs2" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_1.png" id="156_ww77b"]
+[ext_resource type="Texture2D" uid="uid://d4hp8a188wirf" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_2.png" id="157_i7jh4"]
+[ext_resource type="Texture2D" uid="uid://bdipyrg6dyyax" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_3.png" id="158_un1qg"]
+[ext_resource type="Texture2D" uid="uid://b54j8j6d6gdub" path="res://src/bosses/tutorial/assets/sprites/walk/upper_idle_1.png" id="159_1t0vd"]
+[ext_resource type="Texture2D" uid="uid://dh67pai1sxge4" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_4.png" id="159_v6rn6"]
+[ext_resource type="Texture2D" uid="uid://dys2jpnqqe2c0" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_5.png" id="160_cyh67"]
+[ext_resource type="Texture2D" uid="uid://buq8ar844lek" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_6.png" id="161_b8pgy"]
+[ext_resource type="Texture2D" uid="uid://0jqsenjk1gci" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_0.png" id="161_mlqgr"]
+[ext_resource type="Texture2D" uid="uid://bkh74806trjor" path="res://src/bosses/tutorial/assets/sprites/walk/upper_nail_aim.png" id="161_n6xq7"]
+[ext_resource type="Texture2D" uid="uid://wski07es7auc" path="res://src/bosses/tutorial/assets/sprites/walk/upper_nail_1.png" id="162_q2heb"]
+[ext_resource type="Texture2D" uid="uid://b28rl5hrg66xi" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_7.png" id="162_sh0tg"]
+[ext_resource type="Texture2D" uid="uid://dsk50hdo448lb" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_1.png" id="162_w5s6k"]
+[ext_resource type="Texture2D" uid="uid://bd0seso8v4v1g" path="res://src/bosses/tutorial/assets/sprites/walk/legs_strafe/Repair_legs_strafe_8.png" id="163_eh8dp"]
+[ext_resource type="Texture2D" uid="uid://cxemx4fxcj7e5" path="res://src/bosses/tutorial/assets/sprites/walk/upper_nail_shoot_l.png" id="163_xb2ej"]
+[ext_resource type="Texture2D" uid="uid://cnl3nihmuo8c5" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_2.png" id="163_xbion"]
+[ext_resource type="Texture2D" uid="uid://ddvm4wdq2er8q" path="res://src/bosses/tutorial/assets/sprites/walk/upper_nail_shoot_r.png" id="164_75yf7"]
+[ext_resource type="Texture2D" uid="uid://cwwxhcdjpnp1p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_3.png" id="164_erjut"]
+[ext_resource type="Texture2D" uid="uid://buinirjjrof0f" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_4.png" id="165_rem8i"]
+[ext_resource type="Texture2D" uid="uid://h2x2t6kcdebk" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_5.png" id="166_dond1"]
+[ext_resource type="Texture2D" uid="uid://banu5ttakbecx" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_6.png" id="167_802cf"]
+[ext_resource type="Texture2D" uid="uid://o2ds1v8qgtg8" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_up/walk_7.png" id="168_8pwnm"]
 
-[sub_resource type="Shader" id="Shader_dj5p2"]
-code = "shader_type spatial;
-render_mode unshaded, cull_disabled, depth_draw_opaque, depth_prepass_alpha;
-// Remove unshaded if you want shading
-// Replace cull_disabled if you want to only show one side (cull_front, cull_back)
-// Reference for depth ::: https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/spatial_shader.html#render-modes
-
-// Hit flash
-uniform bool active = false; // Sets pixels to flash color when true
-uniform vec4 flash_color: source_color = vec4(1.0,1.0,1.0,1.0); // The color to use when active
-uniform bool y_billboard = false; // Enables Y-Billboarding when true
-uniform sampler2D tex: source_color; // A copy of the texture for the Sprite3D or AnimatedSprite3D
-uniform float tex_alpha = 1.0;
-uniform float scale = 1.0;
-
-// Squash and stretch
-uniform vec2 deform = vec2(0, 0);
-uniform float deform_h_scale = 5.0;
-uniform float knockback_scale = 0.4;
-
-void vertex() {
-	VERTEX *= scale;
-	
-	vec2 deform_strength = abs(deform);
-	float deform_h = min(deform_strength.x, deform_strength.y);
-	float sprite_width = abs(VERTEX.x);
-	if (sign(VERTEX.y) != sign(deform.y)) {
-		VERTEX.x += deform_h * deform_h_scale * sprite_width;// * sign(deform.x);
-	}
-	vec2 deform_scale = 1.0 - deform_strength;
-	vec3 vertex_cached = VERTEX;
-	VERTEX.x = vertex_cached.x * deform_scale.x / deform_scale.y;
-	VERTEX.y = vertex_cached.y * deform_scale.y / deform_scale.x;
-	VERTEX.y += deform.y * sprite_width * knockback_scale;
-	
-	// You can comment out this function if you don't need billboarding
-	if (y_billboard == true) {
-		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)), 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))), 0.0), MODEL_MATRIX[3]);
-	}
-	else {
-		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
-	}
-	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
-}
-
-void fragment() {
-	vec4 col = texture(tex, UV);
-	vec4 set_col = col;
-	if(active == true) {
-		set_col = flash_color;
-	}
-	ALBEDO = vec3(set_col.r,set_col.g,set_col.b);
-	ALPHA = col.a * tex_alpha;
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jcrvj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qmm2u"]
 resource_local_to_scene = true
-render_priority = 0
-shader = SubResource("Shader_dj5p2")
-shader_parameter/active = false
-shader_parameter/flash_color = Color(1, 1, 1, 1)
-shader_parameter/y_billboard = true
-shader_parameter/tex_alpha = 1.0
-shader_parameter/scale = 1.0
-shader_parameter/deform = Vector2(0, 0)
-shader_parameter/deform_h_scale = 5.0
-shader_parameter/knockback_scale = 0.4
-shader_parameter/tex = ExtResource("16_ukgug")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6fu0d"]
 render_priority = 0
 shader = ExtResource("84_s600r")
 shader_parameter/active = false
@@ -236,8 +181,9 @@ shader_parameter/y_billboard = true
 shader_parameter/tex_alpha = 1.0
 shader_parameter/scale = 1.0
 shader_parameter/deform = Vector2(0, 0)
-shader_parameter/deform_h_scale = 2.0
-shader_parameter/knockback_scale = 0.2
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -751,67 +697,67 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/path = NodePath("DebugAnimPivot/SlamSpawn:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("16_ukgug")]
+"update": 0,
+"values": [Vector3(-0.8, -1.9, 0.800001)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/6/path = NodePath("Sprite3D:scale")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.8, -1.9, 0.800001)]
+"values": [Vector3(1, 1, 1)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Sprite3D:scale")
+tracks/7/path = NodePath("CollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(1, 1, 1)]
+"update": 1,
+"values": [false]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("CollisionShape3D:disabled")
+tracks/8/path = NodePath("Sprite3D:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector3(0, -0.208356, 0)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Sprite3D:position")
+tracks/9/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, -0.208356, 0)]
+"update": 1,
+"values": [false]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/10/path = NodePath("LaserSpawn/LaserEndParticles:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -823,122 +769,134 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/11/path = NodePath("LaserCollider:disabled")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("LaserCollider:disabled")
+tracks/12/path = NodePath("LaserCollider:position")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [Vector3(0, 27.0765, 0)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("LaserCollider:position")
+tracks/13/path = NodePath("DebugAnimPivot/WrenchParticleSpawn:position")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(0, 27.0765, 0)]
+"update": 0,
+"values": [Vector3(2, 0.6, 0.2)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("DebugAnimPivot/WrenchParticleSpawn:position")
+tracks/14/path = NodePath("DebugAnimPivot/WrenchParticleSpawn:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(2, 0.6, 0.2)]
+"update": 1,
+"values": [false]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("DebugAnimPivot/WrenchParticleSpawn:visible")
+tracks/15/path = NodePath("Sprite3D:offset")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/16/type = "value"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("Sprite3D:offset")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
 "times": PackedFloat32Array(0.001),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 256)]
 }
-tracks/17/type = "value"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath("SmokeParticles:emitting")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SmokeParticles:emitting")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
 }
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Sprite3D:material_override:shader_parameter/tex_alpha")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/18/path = NodePath("Sprite3D/UpperTorsoSprite:material_override:shader_parameter/tex_alpha")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
+"update": 0,
+"values": [1.0]
 }
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("Sprite3D:material_override:shader_parameter/tex_alpha")
+tracks/19/path = NodePath("Sprite3D/UpperTorsoSprite:position")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0]
+"values": [Vector3(0, 0.0804853, 0)]
 }
 tracks/20/type = "value"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("Sprite3D/NailShotSprite:material_override:shader_parameter/tex_alpha")
+tracks/20/path = NodePath("Sprite3D/UpperTorsoSprite:visible")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
+"update": 1,
+"values": [true]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = false
+tracks/21/path = NodePath("Sprite3D:texture")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("16_ukgug")]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -1075,7 +1033,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Sprite3D/NailShotSprite:material_override:shader_parameter/tex_alpha")
+tracks/8/path = NodePath("Sprite3D/UpperTorsoSprite:material_override:shader_parameter/tex_alpha")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1140,7 +1098,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Sprite3D/NailShotSprite:material_override:shader_parameter/tex_alpha")
+tracks/4/path = NodePath("Sprite3D/UpperTorsoSprite:material_override:shader_parameter/tex_alpha")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1994,70 +1952,22 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("23_m0iiy")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_vllqq"]
-resource_name = "nails_idle_split"
+resource_name = "nails_idle_upper"
 length = 0.01
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = false
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("84_siud8")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("84_siud8")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite3D/NailShotSprite:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [ExtResource("161_n6xq7")]
 }
 
 [sub_resource type="Animation" id="Animation_pm884"]
@@ -2091,7 +2001,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -2103,7 +2013,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/3/path = NodePath("Sprite3D/UpperTorsoSprite:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -2132,7 +2042,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -2144,7 +2054,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/2/path = NodePath("Sprite3D/UpperTorsoSprite:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -2185,7 +2095,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -2196,7 +2106,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_k5vv4"]
-resource_name = "ranged_shoot_l_split"
+resource_name = "ranged_shoot_l_upper"
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -2214,26 +2124,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.05, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("84_siud8"), ExtResource("153_m4crw"), ExtResource("84_siud8")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [ExtResource("162_q2heb"), ExtResource("163_xb2ej"), ExtResource("161_n6xq7")]
 }
 
 [sub_resource type="Animation" id="Animation_imvni"]
@@ -2267,7 +2165,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/2/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -2278,7 +2176,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_i6ee8"]
-resource_name = "ranged_shoot_r_split"
+resource_name = "ranged_shoot_r_upper"
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -2296,26 +2194,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/NailShotSprite:texture")
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.05, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("84_siud8"), ExtResource("154_lmkqu"), ExtResource("84_siud8")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite3D/NailShotSprite:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [ExtResource("161_n6xq7"), ExtResource("164_75yf7"), ExtResource("161_n6xq7")]
 }
 
 [sub_resource type="Animation" id="Animation_qyeng"]
@@ -2938,7 +2824,7 @@ tracks/0/keys = {
 }
 tracks/1/type = "value"
 tracks/1/imported = false
-tracks/1/enabled = true
+tracks/1/enabled = false
 tracks/1/path = NodePath("Sprite3D:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
@@ -2959,6 +2845,20 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(0.233258, 2.46229, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 0.86, 0.7, 1), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [1.0, Vector2(0, -0.05)],
+"method": &"hit_effect_sprite_squash"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_russa"]
@@ -3009,8 +2909,152 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("125_6pklb"), ExtResource("126_kae47"), ExtResource("127_wn326"), ExtResource("128_31kuj"), ExtResource("129_u02bm"), ExtResource("130_3di5n"), ExtResource("131_rjfxe"), ExtResource("132_14hj5")]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [null]
+}
+
+[sub_resource type="Animation" id="Animation_5x5qg"]
+resource_name = "nails_walk_lower_forward"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("145_n8ofe"), ExtResource("146_6c17b"), ExtResource("147_vt155"), ExtResource("148_fmtrp"), ExtResource("149_6cbky"), ExtResource("150_igbie"), ExtResource("151_lvs30"), ExtResource("152_00knk")]
+}
+
+[sub_resource type="Animation" id="Animation_7xpvs"]
+resource_name = "nails_walk_lower_backward"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("152_00knk"), ExtResource("151_lvs30"), ExtResource("150_igbie"), ExtResource("149_6cbky"), ExtResource("148_fmtrp"), ExtResource("147_vt155"), ExtResource("146_6c17b"), ExtResource("145_n8ofe")]
+}
+
+[sub_resource type="Animation" id="Animation_jfs7i"]
+resource_name = "nails_walk_lower_strafe_left"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("156_ww77b"), ExtResource("157_i7jh4"), ExtResource("158_un1qg"), ExtResource("159_v6rn6"), ExtResource("160_cyh67"), ExtResource("161_b8pgy"), ExtResource("162_sh0tg"), ExtResource("163_eh8dp")]
+}
+
+[sub_resource type="Animation" id="Animation_r0n3y"]
+resource_name = "nails_walk_lower_strafe_right"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("163_eh8dp"), ExtResource("162_sh0tg"), ExtResource("161_b8pgy"), ExtResource("160_cyh67"), ExtResource("159_v6rn6"), ExtResource("158_un1qg"), ExtResource("157_i7jh4"), ExtResource("156_ww77b")]
+}
 
 [sub_resource type="Animation" id="Animation_imqkd"]
+resource_name = "idle_upper_2"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("146_d1dta")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, -0.025, 0), Vector3(0, -0.177, 0), Vector3(0, -0.178, 0), Vector3(0, -0.048, 0), Vector3(0, -0.153, 0), Vector3(0, -0.177, 0), Vector3(0, -0.16, 0), Vector3(0, -0.098, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_am63p"]
+resource_name = "idle_upper_1"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("159_1t0vd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, -0.025, 0), Vector3(0, -0.177, 0), Vector3(0, -0.178, 0), Vector3(0, -0.048, 0), Vector3(0, -0.153, 0), Vector3(0, -0.177, 0), Vector3(0, -0.16, 0), Vector3(0, -0.098, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_b8gxe"]
 resource_name = "walk_idle_2"
 length = 0.8
 loop_mode = 1
@@ -3025,37 +3069,19 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("141_i7nbs"), ExtResource("142_h5une"), ExtResource("143_uf837"), ExtResource("144_u5evu"), ExtResource("145_0tdny"), ExtResource("146_fifgs"), ExtResource("147_mgcby"), ExtResource("148_135ef")]
-}
-
-[sub_resource type="Animation" id="Animation_5x5qg"]
-resource_name = "walk_ranged_temp"
-length = 0.8
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("144_op6ct"), ExtResource("145_4055j"), ExtResource("146_f074h"), ExtResource("147_lpk1w"), ExtResource("148_oeqix"), ExtResource("149_b0gbw"), ExtResource("150_vwx8v"), ExtResource("151_wqtli")]
+"values": [ExtResource("161_mlqgr"), ExtResource("162_w5s6k"), ExtResource("163_xbion"), ExtResource("164_erjut"), ExtResource("165_rem8i"), ExtResource("166_dond1"), ExtResource("167_802cf"), ExtResource("168_8pwnm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/NailShotSprite:visible")
+tracks/1/path = NodePath("Sprite3D/UpperTorsoSprite:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [null]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
@@ -3065,6 +3091,8 @@ _data = {
 "dash_wave_2": SubResource("Animation_p7vy0"),
 "dash_wave_fast": SubResource("Animation_sp153"),
 "idle": SubResource("Animation_f2hbb"),
+"idle_upper_1": SubResource("Animation_am63p"),
+"idle_upper_2": SubResource("Animation_imqkd"),
 "impact_no_slam": SubResource("Animation_jt2i0"),
 "intro": SubResource("Animation_cijff"),
 "kick": SubResource("Animation_p5f0r"),
@@ -3075,13 +3103,17 @@ _data = {
 "laser_idle": SubResource("Animation_ex4gi"),
 "laser_telegraph": SubResource("Animation_ua1dm"),
 "nails_idle": SubResource("Animation_6u8u7"),
-"nails_idle_split": SubResource("Animation_vllqq"),
+"nails_idle_upper": SubResource("Animation_vllqq"),
+"nails_walk_lower_backward": SubResource("Animation_7xpvs"),
+"nails_walk_lower_forward": SubResource("Animation_5x5qg"),
+"nails_walk_lower_strafe_left": SubResource("Animation_jfs7i"),
+"nails_walk_lower_strafe_right": SubResource("Animation_r0n3y"),
 "ranged_arm": SubResource("Animation_pm884"),
 "ranged_disarm": SubResource("Animation_kr3rw"),
 "ranged_shoot_l": SubResource("Animation_tf56t"),
-"ranged_shoot_l_split": SubResource("Animation_k5vv4"),
+"ranged_shoot_l_upper": SubResource("Animation_k5vv4"),
 "ranged_shoot_r": SubResource("Animation_imvni"),
-"ranged_shoot_r_split": SubResource("Animation_i6ee8"),
+"ranged_shoot_r_upper": SubResource("Animation_i6ee8"),
 "shock_slam_end": SubResource("Animation_qyeng"),
 "shock_slam_start": SubResource("Animation_gmqna"),
 "shock_slam_start_main": SubResource("Animation_gr8eh"),
@@ -3097,8 +3129,7 @@ _data = {
 "taunt": SubResource("Animation_50rbb"),
 "throw_barrel": SubResource("Animation_russa"),
 "walk_idle_1": SubResource("Animation_fekaf"),
-"walk_idle_2": SubResource("Animation_imqkd"),
-"walk_ranged_temp": SubResource("Animation_5x5qg")
+"walk_idle_2": SubResource("Animation_b8gxe")
 }
 
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_7pmj2")]
@@ -3204,6 +3235,7 @@ sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), 
 base_sprite = ExtResource("16_ukgug")
 hurt_sprite = ExtResource("72_gxdkx")
 death_sprites = Array[CompressedTexture2D]([ExtResource("73_0d1k8")])
+hit_material = SubResource("ShaderMaterial_qmm2u")
 attack_recovery_time = 0.5
 telegraph_time = 0.6
 projectile_scene = null
@@ -3212,16 +3244,15 @@ angle_speed = 0.5
 hit_effect_squash = Vector2(0.08, 0)
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.208356, 0)
-material_override = SubResource("ShaderMaterial_jcrvj")
+transform = Transform3D(0.999895, -0.0144857, 0, 0.0144857, 0.999895, 0, 0, 0, 1, 0, -0.208356, 0)
+sorting_offset = -1.0
+material_override = ExtResource("85_0tkhf")
 offset = Vector2(0, 256)
-texture = ExtResource("16_ukgug")
+texture = ExtResource("125_6pklb")
 
-[node name="NailShotSprite" type="Sprite3D" parent="Sprite3D" index="0"]
+[node name="UpperTorsoSprite" type="Sprite3D" parent="Sprite3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0804853, 0)
 layers = 2
-sorting_offset = 1.0
-material_override = SubResource("ShaderMaterial_6fu0d")
 offset = Vector2(0, 256)
 billboard = 2
 
@@ -4825,8 +4856,18 @@ parameters/mechanic_attack_states/nails/walk/nail_shot/active = false
 parameters/mechanic_attack_states/nails/walk/nail_shot/internal_active = false
 parameters/mechanic_attack_states/nails/walk/nail_shot/request = 0
 parameters/mechanic_attack_states/nails/walk/shoot_dir/blend_amount = 1.0
+parameters/mechanic_attack_states/nails/walk/walk_speed/scale = 1.0
+parameters/mechanic_attack_states/nails/walk/walk_state/current_state = "strafe_right"
+parameters/mechanic_attack_states/nails/walk/walk_state/transition_request = ""
+parameters/mechanic_attack_states/nails/walk/walk_state/current_index = 3
+parameters/mechanic_attack_states/walk/Add2/add_amount = 1.0
+parameters/mechanic_attack_states/walk/body_state/current_state = "idle"
+parameters/mechanic_attack_states/walk/body_state/transition_request = ""
+parameters/mechanic_attack_states/walk/body_state/current_index = 0
 parameters/mechanic_attack_states/walk/walk_speed/scale = 1.0
-parameters/mechanic_attack_states/walk_taunt/walk_taunt_speed/scale = 1.0
+parameters/mechanic_attack_states/walk/walk_state/current_state = "strafe_right"
+parameters/mechanic_attack_states/walk/walk_state/transition_request = ""
+parameters/mechanic_attack_states/walk/walk_state/current_index = 3
 
 [connection signal="state_exited" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]

@@ -100,10 +100,6 @@ func _ready() -> void:
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
 	
-	sprite.texture_changed.connect(_update_hit_shader.bind(sprite))
-	sprite.material_override.set_shader_parameter("tex", sprite.texture)
-	sprite.material_override.set_shader_parameter("active", false)
-	
 	# TODO - remove or replace with array mesh
 	#debug_trajectory_mesh = MeshInstance3D.new()
 	#debug_trajectory_mesh.mesh = ImmediateMesh.new()
@@ -111,6 +107,8 @@ func _ready() -> void:
 	
 	_init_chip_projectiles()
 	_init_swipe_projectiles()
+	
+	init_hit_flash_shader()
 	
 	if GameManager.boss_ante >= 1:
 		pass
