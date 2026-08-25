@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
-[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_1sxb2"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="3_qmj7g"]
 [ext_resource type="Texture2D" uid="uid://cr52bg7vx5ccm" path="res://assets/sprite/game_icon/gamepad.png" id="4_4x1kt"]
 [ext_resource type="Theme" uid="uid://c4j7kmv6avlsi" path="res://src/ui/theme/setting_theme.tres" id="4_fifb6"]
@@ -13,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
 [ext_resource type="Texture2D" uid="uid://c4brubgvfwrmn" path="res://assets/sprite/input/keyboard_and_mouse/keyboard.png" id="11_pg8t6"]
+[ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot-ui-border1.png" id="13_hbxnj"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -85,7 +85,7 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -416.0
-offset_top = -404.0
+offset_top = -396.0
 offset_right = 416.0
 offset_bottom = 372.0
 grow_horizontal = 2
@@ -1187,11 +1187,11 @@ offset_right = 416.0
 offset_bottom = 372.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_1sxb2")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+texture = ExtResource("13_hbxnj")
+patch_margin_left = 41
+patch_margin_top = 29
+patch_margin_right = 41
+patch_margin_bottom = 41
 
 [node name="BackButton" parent="." instance=ExtResource("5_oipns")]
 custom_minimum_size = Vector2(200, 0)

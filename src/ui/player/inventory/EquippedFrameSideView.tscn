@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bagau1537wut2"]
+[gd_scene load_steps=9 format=3 uid="uid://bagau1537wut2"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/equipped_frame_side_view.gd" id="1_liic0"]
 [ext_resource type="Shader" path="res://src/ui/player/inventory/double_sided_transparent_fade.gdshader" id="1_o44u6"]
 [ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="1_x84nb"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="3_dh61e"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_hvmym"]
+[ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot-ui-border1.png" id="6_2vn4a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d6g0p"]
 shader = ExtResource("1_o44u6")
@@ -226,8 +227,9 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_hvmym")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+texture = ExtResource("6_2vn4a")
+region_rect = Rect2(0, 0, 512, 512)
+patch_margin_left = 41
+patch_margin_top = 31
+patch_margin_right = 42
+patch_margin_bottom = 42
