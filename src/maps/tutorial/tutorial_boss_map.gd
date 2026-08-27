@@ -208,6 +208,8 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
 	await tutorial_panel_tween.finished
 	active_tutorial_panel = null
+	
+	return
 
 
 func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
@@ -436,6 +438,8 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	await get_tree().create_timer(0.8, false).timeout
 
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
+	
+	#await get_tree().create_timer(0.8, false).timeout
 
 	# Spark the electrical box
 	door_spark_emitter.emitting = true
