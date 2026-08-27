@@ -763,6 +763,7 @@ func _on_health_hit_state_exited() -> void:
 #### DEAD
 func _on_health_dead_state_entered() -> void:
 	health_ui.empty_phase_marker(0)
+	health_ui._on_health_changed(0.0, 0.0)
 	
 	if anim_player.is_playing():
 		anim_player.stop()

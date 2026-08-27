@@ -53,7 +53,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	var tween: Tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(health_bar, "value", ui_current_health, 0.4)
-	health_label.text = "%s/%s" % [ui_current_health + diff, health_bar.max_value]
+	health_label.text = "%s/%s" % [ui_current_health, health_bar.max_value]
 	
 	timer.start()
 
