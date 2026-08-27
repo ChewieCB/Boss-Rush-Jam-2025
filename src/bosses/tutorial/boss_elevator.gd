@@ -399,7 +399,7 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 
 func _physics_process(_delta: float) -> void:
 	#super(delta)
-	debug_dist_label.text = str(snapped(velocity.length(), 0.01))
+	debug_dist_label.text = str(snapped(velocity.length(), 0.001))
 	# Set walking state based on boss movement direction relative to facing direction
 	check_walk_state()
 
@@ -854,7 +854,6 @@ func _on_melee_combo_recover_state_entered() -> void:
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	anim_sm.travel("idle")
-	anim_player.play("RESET")
 	
 	select_attack()
 	
@@ -1168,7 +1167,7 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	
 	anim_sm.travel("idle")
-	anim_player.play("RESET")
+	#anim_player.play("RESET")
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	sprite.visible = true
@@ -1682,6 +1681,8 @@ func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 
 
 func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
+	navigation_component.disable()
+	nav_enabled = false
 	await taunt()
 	state_chart.send_event("end_taunt")
 
@@ -1784,6 +1785,7 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_physics_processing(delta
 func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 	prev_attack = "strafing_nails"
 	state_chart.send_event("start_targeting")
+	velocity = Vector3.ZERO
 	_on_ranged_nails_recover_state_entered()
 
 
