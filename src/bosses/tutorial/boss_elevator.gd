@@ -1797,6 +1797,9 @@ func _on_tutorial_phase_2_state_entered() -> void:
 	current_phase = 2
 	health_ui.empty_phase_marker(-1)
 	health_ui.next_health_bar()
+	velocity = Vector3.ZERO
+	nails_anim_sm.travel("disarm")
+	anim_sm.travel("idle")
 	tutorial_phase_2_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
 
@@ -1983,6 +1986,8 @@ func _on_tutorial_phase_3_state_entered() -> void:
 	current_phase = 3
 	health_ui.empty_phase_marker(-2)
 	health_ui.next_health_bar()
+	velocity = Vector3.ZERO
+	anim_sm.travel("idle")
 	tutorial_phase_3_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_3.pick_random(), "SFX")
 
@@ -2233,6 +2238,8 @@ func _on_phase_5_state_entered() -> void:
 	current_phase = 5
 	health_ui.empty_phase_marker(-1)
 	health_ui.next_health_bar()
+	velocity = Vector3.ZERO
+	anim_sm.travel("idle")
 	melee_phase_count = 0
 	ranged_phase_count = 0
 	attack_interrupt = false
