@@ -30,6 +30,7 @@ signal end_smoke
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
 var is_being_tweened: bool = false
+var nav_enabled: bool = false  # Track the previous nav state for stagger
 
 var boss_origin: Node
 var elevator_spawns: Array[Node]
@@ -314,7 +315,8 @@ func stagger_anim() -> void:
 func _on_hurt_frame_timer_timeout() -> void:
 	anim_tree["parameters/hurt_blend/blend_amount"] = 0.0
 	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
-	navigation_component.enable()
+	if nav_enabled:
+		navigation_component.enable()
 	stagger_end.emit()
 
 
@@ -392,8 +394,7 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 
 func _physics_process(_delta: float) -> void:
 	#super(delta)
-	#debug_dist_label.text = str(velocity.length())
-	
+	debug_dist_label.text = str(snapped(velocity.length(), 0.01))
 	# Set walking state based on boss movement direction relative to facing direction
 	check_walk_state()
 
@@ -892,7 +893,10 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Targeting"
 	ranged_phase_count += 1
 	
-	desired_distance = 40
+	#desired_distance = 40
+	nav_enabled = navigation_component.is_enabled()
+	navigation_component.disable()
+	block_hurt_frame = true  # HACK - refactor the stagger code to better handle resuming to 
 	
 	anim_sm.travel("nails")
 	state_chart.send_event("start_targeting")
@@ -983,14 +987,13 @@ func _on_ranged_nails_recover_state_entered() -> void:
 		sfx_player.stream = sfx_nail_unequip.pick_random()
 		sfx_player.play()
 	nails_anim_sm.travel("disarm")
-	#anim_player.play("elevator_boss/ranged_disarm")
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	anim_sm.travel("idle")
-	#anim_player.play("RESET")
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
+	navigation_component.enable()
 	
 	select_attack()
 	# HACK - need this call for phase 1, but need to not call it for phase 5
