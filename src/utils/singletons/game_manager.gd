@@ -14,6 +14,7 @@ signal refresh_shop_ui
 signal risk_level_changed
 signal demo_time_changed
 signal player_level_up
+signal cheat_godmode_toggle(value: bool)
 
 # TODO: Use Fmod enum to change music state to avoid mismatched name
 enum FmodMusicState {
@@ -179,7 +180,10 @@ var aim_assist_strength: float = 0.5
 
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
-var CHEAT_godmode: bool = false
+var CHEAT_godmode: bool = false:
+	set(value):
+		CHEAT_godmode = value
+		cheat_godmode_toggle.emit(CHEAT_godmode)
 var CHEAT_skip_tutorial_on_new_game: bool = false
 enum DebugSpinMode {
 	ON_RELOAD,
