@@ -862,6 +862,8 @@ func _on_lever_swipe_recover_state_entered() -> void:
 #
 func _on_phase_2_state_entered() -> void:
 	current_phase = 2
+	health_ui.empty_phase_marker(-1)
+	health_ui.next_health_bar()
 	phase_2_smoke_effect.emitting = true
 	slot_ticks /= 4
 	select_attack()

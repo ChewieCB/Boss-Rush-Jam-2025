@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgulg3vrjkcbk"]
+
+[ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="1_pl408"]
+
+[node name="PhaseIcon" type="MarginContainer"]
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="Border" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+texture = ExtResource("1_pl408")
+expand_mode = 3
+
+[node name="Fill" type="TextureRect" parent="."]
+modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("1_pl408")
+expand_mode = 3

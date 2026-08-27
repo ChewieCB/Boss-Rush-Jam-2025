@@ -1,4 +1,4 @@
-[gd_scene load_steps=390 format=4 uid="uid://bb3nslkfnfo81"]
+[gd_scene load_steps=392 format=4 uid="uid://bb3nslkfnfo81"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -74,6 +74,7 @@
 [ext_resource type="Material" uid="uid://ddqkn38etnjr1" path="res://assets/textures/posters/bigboss.tres" id="79_qa2kr"]
 [ext_resource type="PackedScene" uid="uid://cstu4hay3iips" path="res://src/maps/tutorial/triggers/SingleEffectTrigger.tscn" id="79_wgc81"]
 [ext_resource type="Material" uid="uid://dxuto5h6uh22o" path="res://assets/textures/posters/pitboss.tres" id="80_q7tk3"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="81_3mntn"]
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="81_ojd6u"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="83_53s23"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="84_udjkb"]
@@ -4910,6 +4911,20 @@ _data = {
 "tutorial_end_3": SubResource("Animation_ywajm")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_20iwg"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("81_3mntn")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
+
 [sub_resource type="Curve3D" id="Curve3D_uri17"]
 _data = {
 "points": PackedVector3Array(0, 0, 0, 4.75, 8.68, 0, -51.478, 0.145, 29.574, 0, 0, 0, -1.54, 8.41, 0, -44.769, 0, 29.574),
@@ -7572,6 +7587,7 @@ arena_2_center = NodePath("../Arena2Center")
 target = NodePath("../entity_11_PlayerRef")
 barrel_to_drop = ExtResource("79_j5pa6")
 barrel_pickup_scene = ExtResource("79_jne3r")
+hit_material = SubResource("ShaderMaterial_20iwg")
 orbit_radius = 200.0
 
 [node name="Path3D" type="Path3D" parent="." index="18"]

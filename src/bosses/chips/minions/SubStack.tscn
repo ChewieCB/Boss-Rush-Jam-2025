@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://bhaia8j3ynxwp"]
+[gd_scene load_steps=52 format=3 uid="uid://bhaia8j3ynxwp"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_t3h5b"]
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
@@ -42,29 +42,19 @@
 [ext_resource type="AudioStream" uid="uid://5f5asfydiwxp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3" id="28_ult5e"]
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="36_t01eu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_27sph"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tvcyt"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("36_t01eu")
 shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
 shader_parameter/scale = 1.0
 shader_parameter/deform = Vector2(0, 0)
-shader_parameter/deform_h_scale = 5.0
+shader_parameter/deform_h_scale = 1.0
 shader_parameter/knockback_scale = 0.4
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ftjr0"]
-render_priority = 0
-shader = ExtResource("36_t01eu")
-shader_parameter/active = false
-shader_parameter/flash_color = Color(1, 1, 1, 1)
-shader_parameter/y_billboard = true
-shader_parameter/scale = 1.0
-shader_parameter/deform = Vector2(0, 0)
-shader_parameter/deform_h_scale = 5.0
-shader_parameter/knockback_scale = 0.4
-shader_parameter/tex = ExtResource("12_pln03")
+shader_parameter/depth_bias = 0.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0
@@ -178,6 +168,7 @@ sfx_hit = Array[AudioStream]([ExtResource("5_4sojs"), ExtResource("6_16fho"), Ex
 sfx_slowmo = null
 base_sprite = ExtResource("5_nsqwa")
 hurt_sprite = ExtResource("11_rowys")
+hit_material = SubResource("ShaderMaterial_tvcyt")
 attack_recovery_time = 0.5
 telegraph_time = 0.45
 projectile_scene = null
@@ -189,14 +180,12 @@ hit_effect_squash = Vector2(0.16, 0)
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.09105, 0)
-material_override = SubResource("ShaderMaterial_27sph")
 render_priority = 1
 texture = ExtResource("20_ro4sy")
 
 [node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 visible = false
-material_override = SubResource("ShaderMaterial_ftjr0")
 billboard = 2
 render_priority = 1
 texture = ExtResource("12_pln03")
@@ -244,7 +233,6 @@ visible = false
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 visible = false
 boss_name = "MINION DO NOT USE"
-sub_bar_count = 0
 
 [node name="DebugUI" parent="." index="8"]
 process_mode = 4

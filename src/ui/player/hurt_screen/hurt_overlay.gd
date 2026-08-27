@@ -164,9 +164,8 @@ func dead() -> void:
 func revive() -> void:
 	if GameManager.hide_hurt_overlay:
 		return
-	#anim_player.play("revive")
-	anim_tree["parameters/death_transition/transition_request"] =  "dead"
+	
+	anim_tree["parameters/death_transition/transition_request"] =  "revive"
 	anim_tree["parameters/low_health_blend/blend_amount"] =  0.0
 	anim_tree["parameters/low_health_seek/seek_request"] =  0.0
 	anim_tree["parameters/low_health_speed/scale"] =  0.0
-	#update_low_health_anim(0.0)

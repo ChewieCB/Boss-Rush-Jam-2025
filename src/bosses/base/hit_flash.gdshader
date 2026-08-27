@@ -9,6 +9,7 @@ uniform bool active = false; // Sets pixels to flash color when true
 uniform vec4 flash_color: source_color = vec4(1.0,1.0,1.0,1.0); // The color to use when active
 uniform bool y_billboard = false; // Enables Y-Billboarding when true
 uniform sampler2D tex: source_color; // A copy of the texture for the Sprite3D or AnimatedSprite3D
+uniform float tex_alpha = 1.0;
 uniform float scale = 1.0;
 
 // Squash and stretch
@@ -16,9 +17,11 @@ uniform vec2 deform = vec2(0, 0);
 uniform float deform_h_scale = 5.0;
 uniform float knockback_scale = 0.4;
 
+uniform float depth_bias : hint_range(-1.0, 1.0) = 0.0; // small negative = pull toward camera
+
 void vertex() {
 	VERTEX *= scale;
-	
+
 	vec2 deform_strength = abs(deform);
 	float deform_h = min(deform_strength.x, deform_strength.y);
 	float sprite_width = abs(VERTEX.x);
@@ -30,7 +33,7 @@ void vertex() {
 	VERTEX.x = vertex_cached.x * deform_scale.x / deform_scale.y;
 	VERTEX.y = vertex_cached.y * deform_scale.y / deform_scale.x;
 	VERTEX.y += deform.y * sprite_width * knockback_scale;
-	
+
 	// You can comment out this function if you don't need billboarding
 	if (y_billboard == true) {
 		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)), 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))), 0.0), MODEL_MATRIX[3]);
@@ -39,14 +42,17 @@ void vertex() {
 		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
 	}
 	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
+
+	VERTEX.z += depth_bias;
 }
 
 void fragment() {
 	vec4 col = texture(tex, UV);
+
 	vec4 set_col = col;
 	if(active == true) {
 		set_col = flash_color;
 	}
 	ALBEDO = vec3(set_col.r,set_col.g,set_col.b);
-	ALPHA = col.a;
+	ALPHA = col.a * tex_alpha;
 }

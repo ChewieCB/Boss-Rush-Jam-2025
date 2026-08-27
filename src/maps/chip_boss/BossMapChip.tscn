@@ -1,4 +1,4 @@
-[gd_scene load_steps=278 format=4 uid="uid://j3lttghifqbk"]
+[gd_scene load_steps=280 format=4 uid="uid://j3lttghifqbk"]
 
 [ext_resource type="Script" path="res://src/maps/chip_boss/boss_chip.gd" id="1_cxln3"]
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_nl1so"]
@@ -47,6 +47,7 @@
 [ext_resource type="Material" uid="uid://cf17nn7fy22gn" path="res://assets/textures/placeholder/texture_orange_08.tres" id="33_sgejm"]
 [ext_resource type="PackedScene" uid="uid://ckjl0xci7amep" path="res://src/env/lighting/ChandellierLight1.tscn" id="38_dfq62"]
 [ext_resource type="PackedScene" uid="uid://n0jp5tbddwfx" path="res://src/env/lighting/WallLight1.tscn" id="40_05tue"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="42_je10u"]
 [ext_resource type="AudioStream" uid="uid://bfs78psjcaj50" path="res://src/maps/chip_boss/SFX/Beer Pour trickle loop.mp3" id="44_t8cgy"]
 [ext_resource type="AudioStream" uid="uid://bgycvk4g0jh5r" path="res://src/maps/chip_boss/SFX/Beer Pour Initial Flood.mp3" id="45_2mjar"]
 [ext_resource type="AudioStream" uid="uid://dghbmgcqlpg8a" path="res://src/bosses/chips/assets/sfx/Bursting Out Ground Through Chips.mp3" id="46_76fvv"]
@@ -2344,6 +2345,20 @@ data = PackedVector3Array(2.46875, 0.953125, 7.74801, 2.46875, -0.296875, 7.7480
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_i0trb"]
 data = PackedVector3Array(-2.5, 0.140625, 9.00161, -2.5, -0.390625, 9.00161, 2.5, -0.390625, 9.00161, -2.5, 0.140625, 9.00161, 2.5, -0.390625, 9.00161, 2.5, 0.140625, 9.00161, -2.5, 0.140625, 9.00161, -2.5, 0.140625, 9.50161, -2.5, -0.390625, 9.50161, -2.5, 0.140625, 9.00161, -2.5, -0.390625, 9.50161, -2.5, -0.390625, 9.00161, 2.5, -0.390625, 9.00161, -2.5, -0.390625, 9.00161, -2.5, -0.390625, 9.50161, 2.5, -0.390625, 9.00161, -2.5, -0.390625, 9.50161, 2.5, -0.390625, 9.50161, 2.5, 0.140625, 9.00161, 2.5, 0.140625, 9.50161, -2.5, 0.140625, 9.50161, 2.5, 0.140625, 9.00161, -2.5, 0.140625, 9.50161, -2.5, 0.140625, 9.00161, 2.5, 0.140625, 9.00161, 2.5, -0.390625, 9.00161, 2.5, -0.390625, 9.50161, 2.5, 0.140625, 9.00161, 2.5, -0.390625, 9.50161, 2.5, 0.140625, 9.50161, -2.5, 0.140625, 9.50161, 2.5, 0.140625, 9.50161, 2.5, -0.390625, 9.50161, -2.5, 0.140625, 9.50161, 2.5, -0.390625, 9.50161, -2.5, -0.390625, 9.50161)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbwux"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("42_je10u")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mb02m"]
 _surfaces = [{
@@ -4790,6 +4805,7 @@ transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -5
 [node name="entity_257_BossChips" parent="FuncGodotMap/layer_3_entities" index="42" node_paths=PackedStringArray("target") instance=ExtResource("51_my10v")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2)
 target = NodePath("../entity_246_PlayerRef")
+hit_material = SubResource("ShaderMaterial_qbwux")
 
 [node name="layer_4_elevator" type="Node3D" parent="FuncGodotMap" index="26"]
 metadata/_tb_type = "_tb_layer"

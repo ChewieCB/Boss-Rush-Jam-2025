@@ -267,10 +267,6 @@ func _ready() -> void:
 					print(prop.name, " → ", value)
 	super()
 
-	health_component.initialize_health()
-	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(int(health_component.max_health), 2)
-
 	if GameManager.boss_ante >= 1:
 		place_your_bet_attack_enabled = true
 	if GameManager.boss_ante >= 2:
@@ -380,6 +376,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_health_dead_state_entered() -> void:
+	health_ui.empty_phase_marker(0)
+	
 	# Before we trigger the death state, make sure we've merged back into the big stack
 	_enable_gravity()
 	_cleanup_backspin_chip()
@@ -1218,7 +1216,8 @@ func _on_ss_charge_reform_recover_state_entered() -> void:
 
 func _on_phase_2_state_entered() -> void:
 	flood_chamber.emit()
-	current_phase = 2
+	health_ui.empty_phase_marker(-1)
+	health_ui.next_health_bar()
 	aoe_floor = 2.0
 	big_attacks_performed = 0
 	small_attacks_performed = 0
@@ -1427,6 +1426,7 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 
 func _on_phase_3_state_entered() -> void:
 	current_phase = 3
+	health_ui.empty_phase_marker(-2)
 	# 4.2s delay going in
 	# +0.3s despawning
 	await despawn_stacks()
@@ -1454,9 +1454,8 @@ func activate_chiptopede() -> void:
 	health_component.max_health = chiptopede_max_health
 	health_component.current_health = chiptopede_max_health
 	health_component.received_dmg_multiplier = 0.5
-	#health_ui.init_health_ui(chiptopede_max_health)
-	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(int(chiptopede_max_health), 1)
+	health_ui.phase_health_arr = []
+	health_ui.init_boss_health_ui(0)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
 

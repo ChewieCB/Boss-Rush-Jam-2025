@@ -226,6 +226,8 @@ func _ready():
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
+	
+	GameManager.cheat_godmode_toggle.connect(func(is_invincible: bool): health_component.enabled = !is_invincible)
 
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
