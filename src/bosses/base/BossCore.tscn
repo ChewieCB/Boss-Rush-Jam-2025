@@ -173,12 +173,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../Targeting")
 event = &"start_targeting"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="toJumping" type="Node" parent="StateChart/Root/Movement/Idle"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Jumping")
 event = &"start_jumping"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Movement"]
@@ -194,18 +196,21 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../Walking")
 event = &"start_moving"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="toCharging" type="Node" parent="StateChart/Root/Movement/Targeting"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Charging")
 event = &"start_charge"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="toJumping" type="Node" parent="StateChart/Root/Movement/Targeting"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Jumping")
 event = &"start_jumping"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="Walking" type="Node" parent="StateChart/Root/Movement"]
@@ -221,12 +226,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../Targeting")
 event = &"start_targeting"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="toJumping" type="Node" parent="StateChart/Root/Movement/Walking"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Jumping")
 event = &"start_jumping"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="Charging" type="Node" parent="StateChart/Root/Movement"]
@@ -242,12 +249,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../Targeting")
 event = &"start_targeting"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="toJumping" type="Node" parent="StateChart/Root/Movement/Charging"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Jumping")
 event = &"start_jumping"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="Jumping" type="Node" parent="StateChart/Root/Movement"]

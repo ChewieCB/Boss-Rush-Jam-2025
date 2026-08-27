@@ -343,6 +343,10 @@ func _on_health_dead_state_entered() -> void:
 			laser_sfx_player = null
 
 
+func _on_dead_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
 
 func _death_anim_finished() -> void:
 	death_anim_finished.emit()
@@ -367,6 +371,7 @@ func _on_died() -> void:
 		state_chart.send_event("death")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
+		anim_tree["parameters/mechanic_attack_states/conditions/dead"] = true
 		await death_anim_finished
 		drop_barrel()
 		await boss_death_slow_mo()
@@ -657,6 +662,9 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
 	melee_phase_count += 1
 	navigation_component.follow_target = true
+	
+	navigation_component.enable()
+	nav_enabled = navigation_component.is_enabled()
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
@@ -987,9 +995,10 @@ func _on_ranged_nails_recover_state_entered() -> void:
 		sfx_player.stream = sfx_nail_unequip.pick_random()
 		sfx_player.play()
 	nails_anim_sm.travel("disarm")
+	anim_sm.travel("idle")
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-	anim_sm.travel("idle")
+	
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
@@ -1718,8 +1727,7 @@ func taunt() -> void:
 	await get_tree().create_timer(sfx_length, false).timeout
 	
 	anim_player.speed_scale = 1.0
-	
-	return
+
 
 func _on_tutorial_phase_1_taunt_taunting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
@@ -1734,8 +1742,9 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 	orbit_radius = tutorial_strafe_radius
 	
 	navigation_component.follow_target = false
+	navigation_component.enable()
+	nav_enabled = navigation_component.is_enabled()
 	state_chart.send_event("start_moving")
-	#state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	
 	var sfx_player = get_available_sfx_player()
@@ -2132,8 +2141,9 @@ func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
 	move_speed = MOVE_SPEED
 	
 	navigation_component.follow_target = false
+	navigation_component.enable()
+	nav_enabled = navigation_component.is_enabled()
 	state_chart.send_event("start_moving")
-	#state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	
 	var sfx_player = get_available_sfx_player()
