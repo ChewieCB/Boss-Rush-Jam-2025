@@ -1251,7 +1251,6 @@ func _on_smokescreen_smoke_state_entered() -> void:
 		health_component.show_damage_text = true
 		return
 	
-	
 	var new_spawn: Node
 	var state_event: String = ""
 	match next_attack:
@@ -1334,6 +1333,8 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	sprite.modulate.a = 1.0
 	sprite.material_override.set_shader_parameter("tex_alpha", 1.0)
 	sprite.get_child(0).material_override.set_shader_parameter("tex_alpha", 1.0)
+	# TODO - should this be nails walk with arms down?
+	anim_sm.travel("idle")
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
@@ -1662,6 +1663,7 @@ func _on_tutorial_phase_1_state_entered() -> void:
 # TAUNT
 func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 	velocity = Vector3.ZERO
+	anim_sm.travel("idle")
 	state_chart.send_event("start_targeting")
 	prev_attack = "taunt"
 	state_chart.send_event("start_taunt")
@@ -1708,9 +1710,10 @@ func taunt() -> void:
 	if next_attack != "start_laser_aoe_attack":
 		anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
 		anim_sm.travel("taunt")
-	#anim_player.play("elevator_boss/taunt")
-	#await anim_player.animation_finished
+		hit_effect_sprite_squash(sfx_length, Vector2(0, -0.1))
+		
 	await get_tree().create_timer(sfx_length, false).timeout
+	
 	anim_player.speed_scale = 1.0
 	
 	return
