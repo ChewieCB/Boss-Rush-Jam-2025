@@ -1,4 +1,4 @@
-[gd_scene load_steps=523 format=4 uid="uid://bcpcv8dc854s7"]
+[gd_scene load_steps=525 format=4 uid="uid://bcpcv8dc854s7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
@@ -11,10 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://bhowy7oa70k85" path="res://src/env/decor/assets/stool.png" id="9_oxvqi"]
 [ext_resource type="Texture2D" uid="uid://dl65xxjqpf0o7" path="res://src/env/decor/assets/trash_can_art_deco_1.png" id="10_xmlee"]
 [ext_resource type="Material" uid="uid://d0lnpev1a8x7j" path="res://assets/textures/placeholder/texture_green_green_green_02.tres" id="12_8t61t"]
+[ext_resource type="Texture2D" uid="uid://d0sojwqbvgh8r" path="res://assets/posters/yuya_shop_1.png" id="12_mfi1x"]
 [ext_resource type="Texture2D" uid="uid://cvn6igtej4xxb" path="res://assets/textures/posters/grand_opening_scuffed.png" id="12_p4val"]
 [ext_resource type="Texture2D" uid="uid://dsbimxr0cp5jn" path="res://assets/textures/posters/might_poster.png" id="12_p22cr"]
 [ext_resource type="Texture2D" uid="uid://uxgmmcirjxj2" path="res://assets/textures/posters/gambling_poster.png" id="13_m46mf"]
-[ext_resource type="Texture2D" uid="uid://dmfcir3rm260" path="res://assets/textures/posters/management_poster.png" id="13_p1yck"]
 [ext_resource type="Material" uid="uid://bjalp3vgrdgfn" path="res://assets/textures/walls/red_floor_tiles.tres" id="13_tgkfd"]
 [ext_resource type="Material" uid="uid://cf17nn7fy22gn" path="res://assets/textures/placeholder/texture_orange_08.tres" id="13_x660r"]
 [ext_resource type="Texture2D" uid="uid://drxaghabsqyx1" path="res://assets/textures/platforms/coaster_1.png" id="13_yx2w6"]
@@ -23,8 +23,10 @@
 [ext_resource type="Material" uid="uid://dtl8ybjw5mgl5" path="res://assets/textures/posters/surveillance_poster.tres" id="14_fxap3"]
 [ext_resource type="Texture2D" uid="uid://kjku34custj0" path="res://assets/textures/platforms/coaster_2.png" id="14_hvwgt"]
 [ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="14_m3wbt"]
+[ext_resource type="Texture2D" uid="uid://b03cf15kfxcox" path="res://assets/posters/see_something_alt_1.png" id="15_72o55"]
 [ext_resource type="AudioStream" uid="uid://brxmaksjy6431" path="res://src/maps/lobby/assets/Lift Door Close.mp3" id="15_iwsk0"]
 [ext_resource type="Material" uid="uid://boe1pn246iwrh" path="res://assets/textures/posters/grand_opening_scuffed.tres" id="16_g8lwn"]
+[ext_resource type="Texture2D" uid="uid://b2eck5mmhaaaa" path="res://assets/posters/one_win_1.png" id="17_pjdn7"]
 [ext_resource type="Material" uid="uid://dr3hgrw1wdh3v" path="res://assets/textures/walls/column_trim_1.tres" id="17_rveo5"]
 [ext_resource type="Material" uid="uid://bn5vjofuqcp4r" path="res://assets/textures/walls/green_tile_jank.tres" id="18_4d0om"]
 [ext_resource type="PackedScene" uid="uid://cdkpo8wgm1k46" path="res://src/maps/lobby/vendor/Workbench.tscn" id="18_dv650"]
@@ -7625,6 +7627,13 @@ texture_albedo = ExtResource("12_p4val")
 upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
 
+[node name="Decal5" type="Decal" parent="Decals"]
+transform = Transform3D(-0.565662, -0.82454, 0.0126802, 0.000165096, -0.01549, -0.99988, 0.824638, -0.565592, 0.00889826, -0.517229, 3.54699, -3.01748)
+size = Vector3(2.52429, 0.659302, 1.3)
+texture_albedo = ExtResource("12_mfi1x")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+
 [node name="Decal2" type="Decal" parent="Decals"]
 transform = Transform3D(-0.498098, -0.86273, -0.0871557, 0.0435778, 0.0754791, -0.996195, 0.866026, -0.5, -4.61649e-08, 0.0703529, 2.12159, 6.29396)
 size = Vector3(0.8, 1.26416, 1.2)
@@ -7633,7 +7642,7 @@ upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
 
 [node name="Decal4" type="Decal" parent="Decals"]
-transform = Transform3D(-0.47161, -0.86273, -0.182433, 0.236632, 0.0754791, -0.968664, 0.849465, -0.5, 0.168553, -0.922717, 2.0935, 8.00323)
+transform = Transform3D(-0.47161, -0.86273, -0.182433, 0.236632, 0.0754791, -0.968664, 0.849465, -0.5, 0.168553, -0.920875, 1.88893, 7.96917)
 sorting_offset = 2.0
 size = Vector3(0.919653, 1.26416, 1.22451)
 texture_albedo = ExtResource("13_m46mf")
@@ -7641,15 +7650,22 @@ upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
 
 [node name="Decal3" type="Decal" parent="Decals"]
-transform = Transform3D(-0.502884, -0.86273, -0.0529615, -0.0245058, 0.0754791, -0.996847, 0.864007, -0.5, -0.0590991, -0.570551, 1.99752, 7.38109)
+transform = Transform3D(-0.502884, -0.86273, -0.0529615, -0.0245058, 0.0754791, -0.996847, 0.864007, -0.5, -0.0590991, -0.494998, 2.0012, 7.25128)
 size = Vector3(1.1, 1.26416, 1.6)
-texture_albedo = ExtResource("13_p1yck")
+texture_albedo = ExtResource("15_72o55")
 upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
 
 [node name="BeerPoster" type="Decal" parent="Decals"]
 transform = Transform3D(0.262604, 0.96225, -0.0715094, 0.0373276, -0.0841859, -0.995751, -0.964182, 0.258819, -0.0580261, -26.5929, -0.0152781, -5.82835)
 texture_albedo = ExtResource("13_yx2w6")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+
+[node name="BeerPoster3" type="Decal" parent="Decals"]
+transform = Transform3D(0.00199211, 0.99982, 0.0188398, 0.00387763, 0.018832, -0.999816, -0.999991, 0.00206525, -0.00383949, -27.5794, 2.88839, -1.94747)
+size = Vector3(2, 1.68903, 2.5)
+texture_albedo = ExtResource("17_pjdn7")
 upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
 
