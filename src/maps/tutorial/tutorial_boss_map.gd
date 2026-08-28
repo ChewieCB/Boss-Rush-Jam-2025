@@ -439,8 +439,6 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
 	
-	#await get_tree().create_timer(0.8, false).timeout
-
 	# Spark the electrical box
 	door_spark_emitter.emitting = true
 	spark_sfx_player.stream = sfx_door_spark.pick_random()
