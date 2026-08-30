@@ -40,7 +40,7 @@ vec2 ti1ingN0ffsetFunc(vec2 _uv_tN0, vec2 _offset_tN0){
 vec3 read_normalmap(in vec3 normalmap, in vec3 normal, in vec3 tangent, in vec3 binormal, in float normaldepth) {
 	normalmap.xy = normalmap.xy * 2.0 - 1.0;
 	normalmap.z = sqrt(max(0.0, 1.0 - dot(normalmap.xy, normalmap.xy))); //always ignore Z, as it can be RG packed, Z may be pos/neg, etc.
-	
+
 	return normalize(mix(normal, tangent * normalmap.x + binormal * normalmap.y + normal * normalmap.z, normaldepth));
 }
 
@@ -183,7 +183,7 @@ void fragment() {
 	vec3 n_out18p0;
 	{
 		n_out18p0 = read_normalmap(n_out11p0, vec3(n_out4p0), TANGENT, BINORMAL, NORMAL_MAP_DEPTH);
-		
+
 	}
 
 

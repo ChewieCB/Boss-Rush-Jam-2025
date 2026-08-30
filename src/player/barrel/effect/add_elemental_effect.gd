@@ -22,11 +22,11 @@ func on_effect_set():
 
 
 func on_effect_removed():
-	owner_barrel.owner_gun.set_elemental_anim()
+	owner_barrel.owner_gun.remove_elemental_anim()
 
 
 func on_barrel_start_spin():
-	owner_barrel.owner_gun.set_elemental_anim()
+	owner_barrel.owner_gun.remove_elemental_anim()
 
 
 func on_projectile_spawn(_projectile: BaseBullet):

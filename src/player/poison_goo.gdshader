@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform sampler2D tex : source_color;
+uniform float tex_alpha = 1.0;
 uniform float wave_amplitude : hint_range(0.0, 1.0) = 0.1;
 uniform float wave_frequency : hint_range(0.0, 20.0) = 10.0;
 uniform float wave_speed : hint_range(0.0, 10.0) = 1.0;
@@ -21,5 +22,5 @@ void fragment() {
     uv = clamp(uv, vec2(0.0), vec2(1.0));
     vec4 tex_color = texture(tex, uv);
     ALBEDO = tex_color.rgb;
-    ALPHA = tex_color.a;
+    ALPHA = tex_color.a * tex_alpha;
 }

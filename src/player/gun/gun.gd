@@ -1347,18 +1347,26 @@ func _debug_anim_tree_state_trace(state_name: String, transition: String) -> voi
 	print("Anim state: %s - %s" % [state_name, transition])
 
 
+
+func remove_elemental_anim() -> void:
+	var frames = ["shotgun", "smg", "rifle"]
+	for _frame in frames:
+		anim_tree["parameters/elemental_%s/playback" % [_frame]].travel("idle")
+
+
 func set_elemental_anim(element: String = "") -> void:
 	if element:
-		var frame: String = ""
+		var new_frame: String = ""
 		match GameManager.equipped_gun_frame.frame_id:
 			GunFrameResource.GunFrameIdEnum.SHOTGUN:
-				frame = "shotgun"
+				new_frame = "shotgun"
 			GunFrameResource.GunFrameIdEnum.SMG:
-				frame = "smg"
+				new_frame = "smg"
 			GunFrameResource.GunFrameIdEnum.SNIPER:
-				frame = "rifle"
-			
-		anim_tree["parameters/elemental_state/transition_request"] = "%s_%s" % [element, frame]
+				new_frame = "rifle"
+		
+		anim_tree["parameters/elemental_state/transition_request"] = new_frame
+		anim_tree["parameters/elemental_%s/playback" % [new_frame]].travel("%s_equip" % [element])
 		anim_tree["parameters/elemental_add/add_amount"] = 1.0
 	else:
 		anim_tree["parameters/elemental_add/add_amount"] = 0.0
