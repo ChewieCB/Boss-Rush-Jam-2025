@@ -1345,3 +1345,20 @@ func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_fin
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:
 	print("Anim state: %s - %s" % [state_name, transition])
+
+
+func set_elemental_anim(element: String = "") -> void:
+	if element:
+		var frame: String = ""
+		match GameManager.equipped_gun_frame.frame_id:
+			GunFrameResource.GunFrameIdEnum.SHOTGUN:
+				frame = "shotgun"
+			GunFrameResource.GunFrameIdEnum.SMG:
+				frame = "smg"
+			GunFrameResource.GunFrameIdEnum.SNIPER:
+				frame = "rifle"
+			
+		anim_tree["parameters/elemental_state/transition_request"] = "%s_%s" % [element, frame]
+		anim_tree["parameters/elemental_add/add_amount"] = 1.0
+	else:
+		anim_tree["parameters/elemental_add/add_amount"] = 0.0

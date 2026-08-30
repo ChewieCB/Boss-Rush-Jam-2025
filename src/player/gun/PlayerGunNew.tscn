@@ -1,4 +1,4 @@
-[gd_scene load_steps=177 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=224 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -63,8 +63,13 @@
 [ext_resource type="Texture2D" uid="uid://cnat6ccrdw3a5" path="res://src/player/gun/assets/sprite/frames/smg/smg_idle_hand.png" id="38_ew4gs"]
 [ext_resource type="Texture2D" uid="uid://cjc6l0p8c4720" path="res://src/player/gun/assets/sprite/rescale/jam/1_barrel_jam_0.png" id="39_br3nd"]
 [ext_resource type="Texture2D" uid="uid://cakvrwlj2seao" path="res://src/player/gun/assets/sprite/rescale/jam/2_barrel_jam_0.png" id="40_kpqpn"]
+[ext_resource type="Texture2D" uid="uid://mvodghq1nj5c" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Asset-Overheat-shotgun-multiply-02.png" id="43_70w2b"]
+[ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="43_an5qq"]
 [ext_resource type="Texture2D" uid="uid://dsvduyuup1tyr" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_000.png" id="43_nrwcm"]
+[ext_resource type="Shader" path="res://src/player/poison_goo.gdshader" id="44_a5uul"]
 [ext_resource type="Texture2D" uid="uid://bdqts008mm68v" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_002.png" id="44_kke66"]
+[ext_resource type="Texture2D" uid="uid://8vgor71u70ql" path="res://src/player/gun/assets/sprite/elemental/cold/shotgun/Asset-Iced-shotgun-03.png" id="44_wvu30"]
+[ext_resource type="Texture2D" uid="uid://bbeeb3au55qoj" path="res://src/player/gun/assets/sprite/elemental/poison/shotgun/Asset-tar-shotgun-03.png" id="45_bxgvq"]
 [ext_resource type="Texture2D" uid="uid://cpdkp1jdb31rp" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_003.png" id="45_mkuwl"]
 [ext_resource type="Texture2D" uid="uid://gxrbgeiyaqvf" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_004.png" id="46_5pojg"]
 [ext_resource type="Texture2D" uid="uid://bfqiog4bk6fdr" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_005.png" id="47_t3fma"]
@@ -72,6 +77,24 @@
 [ext_resource type="Texture2D" uid="uid://mc8iiclya1ts" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_007.png" id="49_q0xdi"]
 [ext_resource type="Texture2D" uid="uid://dlf1viimbfv7j" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_009.png" id="50_v5jxa"]
 [ext_resource type="Texture2D" uid="uid://n3evsy846arq" path="res://assets/sprite/particles/springs/springs_&_gears_sheet.png" id="55_18u8p"]
+[ext_resource type="Texture2D" uid="uid://dbao5p5c83gc" path="res://src/player/gun/assets/sprite/elemental/poison/rifle/Asset-Corruption-01-Sniper.png" id="71_ibdkl"]
+[ext_resource type="Texture2D" uid="uid://ddxwks41c7to3" path="res://src/player/gun/assets/sprite/elemental/cold/rifle/Asset-Ice-01-Sniper.png" id="71_rp3dt"]
+[ext_resource type="Texture2D" uid="uid://pm2bp7d0cddp" path="res://src/player/gun/assets/sprite/elemental/poison/rifle/Asset-Corruption-03-Sniper.png" id="71_tited"]
+[ext_resource type="Texture2D" uid="uid://dgqu1f5icsgcr" path="res://src/player/gun/assets/sprite/elemental/poison/rifle/Asset-Corruption-02-Sniper.png" id="72_42i25"]
+[ext_resource type="Texture2D" uid="uid://c73hy2kgvgu4l" path="res://src/player/gun/assets/sprite/elemental/cold/rifle/Asset-Ice-02-Sniper.png" id="72_mt4bp"]
+[ext_resource type="Texture2D" uid="uid://dwboswm1ogexj" path="res://src/player/gun/assets/sprite/elemental/cold/rifle/Asset-Ice-03-Sniper.png" id="72_pjy11"]
+[ext_resource type="Texture2D" uid="uid://bwr45wmaqc44t" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Asset-Fire-02-Sniper.png" id="73_6tpsq"]
+[ext_resource type="Texture2D" uid="uid://ckp0ncnknl5ks" path="res://src/player/gun/assets/sprite/elemental/cold/shotgun/Asset-Iced-shotgun-01.png" id="74_hxmbt"]
+[ext_resource type="Texture2D" uid="uid://dcy22x5b7e3kw" path="res://src/player/gun/assets/sprite/elemental/poison/smg/Asset-Corruption-03-SMG.png" id="75_05uis"]
+[ext_resource type="Texture2D" uid="uid://dv2vvlkptmpdn" path="res://src/player/gun/assets/sprite/elemental/cold/shotgun/Asset-Iced-shotgun-02.png" id="75_cfp7l"]
+[ext_resource type="Texture2D" uid="uid://d2jcds7dw84j2" path="res://src/player/gun/assets/sprite/elemental/cold/smg/Asset-Ice-03-SMG.png" id="77_la1dv"]
+[ext_resource type="Texture2D" uid="uid://dryv8tcd7f8ax" path="res://src/player/gun/assets/sprite/elemental/fire/smg/Asset-Fire-02-SMG.png" id="79_0hfgv"]
+[ext_resource type="Texture2D" uid="uid://cyjjbegvfx0jw" path="res://src/player/gun/assets/sprite/elemental/poison/shotgun/Asset-tar-shotgun-01.png" id="79_k6xkm"]
+[ext_resource type="Texture2D" uid="uid://bmgn34h261idh" path="res://src/player/gun/assets/sprite/elemental/poison/shotgun/Asset-tar-shotgun-02.png" id="80_rvfak"]
+[ext_resource type="Texture2D" uid="uid://d3hrf51bwoqtq" path="res://src/player/gun/assets/sprite/elemental/cold/smg/Asset-Ice-01-SMG.png" id="82_heacv"]
+[ext_resource type="Texture2D" uid="uid://822tocy8kvbd" path="res://src/player/gun/assets/sprite/elemental/cold/smg/Asset-Ice-02-SMG.png" id="83_jb56u"]
+[ext_resource type="Texture2D" uid="uid://dxm4rhlymggyi" path="res://src/player/gun/assets/sprite/elemental/poison/smg/Asset-Corruption-01-SMG.png" id="90_h1vq7"]
+[ext_resource type="Texture2D" uid="uid://d0gthdopl3q5q" path="res://src/player/gun/assets/sprite/elemental/poison/smg/Asset-Corruption-02-SMG.png" id="91_pq0kg"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
 random_pitch = 1.19
@@ -150,6 +173,96 @@ orientation = 2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
 viewport_path = NodePath("EffectIconsViewport")
+
+[sub_resource type="Curve" id="Curve_aei03"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.255172, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xv3un"]
+curve = SubResource("Curve_aei03")
+
+[sub_resource type="Curve" id="Curve_5qq8o"]
+_data = [Vector2(0, 1), 0.0, -1.32864, 0, 0, Vector2(0.160804, 0.450549), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_8aoov"]
+curve = SubResource("Curve_5qq8o")
+
+[sub_resource type="Curve" id="Curve_q5rxh"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_damdf"]
+curve = SubResource("Curve_q5rxh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t2mr5"]
+particle_flag_align_y = true
+emission_shape_offset = Vector3(0, 0.4, 0)
+emission_shape_scale = Vector3(0.335, 0.48, 0.45)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 2, 0)
+spread = 65.36
+flatness = 1.0
+radial_velocity_min = 2.24998
+radial_velocity_max = 5.24998
+radial_velocity_curve = SubResource("CurveTexture_8aoov")
+gravity = Vector3(0, 0.3, 0.2)
+scale_min = 0.2
+scale_max = 0.5
+scale_over_velocity_min = 1.0
+scale_over_velocity_max = 6.0
+scale_over_velocity_curve = SubResource("CurveTexture_damdf")
+color = Color(1, 1, 1, 0.552941)
+alpha_curve = SubResource("CurveTexture_xv3un")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u8okl"]
+render_priority = 1
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.1, 0.1, 0.1, 0.27451)
+emission_enabled = true
+emission = Color(0.61, 0.61, 0.61, 1)
+billboard_keep_scale = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_p7abi"]
+_surfaces = [{
+"aabb": AABB(-0.154951, -0.163546, -0.146853, 0.306201, 0.326742, 0.295014),
+"format": 34896613377,
+"index_count": 60,
+"index_data": PackedByteArray("AAACAAEAAQAFAAAAAAADAAIAAAAEAAMAAAAFAAQAAQAKAAUAAgAGAAEAAwAHAAIABAAIAAMABQAJAAQAAQAGAAoAAgAHAAYAAwAIAAcABAAJAAgABQAKAAkABgALAAoABwALAAYACAALAAcACQALAAgACgALAAkA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("OYMAADl+AAD75xNIrtYAAOVh/UP//wAAAABMRQB3AABzVMxBAAAAAHLeQ03eNwAAbKI4sqT3AACWHA+6r8kAANkfrsCPNgAAh6f8uJYDAAD//2e4JYwAAHKC///LfwAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_kgv1q"]
+resource_name = "icosphere_Icosphere"
+_surfaces = [{
+"aabb": AABB(-0.154951, -0.163546, -0.146853, 0.306201, 0.326742, 0.295014),
+"attribute_data": PackedByteArray("iy7//xZd//+ii///Lbr//7no///RRa/XRRev1///r9dz0a/X6KKv11x0r9eLLmCvAABgr7noYK8tumCvootgrxZdYK9FFxGH0UURh1x0EYfoohGHc9ERhw=="),
+"format": 34896613399,
+"index_count": 60,
+"index_data": PackedByteArray("AAAGAAUABQAKAAEABAAIAAcAAwAJAAgAAgAKAAkABQAQAAoABgALAAUACAANAAcACQAOAAgACgAPAAkABQALABAABgAMAAsACAAOAA0ACQAPAA4ACgAQAA8ACwASABAADAARAAsADgAVAA0ADwAUAA4AEAATAA8A"),
+"material": SubResource("StandardMaterial3D_u8okl"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 22,
+"vertex_data": PackedByteArray("OYMAADl+S8E5gwAAOX4e1jmDAAA5fjT0OYMAADl+8+Y5gwAAOX6fyfvnE0iu1p2p5WH9Q///jJblYf1D///RmgAATEUAd7/Cc1TMQQAA2fNy3kNN3jeR2myiOLKk9wmWlhwPuq/JLKmWHA+6r8mArdkfrsCPNtnah6f8uJYDePL//2e4JYwSwHKC///Lf0PAcoL//8t/oMVygv//y39z43KC///Lf5T2coL//8t/2tWzHFZvdlf6Uih2KURpMhPlrx6cv6lb5DKrNm+lXSjz0SFYOuyfY3L7EHYYIPrW/UywsgbOmZcOxxKNRdpdmsYCWKkyFIXgd44t4S9DZc05GsWK0bkIqgOq")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_p7abi")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q6drh"]
+render_priority = 3
+shader = ExtResource("44_a5uul")
+shader_parameter/wave_amplitude = 0.003
+shader_parameter/wave_frequency = 20.0
+shader_parameter/wave_speed = 1.6
+shader_parameter/vertical_wobble = true
 
 [sub_resource type="Animation" id="Animation_64i2r"]
 resource_name = "RESET"
@@ -431,6 +544,198 @@ tracks/22/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("15_x3kbv")]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("SpriteParent/FireInfusion/FireEffect:texture")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_8rp44")]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("43_70w2b")]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:texture")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/33/type = "value"
+tracks/33/imported = false
+tracks/33/enabled = true
+tracks/33/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/33/interp = 1
+tracks/33/loop_wrap = true
+tracks/33/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/34/type = "value"
+tracks/34/imported = false
+tracks/34/enabled = true
+tracks/34/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/34/interp = 1
+tracks/34/loop_wrap = true
+tracks/34/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/35/type = "value"
+tracks/35/imported = false
+tracks/35/enabled = true
+tracks/35/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/35/interp = 1
+tracks/35/loop_wrap = true
+tracks/35/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/36/type = "value"
+tracks/36/imported = false
+tracks/36/enabled = true
+tracks/36/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/36/interp = 1
+tracks/36/loop_wrap = true
+tracks/36/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/37/type = "value"
+tracks/37/imported = false
+tracks/37/enabled = true
+tracks/37/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/37/interp = 1
+tracks/37/loop_wrap = true
+tracks/37/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/38/type = "value"
+tracks/38/imported = false
+tracks/38/enabled = true
+tracks/38/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/38/interp = 1
+tracks/38/loop_wrap = true
+tracks/38/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
@@ -1210,6 +1515,9 @@ tracks/3/keys = {
 "values": [Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_o6i88"]
+resource_name = "new_animation"
+
 [sub_resource type="Animation" id="Animation_3r35k"]
 resource_name = "reload"
 length = 0.55
@@ -1543,6 +1851,7 @@ _data = {
 "equip": SubResource("Animation_4s64o"),
 "failed_shot": SubResource("Animation_fa7ie"),
 "idle": SubResource("Animation_pwnrm"),
+"new_animation": SubResource("Animation_o6i88"),
 "reload": SubResource("Animation_3r35k"),
 "start_spin": SubResource("Animation_n22ld"),
 "start_spin_down": SubResource("Animation_86ihn"),
@@ -1734,6 +2043,84 @@ tracks/14/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_nelbp"]
+resource_name = "cold_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("71_rp3dt"), ExtResource("72_mt4bp"), ExtResource("72_pjy11")]
+}
+
+[sub_resource type="Animation" id="Animation_qus7t"]
+resource_name = "electric_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
 [sub_resource type="Animation" id="Animation_xhghb"]
 resource_name = "equip"
 length = 0.15
@@ -1802,6 +2189,70 @@ tracks/4/keys = {
 "args": ["rifle/equip", "finished"],
 "method": &"_debug_anim_tree_state_trace"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_tjscr"]
+resource_name = "fire_infusion"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/FireEffect:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_8rp44")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("73_6tpsq")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.466667),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_n74wa"]
@@ -1949,6 +2400,70 @@ tracks/6/keys = {
 "args": [],
 "method": &"clear_jam"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_i85wp"]
+resource_name = "poison_infusion"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("71_ibdkl"), ExtResource("72_42i25"), ExtResource("71_tited")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("71_ibdkl"), ExtResource("72_42i25"), ExtResource("71_tited")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_26ako"]
@@ -2203,9 +2718,13 @@ tracks/4/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_w2b2s"]
 _data = {
 "active": SubResource("Animation_u240e"),
+"cold_infusion": SubResource("Animation_nelbp"),
+"electric_infusion": SubResource("Animation_qus7t"),
 "equip": SubResource("Animation_xhghb"),
+"fire_infusion": SubResource("Animation_tjscr"),
 "idle": SubResource("Animation_n74wa"),
 "jam": SubResource("Animation_23m4y"),
+"poison_infusion": SubResource("Animation_i85wp"),
 "rack": SubResource("Animation_26ako"),
 "reload": SubResource("Animation_vfnkp"),
 "unqeuip": SubResource("Animation_vn4lx")
@@ -2407,6 +2926,85 @@ tracks/15/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_3lsgs"]
+resource_name = "cold_infusion"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("74_hxmbt"), ExtResource("75_cfp7l"), ExtResource("44_wvu30")]
+}
+
+[sub_resource type="Animation" id="Animation_wmm8j"]
+resource_name = "electric_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
 [sub_resource type="Animation" id="Animation_gn12k"]
 resource_name = "equip"
 length = 0.15
@@ -2475,6 +3073,69 @@ tracks/4/keys = {
 "args": ["shotgun/equip", "finished"],
 "method": &"_debug_anim_tree_state_trace"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_ngfjs"]
+resource_name = "fire_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/FireEffect:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_8rp44")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("43_70w2b")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.466667),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_axnvj"]
@@ -2634,6 +3295,70 @@ tracks/6/keys = {
 "args": [],
 "method": &"clear_jam"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_ka5he"]
+resource_name = "poison_infusion"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("79_k6xkm"), ExtResource("80_rvfak"), ExtResource("45_bxgvq")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("79_k6xkm"), ExtResource("80_rvfak"), ExtResource("45_bxgvq")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_orurc"]
@@ -2994,9 +3719,13 @@ tracks/4/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_grfdj"]
 _data = {
 "active": SubResource("Animation_wn1yt"),
+"cold_infusion": SubResource("Animation_3lsgs"),
+"electric_infusion": SubResource("Animation_wmm8j"),
 "equip": SubResource("Animation_gn12k"),
+"fire_infusion": SubResource("Animation_ngfjs"),
 "idle": SubResource("Animation_axnvj"),
 "jam": SubResource("Animation_n0x06"),
+"poison_infusion": SubResource("Animation_ka5he"),
 "pump": SubResource("Animation_orurc"),
 "pump_no_shell": SubResource("Animation_78i3g"),
 "reload": SubResource("Animation_ik8rl"),
@@ -3187,6 +3916,84 @@ tracks/14/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_q2s7o"]
+resource_name = "cold_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("82_heacv"), ExtResource("83_jb56u"), ExtResource("77_la1dv")]
+}
+
+[sub_resource type="Animation" id="Animation_7pb37"]
+resource_name = "electric_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
 [sub_resource type="Animation" id="Animation_yfl8i"]
 resource_name = "equip"
 length = 0.15
@@ -3267,6 +4074,69 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("38_bubf0"), ExtResource("38_ew4gs")]
+}
+
+[sub_resource type="Animation" id="Animation_htcj4"]
+resource_name = "fire_infusion"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/FireEffect:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_8rp44")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("79_0hfgv")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.466667),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_dbk33"]
@@ -3426,6 +4296,70 @@ tracks/6/keys = {
 "args": [],
 "method": &"clear_jam"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_1hw36"]
+resource_name = "poison_infusion"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("90_h1vq7"), ExtResource("91_pq0kg"), ExtResource("75_05uis")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("90_h1vq7"), ExtResource("91_pq0kg"), ExtResource("75_05uis")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_nweg0"]
@@ -3598,9 +4532,13 @@ tracks/5/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_saspt"]
 _data = {
 "active": SubResource("Animation_xcjdo"),
+"cold_infusion": SubResource("Animation_q2s7o"),
+"electric_infusion": SubResource("Animation_7pb37"),
 "equip": SubResource("Animation_yfl8i"),
+"fire_infusion": SubResource("Animation_htcj4"),
 "idle": SubResource("Animation_dbk33"),
 "jam": SubResource("Animation_xclyc"),
+"poison_infusion": SubResource("Animation_1hw36"),
 "reload": SubResource("Animation_nweg0"),
 "unqeuip": SubResource("Animation_rdtrw")
 }
@@ -4175,6 +5113,74 @@ sorting_offset = 3.0
 render_priority = 3
 texture = SubResource("ViewportTexture_rlyuh")
 
+[node name="FireInfusion" type="Node3D" parent="SpriteParent"]
+visible = false
+
+[node name="OverheatMultiply" type="Sprite3D" parent="SpriteParent/FireInfusion"]
+layers = 2
+sorting_offset = 7.0
+render_priority = 2
+texture = ExtResource("43_70w2b")
+
+[node name="FireEffect" type="Sprite3D" parent="SpriteParent/FireInfusion"]
+layers = 2
+sorting_offset = 4.0
+render_priority = 2
+texture = ExtResource("14_8rp44")
+
+[node name="SmokeParticles" parent="SpriteParent/FireInfusion" instance=ExtResource("43_an5qq")]
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 1.45473, -2.22531, 0)
+amount = 256
+lifetime = 0.7
+one_shot = false
+speed_scale = 0.7
+explosiveness = 0.0
+visibility_aabb = AABB(-1.241, -1.182, -1.836, 4.727, 2.981, 4.267)
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_t2mr5")
+draw_pass_1 = SubResource("ArrayMesh_kgv1q")
+
+[node name="ColdInfusion" type="Node3D" parent="SpriteParent"]
+visible = false
+
+[node name="ColdMultiply" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
+layers = 2
+sorting_offset = 7.0
+render_priority = 2
+
+[node name="ColdEffect" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
+layers = 2
+sorting_offset = 5.0
+render_priority = 2
+
+[node name="PoisonInfusion" type="Node3D" parent="SpriteParent"]
+visible = false
+
+[node name="PoisonMultiply" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
+layers = 2
+sorting_offset = 7.0
+render_priority = 2
+
+[node name="PoisonEffect" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
+layers = 2
+sorting_offset = 4.0
+material_override = SubResource("ShaderMaterial_q6drh")
+render_priority = 2
+
+[node name="ElectricInfusion" type="Node3D" parent="SpriteParent"]
+visible = false
+
+[node name="ElectricMultiply" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 7.0
+render_priority = 2
+
+[node name="ElectricEffect" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 4.0
+material_override = SubResource("ShaderMaterial_q6drh")
+render_priority = 2
+
 [node name="BarrelContainer" type="Node3D" parent="."]
 
 [node name="JamTimer" type="Timer" parent="."]
@@ -4210,6 +5216,10 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/barrel_1+2/add_amount = 1.0
 parameters/barrel_12+3/add_amount = 1.0
 parameters/barrels+reload/add_amount = 1.0
+parameters/elemental_add/add_amount = 1.0
+parameters/elemental_state/current_state = "poison_smg"
+parameters/elemental_state/transition_request = ""
+parameters/elemental_state/current_index = 10
 parameters/jam_shot/active = false
 parameters/jam_shot/internal_active = false
 parameters/jam_shot/request = 0
