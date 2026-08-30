@@ -281,9 +281,6 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_utfua")
 orientation = 2
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
-viewport_path = NodePath("EffectIconsViewport")
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_px4kk"]
 animations = [{
 "frames": [{
@@ -471,6 +468,7 @@ code = "shader_type spatial;
 render_mode unshaded, cull_disabled, blend_mix, depth_draw_opaque, diffuse_burley;
 
 uniform sampler2D texture_albedo : source_color, hint_default_white;
+uniform float tex_alpha = 1.0;
 uniform float radius = 1.0;
 uniform float speed : hint_range(0.0, 10.0) = 1.0;
 uniform vec4 effect_color : source_color = vec4(0.251, 0.0, 0.0, 1.0);
@@ -528,7 +526,7 @@ void fragment()
     );
 
     ALBEDO = tex.rgb;
-    ALPHA = tex.a * mask;
+    ALPHA = tex.a * mask * tex_alpha;;
 
     // Emissive rim right at the dissolve edge
     float rim = 1.0 - smoothstep(0.0, edge_width, abs(color - threshold));
@@ -536,9 +534,10 @@ void fragment()
 }"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_72eyo"]
-render_priority = 4
+render_priority = 3
 next_pass = SubResource("ShaderMaterial_1vs7g")
 shader = SubResource("Shader_imxdb")
+shader_parameter/tex_alpha = 1.0
 shader_parameter/radius = 10.0
 shader_parameter/speed = 0.303
 shader_parameter/effect_color = Color(0.627741, 0.713726, 0.737163, 1)
@@ -548,8 +547,9 @@ shader_parameter/emission_strength = 3.0
 shader_parameter/texture_albedo = ExtResource("82_heacv")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lsej2"]
-render_priority = 3
+render_priority = 2
 shader = SubResource("Shader_imxdb")
+shader_parameter/tex_alpha = 1.0
 shader_parameter/radius = -5.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
@@ -559,8 +559,9 @@ shader_parameter/emission_strength = 3.0
 shader_parameter/texture_albedo = ExtResource("108_vorq7")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_febxt"]
-render_priority = 3
+render_priority = 2
 shader = SubResource("Shader_imxdb")
+shader_parameter/tex_alpha = 1.0
 shader_parameter/radius = 0.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
@@ -570,8 +571,9 @@ shader_parameter/emission_strength = 3.0
 shader_parameter/texture_albedo = ExtResource("74_ns2wj")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qday6"]
-render_priority = 3
+render_priority = 2
 shader = SubResource("Shader_imxdb")
+shader_parameter/tex_alpha = 1.0
 shader_parameter/radius = 0.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
@@ -581,8 +583,9 @@ shader_parameter/emission_strength = 3.0
 shader_parameter/texture_albedo = ExtResource("75_d504r")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_34p4g"]
-render_priority = 3
+render_priority = 2
 shader = SubResource("Shader_imxdb")
+shader_parameter/tex_alpha = 1.0
 shader_parameter/radius = 0.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
@@ -872,6 +875,9 @@ animations = [{
 "name": &"stage_3",
 "speed": 30.0
 }]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
+viewport_path = NodePath("EffectIconsViewport")
 
 [sub_resource type="Animation" id="Animation_64i2r"]
 resource_name = "RESET"
@@ -1609,6 +1615,18 @@ tracks/60/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [&"default"]
+}
+tracks/61/type = "value"
+tracks/61/imported = false
+tracks/61/enabled = true
+tracks/61/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/tex_alpha")
+tracks/61/interp = 1
+tracks/61/loop_wrap = true
+tracks/61/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
 }
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
@@ -5786,7 +5804,7 @@ tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.65),
+"times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -5810,10 +5828,10 @@ tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(0.517632),
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.517632, 1),
 "update": 1,
-"values": [ExtResource("77_la1dv")]
+"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -5894,10 +5912,10 @@ tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1.36604),
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1.36604, 1),
 "update": 1,
-"values": [ExtResource("77_la1dv")]
+"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -5970,6 +5988,18 @@ tracks/15/keys = {
 "transitions": PackedFloat32Array(0.120742, 1.36604),
 "update": 0,
 "values": [Vector3(1, 1, 1), Vector3(0.655, 0.655, 0.655)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/tex_alpha")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 0.12),
+"update": 0,
+"values": [1.0, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_n7bbu"]
@@ -6867,12 +6897,6 @@ layers = 2
 sorting_offset = 3.0
 render_priority = 2
 
-[node name="EffectIconsSprite" type="Sprite3D" parent="SpriteParent"]
-layers = 2
-sorting_offset = 3.0
-render_priority = 8
-texture = SubResource("ViewportTexture_rlyuh")
-
 [node name="FireInfusion" type="Node3D" parent="SpriteParent"]
 visible = false
 
@@ -7014,6 +7038,13 @@ layers = 2
 render_priority = 3
 sprite_frames = SubResource("SpriteFrames_0c6q5")
 animation = &"stage_1"
+
+[node name="EffectIconsSprite" type="Sprite3D" parent="SpriteParent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 2
+sorting_offset = 10.0
+render_priority = 8
+texture = SubResource("ViewportTexture_rlyuh")
 
 [node name="BarrelContainer" type="Node3D" parent="."]
 
