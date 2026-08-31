@@ -10,7 +10,7 @@ uniform float overlay_amount : hint_range(0.0, 1.0) = 1.0; // how much the effec
 uniform float edge_width : hint_range(0.0, 1.0) = 0.1;
 uniform float emission_strength : hint_range(0.0, 10.0) = 3.0;
 uniform float overlay_opacity : hint_range(0.0, 1.0) = 1.0; // max opacity of the overlay layer where active
-uniform float effect_opacity : hint_range(0.0, 1.0) = 1.0; 
+uniform float effect_opacity : hint_range(0.0, 1.0) = 1.0;
 
 
 float snoise(vec3 uv, float res)
