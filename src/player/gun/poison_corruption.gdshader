@@ -10,6 +10,8 @@ uniform float overlay_amount : hint_range(0.0, 1.0) = 1.0; // how much the effec
 uniform float edge_width : hint_range(0.0, 1.0) = 0.1;
 uniform float emission_strength : hint_range(0.0, 10.0) = 3.0;
 uniform float overlay_opacity : hint_range(0.0, 1.0) = 1.0; // max opacity of the overlay layer where active
+uniform float effect_opacity : hint_range(0.0, 1.0) = 1.0; 
+
 
 float snoise(vec3 uv, float res)
 {
@@ -65,7 +67,7 @@ void fragment()
 
     // Composite overlay on top of the always-visible base
     ALBEDO = mix(base.rgb, overlay_color, overlay_alpha);
-    ALPHA = base.a; // base stays fully opaque/visible regardless of overlay
+    ALPHA = base.a * effect_opacity; // base stays fully opaque/visible regardless of overlay
 
     // Emissive glow riding along the overlay's edge
     float rim = 1.0 - smoothstep(0.0, edge_width, abs(color - threshold));

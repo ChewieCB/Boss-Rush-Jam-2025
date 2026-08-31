@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ds2os5uy4mjvn"
-path.s3tc="res://.godot/imported/Asset-Poison-Mask-Roller-Front.png-322400b35b54e9897ad005aa829a9b66.s3tc.ctex"
+uid="uid://dfkka20kshvwp"
+path.s3tc="res://.godot/imported/Asset-Lightning-shotgun-multiply-02.png-a066dab5b5fb2072dc16778b8fcf4d58.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Front.png"
-dest_files=["res://.godot/imported/Asset-Poison-Mask-Roller-Front.png-322400b35b54e9897ad005aa829a9b66.s3tc.ctex"]
+source_file="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-Lightning-shotgun-multiply-02.png"
+dest_files=["res://.godot/imported/Asset-Lightning-shotgun-multiply-02.png-a066dab5b5fb2072dc16778b8fcf4d58.s3tc.ctex"]
 
 [params]
 

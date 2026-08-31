@@ -1,4 +1,4 @@
-[gd_scene load_steps=354 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=368 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -105,24 +105,20 @@
 [ext_resource type="Texture2D" uid="uid://cl5sduvm25maq" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Mid.png" id="68_ffgdv"]
 [ext_resource type="Texture2D" uid="uid://cysge7mi7k2it" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Front.png" id="69_ajow0"]
 [ext_resource type="Shader" path="res://src/player/gun/cold_glitter.gdshader" id="71_2hpme"]
-[ext_resource type="Texture2D" uid="uid://dbao5p5c83gc" path="res://src/player/gun/assets/sprite/elemental/poison/rifle/Asset-Corruption-01-Sniper.png" id="71_ibdkl"]
 [ext_resource type="Shader" path="res://src/player/gun/poison_corruption.gdshader" id="71_okl3c"]
-[ext_resource type="Texture2D" uid="uid://ddxwks41c7to3" path="res://src/player/gun/assets/sprite/elemental/cold/rifle/Asset-Ice-01-Sniper.png" id="71_rp3dt"]
 [ext_resource type="Texture2D" uid="uid://pm2bp7d0cddp" path="res://src/player/gun/assets/sprite/elemental/poison/rifle/Asset-Corruption-03-Sniper.png" id="71_tited"]
 [ext_resource type="Texture2D" uid="uid://dgqu1f5icsgcr" path="res://src/player/gun/assets/sprite/elemental/poison/rifle/Asset-Corruption-02-Sniper.png" id="72_42i25"]
-[ext_resource type="Texture2D" uid="uid://c73hy2kgvgu4l" path="res://src/player/gun/assets/sprite/elemental/cold/rifle/Asset-Ice-02-Sniper.png" id="72_mt4bp"]
-[ext_resource type="Texture2D" uid="uid://dwboswm1ogexj" path="res://src/player/gun/assets/sprite/elemental/cold/rifle/Asset-Ice-03-Sniper.png" id="72_pjy11"]
-[ext_resource type="Texture2D" uid="uid://bwr45wmaqc44t" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Asset-Fire-02-Sniper.png" id="73_6tpsq"]
 [ext_resource type="Texture2D" uid="uid://ckp0ncnknl5ks" path="res://src/player/gun/assets/sprite/elemental/cold/shotgun/Asset-Iced-shotgun-01.png" id="74_hxmbt"]
 [ext_resource type="Texture2D" uid="uid://cvlag325mg0qs" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Back.png" id="74_ns2wj"]
+[ext_resource type="Texture2D" uid="uid://coglscswt6b6q" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Back.png" id="75_3xwi3"]
 [ext_resource type="Texture2D" uid="uid://dcy22x5b7e3kw" path="res://src/player/gun/assets/sprite/elemental/poison/smg/Asset-Corruption-03-SMG.png" id="75_05uis"]
-[ext_resource type="Texture2D" uid="uid://dv2vvlkptmpdn" path="res://src/player/gun/assets/sprite/elemental/cold/shotgun/Asset-Iced-shotgun-02.png" id="75_cfp7l"]
 [ext_resource type="Texture2D" uid="uid://b4kx6fnqf2j5c" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Mid.png" id="75_d504r"]
 [ext_resource type="Texture2D" uid="uid://buvqhyn0rl831" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Front.png" id="76_cqcly"]
 [ext_resource type="Texture2D" uid="uid://csqcrbtg3oloo" path="res://src/player/gun/assets/sprite/elemental/poison/smg/Asset-Poison-Mask-SMG.png" id="77_5ltfu"]
+[ext_resource type="Texture2D" uid="uid://blnea3xhy6u55" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Mid.png" id="77_1841l"]
 [ext_resource type="Texture2D" uid="uid://d2jcds7dw84j2" path="res://src/player/gun/assets/sprite/elemental/cold/smg/Asset-Ice-03-SMG.png" id="77_la1dv"]
 [ext_resource type="Texture2D" uid="uid://bmq6vc88uudaq" path="res://src/player/gun/assets/sprite/elemental/poison/corruption-layer.png" id="78_7wd4n"]
-[ext_resource type="Texture2D" uid="uid://cyjjbegvfx0jw" path="res://src/player/gun/assets/sprite/elemental/poison/shotgun/Asset-tar-shotgun-01.png" id="79_k6xkm"]
+[ext_resource type="Texture2D" uid="uid://ckkvluwxlsblq" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Electric-02-Roller-Cover-Front.png" id="79_4llk4"]
 [ext_resource type="Texture2D" uid="uid://imshkor6561u" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Mid.png" id="79_r2khx"]
 [ext_resource type="Texture2D" uid="uid://bmgn34h261idh" path="res://src/player/gun/assets/sprite/elemental/poison/shotgun/Asset-tar-shotgun-02.png" id="80_rvfak"]
 [ext_resource type="Texture2D" uid="uid://b5nxd6hktccf0" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Back.png" id="80_yunyn"]
@@ -130,6 +126,7 @@
 [ext_resource type="Texture2D" uid="uid://d3hrf51bwoqtq" path="res://src/player/gun/assets/sprite/elemental/cold/smg/Asset-Ice-01-SMG.png" id="82_heacv"]
 [ext_resource type="Texture2D" uid="uid://c3w3vdyya6bwr" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0001.png" id="83_4sycw"]
 [ext_resource type="Texture2D" uid="uid://ckaqpduhfq8yi" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0002.png" id="84_pi2xr"]
+[ext_resource type="Texture2D" uid="uid://ds2os5uy4mjvn" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Front.png" id="84_qekyp"]
 [ext_resource type="Texture2D" uid="uid://c0g8pdagli0hh" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0003.png" id="85_j82or"]
 [ext_resource type="Texture2D" uid="uid://c4k04ygfc3neb" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0004.png" id="86_0sxbh"]
 [ext_resource type="Texture2D" uid="uid://wfxvi7yhvfkl" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0005.png" id="87_ansam"]
@@ -204,7 +201,11 @@
 [ext_resource type="Texture2D" uid="uid://bybv13aicjala" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0021.png" id="151_rgjqu"]
 [ext_resource type="Texture2D" uid="uid://8gi7dcsxgm0a" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0022.png" id="152_1mvvk"]
 [ext_resource type="Texture2D" uid="uid://ckwki0lxh0mi5" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0023.png" id="153_u80wq"]
+[ext_resource type="Texture2D" uid="uid://brmtdkf8mfg7k" path="res://src/player/gun/assets/sprite/elemental/cold/shotgun/Asset-Iced-shotgun-multiply-02.png" id="188_tbb4t"]
+[ext_resource type="Texture2D" uid="uid://dfkka20kshvwp" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-Lightning-shotgun-multiply-02.png" id="194_fhlm0"]
+[ext_resource type="Texture2D" uid="uid://c2vy3x4rbkdsi" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Asset-Overheat-shotgun-multiply-01.png" id="195_2levb"]
 [ext_resource type="Texture2D" uid="uid://3cqh7ssgsr2h" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-Mask-SMG.png" id="195_x7trr"]
+[ext_resource type="Texture2D" uid="uid://orusaiyc0a0" path="res://src/player/gun/assets/sprite/elemental/poison/shotgun/Asset-Tar-shotgun-multiply-02.png" id="196_vpeit"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
 random_pitch = 1.19
@@ -561,38 +562,38 @@ shader_parameter/texture_albedo = ExtResource("108_vorq7")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_febxt"]
 render_priority = 2
 shader = SubResource("Shader_imxdb")
-shader_parameter/tex_alpha = 1.0
+shader_parameter/tex_alpha = 0.0
 shader_parameter/radius = 0.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
 shader_parameter/dissolve_amount = 1.0
 shader_parameter/edge_width = 0.325
 shader_parameter/emission_strength = 3.0
-shader_parameter/texture_albedo = ExtResource("74_ns2wj")
+shader_parameter/texture_albedo = ExtResource("75_3xwi3")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qday6"]
 render_priority = 2
 shader = SubResource("Shader_imxdb")
-shader_parameter/tex_alpha = 1.0
+shader_parameter/tex_alpha = 0.0
 shader_parameter/radius = 0.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
 shader_parameter/dissolve_amount = 1.0
 shader_parameter/edge_width = 0.325
 shader_parameter/emission_strength = 3.0
-shader_parameter/texture_albedo = ExtResource("75_d504r")
+shader_parameter/texture_albedo = ExtResource("77_1841l")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_34p4g"]
 render_priority = 2
 shader = SubResource("Shader_imxdb")
-shader_parameter/tex_alpha = 1.0
+shader_parameter/tex_alpha = 0.0
 shader_parameter/radius = 0.0
 shader_parameter/speed = 1.295
 shader_parameter/effect_color = Color(0.588174, 0.666819, 0.74107, 1)
 shader_parameter/dissolve_amount = 1.0
 shader_parameter/edge_width = 0.325
 shader_parameter/emission_strength = 3.0
-shader_parameter/texture_albedo = ExtResource("76_cqcly")
+shader_parameter/texture_albedo = ExtResource("79_4llk4")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bv8sv"]
 render_priority = 3
@@ -604,23 +605,31 @@ shader_parameter/overlay_amount = 1.0
 shader_parameter/edge_width = 0.192
 shader_parameter/emission_strength = 0.355
 shader_parameter/overlay_opacity = 1.0
+shader_parameter/effect_opacity = 1.0
 shader_parameter/texture_base = ExtResource("77_5ltfu")
 shader_parameter/texture_overlay = ExtResource("78_7wd4n")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ilqci"]
-render_priority = 3
-shader = ExtResource("71_okl3c")
-shader_parameter/radius = 0.745
-shader_parameter/speed = 10.0
-shader_parameter/effect_color = Color(0.0983333, 0.1, 0, 1)
-shader_parameter/overlay_amount = 1.0
-shader_parameter/edge_width = 0.0
-shader_parameter/emission_strength = 0.355
-shader_parameter/overlay_opacity = 1.0
-shader_parameter/texture_base = ExtResource("79_r2khx")
-shader_parameter/texture_overlay = ExtResource("78_7wd4n")
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p7ct5"]
+load_path = "res://.godot/imported/corruption-layer.png-f2f633c72b7eb81b1ca2359bf2d41c4e.s3tc.ctex"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8upm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_133id"]
+render_priority = 3
+shader = ExtResource("71_okl3c")
+shader_parameter/radius = 0.745
+shader_parameter/speed = 10.0
+shader_parameter/effect_color = Color(0.0983333, 0.1, 0, 1)
+shader_parameter/overlay_amount = 1.0
+shader_parameter/edge_width = 0.192
+shader_parameter/emission_strength = 0.355
+shader_parameter/overlay_opacity = 1.0
+shader_parameter/effect_opacity = 1.0
+shader_parameter/texture_base = ExtResource("84_qekyp")
+shader_parameter/texture_overlay = SubResource("CompressedTexture2D_p7ct5")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tkh3e"]
+load_path = "res://.godot/imported/corruption-layer.png-f2f633c72b7eb81b1ca2359bf2d41c4e.s3tc.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1635n"]
 render_priority = 3
 shader = ExtResource("71_okl3c")
 shader_parameter/radius = 0.745
@@ -630,8 +639,26 @@ shader_parameter/overlay_amount = 1.0
 shader_parameter/edge_width = 0.0
 shader_parameter/emission_strength = 0.355
 shader_parameter/overlay_opacity = 1.0
+shader_parameter/effect_opacity = 1.0
+shader_parameter/texture_base = ExtResource("79_r2khx")
+shader_parameter/texture_overlay = SubResource("CompressedTexture2D_tkh3e")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4lptk"]
+load_path = "res://.godot/imported/corruption-layer.png-f2f633c72b7eb81b1ca2359bf2d41c4e.s3tc.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_783gl"]
+render_priority = 3
+shader = ExtResource("71_okl3c")
+shader_parameter/radius = 0.745
+shader_parameter/speed = 10.0
+shader_parameter/effect_color = Color(0.0983333, 0.1, 0, 1)
+shader_parameter/overlay_amount = 1.0
+shader_parameter/edge_width = 0.1
+shader_parameter/emission_strength = 0.355
+shader_parameter/overlay_opacity = 1.0
+shader_parameter/effect_opacity = 1.0
 shader_parameter/texture_base = ExtResource("80_yunyn")
-shader_parameter/texture_overlay = ExtResource("78_7wd4n")
+shader_parameter/texture_overlay = SubResource("CompressedTexture2D_4lptk")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q6drh"]
 render_priority = 4
@@ -875,6 +902,34 @@ animations = [{
 "name": &"stage_3",
 "speed": 30.0
 }]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ilqci"]
+render_priority = 3
+shader = ExtResource("71_okl3c")
+shader_parameter/radius = 0.745
+shader_parameter/speed = 10.0
+shader_parameter/effect_color = Color(0.0983333, 0.1, 0, 1)
+shader_parameter/overlay_amount = 1.0
+shader_parameter/edge_width = 0.0
+shader_parameter/emission_strength = 0.355
+shader_parameter/overlay_opacity = 1.0
+shader_parameter/effect_opacity = 1.0
+shader_parameter/texture_base = ExtResource("79_r2khx")
+shader_parameter/texture_overlay = ExtResource("78_7wd4n")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8upm"]
+render_priority = 3
+shader = ExtResource("71_okl3c")
+shader_parameter/radius = 0.745
+shader_parameter/speed = 10.0
+shader_parameter/effect_color = Color(0.0983333, 0.1, 0, 1)
+shader_parameter/overlay_amount = 1.0
+shader_parameter/edge_width = 0.0
+shader_parameter/emission_strength = 0.355
+shader_parameter/overlay_opacity = 1.0
+shader_parameter/effect_opacity = 1.0
+shader_parameter/texture_base = ExtResource("80_yunyn")
+shader_parameter/texture_overlay = ExtResource("78_7wd4n")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
 viewport_path = NodePath("EffectIconsViewport")
@@ -1623,6 +1678,174 @@ tracks/61/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_overrid
 tracks/61/interp = 1
 tracks/61/loop_wrap = true
 tracks/61/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/62/type = "value"
+tracks/62/imported = false
+tracks/62/enabled = true
+tracks/62/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerFront:modulate")
+tracks/62/interp = 1
+tracks/62/loop_wrap = true
+tracks/62/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/63/type = "value"
+tracks/63/imported = false
+tracks/63/enabled = true
+tracks/63/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerMid:modulate")
+tracks/63/interp = 1
+tracks/63/loop_wrap = true
+tracks/63/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/64/type = "value"
+tracks/64/imported = false
+tracks/64/enabled = true
+tracks/64/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerBack:modulate")
+tracks/64/interp = 1
+tracks/64/loop_wrap = true
+tracks/64/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/65/type = "value"
+tracks/65/imported = false
+tracks/65/enabled = true
+tracks/65/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerFront:material_override:shader_parameter/texture_albedo")
+tracks/65/interp = 1
+tracks/65/loop_wrap = true
+tracks/65/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("79_4llk4")]
+}
+tracks/66/type = "value"
+tracks/66/imported = false
+tracks/66/enabled = true
+tracks/66/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerMid:material_override:shader_parameter/texture_albedo")
+tracks/66/interp = 1
+tracks/66/loop_wrap = true
+tracks/66/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("77_1841l")]
+}
+tracks/67/type = "value"
+tracks/67/imported = false
+tracks/67/enabled = true
+tracks/67/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerBack:material_override:shader_parameter/texture_albedo")
+tracks/67/interp = 1
+tracks/67/loop_wrap = true
+tracks/67/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("75_3xwi3")]
+}
+tracks/68/type = "value"
+tracks/68/imported = false
+tracks/68/enabled = true
+tracks/68/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:material_override:shader_parameter/texture_base")
+tracks/68/interp = 1
+tracks/68/loop_wrap = true
+tracks/68/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("77_5ltfu")]
+}
+tracks/69/type = "value"
+tracks/69/imported = false
+tracks/69/enabled = true
+tracks/69/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:modulate")
+tracks/69/interp = 1
+tracks/69/loop_wrap = true
+tracks/69/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/70/type = "value"
+tracks/70/imported = false
+tracks/70/enabled = true
+tracks/70/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:modulate")
+tracks/70/interp = 1
+tracks/70/loop_wrap = true
+tracks/70/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/71/type = "value"
+tracks/71/imported = false
+tracks/71/enabled = true
+tracks/71/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:modulate")
+tracks/71/interp = 1
+tracks/71/loop_wrap = true
+tracks/71/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/72/type = "value"
+tracks/72/imported = false
+tracks/72/enabled = true
+tracks/72/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:material_override:shader_parameter/effect_opacity")
+tracks/72/interp = 1
+tracks/72/loop_wrap = true
+tracks/72/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/73/type = "value"
+tracks/73/imported = false
+tracks/73/enabled = true
+tracks/73/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:material_override:shader_parameter/effect_opacity")
+tracks/73/interp = 1
+tracks/73/loop_wrap = true
+tracks/73/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/74/type = "value"
+tracks/74/imported = false
+tracks/74/enabled = true
+tracks/74/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:material_override:shader_parameter/effect_opacity")
+tracks/74/interp = 1
+tracks/74/loop_wrap = true
+tracks/74/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/75/type = "value"
+tracks/75/imported = false
+tracks/75/enabled = true
+tracks/75/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:material_override:shader_parameter/effect_opacity")
+tracks/75/interp = 1
+tracks/75/loop_wrap = true
+tracks/75/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -2718,6 +2941,10 @@ tracks/2/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0.261799)]
 }
 
+[sub_resource type="Animation" id="Animation_8nx72"]
+resource_name = "elemental_reset"
+step = 0.05
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
 _data = {
 "RESET": SubResource("Animation_64i2r"),
@@ -2739,6 +2966,7 @@ _data = {
 "barrel_3_spin_end": SubResource("Animation_sn0mj"),
 "barrel_3_spin_start": SubResource("Animation_wc336"),
 "barrel_3_unequipped": SubResource("Animation_vooid"),
+"elemental_reset": SubResource("Animation_8nx72"),
 "equip": SubResource("Animation_4s64o"),
 "failed_shot": SubResource("Animation_fa7ie"),
 "idle": SubResource("Animation_pwnrm"),
@@ -2934,72 +3162,6 @@ tracks/14/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_nelbp"]
-resource_name = "cold_infusion"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.133333),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [ExtResource("71_rp3dt"), ExtResource("72_mt4bp"), ExtResource("72_pjy11")]
-}
-
-[sub_resource type="Animation" id="Animation_qus7t"]
-resource_name = "electric_infusion"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-
 [sub_resource type="Animation" id="Animation_xhghb"]
 resource_name = "equip"
 length = 0.15
@@ -3068,58 +3230,6 @@ tracks/4/keys = {
 "args": ["rifle/equip", "finished"],
 "method": &"_debug_anim_tree_state_trace"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_tjscr"]
-resource_name = "fire_infusion"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("73_6tpsq")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.466667),
-"transitions": PackedFloat32Array(1.8025, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_n74wa"]
@@ -3267,70 +3377,6 @@ tracks/6/keys = {
 "args": [],
 "method": &"clear_jam"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_i85wp"]
-resource_name = "poison_infusion"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [ExtResource("71_ibdkl"), ExtResource("72_42i25"), ExtResource("71_tited")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [ExtResource("71_ibdkl"), ExtResource("72_42i25"), ExtResource("71_tited")]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1.8025, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_26ako"]
@@ -3582,16 +3628,1120 @@ tracks/4/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_i0ynv"]
+resource_name = "poison_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [ExtResource("196_vpeit")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 1,
+"values": [ExtResource("71_tited"), ExtResource("72_42i25")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 1,
+"values": [ExtResource("75_05uis"), ExtResource("91_pq0kg")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.7, 0.7, 0.7)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.93187),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex_alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:material_override:shader_parameter/effect_opacity")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.652848),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:material_override:shader_parameter/effect_opacity")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.652848),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:material_override:shader_parameter/effect_opacity")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.652848),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:material_override:shader_parameter/effect_opacity")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_36sap"]
+resource_name = "poison_infusion"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("91_pq0kg"), ExtResource("75_05uis")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("91_pq0kg"), ExtResource("75_05uis")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(2, 0.34151, 2.73208, 1),
+"update": 0,
+"values": [Vector3(0.7, 0.7, 0.7), Vector3(1, 1, 1), Vector3(1.1, 1.1, 1.1), Vector3(1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.93187, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex_alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_hdkxl"]
+resource_name = "cold_infusion"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.517632),
+"update": 1,
+"values": [ExtResource("77_la1dv")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(-0.0125, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/radius")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(-0.0125, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [-5.0, -0.11]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/dissolve_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/edge_width")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(-0.0125, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [1.0, 0.325]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/speed")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [0.2, 1.295]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/radius")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.15932, 1),
+"update": 0,
+"values": [10.0, 0.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/texture_albedo")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.36604),
+"update": 1,
+"values": [ExtResource("77_la1dv")]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.95),
+"transitions": PackedFloat32Array(1.79722, 1.79722, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/texture_albedo")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerMid:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.55),
+"transitions": PackedFloat32Array(1, 0.34151, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerFront:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.4),
+"transitions": PackedFloat32Array(1, 0.34151, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerBack:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.7),
+"transitions": PackedFloat32Array(1, 0.34151, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.7),
+"transitions": PackedFloat32Array(1.36604, 0.241484, 1),
+"update": 0,
+"values": [Vector3(0.655, 0.655, 0.655), Vector3(1.1, 1.1, 1.1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_owu32"]
+resource_name = "cold_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.517632, 1),
+"update": 1,
+"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.217637),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/radius")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [-0.11, -5.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/dissolve_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.65),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/edge_width")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [0.325, 1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/speed")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [1.295, 0.2]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/radius")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.15, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [0.0, 10.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/texture_albedo")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1.36604, 1),
+"update": 1,
+"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1.79722),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/texture_albedo")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerMid:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerFront:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerBack:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1.36604),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.655, 0.655, 0.655)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/tex_alpha")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 0.12),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_rbk3l"]
+resource_name = "electric_infusion"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("195_x7trr")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.666667),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.572549)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [&"stage_1", &"stage_2", &"stage_2"]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1.6245, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_swt3j"]
+resource_name = "electric_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.12),
+"update": 1,
+"values": [ExtResource("195_x7trr")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [Color(1, 1, 1, 0.572549), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.6245),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_3", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a1ta5"]
+resource_name = "fire_infusion"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("117_i8g3i"), ExtResource("113_cwbil")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(2.46229, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/FireEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(3.36359, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.55, 0.75),
+"transitions": PackedFloat32Array(2.92818, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.5, 0.7),
+"transitions": PackedFloat32Array(2.92818, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.4, 0.6),
+"transitions": PackedFloat32Array(2.92818, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/FireInfusion/FireEffect:animation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stage_1"]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/FireInfusion/FireEffect")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_3dtqu"]
+resource_name = "fire_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("113_cwbil"), ExtResource("117_i8g3i")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/FireEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/FireInfusion/FireEffect:animation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stage_1"]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/FireInfusion/FireEffect")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_w2b2s"]
 _data = {
 "active": SubResource("Animation_u240e"),
-"cold_infusion": SubResource("Animation_nelbp"),
-"electric_infusion": SubResource("Animation_qus7t"),
+"cold_infusion": SubResource("Animation_hdkxl"),
+"cold_unequip": SubResource("Animation_owu32"),
+"electric_infusion": SubResource("Animation_rbk3l"),
+"electric_unequip": SubResource("Animation_swt3j"),
 "equip": SubResource("Animation_xhghb"),
-"fire_infusion": SubResource("Animation_tjscr"),
+"fire_infusion": SubResource("Animation_a1ta5"),
+"fire_unequip": SubResource("Animation_3dtqu"),
 "idle": SubResource("Animation_n74wa"),
 "jam": SubResource("Animation_23m4y"),
-"poison_infusion": SubResource("Animation_i85wp"),
+"poison_infusion": SubResource("Animation_36sap"),
+"poison_unequip": SubResource("Animation_i0ynv"),
 "rack": SubResource("Animation_26ako"),
 "reload": SubResource("Animation_vfnkp"),
 "unqeuip": SubResource("Animation_vn4lx")
@@ -3793,73 +4943,6 @@ tracks/15/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_3lsgs"]
-resource_name = "cold_infusion"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [ExtResource("74_hxmbt"), ExtResource("75_cfp7l"), ExtResource("44_wvu30")]
-}
-
-[sub_resource type="Animation" id="Animation_wmm8j"]
-resource_name = "electric_infusion"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-
 [sub_resource type="Animation" id="Animation_gn12k"]
 resource_name = "equip"
 length = 0.15
@@ -3928,93 +5011,6 @@ tracks/4/keys = {
 "args": ["shotgun/equip", "finished"],
 "method": &"_debug_anim_tree_state_trace"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_ngfjs"]
-resource_name = "fire_infusion"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("43_70w2b")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.466667),
-"transitions": PackedFloat32Array(1.8025, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_axnvj"]
@@ -4174,70 +5170,6 @@ tracks/6/keys = {
 "args": [],
 "method": &"clear_jam"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_ka5he"]
-resource_name = "poison_infusion"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [ExtResource("79_k6xkm"), ExtResource("80_rvfak"), ExtResource("45_bxgvq")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [ExtResource("79_k6xkm"), ExtResource("80_rvfak"), ExtResource("45_bxgvq")]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1.8025, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_orurc"]
@@ -4595,7 +5527,803 @@ tracks/4/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_5ej66"]
+[sub_resource type="Animation" id="Animation_xmn5b"]
+resource_name = "cold_infusion"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("188_tbb4t")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.517632),
+"update": 1,
+"values": [ExtResource("44_wvu30")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(-0.0125, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/radius")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(-0.0125, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [-5.0, -0.11]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/dissolve_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/edge_width")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(-0.0125, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [1.0, 0.325]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/speed")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.55),
+"transitions": PackedFloat32Array(0.170755, 1),
+"update": 0,
+"values": [0.2, 1.295]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/radius")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.15932, 1),
+"update": 0,
+"values": [10.0, 0.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/texture_albedo")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.36604),
+"update": 1,
+"values": [ExtResource("44_wvu30")]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.95),
+"transitions": PackedFloat32Array(1.79722, 1.79722, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/texture_albedo")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerMid:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.55),
+"transitions": PackedFloat32Array(1, 0.34151, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerFront:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.4),
+"transitions": PackedFloat32Array(1, 0.34151, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerBack:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.7),
+"transitions": PackedFloat32Array(1, 0.34151, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.7),
+"transitions": PackedFloat32Array(1.36604, 0.241484, 1),
+"update": 0,
+"values": [Vector3(0.655, 0.655, 0.655), Vector3(1.1, 1.1, 1.1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wn11i"]
+resource_name = "cold_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("188_tbb4t")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.517632, 1),
+"update": 1,
+"values": [ExtResource("44_wvu30"), ExtResource("74_hxmbt")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.217637),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/radius")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [-0.11, -5.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/dissolve_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.65),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/edge_width")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [0.325, 1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/speed")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [1.295, 0.2]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/radius")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.15, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [0.0, 10.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/texture_albedo")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1.36604, 1),
+"update": 1,
+"values": [ExtResource("44_wvu30"), ExtResource("74_hxmbt")]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1.79722),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/texture_albedo")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerMid:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerFront:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerBack:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1.36604),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.655, 0.655, 0.655)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/tex_alpha")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 0.12),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_3xo5p"]
+resource_name = "electric_infusion"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("194_fhlm0")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.666667),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.572549)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [&"stage_1", &"stage_2", &"stage_2"]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1.6245, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerFront:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.666667),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerMid:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.666667),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerBack:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.666667),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_q2klq"]
+resource_name = "electric_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.12),
+"update": 1,
+"values": [ExtResource("194_fhlm0")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [Color(1, 1, 1, 0.572549), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.6245),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_3", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerFront:material_override:shader_parameter/texture_albedo")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.12),
+"update": 1,
+"values": [ExtResource("79_4llk4")]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerMid:material_override:shader_parameter/texture_albedo")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.12),
+"update": 1,
+"values": [ExtResource("77_1841l")]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerBack:material_override:shader_parameter/texture_albedo")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.12),
+"update": 1,
+"values": [ExtResource("75_3xwi3")]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerBack:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerMid:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiplyRollerFront:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yyro8"]
+resource_name = "fire_infusion"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("195_2levb"), ExtResource("43_70w2b")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(2.46229, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/FireEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(3.36359, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.5, 0.7),
+"transitions": PackedFloat32Array(2.92818, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.5, 0.7),
+"transitions": PackedFloat32Array(2.92818, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.4, 0.6),
+"transitions": PackedFloat32Array(2.92818, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/FireInfusion/FireEffect:animation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stage_1"]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/FireInfusion/FireEffect")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_gyjpr"]
 resource_name = "fire_unequip"
 length = 0.65
 step = 0.05
@@ -4618,10 +6346,10 @@ tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("43_70w2b")]
+"values": [ExtResource("43_70w2b"), ExtResource("195_2levb")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -4630,8 +6358,8 @@ tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.0333333, 0.666667),
-"transitions": PackedFloat32Array(1, 1.8025),
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
@@ -4650,51 +6378,473 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
+tracks/4/path = NodePath("SpriteParent/FireInfusion/FireEffect:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(1, 1),
+"transitions": PackedFloat32Array(0.12, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
+tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(1, 1),
+"transitions": PackedFloat32Array(0.12, 2.92818),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
+tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(1, 1.23114),
+"transitions": PackedFloat32Array(0.12, 2.92818),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/FireInfusion/FireEffect:animation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stage_1"]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/FireInfusion/FireEffect")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_dlkka"]
+resource_name = "poison_infusion"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [ExtResource("196_vpeit")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("80_rvfak"), ExtResource("45_bxgvq")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("80_rvfak"), ExtResource("45_bxgvq")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(2, 0.34151, 2.73208, 1),
+"update": 0,
+"values": [Vector3(0.7, 0.7, 0.7), Vector3(1, 1, 1), Vector3(1.1, 1.1, 1.1), Vector3(1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex_alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8025, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:material_override:shader_parameter/texture_base")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("196_vpeit")]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:material_override:shader_parameter/effect_opacity")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:material_override:shader_parameter/effect_opacity")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:material_override:shader_parameter/effect_opacity")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:material_override:shader_parameter/effect_opacity")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.8, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_kgkkm"]
+resource_name = "poison_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [ExtResource("196_vpeit")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 1,
+"values": [ExtResource("45_bxgvq"), ExtResource("80_rvfak")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 1,
+"values": [ExtResource("45_bxgvq"), ExtResource("80_rvfak")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.7, 0.7, 0.7)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.93187),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex_alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:material_override:shader_parameter/effect_opacity")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerFront:material_override:shader_parameter/effect_opacity")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerMid:material_override:shader_parameter/effect_opacity")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiplyRollerBack:material_override:shader_parameter/effect_opacity")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [1.0, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_grfdj"]
 _data = {
 "active": SubResource("Animation_wn1yt"),
-"cold_infusion": SubResource("Animation_3lsgs"),
-"electric_infusion": SubResource("Animation_wmm8j"),
+"cold_infusion": SubResource("Animation_xmn5b"),
+"cold_unequip": SubResource("Animation_wn11i"),
+"electric_infusion": SubResource("Animation_3xo5p"),
+"electric_unequip": SubResource("Animation_q2klq"),
 "equip": SubResource("Animation_gn12k"),
-"fire_infusion": SubResource("Animation_ngfjs"),
-"fire_unequip": SubResource("Animation_5ej66"),
+"fire_infusion": SubResource("Animation_yyro8"),
+"fire_unequip": SubResource("Animation_gyjpr"),
 "idle": SubResource("Animation_axnvj"),
 "jam": SubResource("Animation_n0x06"),
-"poison_infusion": SubResource("Animation_ka5he"),
+"poison_infusion": SubResource("Animation_dlkka"),
+"poison_unequip": SubResource("Animation_kgkkm"),
 "pump": SubResource("Animation_orurc"),
 "pump_no_shell": SubResource("Animation_78i3g"),
 "reload": SubResource("Animation_ik8rl"),
@@ -5081,6 +7231,215 @@ tracks/15/keys = {
 "values": [Vector3(0.655, 0.655, 0.655), Vector3(1.1, 1.1, 1.1), Vector3(1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_ifci4"]
+resource_name = "cold_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.517632, 1),
+"update": 1,
+"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.217637),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/radius")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [-0.11, -5.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/dissolve_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.65),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/edge_width")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [0.325, 1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/speed")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [1.295, 0.2]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/radius")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.15, 0.65),
+"transitions": PackedFloat32Array(0.120742, 0.517631),
+"update": 0,
+"values": [0.0, 10.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/texture_albedo")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1.36604, 1),
+"update": 1,
+"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1.79722),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/texture_albedo")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("119_n0yy3")]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerMid:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerFront:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerBack:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:scale")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.120742, 1.36604),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.655, 0.655, 0.655)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/tex_alpha")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 0.12),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
 [sub_resource type="Animation" id="Animation_7pb37"]
 resource_name = "electric_infusion"
 length = 0.7
@@ -5155,6 +7514,85 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_n7bbu"]
+resource_name = "electric_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.12),
+"update": 1,
+"values": [ExtResource("195_x7trr")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [Color(1, 1, 1, 0.572549), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.6245),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_3", 1.0, false],
 "method": &"play"
 }]
 }
@@ -5367,6 +7805,133 @@ tracks/9/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_ubkf8"]
+resource_name = "fire_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("113_cwbil"), ExtResource("117_i8g3i")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/FireInfusion/FireEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(0.12, 2.92818),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpriteParent/FireInfusion/FireEffect:animation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stage_1"]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpriteParent/FireInfusion/FireEffect")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"stage_1", 1.0, false],
+"method": &"play"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_dbk33"]
 resource_name = "idle"
 length = 0.1
@@ -5551,7 +8116,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [null]
+"values": [ExtResource("77_5ltfu")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -5624,6 +8189,107 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1.8025, 1),
 "update": 0,
 "values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_fjsuu"]
+resource_name = "poison_unequip"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0125, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 1,
+"values": [ExtResource("75_05uis"), ExtResource("91_pq0kg")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0125, 0.65),
+"transitions": PackedFloat32Array(0.12, 1),
+"update": 1,
+"values": [ExtResource("75_05uis"), ExtResource("91_pq0kg")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0125, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.0125, 0.65),
+"transitions": PackedFloat32Array(0.12, 2),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.7, 0.7, 0.7)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.0125, 0.64),
+"transitions": PackedFloat32Array(0.12, 1.93187),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex_alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.0125, 0.65),
+"transitions": PackedFloat32Array(0.12, 1.8025),
+"update": 0,
+"values": [1.0, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_nweg0"]
@@ -5793,526 +8459,6 @@ tracks/5/keys = {
 "values": [ExtResource("38_ew4gs"), ExtResource("38_bubf0")]
 }
 
-[sub_resource type="Animation" id="Animation_ifci4"]
-resource_name = "cold_unequip"
-length = 0.65
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ColdInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("119_n0yy3")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(0.517632, 1),
-"update": 1,
-"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 0.217637),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/radius")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 0.517631),
-"update": 0,
-"values": [-0.11, -5.0]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/dissolve_amount")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.65),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/edge_width")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 0.517631),
-"update": 0,
-"values": [0.325, 1.0]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/speed")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 0.517631),
-"update": 0,
-"values": [1.295, 0.2]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/radius")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0.15, 0.65),
-"transitions": PackedFloat32Array(0.120742, 0.517631),
-"update": 0,
-"values": [0.0, 10.0]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/texture_albedo")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1.36604, 1),
-"update": 1,
-"values": [ExtResource("77_la1dv"), ExtResource("82_heacv")]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:modulate")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 1.79722),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("SpriteParent/ColdInfusion/ColdMultiply:material_override:shader_parameter/texture_albedo")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("119_n0yy3")]
-}
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerMid:modulate")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerFront:modulate")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/14/type = "value"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("SpriteParent/ColdInfusion/ColdMultiplyRollerBack:modulate")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/15/type = "value"
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:scale")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.120742, 1.36604),
-"update": 0,
-"values": [Vector3(1, 1, 1), Vector3(0.655, 0.655, 0.655)]
-}
-tracks/16/type = "value"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("SpriteParent/ColdInfusion/ColdEffect:material_override:shader_parameter/tex_alpha")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 0.12),
-"update": 0,
-"values": [1.0, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_n7bbu"]
-resource_name = "electric_unequip"
-length = 0.65
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ElectricInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(0.12),
-"update": 1,
-"values": [ExtResource("195_x7trr")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/ElectricInfusion/ElectricMultiply:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 1.8025),
-"update": 0,
-"values": [Color(1, 1, 1, 0.572549), Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:animation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 1.6245),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpriteParent/ElectricInfusion/ElectricEffect")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [&"stage_3", 1.0, false],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_ubkf8"]
-resource_name = "fire_unequip"
-length = 0.65
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/FireInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [ExtResource("113_cwbil"), ExtResource("117_i8g3i")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/FireInfusion/OverheatMultiply:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/FireInfusion/SmokeParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/FireInfusion/FireEffect:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerBack:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 2.92818),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerMid:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 2.92818),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("SpriteParent/FireInfusion/OverheatMultiplyRollerFront:modulate")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(0.12, 2.92818),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("SpriteParent/FireInfusion/FireEffect:animation")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"stage_1"]
-}
-tracks/9/type = "method"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("SpriteParent/FireInfusion/FireEffect")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [&"stage_1", 1.0, false],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_fjsuu"]
-resource_name = "poison_unequip"
-length = 0.65
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/PoisonInfusion:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.65),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:texture")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.0125, 0.65),
-"transitions": PackedFloat32Array(0.12, 1),
-"update": 1,
-"values": [ExtResource("75_05uis"), ExtResource("91_pq0kg")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.0125, 0.65),
-"transitions": PackedFloat32Array(0.12, 1),
-"update": 1,
-"values": [ExtResource("75_05uis"), ExtResource("91_pq0kg")]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.0125, 0.65),
-"transitions": PackedFloat32Array(0.12, 1.8025),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.0125, 0.65),
-"transitions": PackedFloat32Array(0.12, 2),
-"update": 0,
-"values": [Vector3(1, 1, 1), Vector3(0.7, 0.7, 0.7)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("SpriteParent/PoisonInfusion/PoisonMultiply:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.0125, 0.64),
-"transitions": PackedFloat32Array(0.12, 1.93187),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("SpriteParent/PoisonInfusion/PoisonEffect:material_override:shader_parameter/tex_alpha")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0.0125, 0.65),
-"transitions": PackedFloat32Array(0.12, 1.8025),
-"update": 0,
-"values": [1.0, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_0bdiv"]
-resource_name = "elemental_reset"
-step = 0.05
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_saspt"]
 _data = {
 "active": SubResource("Animation_xcjdo"),
@@ -6320,7 +8466,6 @@ _data = {
 "cold_unequip": SubResource("Animation_ifci4"),
 "electric_infusion": SubResource("Animation_7pb37"),
 "electric_unequip": SubResource("Animation_n7bbu"),
-"elemental_reset": SubResource("Animation_0bdiv"),
 "equip": SubResource("Animation_yfl8i"),
 "fire_infusion": SubResource("Animation_htcj4"),
 "fire_unequip": SubResource("Animation_ubkf8"),
@@ -6934,6 +9079,7 @@ texture = ExtResource("69_ajow0")
 
 [node name="SmokeParticles" parent="SpriteParent/FireInfusion" instance=ExtResource("43_an5qq")]
 transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 1.45473, -2.22531, 0)
+layers = 2
 amount = 256
 lifetime = 0.7
 one_shot = false
@@ -6951,7 +9097,7 @@ visible = false
 transform = Transform3D(0.655, 0, 0, 0, 0.655, 0, 0, 0, 0.655, 1.58955, -1.74255, 0)
 layers = 2
 material_override = SubResource("ShaderMaterial_72eyo")
-offset = Vector2(-133.775, 147.96)
+offset = Vector2(-142.495, 156.91)
 render_priority = 2
 
 [node name="ColdMultiply" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
@@ -6999,21 +9145,21 @@ render_priority = 2
 [node name="PoisonMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
 layers = 2
 sorting_offset = 7.0
-material_override = SubResource("ShaderMaterial_bv8sv")
+material_override = SubResource("ShaderMaterial_133id")
 render_priority = 2
-texture = ExtResource("77_5ltfu")
+texture = ExtResource("84_qekyp")
 
 [node name="PoisonMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
 layers = 2
 sorting_offset = 7.0
-material_override = SubResource("ShaderMaterial_ilqci")
+material_override = SubResource("ShaderMaterial_1635n")
 render_priority = 2
 texture = ExtResource("79_r2khx")
 
 [node name="PoisonMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
 layers = 2
 sorting_offset = 7.0
-material_override = SubResource("ShaderMaterial_n8upm")
+material_override = SubResource("ShaderMaterial_783gl")
 render_priority = 2
 texture = ExtResource("80_yunyn")
 
@@ -7039,8 +9185,66 @@ render_priority = 3
 sprite_frames = SubResource("SpriteFrames_0c6q5")
 animation = &"stage_1"
 
+[node name="ElectricMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 6.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("75_3xwi3")
+
+[node name="ElectricMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 6.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("77_1841l")
+
+[node name="ElectricMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 6.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("79_4llk4")
+
+[node name="PoisonInfusion" type="Node3D" parent="SpriteParent/ElectricInfusion"]
+visible = false
+
+[node name="PoisonMultiply" type="Sprite3D" parent="SpriteParent/ElectricInfusion/PoisonInfusion"]
+layers = 2
+sorting_offset = 7.0
+material_override = SubResource("ShaderMaterial_bv8sv")
+render_priority = 2
+
+[node name="PoisonMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/ElectricInfusion/PoisonInfusion"]
+layers = 2
+sorting_offset = 7.0
+material_override = SubResource("ShaderMaterial_bv8sv")
+render_priority = 2
+texture = ExtResource("77_5ltfu")
+
+[node name="PoisonMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/ElectricInfusion/PoisonInfusion"]
+layers = 2
+sorting_offset = 7.0
+material_override = SubResource("ShaderMaterial_ilqci")
+render_priority = 2
+texture = ExtResource("79_r2khx")
+
+[node name="PoisonMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/ElectricInfusion/PoisonInfusion"]
+layers = 2
+sorting_offset = 7.0
+material_override = SubResource("ShaderMaterial_n8upm")
+render_priority = 2
+texture = ExtResource("80_yunyn")
+
+[node name="PoisonEffect" type="Sprite3D" parent="SpriteParent/ElectricInfusion/PoisonInfusion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65196, -1.77483, 0)
+layers = 2
+sorting_offset = 5.0
+material_override = SubResource("ShaderMaterial_q6drh")
+offset = Vector2(-168.55, 173.605)
+render_priority = 2
+
 [node name="EffectIconsSprite" type="Sprite3D" parent="SpriteParent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 10.0
 render_priority = 8
@@ -7064,6 +9268,7 @@ wait_time = 0.5
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+active = false
 callback_mode_process = 0
 callback_mode_discrete = 2
 libraries = {
@@ -7081,9 +9286,9 @@ parameters/barrel_1+2/add_amount = 1.0
 parameters/barrel_12+3/add_amount = 1.0
 parameters/barrels+reload/add_amount = 1.0
 parameters/elemental_add/add_amount = 1.0
-parameters/elemental_state/current_state = "smg"
+parameters/elemental_state/current_state = "shotgun"
 parameters/elemental_state/transition_request = ""
-parameters/elemental_state/current_index = 1
+parameters/elemental_state/current_index = 0
 parameters/elemental_state_old/current_state = "cold_smg"
 parameters/elemental_state_old/transition_request = ""
 parameters/elemental_state_old/current_index = 4

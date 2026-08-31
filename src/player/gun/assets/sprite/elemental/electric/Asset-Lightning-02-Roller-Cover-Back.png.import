@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ds2os5uy4mjvn"
-path.s3tc="res://.godot/imported/Asset-Poison-Mask-Roller-Front.png-322400b35b54e9897ad005aa829a9b66.s3tc.ctex"
+uid="uid://coglscswt6b6q"
+path.s3tc="res://.godot/imported/Asset-Lightning-02-Roller-Cover-Back.png-e00ae1a22aed3421707e01405cec80be.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Front.png"
-dest_files=["res://.godot/imported/Asset-Poison-Mask-Roller-Front.png-322400b35b54e9897ad005aa829a9b66.s3tc.ctex"]
+source_file="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Back.png"
+dest_files=["res://.godot/imported/Asset-Lightning-02-Roller-Cover-Back.png-e00ae1a22aed3421707e01405cec80be.s3tc.ctex"]
 
 [params]
 
