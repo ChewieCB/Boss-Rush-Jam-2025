@@ -252,13 +252,18 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip
 	barrel_flare_sprite = flare_sprites[frame_id]
 	muzzle_flash_sprite = flash_sprites[frame_id]
 
-	var frame_prefixes = ["", "", "shotgun_idle", "smg_idle", "rifle_idle"]
-	var idle_state = frame_prefixes[frame_id]
+	var frame_prefixes = ["", "", "shotgun", "smg", "rifle"]
+	var frame = frame_prefixes[frame_id]
+	var idle_state = frame + "_idle"
 
 	if skip_animation:
 		idle_frame_state.start(idle_state)
 	else:
 		idle_frame_state.travel(idle_state)
+	
+	anim_tree["parameters/elemental_state/transition_request"] = frame
+	#anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
+	#anim_tree["parameters/elemental_add/add_amount"] = 1.0
 
 
 func set_stat_from_gun_frame() -> void:
@@ -1366,7 +1371,8 @@ func set_elemental_anim(element: String = "") -> void:
 				new_frame = "rifle"
 		
 		anim_tree["parameters/elemental_state/transition_request"] = new_frame
-		anim_tree["parameters/elemental_%s/playback" % [new_frame]].travel("%s_equip" % [element])
+		for frame in ["shotgun", "smg", "rifle"]:
+			anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
 		anim_tree["parameters/elemental_add/add_amount"] = 1.0
 	else:
 		anim_tree["parameters/elemental_add/add_amount"] = 0.0
