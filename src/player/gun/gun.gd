@@ -252,13 +252,18 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip
 	barrel_flare_sprite = flare_sprites[frame_id]
 	muzzle_flash_sprite = flash_sprites[frame_id]
 
-	var frame_prefixes = ["", "", "shotgun_idle", "smg_idle", "rifle_idle"]
-	var idle_state = frame_prefixes[frame_id]
+	var frame_prefixes = ["", "", "shotgun", "smg", "rifle"]
+	var frame = frame_prefixes[frame_id]
+	var idle_state = frame + "_idle"
 
 	if skip_animation:
 		idle_frame_state.start(idle_state)
 	else:
 		idle_frame_state.travel(idle_state)
+	
+	anim_tree["parameters/elemental_state/transition_request"] = frame
+	#anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
+	#anim_tree["parameters/elemental_add/add_amount"] = 1.0
 
 
 func set_stat_from_gun_frame() -> void:
@@ -1347,18 +1352,27 @@ func _debug_anim_tree_state_trace(state_name: String, transition: String) -> voi
 	print("Anim state: %s - %s" % [state_name, transition])
 
 
+
+func remove_elemental_anim() -> void:
+	var frames = ["shotgun", "smg", "rifle"]
+	for _frame in frames:
+		anim_tree["parameters/elemental_%s/playback" % [_frame]].travel("idle")
+
+
 func set_elemental_anim(element: String = "") -> void:
 	if element:
-		var frame: String = ""
+		var new_frame: String = ""
 		match GameManager.equipped_gun_frame.frame_id:
 			GunFrameResource.GunFrameIdEnum.SHOTGUN:
-				frame = "shotgun"
+				new_frame = "shotgun"
 			GunFrameResource.GunFrameIdEnum.SMG:
-				frame = "smg"
+				new_frame = "smg"
 			GunFrameResource.GunFrameIdEnum.SNIPER:
-				frame = "rifle"
-			
-		anim_tree["parameters/elemental_state/transition_request"] = "%s_%s" % [element, frame]
+				new_frame = "rifle"
+		
+		anim_tree["parameters/elemental_state/transition_request"] = new_frame
+		for frame in ["shotgun", "smg", "rifle"]:
+			anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
 		anim_tree["parameters/elemental_add/add_amount"] = 1.0
 	else:
 		anim_tree["parameters/elemental_add/add_amount"] = 0.0
