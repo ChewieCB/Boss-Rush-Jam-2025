@@ -1293,15 +1293,23 @@ func set_barrels_unjammed() -> void:
 		SoundManager.play_sound(sfx_gp_clear.pick_random(), "Gun")
 
 
-func jam_gun(pre_anim_delay: float = 1.0) -> void:
+func jam_gun(debug_jam: bool = false, pre_anim_delay: float = 1.0) -> void:
 	is_jammed = true
 	jam_dust_particles.emitting = true
 	jam_spring_particles.restart()
 	set_barrels_jammed()
 	SoundManager.play_sound(sfx_gp_steam.pick_random(), "Gun")
-
+	
+	# Hook to block auto-unjam when debug jam controls are active
+	if GameManager.CHEAT_debug_jam_controls and debug_jam:
+		return
+	
 	await get_tree().create_timer(pre_anim_delay, false).timeout
+	
+	unjam_gun()
 
+
+func unjam_gun() -> void:
 	var idle_state: String = idle_frame_state.get_current_node()
 	if not idle_state.ends_with("idle"):
 		await post_reload_anim_end

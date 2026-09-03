@@ -1128,6 +1128,26 @@ theme_override_font_sizes/font_size = 26
 text = "Infinite Ammo"
 
 [node name="InfiniteAmmoToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="DebugJamControls" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DebugJamControls"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Debug Jam Controls (X/C)"
+
+[node name="DebugJamControlsToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/DebugJamControls"]
+layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
 offset_right = 332.0
@@ -1302,6 +1322,8 @@ text = "Back"
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="_on_infinite_ammo_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="_on_debug_jam_controls_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]

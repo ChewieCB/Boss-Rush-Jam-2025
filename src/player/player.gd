@@ -284,6 +284,11 @@ func _unhandled_input(event):
 		if GameManager.CHEAT_spin_mode != GameManager.DebugSpinMode.ON_RELOAD:
 			spin_barrels()
 	# DEBUG
+	if GameManager.CHEAT_debug_jam_controls:
+		if event.is_action_pressed("debug_jam_gun"):
+			current_gun.jam_gun(true)
+		if event.is_action_pressed("debug_unjam_gun"):
+			current_gun.unjam_gun()
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	# DEBUG INPUT FOR TESTING
