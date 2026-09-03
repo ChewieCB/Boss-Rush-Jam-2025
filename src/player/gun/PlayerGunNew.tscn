@@ -1,4 +1,4 @@
-[gd_scene load_steps=115 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=153 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -45,12 +45,49 @@
 [ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
 [ext_resource type="Texture2D" uid="uid://mvodghq1nj5c" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Asset-Overheat-shotgun-multiply-02.png" id="43_70w2b"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="43_an5qq"]
+[ext_resource type="Texture2D" uid="uid://c3e7u1j2us2cr" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0000.png" id="43_ld5ap"]
+[ext_resource type="Texture2D" uid="uid://cysge7mi7k2it" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Front.png" id="44_0pg5e"]
 [ext_resource type="Shader" path="res://src/player/poison_goo.gdshader" id="44_a5uul"]
-[ext_resource type="AnimationLibrary" path="res://src/player/gun/assets/anims/gun_animations_global.res" id="45_q7v2u"]
-[ext_resource type="AnimationLibrary" path="res://src/player/gun/assets/anims/gun_animations_rifle.res" id="46_nmah4"]
-[ext_resource type="AnimationLibrary" path="res://src/player/gun/assets/anims/gun_animations_shotgun.res" id="47_7lgfm"]
-[ext_resource type="AnimationLibrary" path="res://src/player/gun/assets/anims/gun_animations_smg.res" id="48_hvksd"]
+[ext_resource type="Texture2D" uid="uid://duheim7715xx2" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0001.png" id="44_ar7gg"]
+[ext_resource type="AnimationLibrary" uid="uid://c80km4hl2hhp6" path="res://src/player/gun/assets/anims/gun_animations_global.res" id="45_q7v2u"]
+[ext_resource type="Texture2D" uid="uid://yp7y7rcg48h0" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0002.png" id="45_s5s22"]
+[ext_resource type="Texture2D" uid="uid://cl5sduvm25maq" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Mid.png" id="45_vue3p"]
+[ext_resource type="Texture2D" uid="uid://bae110vk0rmu2" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Back.png" id="46_hjoog"]
+[ext_resource type="AnimationLibrary" uid="uid://tfy777wud6n1" path="res://src/player/gun/assets/anims/gun_animations_rifle.res" id="46_nmah4"]
+[ext_resource type="Texture2D" uid="uid://dxkykp0v18tc5" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0003.png" id="46_xqnoq"]
+[ext_resource type="AnimationLibrary" uid="uid://bg0c6avq71d6p" path="res://src/player/gun/assets/anims/gun_animations_shotgun.res" id="47_7lgfm"]
+[ext_resource type="Texture2D" uid="uid://buvqhyn0rl831" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Front.png" id="47_j5ous"]
+[ext_resource type="Texture2D" uid="uid://cml06anyc6wjn" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0004.png" id="47_yg5hb"]
+[ext_resource type="Texture2D" uid="uid://ch0osrjioysbu" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0005.png" id="48_3xbh3"]
+[ext_resource type="Texture2D" uid="uid://b4kx6fnqf2j5c" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Mid.png" id="48_dhdye"]
+[ext_resource type="AnimationLibrary" uid="uid://7bwupd2c3hyi" path="res://src/player/gun/assets/anims/gun_animations_smg.res" id="48_hvksd"]
+[ext_resource type="Texture2D" uid="uid://cdofebm2pid51" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0006.png" id="49_skew2"]
+[ext_resource type="Texture2D" uid="uid://cvlag325mg0qs" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Back.png" id="49_xfe0d"]
+[ext_resource type="Texture2D" uid="uid://dd6ypdc4aphay" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0007.png" id="50_aptks"]
+[ext_resource type="Texture2D" uid="uid://cabkeldlee5hv" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0008.png" id="51_lmrnp"]
+[ext_resource type="Texture2D" uid="uid://ds2os5uy4mjvn" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Front.png" id="51_rxjeo"]
+[ext_resource type="Texture2D" uid="uid://imshkor6561u" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Mid.png" id="52_2inwm"]
+[ext_resource type="Texture2D" uid="uid://d3wlj6lcf8ans" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0009.png" id="52_bscss"]
+[ext_resource type="Texture2D" uid="uid://b5nxd6hktccf0" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Back.png" id="53_fqhu0"]
+[ext_resource type="Texture2D" uid="uid://bhqblelxwkma8" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0010.png" id="53_irfea"]
+[ext_resource type="SpriteFrames" uid="uid://crnpgpww0qs60" path="res://src/player/gun/assets/anims/electric_sprite_frames.tres" id="54_7svxj"]
+[ext_resource type="Texture2D" uid="uid://ckkvluwxlsblq" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Electric-02-Roller-Cover-Front.png" id="54_264i8"]
+[ext_resource type="Texture2D" uid="uid://bu6t0eou6syah" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0011.png" id="54_r0wmo"]
 [ext_resource type="Texture2D" uid="uid://n3evsy846arq" path="res://assets/sprite/particles/springs/springs_&_gears_sheet.png" id="55_18u8p"]
+[ext_resource type="Texture2D" uid="uid://blnea3xhy6u55" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Mid.png" id="55_ar8r0"]
+[ext_resource type="Texture2D" uid="uid://byliwdwj26wfq" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0012.png" id="55_uwstg"]
+[ext_resource type="Texture2D" uid="uid://bkaqvj0dlnf44" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0013.png" id="56_lb4n2"]
+[ext_resource type="Texture2D" uid="uid://coglscswt6b6q" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Back.png" id="56_synst"]
+[ext_resource type="Texture2D" uid="uid://dsa3i1ata1okx" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0014.png" id="57_galn5"]
+[ext_resource type="Texture2D" uid="uid://dx4fj6irrinp" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0015.png" id="58_uibkq"]
+[ext_resource type="Texture2D" uid="uid://cfb5tvapkn7di" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0016.png" id="59_53avt"]
+[ext_resource type="Texture2D" uid="uid://chb4ky8hqf00e" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0017.png" id="60_lnjre"]
+[ext_resource type="Texture2D" uid="uid://b2h8m4g6fgp3y" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0018.png" id="61_0t6hy"]
+[ext_resource type="Texture2D" uid="uid://bgfrfk0vop305" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0019.png" id="62_gxn1i"]
+[ext_resource type="Texture2D" uid="uid://dn6wmmo4wpq65" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0020.png" id="63_y8jhy"]
+[ext_resource type="Texture2D" uid="uid://c71x6l08v5u36" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0021.png" id="64_ejgf4"]
+[ext_resource type="Texture2D" uid="uid://f1kq7lj00fw1" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0022.png" id="65_ev8o2"]
+[ext_resource type="Texture2D" uid="uid://dyhn04uimhhxr" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0023.png" id="66_k2pnu"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
 random_pitch = 1.19
@@ -129,6 +166,86 @@ orientation = 2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
 viewport_path = NodePath("EffectIconsViewport")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jelkk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_ld5ap")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_ar7gg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_s5s22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_xqnoq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_yg5hb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_3xbh3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_skew2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_aptks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_lmrnp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_bscss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_irfea")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_r0wmo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_uwstg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_lb4n2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_galn5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_uibkq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_53avt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_lnjre")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_0t6hy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_gxn1i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_y8jhy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_ejgf4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_ev8o2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_k2pnu")
+}],
+"loop": true,
+"name": &"stage_1",
+"speed": 30.0
+}]
 
 [sub_resource type="Curve" id="Curve_aei03"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.255172, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -651,7 +768,7 @@ draw_pass_1 = SubResource("PlaneMesh_1kjr0")
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent/FramesParent/ShotgunFrame"]
 layers = 2
 sorting_offset = 4.0
-render_priority = 2
+render_priority = 3
 texture = ExtResource("14_8rp44")
 
 [node name="SMGFrame" type="Node3D" parent="SpriteParent/FramesParent"]
@@ -776,7 +893,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 [node name="ArmSprite" type="Sprite3D" parent="SpriteParent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, -2.8, 0)
 layers = 2
-sorting_offset = 5.0
+sorting_offset = 6.0
 render_priority = 3
 texture = ExtResource("15_x3kbv")
 
@@ -796,15 +913,15 @@ visible = false
 
 [node name="OverheatMultiply" type="Sprite3D" parent="SpriteParent/FireInfusion"]
 layers = 2
-sorting_offset = 7.0
-render_priority = 2
+sorting_offset = 5.0
+render_priority = 3
 texture = ExtResource("43_70w2b")
 
-[node name="FireEffect" type="Sprite3D" parent="SpriteParent/FireInfusion"]
+[node name="FireEffect" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
-sorting_offset = 4.0
-render_priority = 2
-texture = ExtResource("14_8rp44")
+render_priority = 6
+sprite_frames = SubResource("SpriteFrames_jelkk")
 
 [node name="SmokeParticles" parent="SpriteParent/FireInfusion" instance=ExtResource("43_an5qq")]
 transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 1.45473, -2.22531, 0)
@@ -818,47 +935,130 @@ transform_align = 1
 process_material = SubResource("ParticleProcessMaterial_t2mr5")
 draw_pass_1 = SubResource("ArrayMesh_kgv1q")
 
+[node name="OverheatMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/FireInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("44_0pg5e")
+
+[node name="OverheatMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/FireInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("45_vue3p")
+
+[node name="OverheatMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/FireInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("46_hjoog")
+
 [node name="ColdInfusion" type="Node3D" parent="SpriteParent"]
 visible = false
 
 [node name="ColdMultiply" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
 layers = 2
-sorting_offset = 7.0
-render_priority = 2
+sorting_offset = 5.0
+render_priority = 3
 
 [node name="ColdEffect" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
 transform = Transform3D(0.655, 0, 0, 0, 0.655, 0, 0, 0, 0.655, 0, 0, 0)
 layers = 2
+sorting_offset = 6.0
+render_priority = 3
+
+[node name="ColdMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
+layers = 2
 sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
 render_priority = 2
+texture = ExtResource("47_j5ous")
+
+[node name="ColdMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("48_dhdye")
+
+[node name="ColdMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/ColdInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("49_xfe0d")
 
 [node name="PoisonInfusion" type="Node3D" parent="SpriteParent"]
 visible = false
 
 [node name="PoisonMultiply" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
 layers = 2
-sorting_offset = 7.0
-render_priority = 2
+sorting_offset = 5.0
+render_priority = 3
 
 [node name="PoisonEffect" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
 layers = 2
-sorting_offset = 4.0
+sorting_offset = 6.0
 material_override = SubResource("ShaderMaterial_q6drh")
+render_priority = 3
+
+[node name="PoisonMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
+layers = 2
+sorting_offset = 5.0
 render_priority = 2
+texture = ExtResource("51_rxjeo")
+
+[node name="PoisonMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
+layers = 2
+sorting_offset = 5.0
+render_priority = 2
+texture = ExtResource("52_2inwm")
+
+[node name="PoisonMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/PoisonInfusion"]
+layers = 2
+sorting_offset = 5.0
+render_priority = 2
+texture = ExtResource("53_fqhu0")
 
 [node name="ElectricInfusion" type="Node3D" parent="SpriteParent"]
 visible = false
 
 [node name="ElectricMultiply" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
 layers = 2
-sorting_offset = 7.0
-render_priority = 2
+sorting_offset = 5.0
+render_priority = 3
 
-[node name="ElectricEffect" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+[node name="ElectricEffect" type="AnimatedSprite3D" parent="SpriteParent/ElectricInfusion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
-sorting_offset = 4.0
-material_override = SubResource("ShaderMaterial_q6drh")
+sorting_offset = 6.0
+render_priority = 3
+sprite_frames = ExtResource("54_7svxj")
+animation = &"smg_stage_3"
+
+[node name="ElectricMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
 render_priority = 2
+texture = ExtResource("54_264i8")
+
+[node name="ElectricMultiplyRollerMid" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("55_ar8r0")
+
+[node name="ElectricMultiplyRollerBack" type="Sprite3D" parent="SpriteParent/ElectricInfusion"]
+layers = 2
+sorting_offset = 5.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 2
+texture = ExtResource("56_synst")
 
 [node name="BarrelContainer" type="Node3D" parent="."]
 
