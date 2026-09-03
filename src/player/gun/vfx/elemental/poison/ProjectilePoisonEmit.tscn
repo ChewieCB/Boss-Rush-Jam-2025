@@ -5,7 +5,7 @@
 
 [sub_resource type="Gradient" id="Gradient_e7rcq"]
 offsets = PackedFloat32Array(0, 0.368644, 1)
-colors = PackedColorArray(0.0407865, 1, 0, 1, 0.0123134, 0.1875, 0, 1, 0, 0, 0, 1)
+colors = PackedColorArray(0.254902, 0, 0.490196, 1, 0.076, 0, 0.19, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_lf3li"]
 gradient = SubResource("Gradient_e7rcq")
@@ -80,7 +80,7 @@ gravity = Vector3(0, 0.5, 0)
 scale_min = 0.2
 scale_max = 0.2
 scale_curve = SubResource("CurveTexture_cq2cr")
-color = Color(0.299416, 0.542969, 0, 0.843137)
+color = Color(0.253167, 0, 0.49, 0.843137)
 color_ramp = SubResource("GradientTexture1D_6le8e")
 turbulence_enabled = true
 turbulence_noise_strength = 0.5

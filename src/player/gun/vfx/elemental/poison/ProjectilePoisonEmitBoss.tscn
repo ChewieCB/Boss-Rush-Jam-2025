@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_307uw"]
 [ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="2_jva0l"]
 
-[sub_resource type="Gradient" id="Gradient_ea8d5"]
+[sub_resource type="Gradient" id="Gradient_e7rcq"]
 offsets = PackedFloat32Array(0, 0.368644, 1)
-colors = PackedColorArray(0.0407865, 1, 0, 1, 0.0123134, 0.1875, 0, 1, 0, 0, 0, 1)
+colors = PackedColorArray(0.254902, 0, 0.490196, 1, 0.076, 0, 0.19, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_jthel"]
-gradient = SubResource("Gradient_ea8d5")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uy3js"]
+gradient = SubResource("Gradient_e7rcq")
 
 [sub_resource type="Curve" id="Curve_5bat2"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.231164, 1), 0.0, 0.0, 0, 0, Vector2(0.640411, 0.407905), -1.4431, -1.4431, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
@@ -32,7 +32,7 @@ gravity = Vector3(0, -3, 0)
 scale_min = 0.2
 scale_max = 0.4
 scale_curve = SubResource("CurveTexture_q0x18")
-color_ramp = SubResource("GradientTexture1D_jthel")
+color_ramp = SubResource("GradientTexture1D_uy3js")
 turbulence_noise_strength = 0.5
 turbulence_noise_scale = 1.0
 turbulence_influence_over_life = SubResource("CurveTexture_5umuh")
@@ -80,7 +80,7 @@ gravity = Vector3(0, 1, 0)
 scale_min = 0.46
 scale_max = 0.8
 scale_curve = SubResource("CurveTexture_vpe3h")
-color = Color(0.299416, 0.542969, 0, 0.843137)
+color = Color(0.254902, 0, 0.490196, 0.843137)
 color_ramp = SubResource("GradientTexture1D_rmlc0")
 turbulence_enabled = true
 turbulence_noise_strength = 0.5
