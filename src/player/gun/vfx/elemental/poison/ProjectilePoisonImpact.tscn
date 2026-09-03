@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_baes6"]
 [ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="4_jdyja"]
 
-[sub_resource type="Gradient" id="Gradient_4ibur"]
+[sub_resource type="Gradient" id="Gradient_e7rcq"]
 offsets = PackedFloat32Array(0, 0.368644, 1)
-colors = PackedColorArray(0.0407865, 1, 0, 1, 0.0123134, 0.1875, 0, 1, 0, 0, 0, 1)
+colors = PackedColorArray(0.254902, 0, 0.490196, 1, 0.076, 0, 0.19, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_1j3v3"]
-gradient = SubResource("Gradient_4ibur")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dm0jx"]
+gradient = SubResource("Gradient_e7rcq")
 
 [sub_resource type="Curve" id="Curve_7ct8h"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.231164, 1), 0.0, 0.0, 0, 0, Vector2(0.640411, 0.407905), -1.4431, -1.4431, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
@@ -36,7 +36,7 @@ gravity = Vector3(0, -4, 0)
 scale_min = 0.15
 scale_max = 0.3
 scale_curve = SubResource("CurveTexture_k6asf")
-color_ramp = SubResource("GradientTexture1D_1j3v3")
+color_ramp = SubResource("GradientTexture1D_dm0jx")
 turbulence_noise_strength = 0.5
 turbulence_noise_scale = 1.0
 turbulence_influence_over_life = SubResource("CurveTexture_co8hd")
@@ -87,7 +87,7 @@ gravity = Vector3(0, 0.5, 0)
 scale_min = 0.2
 scale_max = 0.2
 scale_curve = SubResource("CurveTexture_00b0n")
-color = Color(0.299416, 0.542969, 0, 0.843137)
+color = Color(0.254902, 0, 0.490196, 0.843137)
 color_ramp = SubResource("GradientTexture1D_xuank")
 turbulence_enabled = true
 turbulence_noise_strength = 0.5
@@ -151,7 +151,7 @@ draw_pass_1 = SubResource("ArrayMesh_jngs5")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-light_color = Color(0.766158, 2, 0.101643, 1)
+light_color = Color(0.254902, 0, 0.490196, 1)
 light_energy = 0.25
 light_bake_mode = 1
 omni_range = 0.5

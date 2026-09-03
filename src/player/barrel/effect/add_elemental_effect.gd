@@ -6,6 +6,29 @@ extends BaseBarrelEffect
 @export var change_color = false
 @export var new_color: Color
 
+
+func on_effect_set():
+	var element: String
+	match status_effect:
+		BossCore.BossStatusEffect.BURNING:
+			element = "fire"
+		BossCore.BossStatusEffect.FROZEN:
+			element = "cold"
+		BossCore.BossStatusEffect.POISONED:
+			element = "poison"
+		BossCore.BossStatusEffect.SHOCKED:
+			element = "electric"
+	owner_barrel.owner_gun.set_elemental_anim(element)
+
+
+func on_effect_removed():
+	owner_barrel.owner_gun.remove_elemental_anim()
+
+
+func on_barrel_start_spin():
+	owner_barrel.owner_gun.remove_elemental_anim()
+
+
 func on_projectile_spawn(_projectile: BaseBullet):
 	if change_color:
 		_projectile.change_bullet_color(new_color)
