@@ -1,7 +1,7 @@
 [gd_scene load_steps=23 format=3 uid="uid://bwei3cifjg1sq"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
-[ext_resource type="PackedScene" uid="uid://dgulg3vrjkcbk" path="res://src/ui/boss/BossPhaseIcon.tscn" id="2_fwp03"]
+[ext_resource type="PackedScene" path="res://src/ui/boss/BossPhaseIcon.tscn" id="2_fwp03"]
 [ext_resource type="Texture2D" uid="uid://jgscawd6skc" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-001.png" id="6_62y4p"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="7_bj4c4"]
 [ext_resource type="Texture2D" uid="uid://bfki3npylok25" path="res://assets/sprite/status_icon/burning.png" id="8_oo5ks"]
@@ -242,6 +242,75 @@ expand_mode = 3
 stretch_mode = 5
 flip_h = true
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthBar" type="MarginContainer" parent="VBoxContainer/HBoxContainer" node_paths=PackedStringArray("label", "health_bar", "damage_bar")]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("10_sa321")
+label = NodePath("Label")
+health_bar = NodePath("HealthBar")
+damage_bar = NodePath("HealthBar/DamageBar")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/HealthBar"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_y0f30")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/HealthBar"]
+custom_minimum_size = Vector2(240, 20)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 40.0
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_over = ExtResource("12_w3nlo")
+texture_progress = ExtResource("13_usuns")
+tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
+
+[node name="DamageBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/HealthBar/HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+value = 60.0
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_under = ExtResource("14_lbbuv")
+texture_progress = ExtResource("14_lbbuv")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="PhaseIcons" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PhaseIcons"]
+layout_mode = 2
+
 [node name="StatusContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
@@ -357,75 +426,6 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("7_bj4c4")
 theme_override_font_sizes/font_size = 20
 text = "Bleeding"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="HealthBar" type="MarginContainer" parent="VBoxContainer/HBoxContainer" node_paths=PackedStringArray("label", "health_bar", "damage_bar")]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-script = ExtResource("10_sa321")
-label = NodePath("Label")
-health_bar = NodePath("HealthBar")
-damage_bar = NodePath("HealthBar/DamageBar")
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/HealthBar"]
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 4
-theme = SubResource("Theme_y0f30")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "10,000/10,000"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/HealthBar"]
-custom_minimum_size = Vector2(240, 20)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-value = 40.0
-nine_patch_stretch = true
-stretch_margin_left = 20
-stretch_margin_top = 20
-stretch_margin_right = 20
-stretch_margin_bottom = 20
-texture_over = ExtResource("12_w3nlo")
-texture_progress = ExtResource("13_usuns")
-tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
-
-[node name="DamageBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/HealthBar/HealthBar"]
-z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-value = 60.0
-nine_patch_stretch = true
-stretch_margin_left = 20
-stretch_margin_top = 20
-stretch_margin_right = 20
-stretch_margin_bottom = 20
-texture_under = ExtResource("14_lbbuv")
-texture_progress = ExtResource("14_lbbuv")
-tint_under = Color(0.113725, 0.113725, 0.113725, 1)
-tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
-
-[node name="PhaseIcons" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PhaseIcons"]
-layout_mode = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

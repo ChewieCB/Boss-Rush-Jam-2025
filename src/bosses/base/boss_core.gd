@@ -259,6 +259,12 @@ func _ready() -> void:
 
 	health_component.max_health = main_health
 	health_component.initialize_health()
+	health_component.is_invincible = GameManager.CHEAT_invincible_bosses
+	GameManager.cheat_boss_godmode_toggle.connect(
+		func(enabled: bool):
+			health_component.is_invincible = enabled
+	)
+	
 	var phase_health_arr: Array[int] = []
 	for health in [phase_1_health, phase_2_health, phase_3_health, phase_4_health, phase_5_health]:
 		if health > 0:

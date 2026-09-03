@@ -55,7 +55,9 @@ color: Color = Color.WHITE, text_scale_pop: float = 1.3, detail_text: String = "
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage
-		if show_damage_text and not is_invincible:
+		else:
+			get_parent().state_chart.send_event("start_damage")
+		if show_damage_text:
 			if not text_effect:
 				return
 			

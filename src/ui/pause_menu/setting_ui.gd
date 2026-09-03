@@ -550,3 +550,18 @@ func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
 func _on_skip_tutorial_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.CHEAT_skip_tutorial_on_new_game = toggled_on
+
+
+func _on_infinite_ammo_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_infinite_ammo = toggled_on
+
+
+func _on_debug_jam_controls_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_debug_jam_controls = toggled_on
+
+
+func _on_boss_god_mode_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_invincible_bosses = toggled_on
