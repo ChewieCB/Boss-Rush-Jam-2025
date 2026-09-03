@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bxsq2sfatsh3u"
+path="res://.godot/imported/Clouds.obj-2446f7dc23a7d5342db81aad888552ea.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Clouds.obj-2446f7dc23a7d5342db81aad888552ea.mesh"]
+
+source_file="res://assets/trenchbroom/models/Clouds.obj"
+dest_files=["res://.godot/imported/Clouds.obj-2446f7dc23a7d5342db81aad888552ea.mesh", "res://.godot/imported/Clouds.obj-2446f7dc23a7d5342db81aad888552ea.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

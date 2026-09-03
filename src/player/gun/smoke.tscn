@@ -1,0 +1,71 @@
+[gd_scene load_steps=14 format=3 uid="uid://10nfyvw78qre"]
+
+[ext_resource type="Shader" path="res://assets/shaders/s_smoke_cellShaded.gdshader" id="1_o88gx"]
+[ext_resource type="Texture2D" uid="uid://cda65w45tj8go" path="res://assets/shaders/T_MarbleNoise5_tiled.png" id="2_sl1eh"]
+[ext_resource type="ArrayMesh" uid="uid://bxsq2sfatsh3u" path="res://assets/trenchbroom/models/Clouds.obj" id="3_ofkd8"]
+
+[sub_resource type="Gradient" id="Gradient_sl1eh"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.211849)
+colors = PackedColorArray(0.00563185, 0.0119116, 0.0934714, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_o88gx"]
+gradient = SubResource("Gradient_sl1eh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_60jbs"]
+render_priority = 0
+shader = ExtResource("1_o88gx")
+shader_parameter/texture_scale = Vector2(0.5, 0.5)
+shader_parameter/Light_attenuation = 2.1
+shader_parameter/Shadow_roundness = 1.0
+shader_parameter/dissolver_texture = ExtResource("2_sl1eh")
+shader_parameter/Color_1D_Gradient = SubResource("GradientTexture1D_o88gx")
+
+[sub_resource type="Curve" id="Curve_n6e7u"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.762565, 0.716837), 1.22116, 1.22116, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_pvyvf"]
+texture_mode = 1
+curve = SubResource("Curve_n6e7u")
+
+[sub_resource type="Gradient" id="Gradient_o88gx"]
+offsets = PackedFloat32Array(0.00927644, 0.710575)
+colors = PackedColorArray(0.766621, 0.766619, 0.76662, 1, 0.140447, 0.140447, 0.140447, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wlxrf"]
+gradient = SubResource("Gradient_o88gx")
+
+[sub_resource type="Curve" id="Curve_arpy8"]
+_data = [Vector2(0.00346621, 0.150794), 0.0, 0.0, 0, 0, Vector2(0.505766, 0.493947), 1.0689, 1.0689, 0, 0, Vector2(1, 0.871671), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_5o7gj"]
+curve = SubResource("Curve_arpy8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_83wwu"]
+particle_flag_rotate_y = true
+emission_shape = 1
+emission_sphere_radius = 0.5
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(-0.3, 1, 0)
+spread = 0.0
+initial_velocity_min = 3.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_5o7gj")
+color = Color(0.894922, 0.894922, 0.894922, 1)
+color_ramp = SubResource("GradientTexture1D_wlxrf")
+alpha_curve = SubResource("CurveTexture_pvyvf")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="VFX_Stylized_Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.140338, 0, 0)
+material_override = SubResource("ShaderMaterial_60jbs")
+amount = 20
+fixed_fps = 24
+process_material = SubResource("ParticleProcessMaterial_83wwu")
+draw_pass_1 = ExtResource("3_ofkd8")
