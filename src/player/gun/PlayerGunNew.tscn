@@ -1,4 +1,4 @@
-[gd_scene load_steps=151 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=273 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -44,49 +44,169 @@
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
 [ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
 [ext_resource type="Texture2D" uid="uid://mvodghq1nj5c" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Asset-Overheat-shotgun-multiply-02.png" id="43_70w2b"]
-[ext_resource type="Texture2D" uid="uid://c3e7u1j2us2cr" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0000.png" id="43_ld5ap"]
+[ext_resource type="Texture2D" uid="uid://dniak7wtu517c" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0000.png" id="43_oc85d"]
 [ext_resource type="Texture2D" uid="uid://cysge7mi7k2it" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Front.png" id="44_0pg5e"]
 [ext_resource type="Shader" path="res://src/player/poison_goo.gdshader" id="44_a5uul"]
-[ext_resource type="Texture2D" uid="uid://duheim7715xx2" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0001.png" id="44_ar7gg"]
+[ext_resource type="Texture2D" uid="uid://dpurfi5g3ecqa" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0001.png" id="44_vrlwy"]
+[ext_resource type="Texture2D" uid="uid://dvw8tjsb5wkay" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0002.png" id="45_el5xu"]
 [ext_resource type="AnimationLibrary" uid="uid://c80km4hl2hhp6" path="res://src/player/gun/assets/anims/gun_animations_global.res" id="45_q7v2u"]
-[ext_resource type="Texture2D" uid="uid://yp7y7rcg48h0" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0002.png" id="45_s5s22"]
 [ext_resource type="Texture2D" uid="uid://cl5sduvm25maq" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Mid.png" id="45_vue3p"]
 [ext_resource type="Texture2D" uid="uid://bae110vk0rmu2" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Back.png" id="46_hjoog"]
 [ext_resource type="AnimationLibrary" uid="uid://tfy777wud6n1" path="res://src/player/gun/assets/anims/gun_animations_rifle.res" id="46_nmah4"]
-[ext_resource type="Texture2D" uid="uid://dxkykp0v18tc5" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0003.png" id="46_xqnoq"]
+[ext_resource type="Texture2D" uid="uid://b1qwugyh20non" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0003.png" id="46_t2pbs"]
 [ext_resource type="AnimationLibrary" uid="uid://bg0c6avq71d6p" path="res://src/player/gun/assets/anims/gun_animations_shotgun.res" id="47_7lgfm"]
+[ext_resource type="Texture2D" uid="uid://bcqe1k6mbh7to" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0004.png" id="47_gphfc"]
 [ext_resource type="Texture2D" uid="uid://buvqhyn0rl831" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Front.png" id="47_j5ous"]
-[ext_resource type="Texture2D" uid="uid://cml06anyc6wjn" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0004.png" id="47_yg5hb"]
-[ext_resource type="Texture2D" uid="uid://ch0osrjioysbu" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0005.png" id="48_3xbh3"]
 [ext_resource type="Texture2D" uid="uid://b4kx6fnqf2j5c" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Mid.png" id="48_dhdye"]
 [ext_resource type="AnimationLibrary" uid="uid://7bwupd2c3hyi" path="res://src/player/gun/assets/anims/gun_animations_smg.res" id="48_hvksd"]
-[ext_resource type="Texture2D" uid="uid://cdofebm2pid51" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0006.png" id="49_skew2"]
+[ext_resource type="Texture2D" uid="uid://dpc5jj5f33wvm" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0005.png" id="48_ks0qd"]
+[ext_resource type="Texture2D" uid="uid://blcy7oqe2odu0" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0006.png" id="49_8t8l7"]
 [ext_resource type="Texture2D" uid="uid://cvlag325mg0qs" path="res://src/player/gun/assets/sprite/elemental/cold/Asset-Ice-Mask-Roller-Cover-Back.png" id="49_xfe0d"]
-[ext_resource type="Texture2D" uid="uid://dd6ypdc4aphay" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0007.png" id="50_aptks"]
-[ext_resource type="Texture2D" uid="uid://cabkeldlee5hv" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0008.png" id="51_lmrnp"]
+[ext_resource type="Texture2D" uid="uid://d0lx5ylknc0vd" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0007.png" id="50_gl6a8"]
+[ext_resource type="Texture2D" uid="uid://d3dw52jv4wq75" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0008.png" id="51_pq3nr"]
 [ext_resource type="Texture2D" uid="uid://ds2os5uy4mjvn" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Front.png" id="51_rxjeo"]
 [ext_resource type="Texture2D" uid="uid://imshkor6561u" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Mid.png" id="52_2inwm"]
-[ext_resource type="Texture2D" uid="uid://d3wlj6lcf8ans" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0009.png" id="52_bscss"]
+[ext_resource type="Texture2D" uid="uid://0vhjyeauodov" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0009.png" id="52_ww24s"]
 [ext_resource type="Texture2D" uid="uid://b5nxd6hktccf0" path="res://src/player/gun/assets/sprite/elemental/poison/Asset-Poison-Mask-Roller-Back.png" id="53_fqhu0"]
-[ext_resource type="Texture2D" uid="uid://bhqblelxwkma8" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0010.png" id="53_irfea"]
+[ext_resource type="Texture2D" uid="uid://rewd8f1xlyn6" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0010.png" id="53_kbkom"]
 [ext_resource type="SpriteFrames" uid="uid://crnpgpww0qs60" path="res://src/player/gun/assets/anims/electric_sprite_frames.tres" id="54_7svxj"]
 [ext_resource type="Texture2D" uid="uid://ckkvluwxlsblq" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Electric-02-Roller-Cover-Front.png" id="54_264i8"]
-[ext_resource type="Texture2D" uid="uid://bu6t0eou6syah" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0011.png" id="54_r0wmo"]
+[ext_resource type="Texture2D" uid="uid://co0wbkh785j40" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0011.png" id="54_vj5i2"]
 [ext_resource type="Texture2D" uid="uid://n3evsy846arq" path="res://assets/sprite/particles/springs/springs_&_gears_sheet.png" id="55_18u8p"]
 [ext_resource type="Texture2D" uid="uid://blnea3xhy6u55" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Mid.png" id="55_ar8r0"]
-[ext_resource type="Texture2D" uid="uid://byliwdwj26wfq" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0012.png" id="55_uwstg"]
-[ext_resource type="Texture2D" uid="uid://bkaqvj0dlnf44" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0013.png" id="56_lb4n2"]
+[ext_resource type="Texture2D" uid="uid://di43pk6yw6neu" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0012.png" id="55_lmees"]
+[ext_resource type="Texture2D" uid="uid://btruxg33e2oyl" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0013.png" id="56_j5xvm"]
 [ext_resource type="Texture2D" uid="uid://coglscswt6b6q" path="res://src/player/gun/assets/sprite/elemental/electric/Asset-Lightning-02-Roller-Cover-Back.png" id="56_synst"]
-[ext_resource type="Texture2D" uid="uid://dsa3i1ata1okx" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0014.png" id="57_galn5"]
-[ext_resource type="Texture2D" uid="uid://dx4fj6irrinp" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0015.png" id="58_uibkq"]
-[ext_resource type="Texture2D" uid="uid://cfb5tvapkn7di" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0016.png" id="59_53avt"]
-[ext_resource type="Texture2D" uid="uid://chb4ky8hqf00e" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0017.png" id="60_lnjre"]
-[ext_resource type="Texture2D" uid="uid://b2h8m4g6fgp3y" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0018.png" id="61_0t6hy"]
-[ext_resource type="Texture2D" uid="uid://bgfrfk0vop305" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0019.png" id="62_gxn1i"]
-[ext_resource type="Texture2D" uid="uid://dn6wmmo4wpq65" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0020.png" id="63_y8jhy"]
-[ext_resource type="Texture2D" uid="uid://c71x6l08v5u36" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0021.png" id="64_ejgf4"]
-[ext_resource type="Texture2D" uid="uid://f1kq7lj00fw1" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0022.png" id="65_ev8o2"]
-[ext_resource type="Texture2D" uid="uid://dyhn04uimhhxr" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0023.png" id="66_k2pnu"]
+[ext_resource type="Texture2D" uid="uid://bptn5x07vfj5u" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0014.png" id="57_nurx5"]
+[ext_resource type="Texture2D" uid="uid://be6nbwq53bog6" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0015.png" id="58_1nvp1"]
+[ext_resource type="Texture2D" uid="uid://bjeinw3wf57a7" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0016.png" id="59_gcw4u"]
+[ext_resource type="Texture2D" uid="uid://c7kmwbsiuogsc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0017.png" id="60_nlr1b"]
+[ext_resource type="Texture2D" uid="uid://chhb7gkarm3ji" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0018.png" id="61_ugsjb"]
+[ext_resource type="Texture2D" uid="uid://bri5ctsdt0m0" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0019.png" id="62_acv7v"]
+[ext_resource type="Texture2D" uid="uid://cmej5bpkw2xlp" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0020.png" id="63_r4miy"]
+[ext_resource type="Texture2D" uid="uid://b44mqjv0apdoh" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0021.png" id="64_0gse6"]
+[ext_resource type="Texture2D" uid="uid://dvhc3g5e28w45" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0022.png" id="65_o47hf"]
+[ext_resource type="Texture2D" uid="uid://2yp6uvkcoyeo" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0023.png" id="66_pts8i"]
+[ext_resource type="Texture2D" uid="uid://ceyp7d6hgru6k" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0000.png" id="67_bj5xf"]
+[ext_resource type="Texture2D" uid="uid://bjt51y4lv8i12" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0001.png" id="68_bvn5t"]
+[ext_resource type="Texture2D" uid="uid://bux52x5ut5cd5" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0002.png" id="69_ouimd"]
+[ext_resource type="Texture2D" uid="uid://d2olp47gpobkp" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0003.png" id="70_r1hhq"]
+[ext_resource type="Texture2D" uid="uid://bcspr0namf05n" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0004.png" id="71_mypuk"]
+[ext_resource type="Texture2D" uid="uid://b04ijcab2fhka" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0005.png" id="72_hdefb"]
+[ext_resource type="Texture2D" uid="uid://dcpgup8e6mbse" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0006.png" id="73_i5whi"]
+[ext_resource type="Texture2D" uid="uid://cxj45fp3iwsm0" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0007.png" id="74_yvl76"]
+[ext_resource type="Texture2D" uid="uid://oui0pc72f7ak" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0008.png" id="75_kvnor"]
+[ext_resource type="Texture2D" uid="uid://cjxeg1heg6qdq" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0009.png" id="76_slqgb"]
+[ext_resource type="Texture2D" uid="uid://ce6h511roag0g" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0010.png" id="77_lkaky"]
+[ext_resource type="Texture2D" uid="uid://xnym3cpkyr5x" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0011.png" id="78_nb3e4"]
+[ext_resource type="Texture2D" uid="uid://crdj6hkn6gfpo" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0012.png" id="79_edmoj"]
+[ext_resource type="Texture2D" uid="uid://bc6o5aknucnrs" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0013.png" id="80_b7sro"]
+[ext_resource type="Texture2D" uid="uid://b52x0vtau2wd2" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0014.png" id="81_p6uy8"]
+[ext_resource type="Texture2D" uid="uid://fbbnqo2q8kpx" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0015.png" id="82_fggdt"]
+[ext_resource type="Texture2D" uid="uid://jp3xq7il3pw0" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0016.png" id="83_nemjq"]
+[ext_resource type="Texture2D" uid="uid://dpj0e1myhavy4" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0017.png" id="84_bv2wd"]
+[ext_resource type="Texture2D" uid="uid://0kyevlwvvssp" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0018.png" id="85_kcd0q"]
+[ext_resource type="Texture2D" uid="uid://h1ks8q55q5yp" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0019.png" id="86_6qfhw"]
+[ext_resource type="Texture2D" uid="uid://c5bj3pi7fjsy4" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0020.png" id="87_xhrgq"]
+[ext_resource type="Texture2D" uid="uid://d1hei1o7x11rm" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0021.png" id="88_m267d"]
+[ext_resource type="Texture2D" uid="uid://fchhf2bxmynj" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0022.png" id="89_0i4b6"]
+[ext_resource type="Texture2D" uid="uid://kiqflcor1m25" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Front-fire/Shotgun-Fire-Stage3-FrontFire_0023.png" id="90_nh150"]
+[ext_resource type="Texture2D" uid="uid://c3e7u1j2us2cr" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0000.png" id="91_j6g12"]
+[ext_resource type="Texture2D" uid="uid://duheim7715xx2" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0001.png" id="92_wlfhf"]
+[ext_resource type="Texture2D" uid="uid://yp7y7rcg48h0" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0002.png" id="93_r6gd3"]
+[ext_resource type="Texture2D" uid="uid://dxkykp0v18tc5" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0003.png" id="94_abx8d"]
+[ext_resource type="Texture2D" uid="uid://cml06anyc6wjn" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0004.png" id="95_qwlox"]
+[ext_resource type="Texture2D" uid="uid://ch0osrjioysbu" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0005.png" id="96_hs64w"]
+[ext_resource type="Texture2D" uid="uid://cdofebm2pid51" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0006.png" id="97_kmph7"]
+[ext_resource type="Texture2D" uid="uid://dd6ypdc4aphay" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0007.png" id="98_6wlgf"]
+[ext_resource type="Texture2D" uid="uid://cabkeldlee5hv" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0008.png" id="99_g7vlo"]
+[ext_resource type="Texture2D" uid="uid://d3wlj6lcf8ans" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0009.png" id="100_jfker"]
+[ext_resource type="Texture2D" uid="uid://bhqblelxwkma8" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0010.png" id="101_j3cld"]
+[ext_resource type="Texture2D" uid="uid://bu6t0eou6syah" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0011.png" id="102_2nhxo"]
+[ext_resource type="Texture2D" uid="uid://byliwdwj26wfq" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0012.png" id="103_goye4"]
+[ext_resource type="Texture2D" uid="uid://bkaqvj0dlnf44" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0013.png" id="104_icr6y"]
+[ext_resource type="Texture2D" uid="uid://dsa3i1ata1okx" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0014.png" id="105_r7otp"]
+[ext_resource type="Texture2D" uid="uid://dx4fj6irrinp" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0015.png" id="106_i243t"]
+[ext_resource type="Texture2D" uid="uid://cfb5tvapkn7di" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0016.png" id="107_0l0td"]
+[ext_resource type="Texture2D" uid="uid://chb4ky8hqf00e" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0017.png" id="108_d72d8"]
+[ext_resource type="Texture2D" uid="uid://b2h8m4g6fgp3y" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0018.png" id="109_521ax"]
+[ext_resource type="Texture2D" uid="uid://bgfrfk0vop305" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0019.png" id="110_wtpvu"]
+[ext_resource type="Texture2D" uid="uid://dn6wmmo4wpq65" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0020.png" id="111_of5j5"]
+[ext_resource type="Texture2D" uid="uid://c71x6l08v5u36" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0021.png" id="112_rblur"]
+[ext_resource type="Texture2D" uid="uid://f1kq7lj00fw1" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0022.png" id="113_xd53x"]
+[ext_resource type="Texture2D" uid="uid://dyhn04uimhhxr" path="res://src/player/gun/assets/sprite/elemental/fire/smg/SMG_FIRE_STAGE3_0023.png" id="114_pc02i"]
+[ext_resource type="Texture2D" uid="uid://t73ificstn22" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0000.png" id="115_0g8ml"]
+[ext_resource type="Texture2D" uid="uid://dmkktnhot3uu1" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0001.png" id="116_jcui5"]
+[ext_resource type="Texture2D" uid="uid://dq0qu55gcc4h4" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0002.png" id="117_moxvi"]
+[ext_resource type="Texture2D" uid="uid://bilv72ycws4t4" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0003.png" id="118_6jt3t"]
+[ext_resource type="Texture2D" uid="uid://l04j4snjvdie" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0004.png" id="119_k7s3g"]
+[ext_resource type="Texture2D" uid="uid://u7ylueyveogc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0005.png" id="120_8yky5"]
+[ext_resource type="Texture2D" uid="uid://828u4eykktnc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0006.png" id="121_qyxhy"]
+[ext_resource type="Texture2D" uid="uid://c47l7o0wkdaoo" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0007.png" id="122_nnjdw"]
+[ext_resource type="Texture2D" uid="uid://ond4v6f5gxu" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0008.png" id="123_n82rp"]
+[ext_resource type="Texture2D" uid="uid://b6dshly3bfr48" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0009.png" id="124_7mov8"]
+[ext_resource type="Texture2D" uid="uid://degt664v06brp" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0010.png" id="125_1chi6"]
+[ext_resource type="Texture2D" uid="uid://dah8expet3j8f" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0011.png" id="126_adlqq"]
+[ext_resource type="Texture2D" uid="uid://dnopyqmull2eu" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0012.png" id="127_oo2yn"]
+[ext_resource type="Texture2D" uid="uid://mqojdohax3j3" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0013.png" id="128_bedvy"]
+[ext_resource type="Texture2D" uid="uid://3hxnkx2kt7rf" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0014.png" id="129_e71ll"]
+[ext_resource type="Texture2D" uid="uid://dexew1nlo7qr3" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0015.png" id="130_vwwsj"]
+[ext_resource type="Texture2D" uid="uid://ck1ga3wj8fpwr" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0016.png" id="131_ae7rw"]
+[ext_resource type="Texture2D" uid="uid://cnc2v55r6bvly" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0017.png" id="132_2puol"]
+[ext_resource type="Texture2D" uid="uid://j5q532jub5wj" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0018.png" id="133_jwi0v"]
+[ext_resource type="Texture2D" uid="uid://bdgjyqe5j4q3u" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0019.png" id="134_25m86"]
+[ext_resource type="Texture2D" uid="uid://csqbn3w25cyw8" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0020.png" id="135_d0fsd"]
+[ext_resource type="Texture2D" uid="uid://blr40ogkhlvie" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0021.png" id="136_kmm81"]
+[ext_resource type="Texture2D" uid="uid://bflh0xnp4inkd" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0022.png" id="137_nu5mv"]
+[ext_resource type="Texture2D" uid="uid://ced8nnrln2sck" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Mid Fire/Sniper_Fire_Stage3_MidFire_0023.png" id="138_oyqnq"]
+[ext_resource type="Texture2D" uid="uid://dfvur28ljndpn" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0000.png" id="139_6gcv4"]
+[ext_resource type="Texture2D" uid="uid://c3tam7no03sd8" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0001.png" id="140_knlbs"]
+[ext_resource type="Texture2D" uid="uid://qlkmpqi8wilc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0002.png" id="141_fmo0x"]
+[ext_resource type="Texture2D" uid="uid://dbppg24hkfgwl" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0003.png" id="142_7mc0u"]
+[ext_resource type="Texture2D" uid="uid://cpu155xen02yc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0004.png" id="143_akvyi"]
+[ext_resource type="Texture2D" uid="uid://dcvcwta0r7goc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0005.png" id="144_allu1"]
+[ext_resource type="Texture2D" uid="uid://dyrm0v0mf6518" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0006.png" id="145_a5vo0"]
+[ext_resource type="Texture2D" uid="uid://dreu8ge1i7u6d" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0007.png" id="146_wh76r"]
+[ext_resource type="Texture2D" uid="uid://ch2w155rqrmux" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0008.png" id="147_pe3r1"]
+[ext_resource type="Texture2D" uid="uid://c3358wfv8mhiv" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0009.png" id="148_0ifps"]
+[ext_resource type="Texture2D" uid="uid://bqgjwmpl5b57y" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0010.png" id="149_xui02"]
+[ext_resource type="Texture2D" uid="uid://b14d0t0c8p0wg" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0011.png" id="150_ikqe3"]
+[ext_resource type="Texture2D" uid="uid://ba4f76xkjsdgv" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0012.png" id="151_uy1mh"]
+[ext_resource type="Texture2D" uid="uid://cahj8fhbf58g1" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0013.png" id="152_1fqjv"]
+[ext_resource type="Texture2D" uid="uid://dfvdjbfc2yboc" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0014.png" id="153_4n2ok"]
+[ext_resource type="Texture2D" uid="uid://bnmelydt7dl4u" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0015.png" id="154_nokfw"]
+[ext_resource type="Texture2D" uid="uid://b17ijie2fsbtt" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0016.png" id="155_shi11"]
+[ext_resource type="Texture2D" uid="uid://cq2d2o6ip7dbj" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0017.png" id="156_c35il"]
+[ext_resource type="Texture2D" uid="uid://bcole230vqt12" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0018.png" id="157_gwklp"]
+[ext_resource type="Texture2D" uid="uid://cs8eksyr3qrus" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0019.png" id="158_jl3rb"]
+[ext_resource type="Texture2D" uid="uid://csrhs8uoskc28" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0020.png" id="159_xllfu"]
+[ext_resource type="Texture2D" uid="uid://creynjjhkxgbh" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0021.png" id="160_lf4kq"]
+[ext_resource type="Texture2D" uid="uid://6o218hj1s46m" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0022.png" id="161_0p6tx"]
+[ext_resource type="Texture2D" uid="uid://cuh8oibnggfv7" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Back Fire/Sniper_Fire_Stage3_BackFire_0023.png" id="162_0rg2a"]
+[ext_resource type="Texture2D" uid="uid://c3xsrk5bcskqj" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0000.png" id="163_clca4"]
+[ext_resource type="Texture2D" uid="uid://bwtkbnexbworc" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0001.png" id="164_nculc"]
+[ext_resource type="Texture2D" uid="uid://dp6l11rjeh3fe" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0002.png" id="165_gfy36"]
+[ext_resource type="Texture2D" uid="uid://d1raja41hq13c" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0003.png" id="166_mxkqc"]
+[ext_resource type="Texture2D" uid="uid://b2py6f1gr680x" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0004.png" id="167_ydmbb"]
+[ext_resource type="Texture2D" uid="uid://bxqhco8kp4th" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0005.png" id="168_geobn"]
+[ext_resource type="Texture2D" uid="uid://klmyxxpji0cq" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0006.png" id="169_81uln"]
+[ext_resource type="Texture2D" uid="uid://y5fgkmgpyhfd" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0007.png" id="170_j5vwg"]
+[ext_resource type="Texture2D" uid="uid://dv6amt55csl4p" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0008.png" id="171_o8gol"]
+[ext_resource type="Texture2D" uid="uid://sfd6835npmwu" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0009.png" id="172_3hefq"]
+[ext_resource type="Texture2D" uid="uid://csceixupo6cjy" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0010.png" id="173_tknr0"]
+[ext_resource type="Texture2D" uid="uid://cbpv0oti46ewl" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0011.png" id="174_gcinq"]
+[ext_resource type="Texture2D" uid="uid://bxld42xs5ygci" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0012.png" id="175_je2q6"]
+[ext_resource type="Texture2D" uid="uid://0os1xkpnig1j" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0013.png" id="176_boywk"]
+[ext_resource type="Texture2D" uid="uid://djomdj4grysho" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0014.png" id="177_uaw76"]
+[ext_resource type="Texture2D" uid="uid://ojks3pxth52f" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0015.png" id="178_ckf1l"]
+[ext_resource type="Texture2D" uid="uid://dpypbc2w5k8eb" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0016.png" id="179_pe2c4"]
+[ext_resource type="Texture2D" uid="uid://drfx8wl4nt7kb" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0017.png" id="180_yowab"]
+[ext_resource type="Texture2D" uid="uid://bdth63yxf666q" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0018.png" id="181_xvcd1"]
+[ext_resource type="Texture2D" uid="uid://b6ik3k21m765y" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0019.png" id="182_t0ph7"]
+[ext_resource type="Texture2D" uid="uid://bujit0k8jkq5e" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0020.png" id="183_ocfsy"]
+[ext_resource type="Texture2D" uid="uid://bthcvesmtn7eh" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0021.png" id="184_vowky"]
+[ext_resource type="Texture2D" uid="uid://ys5afrr0a2pu" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0022.png" id="185_oe2lk"]
+[ext_resource type="Texture2D" uid="uid://m84me3ncl6nd" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Back-fire/Shotgun-Fire-Stage3-BackFire_0023.png" id="186_0advq"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
 random_pitch = 1.19
@@ -166,83 +286,489 @@ orientation = 2
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
 viewport_path = NodePath("EffectIconsViewport")
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_jelkk"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_il840"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("43_ld5ap")
+"texture": ExtResource("43_oc85d")
 }, {
 "duration": 1.0,
-"texture": ExtResource("44_ar7gg")
+"texture": ExtResource("44_vrlwy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("45_s5s22")
+"texture": ExtResource("45_el5xu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("46_xqnoq")
+"texture": ExtResource("46_t2pbs")
 }, {
 "duration": 1.0,
-"texture": ExtResource("47_yg5hb")
+"texture": ExtResource("47_gphfc")
 }, {
 "duration": 1.0,
-"texture": ExtResource("48_3xbh3")
+"texture": ExtResource("48_ks0qd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("49_skew2")
+"texture": ExtResource("49_8t8l7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("50_aptks")
+"texture": ExtResource("50_gl6a8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("51_lmrnp")
+"texture": ExtResource("51_pq3nr")
 }, {
 "duration": 1.0,
-"texture": ExtResource("52_bscss")
+"texture": ExtResource("52_ww24s")
 }, {
 "duration": 1.0,
-"texture": ExtResource("53_irfea")
+"texture": ExtResource("53_kbkom")
 }, {
 "duration": 1.0,
-"texture": ExtResource("54_r0wmo")
+"texture": ExtResource("54_vj5i2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("55_uwstg")
+"texture": ExtResource("55_lmees")
 }, {
 "duration": 1.0,
-"texture": ExtResource("56_lb4n2")
+"texture": ExtResource("56_j5xvm")
 }, {
 "duration": 1.0,
-"texture": ExtResource("57_galn5")
+"texture": ExtResource("57_nurx5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("58_uibkq")
+"texture": ExtResource("58_1nvp1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("59_53avt")
+"texture": ExtResource("59_gcw4u")
 }, {
 "duration": 1.0,
-"texture": ExtResource("60_lnjre")
+"texture": ExtResource("60_nlr1b")
 }, {
 "duration": 1.0,
-"texture": ExtResource("61_0t6hy")
+"texture": ExtResource("61_ugsjb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("62_gxn1i")
+"texture": ExtResource("62_acv7v")
 }, {
 "duration": 1.0,
-"texture": ExtResource("63_y8jhy")
+"texture": ExtResource("63_r4miy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("64_ejgf4")
+"texture": ExtResource("64_0gse6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("65_ev8o2")
+"texture": ExtResource("65_o47hf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("66_k2pnu")
+"texture": ExtResource("66_pts8i")
 }],
 "loop": true,
-"name": &"stage_1",
+"name": &"rifle_stage_1",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_bj5xf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_bvn5t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_ouimd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_r1hhq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_mypuk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_hdefb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_i5whi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_yvl76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_kvnor")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_slqgb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_lkaky")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_nb3e4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_edmoj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_b7sro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_p6uy8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_fggdt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_nemjq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_bv2wd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_kcd0q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_6qfhw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_xhrgq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_m267d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_0i4b6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_nh150")
+}],
+"loop": true,
+"name": &"shotgun_stage_1",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("91_j6g12")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_wlfhf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_r6gd3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_abx8d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_qwlox")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_hs64w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_kmph7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_6wlgf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_g7vlo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_jfker")
+}, {
+"duration": 1.0,
+"texture": ExtResource("101_j3cld")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_2nhxo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_goye4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_icr6y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_r7otp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("106_i243t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_0l0td")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_d72d8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("109_521ax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_wtpvu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_of5j5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("112_rblur")
+}, {
+"duration": 1.0,
+"texture": ExtResource("113_xd53x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("114_pc02i")
+}],
+"loop": true,
+"name": &"smg_stage_1",
+"speed": 30.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fqrp5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("115_0g8ml")
+}, {
+"duration": 1.0,
+"texture": ExtResource("116_jcui5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("117_moxvi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("118_6jt3t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("119_k7s3g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("120_8yky5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("121_qyxhy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("122_nnjdw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_n82rp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_7mov8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_1chi6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("126_adlqq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("127_oo2yn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_bedvy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_e71ll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("130_vwwsj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("131_ae7rw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("132_2puol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_jwi0v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_25m86")
+}, {
+"duration": 1.0,
+"texture": ExtResource("135_d0fsd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_kmm81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_nu5mv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("138_oyqnq")
+}],
+"loop": true,
+"name": &"rifle_stage_1",
+"speed": 30.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"shotgun_stage_1",
+"speed": 30.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"smg_stage_1",
+"speed": 30.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x1cwa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("139_6gcv4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_knlbs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_fmo0x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_7mc0u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("143_akvyi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("144_allu1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("145_a5vo0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("146_wh76r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("147_pe3r1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("148_0ifps")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_xui02")
+}, {
+"duration": 1.0,
+"texture": ExtResource("150_ikqe3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("151_uy1mh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_1fqjv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("153_4n2ok")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_nokfw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_shi11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("156_c35il")
+}, {
+"duration": 1.0,
+"texture": ExtResource("157_gwklp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_jl3rb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_xllfu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_lf4kq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("161_0p6tx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("162_0rg2a")
+}],
+"loop": true,
+"name": &"rifle_stage_1",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("163_clca4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("164_nculc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_gfy36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_mxkqc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("167_ydmbb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("168_geobn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("169_81uln")
+}, {
+"duration": 1.0,
+"texture": ExtResource("170_j5vwg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("171_o8gol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("172_3hefq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("173_tknr0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("174_gcinq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("175_je2q6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("176_boywk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("177_uaw76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("178_ckf1l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("179_pe2c4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("180_yowab")
+}, {
+"duration": 1.0,
+"texture": ExtResource("181_xvcd1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("182_t0ph7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("183_ocfsy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("184_vowky")
+}, {
+"duration": 1.0,
+"texture": ExtResource("185_oe2lk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("186_0advq")
+}],
+"loop": true,
+"name": &"shotgun_stage_1",
+"speed": 30.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"smg_stage_1",
 "speed": 30.0
 }]
 
@@ -881,11 +1407,32 @@ sorting_offset = 5.0
 render_priority = 3
 texture = ExtResource("43_70w2b")
 
-[node name="FireEffect" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
+[node name="FireEffectFront" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
-render_priority = 6
-sprite_frames = SubResource("SpriteFrames_jelkk")
+sorting_offset = 6.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 3
+sprite_frames = SubResource("SpriteFrames_il840")
+animation = &"rifle_stage_1"
+
+[node name="FireEffectMid" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 2
+sorting_offset = 6.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 3
+sprite_frames = SubResource("SpriteFrames_fqrp5")
+animation = &"shotgun_stage_1"
+
+[node name="FireEffectBack" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 2
+sorting_offset = 6.0
+modulate = Color(1, 1, 1, 0)
+render_priority = 3
+sprite_frames = SubResource("SpriteFrames_x1cwa")
+animation = &"shotgun_stage_1"
 
 [node name="OverheatMultiplyRollerFront" type="Sprite3D" parent="SpriteParent/FireInfusion"]
 layers = 2
@@ -984,7 +1531,6 @@ sorting_offset = 5.0
 render_priority = 3
 
 [node name="ElectricEffect" type="AnimatedSprite3D" parent="SpriteParent/ElectricInfusion"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 6.0
 render_priority = 3
