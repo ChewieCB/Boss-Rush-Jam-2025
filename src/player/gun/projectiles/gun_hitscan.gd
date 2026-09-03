@@ -14,6 +14,8 @@ signal end_pos_set(pos: Vector3)
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 @onready var area_col: CollisionShape3D = $NearbyEnemyCheckArea3D/CollisionShape3D
 
+var base_color: Color
+
 @onready var ricochet_sfx_player: AudioStreamPlayer3D = $Ricochet3dAudio
 
 var alpha = 1.0
@@ -31,6 +33,7 @@ func _ready():
 	var dup_mat = mesh.mesh.material.duplicate()
 	mesh.mesh.material = dup_mat
 	init_color = get_projectile_color()
+	base_color = init_color
 
 func _activate_visuals() -> void:
 	self.visible = true
@@ -213,8 +216,8 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	self.position += current_dir * (distance / 2.0)
 	mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
 	# Reset base color
-	mesh.mesh.material.set_shader_parameter("color", Color("#ff9106"))
-	mesh.mesh.material.set_shader_parameter("emission_color", Color("#ffc600"))
+	mesh.mesh.material.set_shader_parameter("color", base_color)
+	mesh.mesh.material.set_shader_parameter("emission_color", base_color)
 	
 	if is_ricochet_shot:
 		redshift_bullet()
@@ -302,3 +305,5 @@ func change_bullet_color(_new_color: Color):
 	else:
 		mesh.mesh.material.set_shader_parameter("color", _new_color)
 		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
+	
+	base_color = _new_color
