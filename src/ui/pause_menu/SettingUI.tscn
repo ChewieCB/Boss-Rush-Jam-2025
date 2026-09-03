@@ -1116,6 +1116,24 @@ popup/item_1/id = 1
 popup/item_2/text = "Seeded Auto-spin"
 popup/item_2/id = 2
 
+[node name="InfiniteAmmo" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Infinite Ammo"
+
+[node name="InfiniteAmmoToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo"]
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="Freecam" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -1282,6 +1300,8 @@ text = "Back"
 [connection signal="item_selected" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="_on_infinite_ammo_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]

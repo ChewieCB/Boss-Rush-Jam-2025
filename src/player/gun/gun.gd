@@ -362,10 +362,11 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	reload_interrupt = false
 
 	if magazine_ammo_left <= 0:
-		play_failed_shoot_sfx()
-		if not is_reload_disabled:
-			reload()
-		return false
+		if not GameManager.CHEAT_infinite_ammo:
+			play_failed_shoot_sfx()
+			if not is_reload_disabled:
+				reload()
+			return false
 
 	for barrel in installed_barrels:
 		if barrel == null:
@@ -523,9 +524,10 @@ func play_post_shot_anim() -> bool:
 		await post_reload_anim_end
 
 	#anim_tree.set("parameters/reload_timescale/scale", 1.0)
-
-	if magazine_ammo_left <= 0:
-		reload()
+	
+	if not GameManager.CHEAT_infinite_ammo:
+		if magazine_ammo_left <= 0:
+			reload()
 
 	idle_frame_state.travel(idle_state)
 

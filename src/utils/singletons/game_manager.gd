@@ -198,6 +198,7 @@ var CHEAT_demomode_timeout: int = 60:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)
+var CHEAT_infinite_ammo: bool = false
 
 @export var sfx_screenshot: AudioStream
 
