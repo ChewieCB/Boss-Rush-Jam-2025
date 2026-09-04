@@ -20,25 +20,26 @@ signal setting_back_button_pressed
 @onready var controller_deadzone_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/Value
 @onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider
 @onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/Value
-@onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
-@onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
-@onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
-@onready var fps_limit_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton
-@onready var vsync_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton
-@onready var window_mode_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/WindowMode/WindowModeOptionButton
-@onready var resolution_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton
-@onready var scaling_3d_slider: HSlider = $TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider
-@onready var scaling_3d_value: Label = $TabContainer/Graphic/VBoxContainer/Scaling3D/Value
-@onready var max_pool_size_slider: HSlider = $TabContainer/Graphic/VBoxContainer/MaxPoolSize/MaxPoolSizeSlider
-@onready var max_pool_size_value: Label = $TabContainer/Graphic/VBoxContainer/MaxPoolSize/Value
-@onready var hide_ui_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle
-@onready var hide_hurt_overlay_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideHurtOverlay/HideHurtOverlayToggle
-@onready var hide_damage_number_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideDamageNumber/HideDamageNumberToggle
+@onready var controller_mouse_override_toggle: CheckButton = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerForceMouse/ForceMouseToggle
+@onready var fov_slider: HSlider = $TabContainer/Graphic/ScrollContainer/VBoxContainer/FOV/FOVSlider
+@onready var fov_value: Label = $TabContainer/Graphic/ScrollContainer/VBoxContainer/FOV/Value
+@onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/CameraTilt/CameraTiltToggle
+@onready var fps_limit_option_button: OptionButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/FPSLimit/FPSLimitOptionButton
+@onready var vsync_option_button: OptionButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/Vsync/VsyncOptionButton
+@onready var window_mode_option_button: OptionButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/WindowMode/WindowModeOptionButton
+@onready var resolution_option_button: OptionButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/Resolution/ResolutionOptionButton
+@onready var scaling_3d_slider: HSlider = $TabContainer/Graphic/ScrollContainer/VBoxContainer/Scaling3D/Scaling3DSlider
+@onready var scaling_3d_value: Label = $TabContainer/Graphic/ScrollContainer/VBoxContainer/Scaling3D/Value
+@onready var max_pool_size_slider: HSlider = $TabContainer/Graphic/ScrollContainer/VBoxContainer/MaxPoolSize/MaxPoolSizeSlider
+@onready var max_pool_size_value: Label = $TabContainer/Graphic/ScrollContainer/VBoxContainer/MaxPoolSize/Value
+@onready var hide_ui_toggle: CheckButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/HideUI/HideUIToggle
+@onready var hide_hurt_overlay_toggle: CheckButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/HideHurtOverlay/HideHurtOverlayToggle
+@onready var hide_damage_number_toggle: CheckButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/HideDamageNumber/HideDamageNumberToggle
 
 
 # Accessibility
-@onready var screen_shake_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/ScreenShakeToggle/ScreenShakeToggle
-@onready var drunk_blur_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/DrunkBlurToggle/DrunkBlurToggle
+@onready var screen_shake_toggle: CheckButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/ScreenShakeToggle/ScreenShakeToggle
+@onready var drunk_blur_toggle: CheckButton = $TabContainer/Graphic/ScrollContainer/VBoxContainer/DrunkBlurToggle/DrunkBlurToggle
 
 
 @onready var master_slider: HSlider = $TabContainer/Audio/VBoxContainer/Master/MasterSlider
@@ -63,6 +64,7 @@ signal setting_back_button_pressed
 # DEBUG
 @export var sfx_free_money: AudioStream
 @onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
+@onready var boss_god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossGodMode/BossGodModeToggle
 @onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle
 @onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
@@ -70,6 +72,8 @@ signal setting_back_button_pressed
 @onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
 @onready var barrel_spin_mode_dropdown: OptionButton = $TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown
 @onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
+@onready var debug_jam_controls_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DebugJamControls/DebugJamControlsToggle
+@onready var infinite_ammo_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
 
@@ -104,6 +108,13 @@ func _ready() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	GameManager.controller_mouse_override_toggle.connect(
+		func(enabled): 
+			if enabled:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			else:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_on_controller_connection(0, GameManager.is_controller_connected)
@@ -375,12 +386,11 @@ func _on_drunk_blur_toggle_toggled(toggled_on: bool) -> void:
 func refresh_setting_value():
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
-
 	controller_deadzone_slider.value = GameManager.controller_deadzone
 	controller_deadzone_value.text = "{0}".format([GameManager.controller_deadzone])
-
 	aim_assist_slider.value = GameManager.aim_assist_strength * 100
 	aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])
+	controller_mouse_override_toggle.set_pressed_no_signal(GameManager.mouse_controller_override)
 
 	fov_slider.value = GameManager.camera_fov
 	fov_value.text = "{0}".format([GameManager.camera_fov])
@@ -428,11 +438,14 @@ func refresh_setting_value():
 
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
+	boss_god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_invincible_bosses)
 	skip_tutorial_toggle.set_pressed_no_signal(GameManager.CHEAT_skip_tutorial_on_new_game)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
 	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
 	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
+	debug_jam_controls_toggle.set_pressed_no_signal(GameManager.CHEAT_debug_jam_controls)
+	infinite_ammo_toggle.set_pressed_no_signal(GameManager.CHEAT_infinite_ammo)
 	barrel_spin_mode_dropdown.selected = GameManager.CHEAT_spin_mode
 	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
 
@@ -565,3 +578,8 @@ func _on_debug_jam_controls_toggle_toggled(toggled_on: bool) -> void:
 func _on_boss_god_mode_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.CHEAT_invincible_bosses = toggled_on
+
+
+func _on_force_mouse_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.mouse_controller_override = toggled_on

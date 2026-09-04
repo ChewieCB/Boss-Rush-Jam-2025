@@ -67,7 +67,7 @@ func toggle_pause_menu() -> void:
 	AudioServer.set_bus_effect_enabled(1, 0, is_paused)
 	# Update mouse capture/control focus
 	if is_paused:
-		if not is_controller_connected:
+		if not is_controller_connected or GameManager.mouse_controller_override:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			setting_button.grab_focus()
