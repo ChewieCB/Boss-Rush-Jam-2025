@@ -98,6 +98,12 @@ func _input(event: InputEvent) -> void:
 						return
 				
 				input_prompt_navigate.animate()
+		
+		if not current_selected_item_ui:
+			if event.is_action_pressed("ui_page_up"):
+				get_viewport().set_input_as_handled()
+			elif event.is_action_pressed("ui_page_down"):
+				get_viewport().set_input_as_handled()
 
 
 func _process(_delta: float) -> void:

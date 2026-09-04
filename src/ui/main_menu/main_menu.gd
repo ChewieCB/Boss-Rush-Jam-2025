@@ -49,6 +49,11 @@ func _input(event: InputEvent) -> void:
 	if input_disabled:
 		return
 	
+	if event.is_action_pressed("ui_page_up"):
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("ui_page_down"):
+		get_viewport().set_input_as_handled()
+	
 	if event.is_action_pressed("ui_cancel"):
 		if save_ui.visible:
 			save_ui.visible = false
@@ -56,27 +61,12 @@ func _input(event: InputEvent) -> void:
 			story_ui.visible = true
 		elif settings_ui.visible and not settings_ui.is_remapping:
 			settings_ui.visible = false
-			buttons_container.get_child(0).grab_focus()
+			buttons_container.get_child(1).grab_focus()
 			story_ui.visible = true
 		elif credits_ui.visible:
 			credits_ui.visible = false
-			buttons_container.get_child(0).grab_focus()
+			buttons_container.get_child(2).grab_focus()
 			story_ui.visible = true
-
-	if event.is_action_pressed("ui_left"):
-		if credits_ui.visible:
-			var button_container_has_focus = false
-			for child in buttons_container.get_children():
-				if child.has_focus():
-					button_container_has_focus = true
-					break
-			if not button_container_has_focus:
-				buttons_container.get_child(0).grab_focus()
-	
-	if event.is_action_pressed("ui_right"):
-		if credits_ui.visible:
-			for child in buttons_container.get_children():
-				child.release_focus()
 
 
 func _play_button_sfx() -> void:

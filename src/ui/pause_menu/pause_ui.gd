@@ -25,7 +25,7 @@ func _ready() -> void:
 		$PauseOptionBG/VBoxContainer/LobbyButton.text = "Restart"
 	is_paused = false
 	get_tree().paused = false
-	
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	# If the pause menu button is pressed, reset the pause menu and hide/show it
