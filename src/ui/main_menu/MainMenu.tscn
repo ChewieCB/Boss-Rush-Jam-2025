@@ -193,21 +193,37 @@ theme_override_constants/separation = 20
 
 [node name="StartButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../OptionButton")
+focus_next = NodePath("../OptionButton")
+focus_previous = NodePath("../QuitButton")
 theme_override_font_sizes/font_size = 45
 text = "Start"
 
 [node name="OptionButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../StartButton")
+focus_neighbor_bottom = NodePath("../CreditButton")
+focus_next = NodePath("../CreditButton")
+focus_previous = NodePath("../StartButton")
 theme_override_font_sizes/font_size = 45
 text = "Options"
 
 [node name="CreditButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../OptionButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../OptionButton")
 theme_override_font_sizes/font_size = 45
 text = "Credits"
 
 [node name="QuitButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../CreditButton")
+focus_neighbor_bottom = NodePath("../StartButton")
+focus_next = NodePath("../StartButton")
+focus_previous = NodePath("../CreditButton")
 theme_override_font_sizes/font_size = 45
 text = "Quit"
 
@@ -776,13 +792,49 @@ theme_override_constants/separation = 20
 layout_mode = 2
 slot_id = 1
 
+[node name="LoadButton" parent="SaveUI/VBoxContainer/SaveSlotItem/MarginContainer" index="0"]
+focus_neighbor_top = NodePath("../../../SaveSlotItem3/MarginContainer/LoadButton")
+focus_neighbor_bottom = NodePath("../../../SaveSlotItem2/MarginContainer/LoadButton")
+focus_next = NodePath("../../DeleteButton")
+focus_previous = NodePath("../../../SaveSlotItem3/MarginContainer/LoadButton")
+
+[node name="DeleteButton" parent="SaveUI/VBoxContainer/SaveSlotItem" index="1"]
+focus_neighbor_top = NodePath("../../SaveSlotItem3/DeleteButton")
+focus_neighbor_bottom = NodePath("../../SaveSlotItem2/DeleteButton")
+focus_next = NodePath("../../SaveSlotItem2/MarginContainer/LoadButton")
+focus_previous = NodePath("../MarginContainer/LoadButton")
+
 [node name="SaveSlotItem2" parent="SaveUI/VBoxContainer" instance=ExtResource("24_re1j0")]
 layout_mode = 2
 slot_id = 2
 
+[node name="LoadButton" parent="SaveUI/VBoxContainer/SaveSlotItem2/MarginContainer" index="0"]
+focus_neighbor_top = NodePath("../../../SaveSlotItem/MarginContainer/LoadButton")
+focus_neighbor_bottom = NodePath("../../../SaveSlotItem3/MarginContainer/LoadButton")
+focus_next = NodePath("../../DeleteButton")
+focus_previous = NodePath("../../../SaveSlotItem/MarginContainer/LoadButton")
+
+[node name="DeleteButton" parent="SaveUI/VBoxContainer/SaveSlotItem2" index="1"]
+focus_neighbor_top = NodePath("../../SaveSlotItem/DeleteButton")
+focus_neighbor_bottom = NodePath("../../SaveSlotItem3/DeleteButton")
+focus_next = NodePath("../../SaveSlotItem3/MarginContainer/LoadButton")
+focus_previous = NodePath("../MarginContainer/LoadButton")
+
 [node name="SaveSlotItem3" parent="SaveUI/VBoxContainer" instance=ExtResource("24_re1j0")]
 layout_mode = 2
 slot_id = 3
+
+[node name="LoadButton" parent="SaveUI/VBoxContainer/SaveSlotItem3/MarginContainer" index="0"]
+focus_neighbor_top = NodePath("../../../SaveSlotItem2/MarginContainer/LoadButton")
+focus_neighbor_bottom = NodePath("../../../SaveSlotItem/MarginContainer/LoadButton")
+focus_next = NodePath("../../DeleteButton")
+focus_previous = NodePath("../../../SaveSlotItem2/MarginContainer/LoadButton")
+
+[node name="DeleteButton" parent="SaveUI/VBoxContainer/SaveSlotItem3" index="1"]
+focus_neighbor_top = NodePath("../../SaveSlotItem2/DeleteButton")
+focus_neighbor_bottom = NodePath("../../SaveSlotItem/DeleteButton")
+focus_next = NodePath("../../SaveSlotItem/MarginContainer/LoadButton")
+focus_previous = NodePath("../MarginContainer/LoadButton")
 
 [connection signal="focus_entered" from="TitleColumn/VBoxContainer/StartButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
@@ -793,3 +845,7 @@ slot_id = 3
 [connection signal="focus_entered" from="TitleColumn/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="setting_back_button_pressed" from="SettingUI" to="." method="_on_setting_ui_setting_back_button_pressed"]
+
+[editable path="SaveUI/VBoxContainer/SaveSlotItem"]
+[editable path="SaveUI/VBoxContainer/SaveSlotItem2"]
+[editable path="SaveUI/VBoxContainer/SaveSlotItem3"]

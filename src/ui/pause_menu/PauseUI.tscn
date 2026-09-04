@@ -121,22 +121,38 @@ theme_override_constants/separation = 20
 
 [node name="SettingButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../LobbyButton")
+focus_next = NodePath("../LobbyButton")
+focus_previous = NodePath("../QuitButton")
 theme_override_font_sizes/font_size = 35
 text = "Settings"
 
 [node name="LobbyButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../SettingButton")
+focus_neighbor_bottom = NodePath("../MainMenuButton")
+focus_next = NodePath("../MainMenuButton")
+focus_previous = NodePath("../SettingButton")
 theme_override_font_sizes/font_size = 35
 text = "Return to 
 Hub"
 
 [node name="MainMenuButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../LobbyButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../LobbyButton")
 theme_override_font_sizes/font_size = 35
 text = "Main menu"
 
 [node name="QuitButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
+focus_neighbor_top = NodePath("../MainMenuButton")
+focus_neighbor_bottom = NodePath("../SettingButton")
+focus_next = NodePath("../SettingButton")
+focus_previous = NodePath("../MainMenuButton")
 theme_override_font_sizes/font_size = 35
 text = "Quit"
 

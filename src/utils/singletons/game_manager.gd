@@ -16,6 +16,7 @@ signal demo_time_changed
 signal player_level_up
 signal cheat_godmode_toggle(value: bool)
 signal cheat_boss_godmode_toggle(value: bool)
+signal controller_mouse_override_toggle(value: bool)
 
 # TODO: Use Fmod enum to change music state to avoid mismatched name
 enum FmodMusicState {
@@ -177,6 +178,11 @@ var drunk_blur_enabled: bool = true
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
 var is_controller_connected: bool = false
+@export var mouse_controller_override: bool = false:
+	set(value):
+		mouse_controller_override = value
+		controller_mouse_override_toggle.emit(mouse_controller_override)
+		
 var aim_assist_strength: float = 0.5
 
 # DEBUG CHEATS

@@ -495,6 +495,7 @@ offset_right = 200.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="StunShader" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -516,6 +517,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="HurtColor" type="ColorRect" parent="HurtFlash"]
 layout_mode = 1
@@ -524,6 +526,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.65, 0.1404, 0.013, 0.486275)
 
 [node name="HurtBlur" type="ColorRect" parent="HurtFlash"]
@@ -557,6 +560,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(960, 540)
+mouse_filter = 2
 
 [node name="HurtVignette" type="ColorRect" parent="LowHealthOverlay"]
 modulate = Color(0, 0, 0, 1)
@@ -576,6 +580,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.65, 0.14, 0.013, 0.667)
 
 [node name="BloodSmear1" type="TextureRect" parent="LowHealthOverlay"]
@@ -621,6 +626,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="BloodDead1" type="TextureRect" parent="BloodDead"]
 modulate = Color(0, 0, 0, 1)

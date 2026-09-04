@@ -38,17 +38,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_ipm0i")
-shop_title = "Yuya's Barrels"
 barrel_item_ui_prefab = ExtResource("2_ll5g3")
-shop_item_ui_prefab = ExtResource("4_2cim8")
-current_inventory = null
 sfx_open = SubResource("AudioStreamRandomizer_k1v6f")
 sfx_click = ExtResource("6_r2p6i")
 sfx_purchase = ExtResource("7_7ms08")
 sfx_too_expensive = ExtResource("8_26bi3")
 sfx_barrel_equip = ExtResource("9_1namh")
-has_custom_inventory = null
 
 [node name="BlurShader" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_kjq12")
@@ -71,6 +68,7 @@ offset_right = -128.0
 offset_bottom = -120.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 color = Color(0, 0, 0, 0.72549)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Background"]
@@ -128,6 +126,7 @@ offset_top = -284.0
 offset_right = 928.0
 offset_bottom = 380.0
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="EquipTitle" type="Label" parent="EquipBarrelSection"]
 layout_mode = 1
@@ -270,6 +269,7 @@ offset_top = -344.0
 offset_right = 384.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 1
 color = Color(0.505882, 0.505882, 0.505882, 0.27451)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="EquipBarrelSection/BarrelDescription"]
@@ -475,6 +475,7 @@ offset_right = 824.0
 offset_bottom = -56.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 1
 color = Color(0, 0, 0, 0.498039)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp"]

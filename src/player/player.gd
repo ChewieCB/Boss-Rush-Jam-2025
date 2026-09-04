@@ -268,8 +268,12 @@ func _unhandled_input(event):
 
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
-		# (this prevents the PS4 trackpad from triggering aim)
-		if Input.get_connected_joypads():
+		# (this prevents the PS4 and PS5 trackpad from triggering aim)
+		var device_name: String = InputHelper.get_simplified_device_name(Input.get_joy_name(0))
+		var connected_devices = Input.get_connected_joypads()
+		if connected_devices and \
+		device_name == InputHelper.DEVICE_PLAYSTATION_CONTROLLER and \
+		not GameManager.mouse_controller_override:
 			return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:

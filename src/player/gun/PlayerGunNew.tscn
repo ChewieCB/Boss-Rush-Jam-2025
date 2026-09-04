@@ -1408,7 +1408,6 @@ render_priority = 3
 texture = ExtResource("43_70w2b")
 
 [node name="FireEffectFront" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 6.0
 modulate = Color(1, 1, 1, 0)
@@ -1417,7 +1416,6 @@ sprite_frames = SubResource("SpriteFrames_il840")
 animation = &"rifle_stage_1"
 
 [node name="FireEffectMid" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 6.0
 modulate = Color(1, 1, 1, 0)
@@ -1426,7 +1424,6 @@ sprite_frames = SubResource("SpriteFrames_fqrp5")
 animation = &"shotgun_stage_1"
 
 [node name="FireEffectBack" type="AnimatedSprite3D" parent="SpriteParent/FireInfusion"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 6.0
 modulate = Color(1, 1, 1, 0)
