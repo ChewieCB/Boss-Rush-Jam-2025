@@ -109,6 +109,7 @@ offset_right = 1.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_j5xux")
 shop_title = "Yuya's Barrels"
 shop_barrel_item_ui_prefab = ExtResource("2_2niy2")
@@ -177,6 +178,7 @@ offset_top = 83.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="BarrelShopUI" type="Control" parent="MainRegion"]
 layout_mode = 1
@@ -185,6 +187,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="LeftRegion" type="Control" parent="MainRegion/BarrelShopUI"]
 layout_mode = 1
@@ -192,6 +195,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 960.0
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelShopUI/LeftRegion"]
 layout_mode = 1
@@ -320,6 +324,7 @@ anchor_bottom = 1.0
 offset_left = -960.0
 grow_horizontal = 0
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="VendorAvatar" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion"]
 layout_mode = 0
