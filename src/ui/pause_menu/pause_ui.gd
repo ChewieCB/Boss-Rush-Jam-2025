@@ -25,7 +25,7 @@ func _ready() -> void:
 		$PauseOptionBG/VBoxContainer/LobbyButton.text = "Restart"
 	is_paused = false
 	get_tree().paused = false
-	
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	# If the pause menu button is pressed, reset the pause menu and hide/show it
@@ -67,7 +67,7 @@ func toggle_pause_menu() -> void:
 	AudioServer.set_bus_effect_enabled(1, 0, is_paused)
 	# Update mouse capture/control focus
 	if is_paused:
-		if not is_controller_connected:
+		if not is_controller_connected or GameManager.mouse_controller_override:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			setting_button.grab_focus()

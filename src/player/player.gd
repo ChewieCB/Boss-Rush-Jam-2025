@@ -226,6 +226,8 @@ func _ready():
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
+	
+	GameManager.cheat_godmode_toggle.connect(func(is_invincible: bool): health_component.enabled = !is_invincible)
 
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
@@ -266,8 +268,12 @@ func _unhandled_input(event):
 
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
-		# (this prevents the PS4 trackpad from triggering aim)
-		if Input.get_connected_joypads():
+		# (this prevents the PS4 and PS5 trackpad from triggering aim)
+		var device_name: String = InputHelper.get_simplified_device_name(Input.get_joy_name(0))
+		var connected_devices = Input.get_connected_joypads()
+		if connected_devices and \
+		device_name == InputHelper.DEVICE_PLAYSTATION_CONTROLLER and \
+		not GameManager.mouse_controller_override:
 			return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
@@ -282,6 +288,11 @@ func _unhandled_input(event):
 		if GameManager.CHEAT_spin_mode != GameManager.DebugSpinMode.ON_RELOAD:
 			spin_barrels()
 	# DEBUG
+	if GameManager.CHEAT_debug_jam_controls:
+		if event.is_action_pressed("debug_jam_gun"):
+			current_gun.jam_gun(true)
+		if event.is_action_pressed("debug_unjam_gun"):
+			current_gun.unjam_gun()
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	# DEBUG INPUT FOR TESTING

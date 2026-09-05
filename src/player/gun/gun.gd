@@ -252,13 +252,18 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip
 	barrel_flare_sprite = flare_sprites[frame_id]
 	muzzle_flash_sprite = flash_sprites[frame_id]
 
-	var frame_prefixes = ["", "", "shotgun_idle", "smg_idle", "rifle_idle"]
-	var idle_state = frame_prefixes[frame_id]
+	var frame_prefixes = ["", "", "shotgun", "smg", "rifle"]
+	var frame = frame_prefixes[frame_id]
+	var idle_state = frame + "_idle"
 
 	if skip_animation:
 		idle_frame_state.start(idle_state)
 	else:
 		idle_frame_state.travel(idle_state)
+	
+	anim_tree["parameters/elemental_state/transition_request"] = frame
+	#anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
+	#anim_tree["parameters/elemental_add/add_amount"] = 1.0
 
 
 func set_stat_from_gun_frame() -> void:
@@ -357,10 +362,11 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	reload_interrupt = false
 
 	if magazine_ammo_left <= 0:
-		play_failed_shoot_sfx()
-		if not is_reload_disabled:
-			reload()
-		return false
+		if not GameManager.CHEAT_infinite_ammo:
+			play_failed_shoot_sfx()
+			if not is_reload_disabled:
+				reload()
+			return false
 
 	for barrel in installed_barrels:
 		if barrel == null:
@@ -518,9 +524,10 @@ func play_post_shot_anim() -> bool:
 		await post_reload_anim_end
 
 	#anim_tree.set("parameters/reload_timescale/scale", 1.0)
-
-	if magazine_ammo_left <= 0:
-		reload()
+	
+	if not GameManager.CHEAT_infinite_ammo:
+		if magazine_ammo_left <= 0:
+			reload()
 
 	idle_frame_state.travel(idle_state)
 
@@ -1286,15 +1293,23 @@ func set_barrels_unjammed() -> void:
 		SoundManager.play_sound(sfx_gp_clear.pick_random(), "Gun")
 
 
-func jam_gun(pre_anim_delay: float = 1.0) -> void:
+func jam_gun(debug_jam: bool = false, pre_anim_delay: float = 1.0) -> void:
 	is_jammed = true
 	jam_dust_particles.emitting = true
 	jam_spring_particles.restart()
 	set_barrels_jammed()
 	SoundManager.play_sound(sfx_gp_steam.pick_random(), "Gun")
-
+	
+	# Hook to block auto-unjam when debug jam controls are active
+	if GameManager.CHEAT_debug_jam_controls and debug_jam:
+		return
+	
 	await get_tree().create_timer(pre_anim_delay, false).timeout
+	
+	unjam_gun()
 
+
+func unjam_gun() -> void:
 	var idle_state: String = idle_frame_state.get_current_node()
 	if not idle_state.ends_with("idle"):
 		await post_reload_anim_end
@@ -1345,3 +1360,29 @@ func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_fin
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:
 	print("Anim state: %s - %s" % [state_name, transition])
+
+
+
+func remove_elemental_anim() -> void:
+	var frames = ["shotgun", "smg", "rifle"]
+	for _frame in frames:
+		anim_tree["parameters/elemental_%s/playback" % [_frame]].travel("idle")
+
+
+func set_elemental_anim(element: String = "") -> void:
+	if element:
+		var new_frame: String = ""
+		match GameManager.equipped_gun_frame.frame_id:
+			GunFrameResource.GunFrameIdEnum.SHOTGUN:
+				new_frame = "shotgun"
+			GunFrameResource.GunFrameIdEnum.SMG:
+				new_frame = "smg"
+			GunFrameResource.GunFrameIdEnum.SNIPER:
+				new_frame = "rifle"
+		
+		anim_tree["parameters/elemental_state/transition_request"] = new_frame
+		for frame in ["shotgun", "smg", "rifle"]:
+			anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
+		anim_tree["parameters/elemental_add/add_amount"] = 1.0
+	else:
+		anim_tree["parameters/elemental_add/add_amount"] = 0.0

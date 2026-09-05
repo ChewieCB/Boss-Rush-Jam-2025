@@ -4,6 +4,7 @@ signal player_damage(damage: float, damage_pos: Vector3)
 
 func _ready() -> void:
 	super()
+	enabled = !GameManager.CHEAT_godmode
 
 
 func damage(_damage: float, _damage_pos: Vector3 = Vector3.ZERO, 

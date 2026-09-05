@@ -14,6 +14,9 @@ signal refresh_shop_ui
 signal risk_level_changed
 signal demo_time_changed
 signal player_level_up
+signal cheat_godmode_toggle(value: bool)
+signal cheat_boss_godmode_toggle(value: bool)
+signal controller_mouse_override_toggle(value: bool)
 
 # TODO: Use Fmod enum to change music state to avoid mismatched name
 enum FmodMusicState {
@@ -175,11 +178,23 @@ var drunk_blur_enabled: bool = true
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
 var is_controller_connected: bool = false
+@export var mouse_controller_override: bool = false:
+	set(value):
+		mouse_controller_override = value
+		controller_mouse_override_toggle.emit(mouse_controller_override)
+		
 var aim_assist_strength: float = 0.5
 
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
-var CHEAT_godmode: bool = false
+var CHEAT_godmode: bool = false:
+	set(value):
+		CHEAT_godmode = value
+		cheat_godmode_toggle.emit(CHEAT_godmode)
+var CHEAT_invincible_bosses: bool = false:
+	set(value):
+		CHEAT_invincible_bosses = value
+		cheat_boss_godmode_toggle.emit(CHEAT_invincible_bosses)
 var CHEAT_skip_tutorial_on_new_game: bool = false
 enum DebugSpinMode {
 	ON_RELOAD,
@@ -194,6 +209,8 @@ var CHEAT_demomode_timeout: int = 60:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)
+var CHEAT_infinite_ammo: bool = false
+var CHEAT_debug_jam_controls: bool = false
 
 @export var sfx_screenshot: AudioStream
 

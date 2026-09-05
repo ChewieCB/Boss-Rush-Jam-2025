@@ -208,6 +208,8 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
 	await tutorial_panel_tween.finished
 	active_tutorial_panel = null
+	
+	return
 
 
 func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
@@ -258,14 +260,15 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	# TODO - re-enable when we have a main fight intro
 	#boss.activate()
 
-	boss.health_ui.clear_sub_health_bars()
 	match boss.current_phase:
 		4:
-			boss.health_ui.init_boss_health_ui(boss.main_health, 2)
+			boss.phase_count = 2
 			boss.state_chart.send_event("start_tutorial_phase_4")
 		5:
-			boss.health_ui.init_boss_health_ui(boss.phase_5_health, 1)
+			boss.phase_count = 2
 			boss.state_chart.send_event("start_tutorial_phase_5")
+		_:
+			boss.phase_count = 3
 
 	boss.health_ui.show_ui()
 
@@ -398,6 +401,7 @@ func _on_tutorial_finished() -> void:
 	await $AnimationPlayer.animation_finished
 
 	# Tween the camera back
+	# TODO - make the player now face the final cutscene camera position
 	player.player_camera.rotation.y = 0
 	player.player_camera.rotation.z = 0
 	var camera_tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -434,7 +438,7 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	await get_tree().create_timer(0.8, false).timeout
 
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
-
+	
 	# Spark the electrical box
 	door_spark_emitter.emitting = true
 	spark_sfx_player.stream = sfx_door_spark.pick_random()
@@ -561,6 +565,7 @@ func _on_player_death() -> void:
 		cutscene_camera.process_mode = Node.PROCESS_MODE_INHERIT
 		cutscene_camera.global_transform = player.player_camera.global_transform
 		player._enable_cutscene_cam()
+		player.hurt_overlay.update_low_health_anim(0.0, 1.0)
 
 		# Lerp cutscene camera to boss
 		var camera_tween: Tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)

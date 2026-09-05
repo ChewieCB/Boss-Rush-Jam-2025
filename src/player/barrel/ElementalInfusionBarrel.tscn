@@ -46,7 +46,7 @@ icon_id = 49
 script = ExtResource("3_lgco5")
 status_effect = 2
 change_color = true
-new_color = Color(0.162939, 0.660156, 0, 1)
+new_color = Color(0.253167, 0, 0.49, 1)
 
 [node name="ModifyFirerate" type="Node3D" parent="EffectContainer/PoisonInfusion"]
 script = ExtResource("4_o15qj")

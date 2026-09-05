@@ -1,0 +1,914 @@
+[gd_resource type="SpriteFrames" load_steps=217 format=3 uid="uid://crnpgpww0qs60"]
+
+[ext_resource type="Texture2D" uid="uid://dnulgefsiiskc" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0000.png" id="1_q3k61"]
+[ext_resource type="Texture2D" uid="uid://c1jjb4msmn8vl" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0001.png" id="2_c368x"]
+[ext_resource type="Texture2D" uid="uid://f10khxnx2w8d" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0002.png" id="3_bbdnh"]
+[ext_resource type="Texture2D" uid="uid://qylg2fm6kvgp" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0003.png" id="4_6ubsj"]
+[ext_resource type="Texture2D" uid="uid://dd5k28d40ia8o" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0004.png" id="5_ua10k"]
+[ext_resource type="Texture2D" uid="uid://brbsqpcmhjupr" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0005.png" id="6_lw3qd"]
+[ext_resource type="Texture2D" uid="uid://ci62q4fkk5ijf" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0006.png" id="7_noj1r"]
+[ext_resource type="Texture2D" uid="uid://or370ch1x2uh" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0007.png" id="8_cht85"]
+[ext_resource type="Texture2D" uid="uid://dnfmq2l61c6ry" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0008.png" id="9_h0ycu"]
+[ext_resource type="Texture2D" uid="uid://ddkmarfledhv1" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0009.png" id="10_o07sk"]
+[ext_resource type="Texture2D" uid="uid://33nkvg4uobg3" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0010.png" id="11_mleu6"]
+[ext_resource type="Texture2D" uid="uid://b6t5dlylol8xr" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0011.png" id="12_iwu1j"]
+[ext_resource type="Texture2D" uid="uid://ku6gg60bk2qk" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0012.png" id="13_idwgv"]
+[ext_resource type="Texture2D" uid="uid://wnw6bhrkma4j" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0013.png" id="14_evoae"]
+[ext_resource type="Texture2D" uid="uid://bnattyhendig6" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0014.png" id="15_gyxn4"]
+[ext_resource type="Texture2D" uid="uid://dnysb76e0leng" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0015.png" id="16_nv3ic"]
+[ext_resource type="Texture2D" uid="uid://ck0ix4nly5hwl" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0016.png" id="17_xa6mw"]
+[ext_resource type="Texture2D" uid="uid://3ocf0jjyr2r7" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0017.png" id="18_og3ir"]
+[ext_resource type="Texture2D" uid="uid://biiw4df3f1jnl" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0018.png" id="19_emtv2"]
+[ext_resource type="Texture2D" uid="uid://cli3qyc7j5fyq" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0019.png" id="20_3yys3"]
+[ext_resource type="Texture2D" uid="uid://dfkss2p5henfl" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0020.png" id="21_wgqyv"]
+[ext_resource type="Texture2D" uid="uid://bpjnkg5uvd5pc" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0021.png" id="22_nwgtj"]
+[ext_resource type="Texture2D" uid="uid://5fpyn26mni5i" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0022.png" id="23_mek0v"]
+[ext_resource type="Texture2D" uid="uid://bdt5erb6sik3d" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-01/Sniper_Lightning_Stage1_0023.png" id="24_lou2b"]
+[ext_resource type="Texture2D" uid="uid://b1xu37q1iaba2" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0000.png" id="25_whl0i"]
+[ext_resource type="Texture2D" uid="uid://df08fnis4btcl" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0001.png" id="26_veaat"]
+[ext_resource type="Texture2D" uid="uid://d2lx5grggydof" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0002.png" id="27_gy0r1"]
+[ext_resource type="Texture2D" uid="uid://cw6p78gmru1lp" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0003.png" id="28_4il2i"]
+[ext_resource type="Texture2D" uid="uid://bp56ny8hxu4i5" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0004.png" id="29_df22c"]
+[ext_resource type="Texture2D" uid="uid://bsownxg0w1473" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0005.png" id="30_qwdhm"]
+[ext_resource type="Texture2D" uid="uid://bwq006ew1y8xr" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0006.png" id="31_tjw27"]
+[ext_resource type="Texture2D" uid="uid://b0k50fn4xx0do" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0007.png" id="32_1tow3"]
+[ext_resource type="Texture2D" uid="uid://bkjvf48x5mwn2" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0008.png" id="33_th1wr"]
+[ext_resource type="Texture2D" uid="uid://cm0qw4fcdcjka" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0009.png" id="34_ykgai"]
+[ext_resource type="Texture2D" uid="uid://km6dnv54er4j" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0010.png" id="35_1u3l0"]
+[ext_resource type="Texture2D" uid="uid://crl6byj0s046u" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0011.png" id="36_oairk"]
+[ext_resource type="Texture2D" uid="uid://65vlggsxgdac" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0012.png" id="37_urlqp"]
+[ext_resource type="Texture2D" uid="uid://d31daep0r0dbp" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0013.png" id="38_hrnkt"]
+[ext_resource type="Texture2D" uid="uid://ud8ppxr7m7n2" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0014.png" id="39_vvcfv"]
+[ext_resource type="Texture2D" uid="uid://crg2oirhybn5f" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0015.png" id="40_baf3s"]
+[ext_resource type="Texture2D" uid="uid://casnl7802jigt" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0016.png" id="41_k51il"]
+[ext_resource type="Texture2D" uid="uid://h4q8ajhmh5os" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0017.png" id="42_tyrnh"]
+[ext_resource type="Texture2D" uid="uid://dwuh4y74qqee6" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0018.png" id="43_m3xoi"]
+[ext_resource type="Texture2D" uid="uid://q8r2mfj8udur" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0019.png" id="44_u7pf2"]
+[ext_resource type="Texture2D" uid="uid://b7hpt2u3jww3t" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0020.png" id="45_da5rn"]
+[ext_resource type="Texture2D" uid="uid://xkgxkcfmjpoo" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0021.png" id="46_mqkc3"]
+[ext_resource type="Texture2D" uid="uid://d1d8yvjpqmhvn" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0022.png" id="47_i2opk"]
+[ext_resource type="Texture2D" uid="uid://d3x8u6dfx612b" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-02/Sniper_Lightning-Stage2_0023.png" id="48_13vch"]
+[ext_resource type="Texture2D" uid="uid://drxlgxrf1wo37" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0000.png" id="49_lpesh"]
+[ext_resource type="Texture2D" uid="uid://54k8pcqaivna" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0001.png" id="50_5ewyv"]
+[ext_resource type="Texture2D" uid="uid://lkmi8a3qtkva" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0002.png" id="51_fc22a"]
+[ext_resource type="Texture2D" uid="uid://c67p8rnyyg7m3" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0003.png" id="52_wyjqv"]
+[ext_resource type="Texture2D" uid="uid://dhvmwssg00u5c" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0004.png" id="53_oug00"]
+[ext_resource type="Texture2D" uid="uid://pctf74n7xskt" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0005.png" id="54_2h351"]
+[ext_resource type="Texture2D" uid="uid://kw5mux5v1xoe" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0006.png" id="55_xbh0n"]
+[ext_resource type="Texture2D" uid="uid://wgkr6hu7sbae" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0007.png" id="56_cscyf"]
+[ext_resource type="Texture2D" uid="uid://7mwstwp5h6cp" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0008.png" id="57_aypjh"]
+[ext_resource type="Texture2D" uid="uid://d17m84lejkf2k" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0009.png" id="58_u2glr"]
+[ext_resource type="Texture2D" uid="uid://bjtk71xbsoll6" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0010.png" id="59_7ugmx"]
+[ext_resource type="Texture2D" uid="uid://c2nd27kt0gry" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0011.png" id="60_3h8we"]
+[ext_resource type="Texture2D" uid="uid://cy82bsx6s2b4q" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0012.png" id="61_rydw7"]
+[ext_resource type="Texture2D" uid="uid://cn1ckdvgpqel6" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0013.png" id="62_sifeg"]
+[ext_resource type="Texture2D" uid="uid://bqrgydti2cm7m" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0014.png" id="63_cpxrk"]
+[ext_resource type="Texture2D" uid="uid://bp80jpiile0cm" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0015.png" id="64_v8fro"]
+[ext_resource type="Texture2D" uid="uid://bk1euikg8y8d7" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0016.png" id="65_jsn8n"]
+[ext_resource type="Texture2D" uid="uid://cqe05h3oi5f5f" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0017.png" id="66_0y8nr"]
+[ext_resource type="Texture2D" uid="uid://ckl7whw7g1diq" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0018.png" id="67_g54xg"]
+[ext_resource type="Texture2D" uid="uid://ckrd8vdwxpcu" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0019.png" id="68_jt1ke"]
+[ext_resource type="Texture2D" uid="uid://dpjbho4joeama" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0020.png" id="69_rotm0"]
+[ext_resource type="Texture2D" uid="uid://bdwgqtn8g6rpp" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0021.png" id="70_kesp7"]
+[ext_resource type="Texture2D" uid="uid://dnmgh0w52w2be" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0022.png" id="71_ktoqd"]
+[ext_resource type="Texture2D" uid="uid://cae5lms5bxbr5" path="res://src/player/gun/assets/sprite/elemental/electric/rifle/Sniper-Lighting-03/Sniper_Lightning_Stage3_0023.png" id="72_81if1"]
+[ext_resource type="Texture2D" uid="uid://b57id1lrdwk5s" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0000.png" id="73_wosle"]
+[ext_resource type="Texture2D" uid="uid://cp5x3wa23dpci" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0001.png" id="74_ir4aw"]
+[ext_resource type="Texture2D" uid="uid://chriuplkmw0np" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0002.png" id="75_7xvji"]
+[ext_resource type="Texture2D" uid="uid://dbxhjytenr5g8" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0003.png" id="76_dm1ce"]
+[ext_resource type="Texture2D" uid="uid://d27uqkrj8kdh5" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0004.png" id="77_fqfnt"]
+[ext_resource type="Texture2D" uid="uid://dp85mlhc6qsed" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0005.png" id="78_biibc"]
+[ext_resource type="Texture2D" uid="uid://irpu14ap1g5h" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0006.png" id="79_elx8c"]
+[ext_resource type="Texture2D" uid="uid://ct47a6mt6gaoy" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0007.png" id="80_dqbio"]
+[ext_resource type="Texture2D" uid="uid://cixgsyql1bhqx" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0008.png" id="81_cxoff"]
+[ext_resource type="Texture2D" uid="uid://caficd0uf6313" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0009.png" id="82_ekcqg"]
+[ext_resource type="Texture2D" uid="uid://bay7c6ltga785" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0010.png" id="83_m3p4c"]
+[ext_resource type="Texture2D" uid="uid://ngycshtppf13" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0011.png" id="84_nbflc"]
+[ext_resource type="Texture2D" uid="uid://c8qgreisk5mjq" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0012.png" id="85_x8a62"]
+[ext_resource type="Texture2D" uid="uid://b1ija1pwbttap" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0013.png" id="86_h0n7v"]
+[ext_resource type="Texture2D" uid="uid://nxb6hgxmchnk" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0014.png" id="87_5qlnl"]
+[ext_resource type="Texture2D" uid="uid://cmot8gwyollth" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0015.png" id="88_tw8p0"]
+[ext_resource type="Texture2D" uid="uid://df853hvk1j2oc" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0016.png" id="89_ugynv"]
+[ext_resource type="Texture2D" uid="uid://ovxd3u65y5l2" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0017.png" id="90_xkvox"]
+[ext_resource type="Texture2D" uid="uid://ei02t0jnib8e" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0018.png" id="91_v111s"]
+[ext_resource type="Texture2D" uid="uid://ywoinumceiu2" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0019.png" id="92_ihly2"]
+[ext_resource type="Texture2D" uid="uid://hefkprgaflss" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0020.png" id="93_8brr0"]
+[ext_resource type="Texture2D" uid="uid://b0c525uyxaxn0" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0021.png" id="94_y4x8k"]
+[ext_resource type="Texture2D" uid="uid://0btkudpam76l" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0022.png" id="95_fmxfd"]
+[ext_resource type="Texture2D" uid="uid://oret0vankjh1" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-01-Lightning/Shotgun_Lightning_Stage1_0023.png" id="96_6wxoq"]
+[ext_resource type="Texture2D" uid="uid://cfda7yycojfjj" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0000.png" id="97_op3ke"]
+[ext_resource type="Texture2D" uid="uid://ce13m7wmwqern" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0001.png" id="98_6y0dk"]
+[ext_resource type="Texture2D" uid="uid://7d86tbh2ejkv" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0002.png" id="99_w5vbm"]
+[ext_resource type="Texture2D" uid="uid://cifcou4mi6ggr" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0003.png" id="100_ck3ny"]
+[ext_resource type="Texture2D" uid="uid://g28imks0gmf3" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0004.png" id="101_8suro"]
+[ext_resource type="Texture2D" uid="uid://bbl7fcg8ygkrv" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0005.png" id="102_f7ka3"]
+[ext_resource type="Texture2D" uid="uid://cuyifuu7tfut0" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0006.png" id="103_samnj"]
+[ext_resource type="Texture2D" uid="uid://poqcghhpkp4b" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0007.png" id="104_at7pu"]
+[ext_resource type="Texture2D" uid="uid://c0245mgf3fm4" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0008.png" id="105_khibt"]
+[ext_resource type="Texture2D" uid="uid://ceoxcgerust2c" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0009.png" id="106_dwipg"]
+[ext_resource type="Texture2D" uid="uid://buvq2vljvwavf" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0010.png" id="107_f7rol"]
+[ext_resource type="Texture2D" uid="uid://cacifmx8caugv" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0011.png" id="108_ux5my"]
+[ext_resource type="Texture2D" uid="uid://djtcl1d3njahc" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0012.png" id="109_pfijy"]
+[ext_resource type="Texture2D" uid="uid://dj1komdp7ih8h" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0013.png" id="110_xn8wn"]
+[ext_resource type="Texture2D" uid="uid://0mlllnp2meck" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0014.png" id="111_lan0h"]
+[ext_resource type="Texture2D" uid="uid://bawcqfgyn40ye" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0015.png" id="112_d27t1"]
+[ext_resource type="Texture2D" uid="uid://imktd5t52y36" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0016.png" id="113_a53ll"]
+[ext_resource type="Texture2D" uid="uid://bojxqretai3qv" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0017.png" id="114_pfxtw"]
+[ext_resource type="Texture2D" uid="uid://cu5wlrax2piln" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0018.png" id="115_8ohib"]
+[ext_resource type="Texture2D" uid="uid://87myco1bcjnd" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0019.png" id="116_x5g87"]
+[ext_resource type="Texture2D" uid="uid://qxtrntexsskw" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0020.png" id="117_fcatu"]
+[ext_resource type="Texture2D" uid="uid://bc46nkg02754k" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0021.png" id="118_l0w4j"]
+[ext_resource type="Texture2D" uid="uid://m3m2dultljci" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0022.png" id="119_1xd0p"]
+[ext_resource type="Texture2D" uid="uid://b3rejogscrs4t" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-02-Lightning/Shotgun_Lightning_Stage2_0023.png" id="120_j3o7s"]
+[ext_resource type="Texture2D" uid="uid://dsif02hmp0kf" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0000.png" id="121_y6dr3"]
+[ext_resource type="Texture2D" uid="uid://bj4t3wqhsx8nj" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0001.png" id="122_nfyx3"]
+[ext_resource type="Texture2D" uid="uid://bfsdveufry5wq" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0002.png" id="123_88vrj"]
+[ext_resource type="Texture2D" uid="uid://co3a7saeilkf6" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0003.png" id="124_mrcbm"]
+[ext_resource type="Texture2D" uid="uid://c7vhjtr8e3akh" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0004.png" id="125_6ucx3"]
+[ext_resource type="Texture2D" uid="uid://bpcc3cex05qv3" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0005.png" id="126_gutv4"]
+[ext_resource type="Texture2D" uid="uid://cpmgjr1iu4msd" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0006.png" id="127_xcnxg"]
+[ext_resource type="Texture2D" uid="uid://c66t0aehuu45d" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0007.png" id="128_tclit"]
+[ext_resource type="Texture2D" uid="uid://bpw6hi1c8ia3s" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0008.png" id="129_hn16q"]
+[ext_resource type="Texture2D" uid="uid://q40e2sqwnfge" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0009.png" id="130_irg8m"]
+[ext_resource type="Texture2D" uid="uid://dumfumdxxajmf" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0010.png" id="131_j7wpc"]
+[ext_resource type="Texture2D" uid="uid://dyvf4ng4u2um1" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0011.png" id="132_ysaed"]
+[ext_resource type="Texture2D" uid="uid://cln22ud5wa7u1" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0012.png" id="133_1rua2"]
+[ext_resource type="Texture2D" uid="uid://dibdrj2qye6f1" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0013.png" id="134_vdin1"]
+[ext_resource type="Texture2D" uid="uid://rcvduny8oj4f" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0014.png" id="135_igkno"]
+[ext_resource type="Texture2D" uid="uid://1bhh23r8xciv" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0015.png" id="136_xa2yr"]
+[ext_resource type="Texture2D" uid="uid://dyerkfu36oo7o" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0016.png" id="137_d0rgr"]
+[ext_resource type="Texture2D" uid="uid://lf7qlu5s1gt6" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0017.png" id="138_1shac"]
+[ext_resource type="Texture2D" uid="uid://bua3er0702xgs" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0018.png" id="139_kfwla"]
+[ext_resource type="Texture2D" uid="uid://c2c3e6j0ci6xo" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0019.png" id="140_fyd22"]
+[ext_resource type="Texture2D" uid="uid://dv8yf1rokmn6d" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0020.png" id="141_7hq2l"]
+[ext_resource type="Texture2D" uid="uid://cw3l7ojad25sf" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0021.png" id="142_fc78c"]
+[ext_resource type="Texture2D" uid="uid://cndwmktxcwk0q" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0022.png" id="143_0g1sj"]
+[ext_resource type="Texture2D" uid="uid://cn2p4iw86qo0e" path="res://src/player/gun/assets/sprite/elemental/electric/shotgun/Asset-03-Lightning/Shotgun_Lightning_Stage3_0023.png" id="144_noagg"]
+[ext_resource type="Texture2D" uid="uid://2b06mfob4ayn" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0000.png" id="145_j46la"]
+[ext_resource type="Texture2D" uid="uid://c3w3vdyya6bwr" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0001.png" id="146_ufmmc"]
+[ext_resource type="Texture2D" uid="uid://ckaqpduhfq8yi" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0002.png" id="147_dn1xc"]
+[ext_resource type="Texture2D" uid="uid://c0g8pdagli0hh" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0003.png" id="148_wkxbn"]
+[ext_resource type="Texture2D" uid="uid://c4k04ygfc3neb" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0004.png" id="149_cg08v"]
+[ext_resource type="Texture2D" uid="uid://wfxvi7yhvfkl" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0005.png" id="150_te4ni"]
+[ext_resource type="Texture2D" uid="uid://cedbdoink2ry0" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0006.png" id="151_qkfoq"]
+[ext_resource type="Texture2D" uid="uid://cm6h2l7i08oyo" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0007.png" id="152_gwyv5"]
+[ext_resource type="Texture2D" uid="uid://2sw01t0cn0vg" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0008.png" id="153_672we"]
+[ext_resource type="Texture2D" uid="uid://crjrxp144etwb" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0009.png" id="154_m3hcw"]
+[ext_resource type="Texture2D" uid="uid://dthljibukhw27" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0010.png" id="155_wvmq6"]
+[ext_resource type="Texture2D" uid="uid://dl6i4b4ia1ne5" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0011.png" id="156_6igo1"]
+[ext_resource type="Texture2D" uid="uid://lsr4fsvl1keb" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0012.png" id="157_3r71g"]
+[ext_resource type="Texture2D" uid="uid://bidrc4sgih07" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0013.png" id="158_thlye"]
+[ext_resource type="Texture2D" uid="uid://bnfchwhbw3bac" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0014.png" id="159_abysu"]
+[ext_resource type="Texture2D" uid="uid://divvurnmrj5o8" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0015.png" id="160_6cked"]
+[ext_resource type="Texture2D" uid="uid://dgmnqu2vl6gik" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0016.png" id="161_u6b1c"]
+[ext_resource type="Texture2D" uid="uid://5r1ldcfciik5" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0017.png" id="162_yadc7"]
+[ext_resource type="Texture2D" uid="uid://dfkny8wewm1hm" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0018.png" id="163_2e4ks"]
+[ext_resource type="Texture2D" uid="uid://bjdulcy0lw5t7" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0019.png" id="164_xirmt"]
+[ext_resource type="Texture2D" uid="uid://d3414xnja53j5" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0020.png" id="165_5chqj"]
+[ext_resource type="Texture2D" uid="uid://hthm6k8pio45" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0021.png" id="166_863h6"]
+[ext_resource type="Texture2D" uid="uid://dbdguc1srkg5a" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0022.png" id="167_58csg"]
+[ext_resource type="Texture2D" uid="uid://bbg4qr5q3hlan" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-01/SMG_Lightning-Stage1_0023.png" id="168_ixkfy"]
+[ext_resource type="Texture2D" uid="uid://kxrroav1db84" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0000.png" id="169_7b00d"]
+[ext_resource type="Texture2D" uid="uid://c4lla6ilxan5o" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0001.png" id="170_xglra"]
+[ext_resource type="Texture2D" uid="uid://3v4bn7g0fsgl" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0002.png" id="171_kglxw"]
+[ext_resource type="Texture2D" uid="uid://llseghttejkp" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0003.png" id="172_y28bp"]
+[ext_resource type="Texture2D" uid="uid://cdlja4vuvcdsi" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0004.png" id="173_03xr7"]
+[ext_resource type="Texture2D" uid="uid://vg057fq62l2g" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0005.png" id="174_nwdbl"]
+[ext_resource type="Texture2D" uid="uid://c4yvocq6dwy6u" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0006.png" id="175_bojda"]
+[ext_resource type="Texture2D" uid="uid://cm7bxxg1bjl80" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0007.png" id="176_uh5di"]
+[ext_resource type="Texture2D" uid="uid://cqno4wixd458" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0008.png" id="177_dlppt"]
+[ext_resource type="Texture2D" uid="uid://x5kd0h2afrfq" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0009.png" id="178_78pnv"]
+[ext_resource type="Texture2D" uid="uid://lvq2v10ejn1w" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0010.png" id="179_tadn4"]
+[ext_resource type="Texture2D" uid="uid://cj57iquxg408k" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0011.png" id="180_tcm4y"]
+[ext_resource type="Texture2D" uid="uid://n14hjfvyat5r" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0012.png" id="181_c6qxi"]
+[ext_resource type="Texture2D" uid="uid://hvsr5ehj27wm" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0013.png" id="182_ncnek"]
+[ext_resource type="Texture2D" uid="uid://hpa4buk28p3u" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0014.png" id="183_21x8f"]
+[ext_resource type="Texture2D" uid="uid://ba10miljqge2y" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0015.png" id="184_wlrfc"]
+[ext_resource type="Texture2D" uid="uid://68egtxu02x3x" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0016.png" id="185_155ra"]
+[ext_resource type="Texture2D" uid="uid://dongtur0m54ul" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0017.png" id="186_8iqtm"]
+[ext_resource type="Texture2D" uid="uid://t60bclv3e1ey" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0018.png" id="187_otdkf"]
+[ext_resource type="Texture2D" uid="uid://b4bs54m60u5h5" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0019.png" id="188_lg42i"]
+[ext_resource type="Texture2D" uid="uid://bbhqocp76hrjk" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0020.png" id="189_uysxc"]
+[ext_resource type="Texture2D" uid="uid://dibmr1er44jfo" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0021.png" id="190_rxgsk"]
+[ext_resource type="Texture2D" uid="uid://bfdf0yacgpwii" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0022.png" id="191_0eupk"]
+[ext_resource type="Texture2D" uid="uid://degitvaerajan" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-02/SMG_lightning-Stage2_0023.png" id="192_m2qnw"]
+[ext_resource type="Texture2D" uid="uid://becrkg4cdu42w" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0000.png" id="193_bn026"]
+[ext_resource type="Texture2D" uid="uid://blakdx7ipwkgs" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0001.png" id="194_deari"]
+[ext_resource type="Texture2D" uid="uid://dcliysc3l3lb7" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0002.png" id="195_oeqo1"]
+[ext_resource type="Texture2D" uid="uid://cflj30xcksqol" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0003.png" id="196_5t170"]
+[ext_resource type="Texture2D" uid="uid://cye4lo0qbcqgx" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0004.png" id="197_1auhg"]
+[ext_resource type="Texture2D" uid="uid://jpt4glhhbkwj" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0005.png" id="198_5iidu"]
+[ext_resource type="Texture2D" uid="uid://bcvfnasqrca5r" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0006.png" id="199_cmjcv"]
+[ext_resource type="Texture2D" uid="uid://2a1qrulsot3u" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0007.png" id="200_aj4td"]
+[ext_resource type="Texture2D" uid="uid://ckndwjopwq5r" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0008.png" id="201_aw1j4"]
+[ext_resource type="Texture2D" uid="uid://chy8wd04c3gbx" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0009.png" id="202_0vgx5"]
+[ext_resource type="Texture2D" uid="uid://bwdivltbibxns" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0010.png" id="203_brc7e"]
+[ext_resource type="Texture2D" uid="uid://ce51djn7eage7" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0011.png" id="204_7w66u"]
+[ext_resource type="Texture2D" uid="uid://dnkbsscejkj7f" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0012.png" id="205_qpfu1"]
+[ext_resource type="Texture2D" uid="uid://doc5sbxd53k3r" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0013.png" id="206_gygc3"]
+[ext_resource type="Texture2D" uid="uid://dsj064dd3o4ue" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0014.png" id="207_u1dyj"]
+[ext_resource type="Texture2D" uid="uid://shd3y3llqjqy" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0015.png" id="208_h6p37"]
+[ext_resource type="Texture2D" uid="uid://1sbq0vwupkx3" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0016.png" id="209_vfc6x"]
+[ext_resource type="Texture2D" uid="uid://bmqhqt5ri6cmm" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0017.png" id="210_skmgy"]
+[ext_resource type="Texture2D" uid="uid://d038cjetynmfe" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0018.png" id="211_kcd5p"]
+[ext_resource type="Texture2D" uid="uid://11i8806p07do" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0019.png" id="212_rmr63"]
+[ext_resource type="Texture2D" uid="uid://bla7h6uqtpo48" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0020.png" id="213_qyg15"]
+[ext_resource type="Texture2D" uid="uid://bybv13aicjala" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0021.png" id="214_x0x3x"]
+[ext_resource type="Texture2D" uid="uid://8gi7dcsxgm0a" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0022.png" id="215_opdyi"]
+[ext_resource type="Texture2D" uid="uid://ckwki0lxh0mi5" path="res://src/player/gun/assets/sprite/elemental/electric/smg/Asset-Lightning-03/SMG_Lightning_Stage3_0023.png" id="216_bbtoi"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_q3k61")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_c368x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_bbdnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_6ubsj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ua10k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_lw3qd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_noj1r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_cht85")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_h0ycu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_o07sk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_mleu6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_iwu1j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_idwgv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_evoae")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_gyxn4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_nv3ic")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_xa6mw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_og3ir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_emtv2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_3yys3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_wgqyv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_nwgtj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_mek0v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_lou2b")
+}],
+"loop": true,
+"name": &"rifle_stage_1",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_whl0i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_veaat")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_gy0r1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_4il2i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_df22c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_qwdhm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_tjw27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_1tow3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_th1wr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_ykgai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_1u3l0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_oairk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_urlqp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_hrnkt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_vvcfv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_baf3s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_k51il")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_tyrnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_m3xoi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_u7pf2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_da5rn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_mqkc3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_i2opk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_13vch")
+}],
+"loop": true,
+"name": &"rifle_stage_2",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_lpesh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_5ewyv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_fc22a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_wyjqv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_oug00")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_2h351")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_xbh0n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_cscyf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_aypjh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_u2glr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_7ugmx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_3h8we")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_rydw7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_sifeg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_cpxrk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_v8fro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_jsn8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_0y8nr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_g54xg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_jt1ke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_rotm0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_kesp7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_ktoqd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_81if1")
+}],
+"loop": true,
+"name": &"rifle_stage_3",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("73_wosle")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_ir4aw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_7xvji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_dm1ce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_fqfnt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_biibc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_elx8c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_dqbio")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_cxoff")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_ekcqg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_m3p4c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_nbflc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_x8a62")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_h0n7v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_5qlnl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_tw8p0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_ugynv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_xkvox")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_v111s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_ihly2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_8brr0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_y4x8k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_fmxfd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_6wxoq")
+}],
+"loop": true,
+"name": &"shotgun_stage_1",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("97_op3ke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_6y0dk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_w5vbm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_ck3ny")
+}, {
+"duration": 1.0,
+"texture": ExtResource("101_8suro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_f7ka3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_samnj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_at7pu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_khibt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("106_dwipg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_f7rol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_ux5my")
+}, {
+"duration": 1.0,
+"texture": ExtResource("109_pfijy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_xn8wn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_lan0h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("112_d27t1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("113_a53ll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("114_pfxtw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("115_8ohib")
+}, {
+"duration": 1.0,
+"texture": ExtResource("116_x5g87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("117_fcatu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("118_l0w4j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("119_1xd0p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("120_j3o7s")
+}],
+"loop": true,
+"name": &"shotgun_stage_2",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("121_y6dr3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("122_nfyx3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_88vrj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_mrcbm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_6ucx3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("126_gutv4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("127_xcnxg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_tclit")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_hn16q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("130_irg8m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("131_j7wpc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("132_ysaed")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_1rua2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_vdin1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("135_igkno")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_xa2yr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_d0rgr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("138_1shac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("139_kfwla")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_fyd22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_7hq2l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_fc78c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("143_0g1sj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("144_noagg")
+}],
+"loop": true,
+"name": &"shotgun_stage_3",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("145_j46la")
+}, {
+"duration": 1.0,
+"texture": ExtResource("146_ufmmc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("147_dn1xc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("148_wkxbn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_cg08v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("150_te4ni")
+}, {
+"duration": 1.0,
+"texture": ExtResource("151_qkfoq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_gwyv5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("153_672we")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_m3hcw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_wvmq6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("156_6igo1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("157_3r71g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_thlye")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_abysu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_6cked")
+}, {
+"duration": 1.0,
+"texture": ExtResource("161_u6b1c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("162_yadc7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("163_2e4ks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("164_xirmt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_5chqj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_863h6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("167_58csg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("168_ixkfy")
+}],
+"loop": true,
+"name": &"smg_stage_1",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("169_7b00d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("170_xglra")
+}, {
+"duration": 1.0,
+"texture": ExtResource("171_kglxw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("172_y28bp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("173_03xr7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("174_nwdbl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("175_bojda")
+}, {
+"duration": 1.0,
+"texture": ExtResource("176_uh5di")
+}, {
+"duration": 1.0,
+"texture": ExtResource("177_dlppt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("178_78pnv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("179_tadn4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("180_tcm4y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("181_c6qxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("182_ncnek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("183_21x8f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("184_wlrfc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("185_155ra")
+}, {
+"duration": 1.0,
+"texture": ExtResource("186_8iqtm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("187_otdkf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("188_lg42i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("189_uysxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("190_rxgsk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("191_0eupk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("192_m2qnw")
+}],
+"loop": true,
+"name": &"smg_stage_2",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("193_bn026")
+}, {
+"duration": 1.0,
+"texture": ExtResource("194_deari")
+}, {
+"duration": 1.0,
+"texture": ExtResource("195_oeqo1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("196_5t170")
+}, {
+"duration": 1.0,
+"texture": ExtResource("197_1auhg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("198_5iidu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("199_cmjcv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("200_aj4td")
+}, {
+"duration": 1.0,
+"texture": ExtResource("201_aw1j4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("202_0vgx5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("203_brc7e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("204_7w66u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("205_qpfu1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("206_gygc3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("207_u1dyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("208_h6p37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("209_vfc6x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("210_skmgy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("211_kcd5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("212_rmr63")
+}, {
+"duration": 1.0,
+"texture": ExtResource("213_qyg15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("214_x0x3x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("215_opdyi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("216_bbtoi")
+}],
+"loop": true,
+"name": &"smg_stage_3",
+"speed": 30.0
+}]

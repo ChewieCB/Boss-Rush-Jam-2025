@@ -33,6 +33,14 @@ enum BossStatusEffect {
 	BLEEDING # Take damage based on their movement
 }
 
+@export_category("Health Phases")
+@export var main_health: int = 5000
+@export var phase_1_health: int = 5000
+@export var phase_2_health: int = 0
+@export var phase_3_health: int = 0
+@export var phase_4_health: int = 0
+@export var phase_5_health: int = 0
+
 @export var target: Node3D:
 	set(value):
 		target = value
@@ -128,6 +136,7 @@ var debug_trajectory_mesh: MeshInstance3D
 # const HIT_EFFECT_INITIAL_VALUE = 0.4
 # const HIT_EFFECT_FADE_SPEED = 1.5
 @export_subgroup("Hurt Frame")
+@export var hit_material: ShaderMaterial
 # TODO - make this an actual stagger that delays/interrupts attacks?
 @export var hurt_frame_window: float = 0.6
 @export var hurt_frame_cooldown: float = 1.5
@@ -139,6 +148,7 @@ var hit_tween: Tween
 
 @export_group("Phase")
 @export var current_phase: int = 1
+@export var phase_count: int = 2
 
 # Make sure the boss doesn't spam attacks
 # TODO - make this more modular
@@ -188,7 +198,8 @@ var spawned_area_objects = []
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
-@onready var health_ui: BossHealthBar = $UI/HealthUI/BossHealthContainer
+@export_group("UI")
+@export var health_ui: BossHealthBar
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 @export_group("Movement")
@@ -225,22 +236,14 @@ func _ready() -> void:
 	print_debug("BossCore ready")
 	_original_sprite_position = sprite.position
 	_original_sprite_modulate = sprite.modulate
-	sprite.texture_changed.connect(_update_hit_shader.bind(sprite))
-	sprite.material_override.set_shader_parameter("tex", sprite.texture)
-	sprite.material_override.set_shader_parameter("active", false)
-	for child in sprite.get_children():
-		if child is Sprite3D:
-			child.texture_changed.connect(_update_hit_shader.bind(child))
-			child.material_override.set_shader_parameter("tex", child.texture)
-			child.material_override.set_shader_parameter("active", false)
 	
 	randomize()
 	
 	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
-	if GameManager.all_bosses_defeated:
-		health_component.max_health *= 2
-		health_component.initialize_health()
+	#if GameManager.all_bosses_defeated:
+		#health_component.max_health *= 2
+		#health_component.initialize_health()
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	debug_trajectory_mesh = MeshInstance3D.new()
@@ -254,11 +257,25 @@ func _ready() -> void:
 	for i in range(50):
 		_init_chip_pool.call_deferred()
 
-	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(int(health_component.max_health), 1)
+	health_component.max_health = main_health
+	health_component.initialize_health()
+	health_component.is_invincible = GameManager.CHEAT_invincible_bosses
+	GameManager.cheat_boss_godmode_toggle.connect(
+		func(enabled: bool):
+			health_component.is_invincible = enabled
+	)
+	
+	var phase_health_arr: Array[int] = []
+	for health in [phase_1_health, phase_2_health, phase_3_health, phase_4_health, phase_5_health]:
+		if health > 0:
+			phase_health_arr.append(health)
+	health_ui.phase_health_arr = phase_health_arr
+	health_ui.init_boss_health_ui()
 
 	if owner:
 		await owner.ready
+	
+	init_hit_flash_shader()
 	
 	# Cheat/debug flags
 	if GameManager.CHEAT_oneshot:
@@ -268,6 +285,21 @@ func _ready() -> void:
 		health_component.current_health = 1
 		
 	print_debug("BossCore ready end")
+
+
+func init_hit_flash_shader() -> void:
+	# Load and connect hit shader to sprite materials
+	var depth_bias: float = 0.0
+	for _sprite in [sprite] + sprite.get_children():
+		if _sprite is Sprite3D:
+			var mat = hit_material.duplicate()
+			_sprite.material_override = mat
+			_sprite.material_override.set_shader_parameter("depth_bias", depth_bias)
+			_sprite.material_override.set_shader_parameter("scale", sprite.scale.x)
+			_sprite.texture_changed.connect(_update_hit_shader.bind(_sprite))
+			_sprite.material_override.set_shader_parameter("tex", _sprite.texture)
+			_sprite.material_override.set_shader_parameter("active", false)
+			depth_bias += 0.01
 
 
 # func _process(delta: float) -> void:
@@ -687,23 +719,13 @@ func _update_squash(squash: Vector2, _sprite: Sprite3D = sprite) -> void:
 
 
 func hit_effect_sprite_flash():
-	sprite.material_override.set_shader_parameter("active", true)
-	for child in sprite.get_children():
-		if is_instance_valid(child):
-			if child is Sprite3D:
-				child.material_override.set_shader_parameter("active", true)
-	
-	var tween = create_tween()
-	tween.set_parallel(false)
-	tween.tween_property(sprite, "scale", Vector3(1.05, 1.05, 1.05), hit_effect_flash_duration / 2)
-	tween.tween_property(sprite, "scale", Vector3.ONE, hit_effect_flash_duration / 2)
-	
-	await tween.finished
-	
-	sprite.material_override.set_shader_parameter("active", false)
-	for child in sprite.get_children():
-		if child is Sprite3D:
-			child.material_override.set_shader_parameter("active", false)
+	for _sprite in [sprite] + sprite.get_children():
+		if _sprite is Sprite3D and is_instance_valid(_sprite):
+			_sprite.material_override.set_shader_parameter("active", true)
+			get_tree().create_timer(0.05).timeout.connect(
+				func():
+					_sprite.material_override.set_shader_parameter("active", false)
+			)
 
 
 func hit_effect_sprite_squash(duration: float, squash: Vector2):
@@ -746,6 +768,9 @@ func _on_health_hit_state_exited() -> void:
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:
+	health_ui.empty_phase_marker(0)
+	health_ui._on_health_changed(0.0, 0.0)
+	
 	if anim_player.is_playing():
 		anim_player.stop()
 		anim_player.play("RESET")
