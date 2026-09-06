@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_igsxx"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_8b8o3"]
 [ext_resource type="Script" path="res://src/ui/shop/barrel_slot_ui.gd" id="2_nd0am"]
-[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_hirao"]
+[ext_resource type="Texture2D" uid="uid://cglg7ofdrpcki" path="res://src/ui/common/assets/crapshoot-ui-border4.png" id="4_8bqny"]
 
 [node name="BarrelSlot" type="TextureRect" node_paths=PackedStringArray("item_ui")]
 self_modulate = Color(0, 0, 0, 1)
@@ -20,14 +20,19 @@ offset_right = 110.0
 offset_bottom = 110.0
 
 [node name="BorderNormal" type="NinePatchRect" parent="."]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
+self_modulate = Color(1, 0.919368, 0, 1)
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 18.0
+offset_bottom = 17.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_hirao")
+texture = ExtResource("4_8bqny")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20

@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=15 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
 [ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="4_iqan4"]
 [ext_resource type="Texture2D" uid="uid://cwcqma7xn6wie" path="res://assets/sprite/game_icon/clockwise-rotation.png" id="5_53o4x"]
+[ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot-ui-border1.png" id="6_6asio"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
@@ -115,21 +116,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_lxvge")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+texture = ExtResource("6_6asio")
+patch_margin_left = 41
+patch_margin_top = 29
+patch_margin_right = 42
+patch_margin_bottom = 42
 
 [node name="SingleEffectDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = -16.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -22.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true

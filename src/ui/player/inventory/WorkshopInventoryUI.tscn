@@ -138,7 +138,7 @@ offset_right = 164.0
 offset_bottom = 288.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="BarrelSlot" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
