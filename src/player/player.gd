@@ -1,7 +1,7 @@
 extends CharacterBody3D
 class_name Player
 
-@export_category("SFX")
+@export_group("SFX")
 @export var sfx_hurt: Array[AudioStream]
 @export var sfx_dead: Array[AudioStream]
 @export var sfx_dead_falling: Array[AudioStream]
@@ -20,6 +20,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export_category("Movement")
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
+@export var can_crouch_slide: bool
 @export var max_air_jump = 2
 @export var dash_cd: float = 1
 @export var angular_momentum_multiplier = 0.4
@@ -116,6 +117,27 @@ const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
+# Crouch slide. A slide never grants speed of its own - it suppresses friction and lets
+# slopes do the accelerating, so it stays a momentum tech instead of a second dash.
+const SLIDE_MIN_SPEED_RATIO: float = 0.9 # Must already be this fraction of MAX_SPEED to start
+const SLIDE_END_SPEED_RATIO: float = 0.35 # Slide breaks off below this fraction of MAX_SPEED
+const SLIDE_FRICTION_MODIFIER: float = 0.05
+const SLIDE_SLOPE_ACCEL: float = 22.0 # Gravity projected along the floor slope
+const SLIDE_UPHILL_FRICTION: float = 3.0 # Uphill bleeds much faster than downhill gains
+const SLIDE_STEER_RATE: float = 60.0 # Degrees per second the locked slide direction may turn
+const SLIDE_MAX_SPEED: float = MAX_SPEED * 1.75
+const SLIDE_JUMP_GRACE: float = 1.0 # Seconds of low air friction after jumping out of a slide
+# Running is already pinned at MAX_SPEED, so a slide has to push you above that cap before
+# the friction suppression is worth anything. Multiplicative, so chains compound but the
+# gain per link shrinks as it approaches SLIDE_MAX_SPEED.
+const SLIDE_ENTRY_BOOST: float = 1.5 # Speed multiplier when opening a slide from a run
+const SLIDE_CHAIN_BOOST: float = 1.15 # Smaller multiplier when re-sliding out of a slide jump
+const SLIDE_CHAIN_WINDOW: float = 0.5 # Seconds after a slide jump that still counts as a chain
+# Above MAX_SPEED the normal add_speed is clamped to zero, so air control has to redirect
+# momentum rather than add to it - otherwise a fast chain is stuck flying in a straight line.
+const AIR_STEER_RATE: float = 180.0 # Degrees per second of air steering while above the run cap
+const AIR_JUMP_REDIRECT_KEEP: float = 0.85 # Speed kept when an air jump re-aims your momentum
+
 const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to target. 1-10
 const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
 const AIM_ASSIST_MAX_RANGE = 50
@@ -137,6 +159,10 @@ var is_crouching: bool = false:
 		crouching_shape.disabled = not is_crouching
 
 var uncrouch_collision_check_count = 0
+
+var is_sliding: bool = false
+var slide_jump_grace: float = 0.0
+var slide_chain_window: float = 0.0
 
 var internal_bonus_speed: float = 0
 
@@ -309,6 +335,7 @@ func _unhandled_input(event):
 			return
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
+			end_slide()
 			is_dashing = true
 			if is_on_floor():
 				SoundManager.play_sound_with_pitch(
@@ -427,7 +454,16 @@ func _physics_process(delta):
 
 	# If the next line is for grounded only, we will have bunnyhop tech
 	# If not move, gradually reduce movespeed to 0 (speed decay)
-	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta * current_stats[StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER]
+	if not is_on_floor():
+		slide_jump_grace = maxf(slide_jump_grace - delta, 0.0)
+	# Unlike the grace window this survives landing, so the re-slide still counts as a chain.
+	slide_chain_window = maxf(slide_chain_window - delta, 0.0)
+	# Sliding (and the grace window right after a slide jump) is defined by the absence of
+	# friction - that is what separates it from the dash's additive speed burst.
+	var friction_scale: float = 1.0
+	if is_sliding or slide_jump_grace > 0.0:
+		friction_scale = SLIDE_FRICTION_MODIFIER
+	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta * friction_scale * current_stats[StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER]
 	# Stand still
 	if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
 		vel_horizontal = Vector2.ZERO
@@ -440,6 +476,7 @@ func _physics_process(delta):
 				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			jumped = false
 			vel_vertical = 0
+			slide_jump_grace = 0.0
 			create_jump_dust_ring()
 	else:
 		state_chart.send_event("airborne")
@@ -447,7 +484,9 @@ func _physics_process(delta):
 	# Use the next line will make player move faster when strafing + rotate camera
 	# var current_speed = vel_horizontal.dot(input_dir)
 	var current_speed = vel_horizontal.length()
-	if is_crouching:
+	if is_sliding:
+		max_speed = SLIDE_MAX_SPEED
+	elif is_crouching:
 		max_speed = MAX_SPEED * CROUCH_SPEED_MODIFIER
 	else:
 		max_speed = MAX_SPEED
@@ -455,8 +494,14 @@ func _physics_process(delta):
 
 	if is_dashing:
 		vel_horizontal = input_dir * max_speed
-	elif is_crouching:
-		vel_horizontal += input_dir * add_speed
+	elif is_sliding:
+		# No input acceleration at all while sliding - the direction is committed.
+		apply_slide_physics(delta)
+	elif not is_on_floor() and (current_speed > max_speed or slide_jump_grace > 0.0):
+		# Keep steering for the whole grace window, not just while above the cap. Air control
+		# below the cap is funded by friction, and the grace window removes the friction - so
+		# a chain bleeding back under MAX_SPEED mid-air would otherwise go almost unsteerable.
+		apply_air_steering(delta)
 	else:
 		vel_horizontal += input_dir * add_speed
 
@@ -621,7 +666,7 @@ func show_debug_label():
 	debug_label.text += "\nHSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
 	debug_label.text += "\nHeight from ground: {0}".format([snapped_height - 1.5])
 	debug_label.text += "\nOn ground: {0} | wall-cling: {1}".format([is_on_floor(), moving_toward_wall()])
-	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_crouching])
+	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])
 	debug_label.text += "\nAir jumps move_left: {0}".format([max_air_jump - current_air_jump_count])
 	debug_label.text += "\nCoyote jump: {0}".format([can_coyote_jump])
 	#debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
@@ -634,6 +679,11 @@ func jump(local_multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * current_stats[StatusEffect.PlayerStatEnum.JUMP_HEIGHT] * local_multiplier
 
 	jumped = true
+	if is_sliding:
+		# Carry the slide's momentum into the air so slide -> jump -> slide chains build speed.
+		slide_jump_grace = SLIDE_JUMP_GRACE
+		slide_chain_window = SLIDE_CHAIN_WINDOW
+		end_slide()
 	state_chart.send_event("jump")
 	is_dashing = false
 	is_crouching = false
@@ -740,6 +790,69 @@ func _on_dash_duration_timeout() -> void:
 	is_dashing = false
 
 
+# Only converts existing momentum into a slide - it never adds speed, so you cannot
+# slide out of a standstill and dash -> slide does not stack into a bigger burst.
+func try_start_slide() -> bool:
+	if not can_crouch_slide or is_sliding or is_dashing:
+		return false
+	if vel_horizontal.length() < MAX_SPEED * SLIDE_MIN_SPEED_RATIO:
+		return false
+	if vel_horizontal.is_zero_approx():
+		return false
+	var boost := SLIDE_ENTRY_BOOST
+	if slide_chain_window > 0.0:
+		boost = SLIDE_CHAIN_BOOST
+	is_sliding = true
+	slide_dir = vel_horizontal.normalized()
+	vel_horizontal = slide_dir * minf(vel_horizontal.length() * boost, SLIDE_MAX_SPEED)
+	slide_chain_window = 0.0
+	player_camera.add_trauma(SLIDE_SHAKE_TRAUMA)
+	return true
+
+
+func end_slide() -> void:
+	is_sliding = false
+
+
+# Turns the velocity vector without changing its length, so carrying a slide chain into the
+# air stays fast but is still aimable.
+func apply_air_steering(delta: float) -> void:
+	if input_dir.is_zero_approx() or vel_horizontal.is_zero_approx():
+		return
+	var max_turn := deg_to_rad(AIR_STEER_RATE) * delta
+	var turn := clampf(angle_difference(vel_horizontal.angle(), input_dir.angle()), -max_turn, max_turn)
+	vel_horizontal = vel_horizontal.rotated(turn)
+
+
+# An air jump re-points the momentum you already have instead of only adding height. The
+# speed cost stops a full reversal from being free.
+func redirect_momentum_to_input() -> void:
+	if input_dir.is_zero_approx() or vel_horizontal.is_zero_approx():
+		return
+	vel_horizontal = input_dir.normalized() * (vel_horizontal.length() * AIR_JUMP_REDIRECT_KEEP)
+
+
+func apply_slide_physics(delta: float) -> void:
+	# Steering is a slow turn of the committed direction, not free redirection like the dash.
+	if not input_dir.is_zero_approx():
+		var max_turn := deg_to_rad(SLIDE_STEER_RATE) * delta
+		var turn := clampf(angle_difference(slide_dir.angle(), input_dir.angle()), -max_turn, max_turn)
+		slide_dir = slide_dir.rotated(turn)
+
+	var speed := vel_horizontal.length()
+	# The horizontal part of the floor normal points downhill and has magnitude sin(slope),
+	# so this is gravity along the slope: downhill pays out, uphill costs.
+	if is_on_floor():
+		var floor_normal := get_floor_normal()
+		var slope_accel := Vector2(floor_normal.x, floor_normal.z).dot(slide_dir) * SLIDE_SLOPE_ACCEL
+		if slope_accel < 0.0:
+			slope_accel *= SLIDE_UPHILL_FRICTION
+		speed += slope_accel * delta
+
+	speed = clampf(speed, 0.0, SLIDE_MAX_SPEED)
+	vel_horizontal = slide_dir * speed
+
+
 func _on_grounded_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
 		# Allows us to disable jumping
@@ -749,10 +862,16 @@ func _on_grounded_state_input(event: InputEvent):
 
 func _on_grounded_state_physics_processing(_delta: float):
 		if Input.is_action_pressed("crouch"):
-			is_crouching = true
+			if not is_crouching:
+				is_crouching = true
+				# Also covers landing with crouch held, since going airborne uncrouches us.
+				try_start_slide()
+			elif is_sliding and vel_horizontal.length() < MAX_SPEED * SLIDE_END_SPEED_RATIO:
+				end_slide()
 		else:
 			if uncrouch_collision_check_count == 0 and is_crouching:
 				is_crouching = false
+				end_slide()
 
 
 func _on_airborne_state_input(event: InputEvent):
@@ -764,11 +883,13 @@ func _on_airborne_state_input(event: InputEvent):
 			jump()
 		elif current_air_jump_count < max_air_jump:
 			current_air_jump_count += 1
+			redirect_momentum_to_input()
 			jump()
 
 
 func _on_airborne_state_entered() -> void:
 	is_crouching = false
+	end_slide()
 	if not jumped:
 		coyote_timer.start()
 		can_coyote_jump = true
@@ -779,7 +900,10 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 		vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	if Input.is_action_just_pressed("crouch"):
-		ground_slam()
+		# Slamming requires letting go of the stick. Crouching while still holding a
+		# direction is buffering a slide for the landing instead.
+		if raw_input_dir.is_zero_approx():
+			ground_slam()
 	if moving_toward_wall() and can_wall_cling:
 		state_chart.send_event("wallcling")
 
@@ -824,9 +948,9 @@ func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 	state_chart.send_event("start_damage")
 
 	hurt_overlay.add_damage_dir_marker(damage_pos)
-	stat_ui.anim_health_ui_scale(1.4)  # TODO - scale to damage
-	InputHelper.rumble_large()  # TODO - scale to damage
-	player_camera.add_trauma(0.2)  # TODO - scale to damage
+	stat_ui.anim_health_ui_scale(1.4) # TODO - scale to damage
+	InputHelper.rumble_large() # TODO - scale to damage
+	player_camera.add_trauma(0.2) # TODO - scale to damage
 	SoundManager.play_sound(sfx_hurt.pick_random())
 
 	if health_component.current_health > 0:

@@ -311,6 +311,9 @@ transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107
 [node name="ShootWallTest6" parent="WallStuff" instance=ExtResource("19_cev3k")]
 transform = Transform3D(-2.18557e-08, 0.866025, -0.5, 3.78552e-08, 0.5, 0.866025, 1, 0, -4.37114e-08, -1.88214, 10.3533, -15.182)
 
+[node name="ShootWallTest11" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-16.0308, -7.87741e-08, -0.597135, -11.9337, -2.61016e-08, 0.802141, -1.5743e-06, 1, -2.61016e-08, 23.4885, 2.54551, -5.69059)
+
 [node name="ShootWallTest2" parent="WallStuff" instance=ExtResource("19_cev3k")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.2796, 3.61703, -27.6038)
 
