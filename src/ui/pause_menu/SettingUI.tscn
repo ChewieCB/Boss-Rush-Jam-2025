@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=19 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
