@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dxui67spyijhu"]
+[gd_scene load_steps=31 format=3 uid="uid://dxui67spyijhu"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/shop_ui.gd" id="1_j5xux"]
 [ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="2_2niy2"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="13_or7wt"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_onwa3"]
 [ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="15_7v2dv"]
+[ext_resource type="FontFile" uid="uid://dq3dq2n62svrd" path="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf" id="16_0dkys"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="16_kno7h"]
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="17_3ru54"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="18_ylgjj"]
@@ -223,6 +224,7 @@ theme_override_constants/separation = 16
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("16_0dkys")
 theme_override_font_sizes/font_size = 48
 text = "Gun Frames"
 horizontal_alignment = 1
@@ -252,6 +254,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("16_0dkys")
 theme_override_font_sizes/font_size = 48
 text = "Slot Rollers"
 horizontal_alignment = 1

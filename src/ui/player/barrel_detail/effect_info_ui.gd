@@ -3,7 +3,7 @@ class_name EffectInfoUI
 
 @onready var icon_rect: TextureRect = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer/TextureRect
 @onready var name_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TitleContainer/RichTextLabel
-@onready var tag_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer/RichTextLabel
+@onready var tag_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TagContainer/RichTextLabel
 @onready var effect_description_label: RichTextLabel = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/EffectDescriptionLabel
 @onready var luck_trigger_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/LuckTriggersContainer
 @onready var luck_trigger_1: LuckTriggerInfoUI = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/LuckTriggersContainer/LuckTriggerInfoUI

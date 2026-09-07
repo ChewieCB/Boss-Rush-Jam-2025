@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfdmq8lnyl4ne"
-path="res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"
+uid="uid://d0cj5y3xr0366"
+path="res://.godot/imported/NamesakeNF.otf-e6e018f924b27c0d964accef1f1b329d.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Light.otf"
-dest_files=["res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"]
+source_file="res://assets/fonts/namesake-nf/NamesakeNF.otf"
+dest_files=["res://.godot/imported/NamesakeNF.otf-e6e018f924b27c0d964accef1f1b329d.fontdata"]
 
 [params]
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bagau1537wut2"]
+[gd_scene load_steps=10 format=3 uid="uid://bagau1537wut2"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/equipped_frame_side_view.gd" id="1_liic0"]
 [ext_resource type="Shader" path="res://src/ui/player/inventory/double_sided_transparent_fade.gdshader" id="1_o44u6"]
 [ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="1_x84nb"]
+[ext_resource type="FontFile" uid="uid://dq3dq2n62svrd" path="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf" id="2_fck0x"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="3_dh61e"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_hvmym"]
 [ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border1.png" id="6_2vn4a"]
@@ -38,14 +39,16 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -52.0
-offset_right = 52.0
-offset_bottom = 44.0
+offset_left = -96.0
+offset_top = 8.0
+offset_right = 92.0
+offset_bottom = 52.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 48
+theme_override_fonts/font = ExtResource("2_fck0x")
+theme_override_font_sizes/font_size = 60
 text = "Shotgun"
 horizontal_alignment = 1
 

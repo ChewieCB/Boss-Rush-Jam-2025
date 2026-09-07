@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhwkpguamgubg"]
+[gd_scene load_steps=5 format=3 uid="uid://dhwkpguamgubg"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/effect_info_line.gd" id="1_2l8tf"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="1_7ndok"]
-[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="2_j8crc"]
-[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="3_rgjlf"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_sr4vg"]
+[ext_resource type="FontFile" uid="uid://dq3dq2n62svrd" path="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf" id="4_d11dp"]
 
 [node name="DescriptionEffectLine" type="HBoxContainer" node_paths=PackedStringArray("icon", "label")]
 offset_right = 172.0
@@ -65,8 +64,8 @@ theme_override_constants/margin_top = 16
 custom_minimum_size = Vector2(320, 32)
 layout_mode = 2
 size_flags_horizontal = 2
-theme_override_fonts/normal_font = ExtResource("2_j8crc")
-theme_override_fonts/bold_font = ExtResource("3_rgjlf")
+theme_override_fonts/normal_font = ExtResource("4_d11dp")
+theme_override_fonts/bold_font = ExtResource("4_d11dp")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
