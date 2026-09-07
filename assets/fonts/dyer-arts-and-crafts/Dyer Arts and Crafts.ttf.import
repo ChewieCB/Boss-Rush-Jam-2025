@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfdmq8lnyl4ne"
-path="res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"
+uid="uid://dq3dq2n62svrd"
+path="res://.godot/imported/Dyer Arts and Crafts.ttf-859b24f2c9116af09eb245ffe44ee2af.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Light.otf"
-dest_files=["res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"]
+source_file="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf"
+dest_files=["res://.godot/imported/Dyer Arts and Crafts.ttf-859b24f2c9116af09eb245ffe44ee2af.fontdata"]
 
 [params]
 

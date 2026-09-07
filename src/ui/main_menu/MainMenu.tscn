@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://1t3ui8wme31d"]
+[gd_scene load_steps=34 format=3 uid="uid://1t3ui8wme31d"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -21,6 +21,7 @@
 [ext_resource type="FontFile" uid="uid://djistlrjw48qk" path="res://assets/fonts/kleptocracy titling/kleptocracy titling lt.otf" id="20_6j3k5"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="20_j34pk"]
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="23_8rbfy"]
+[ext_resource type="FontFile" uid="uid://blo25nucsod0p" path="res://assets/fonts/parklane/ParkLaneNF.otf" id="24_c21x1"]
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
 [ext_resource type="PackedScene" uid="uid://dif5ua57y8udh" path="res://src/ui/main_menu/SaveSlotItem.tscn" id="24_re1j0"]
 [ext_resource type="Texture2D" uid="uid://dyiwffcyvqrg7" path="res://src/ui/main_menu/assets/storyboards/crapshoot_panels_chair.png" id="25_adb1y"]
@@ -648,6 +649,7 @@ custom_minimum_size = Vector2(440, 100)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_fonts/normal_font = ExtResource("24_prxld")
+theme_override_fonts/bold_font = ExtResource("24_c21x1")
 theme_override_font_sizes/bold_italics_font_size = 32
 theme_override_font_sizes/italics_font_size = 28
 theme_override_font_sizes/mono_font_size = 32
@@ -691,9 +693,9 @@ theme_override_font_sizes/bold_italics_font_size = 32
 theme_override_font_sizes/italics_font_size = 28
 theme_override_font_sizes/mono_font_size = 32
 theme_override_font_sizes/normal_font_size = 32
-theme_override_font_sizes/bold_font_size = 36
+theme_override_font_sizes/bold_font_size = 32
 bbcode_enabled = true
-text = "Armed with a unique weapon whose [b][color=dark_turquoise]interchangeable barrels[/color][/b] spin random effects on each reload, you must acquire new barrels from every boss you defeat to build a weapon that can [b][color=lawn_green]change your odds[/color][/b]. "
+text = "Armed with a unique weapon whose [color=dark_turquoise]interchangeable barrels[/color] spin random effects on each reload, you must acquire new barrels from every boss you defeat to build a weapon that can [color=lawn_green]change your odds[/color]. "
 fit_content = true
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer"]

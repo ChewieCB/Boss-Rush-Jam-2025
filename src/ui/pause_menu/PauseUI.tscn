@@ -109,7 +109,6 @@ mouse_filter = 2
 texture = ExtResource("3_fbfq4")
 
 [node name="PauseOptionBG" type="TextureRect" parent="."]
-self_modulate = Color(0.109375, 0.109375, 0.109375, 1)
 material = SubResource("ShaderMaterial_lsfl5")
 layout_mode = 1
 anchors_preset = 9

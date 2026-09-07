@@ -28,10 +28,11 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 	super(enemy, projectile)
 	if "bloody_scalpel_shot_count" in projectile.misc_data:
 		var this_proj_shot_count = projectile.misc_data["bloody_scalpel_shot_count"]
-		hit_count_tracker[this_proj_shot_count] += 1
-		if hit_count_tracker[this_proj_shot_count] == proj_amount_per_shot:
-			LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.BLOODY_SCALPEL__FULL_CUT)
-			LuckHandler.increase_luck(2, "+2 Full Cut!")
+		if this_proj_shot_count in hit_count_tracker:
+			hit_count_tracker[this_proj_shot_count] += 1
+			if hit_count_tracker[this_proj_shot_count] == proj_amount_per_shot:
+				LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.BLOODY_SCALPEL__FULL_CUT)
+				LuckHandler.increase_luck(2, "+2 Full Cut!")
 
 
 func on_reload_end():

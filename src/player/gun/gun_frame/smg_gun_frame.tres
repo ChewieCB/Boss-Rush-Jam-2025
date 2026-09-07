@@ -17,7 +17,7 @@
 
 [resource]
 script = ExtResource("1_5wboq")
-frame_name = "SMG"
+frame_name = "Submachine Gun"
 frame_id = 3
 frame_description = "High firerate and magazine size. Best at mid-range."
 flavour_text = "Rattle 'em boys!"

@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://da707blxxuo3c"]
+[gd_scene load_steps=4 format=3 uid="uid://da707blxxuo3c"]
 
+[ext_resource type="FontFile" uid="uid://d0cj5y3xr0366" path="res://assets/fonts/namesake-nf/NamesakeNF.otf" id="1_2jtfg"]
 [ext_resource type="Script" path="res://src/ui/common/template_button/template_button.gd" id="1_anfr8"]
 [ext_resource type="Texture2D" uid="uid://brufsqhjciuy7" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border5.png" id="2_k0a41"]
 
@@ -7,6 +8,7 @@
 custom_minimum_size = Vector2(0, 60)
 offset_right = 160.0
 offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("1_2jtfg")
 theme_override_font_sizes/font_size = 26
 text = "Button"
 script = ExtResource("1_anfr8")

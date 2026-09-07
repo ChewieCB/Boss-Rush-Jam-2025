@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfdmq8lnyl4ne"
-path="res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"
+uid="uid://dbchhv41at8h6"
+path="res://.godot/imported/MadisonSquareNF.otf-d36e0289a245ef0ed953f61e545bd45c.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Light.otf"
-dest_files=["res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"]
+source_file="res://assets/fonts/madison-square-nf/MadisonSquareNF.otf"
+dest_files=["res://.godot/imported/MadisonSquareNF.otf-d36e0289a245ef0ed953f61e545bd45c.fontdata"]
 
 [params]
 
@@ -32,7 +32,8 @@ preload=[{
 "chars": [],
 "glyphs": [],
 "name": "New Configuration",
-"size": Vector2i(16, 0)
+"size": Vector2i(16, 0),
+"variation_embolden": 0.0
 }]
 language_support={}
 script_support={}

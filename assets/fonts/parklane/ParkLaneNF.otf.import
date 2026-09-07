@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfdmq8lnyl4ne"
-path="res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"
+uid="uid://blo25nucsod0p"
+path="res://.godot/imported/ParkLaneNF.otf-48e9c5642d2be58ba7c575eb49277443.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Light.otf"
-dest_files=["res://.godot/imported/Semplicita Light.otf-07c9a915efaa606b9c4bb1971c5d66bf.fontdata"]
+source_file="res://assets/fonts/parklane/ParkLaneNF.otf"
+dest_files=["res://.godot/imported/ParkLaneNF.otf-48e9c5642d2be58ba7c575eb49277443.fontdata"]
 
 [params]
 

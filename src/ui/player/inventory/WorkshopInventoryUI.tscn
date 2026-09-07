@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cu1jrlwvdnnl"]
+[gd_scene load_steps=17 format=3 uid="uid://cu1jrlwvdnnl"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/workshop_inventory_ui.gd" id="1_nmgbf"]
 [ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="2_0be23"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="9_mcm64"]
 [ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="10_uxdru"]
 [ext_resource type="Texture2D" uid="uid://brufsqhjciuy7" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border5.png" id="11_hexww"]
+[ext_resource type="FontFile" uid="uid://dq3dq2n62svrd" path="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf" id="11_o13ka"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="12_8bjyn"]
 [ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="12_qx4wp"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_uy6vt"]
@@ -215,6 +216,7 @@ theme_override_constants/margin_bottom = 32
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("11_o13ka")
 theme_override_font_sizes/font_size = 48
 text = "Inventory"
 horizontal_alignment = 1

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bjfuty8vqwssh"]
+[gd_scene load_steps=6 format=3 uid="uid://bjfuty8vqwssh"]
 
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_ui.gd" id="1_fgnps"]
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_info_icon_text.gd" id="1_wlehn"]
 [ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="2_me5s8"]
-[ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="3_ahmst"]
+[ext_resource type="FontFile" uid="uid://dq3dq2n62svrd" path="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf" id="4_i001j"]
+[ext_resource type="FontFile" uid="uid://bfdmq8lnyl4ne" path="res://assets/fonts/Semplicita/Semplicita Light.otf" id="5_k3m5o"]
 
 [node name="LuckTriggerInfoUI" type="MarginContainer"]
 anchors_preset = 8
@@ -11,9 +12,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -108.5
+offset_left = -108.0
 offset_top = -28.0
-offset_right = 108.5
+offset_right = 192.0
 offset_bottom = 28.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -71,12 +72,13 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_vertical = 6
 mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("3_ahmst")
+theme_override_fonts/normal_font = ExtResource("4_i001j")
 theme_override_font_sizes/normal_font_size = 20
 bbcode_enabled = true
 text = "Lucky Shot"
 fit_content = true
 scroll_active = false
+autowrap_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -87,8 +89,8 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_vertical = 6
 mouse_filter = 2
-theme_override_colors/default_color = Color(0.497474, 0.497474, 0.497474, 1)
-theme_override_fonts/normal_font = ExtResource("3_ahmst")
+theme_override_colors/default_color = Color(0.746094, 0.746094, 0.746094, 1)
+theme_override_fonts/normal_font = ExtResource("5_k3m5o")
 theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
 text = "Gain 4 luck on a crit "

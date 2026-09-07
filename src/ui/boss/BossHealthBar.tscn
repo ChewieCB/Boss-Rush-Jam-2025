@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://bwei3cifjg1sq"]
+[gd_scene load_steps=24 format=3 uid="uid://bwei3cifjg1sq"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
-[ext_resource type="PackedScene" path="res://src/ui/boss/BossPhaseIcon.tscn" id="2_fwp03"]
+[ext_resource type="PackedScene" uid="uid://dgulg3vrjkcbk" path="res://src/ui/boss/BossPhaseIcon.tscn" id="2_fwp03"]
+[ext_resource type="FontFile" uid="uid://blo25nucsod0p" path="res://assets/fonts/parklane/ParkLaneNF.otf" id="5_kb15m"]
 [ext_resource type="Texture2D" uid="uid://jgscawd6skc" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-001.png" id="6_62y4p"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="7_bj4c4"]
 [ext_resource type="Texture2D" uid="uid://bfki3npylok25" path="res://assets/sprite/status_icon/burning.png" id="8_oo5ks"]
@@ -223,6 +224,7 @@ theme = SubResource("Theme_gqrbp")
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("5_kb15m")
 text = "TEST BOSS NAME GOES HERE LALALA"
 horizontal_alignment = 1
 vertical_alignment = 1
