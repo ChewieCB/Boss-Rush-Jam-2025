@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="4_iqan4"]
 [ext_resource type="Texture2D" uid="uid://cwcqma7xn6wie" path="res://assets/sprite/game_icon/clockwise-rotation.png" id="5_53o4x"]
-[ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot-ui-border1.png" id="6_6asio"]
+[ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border1.png" id="6_6asio"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
