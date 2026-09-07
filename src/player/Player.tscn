@@ -154,6 +154,7 @@ sfx_dash_floor = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_purchase = ExtResource("31_uqkio")
 sfx_too_expensive = ExtResource("32_vsild")
+can_crouch_slide = true
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 jump_dust_ring_prefab = ExtResource("34_ph8h0")
