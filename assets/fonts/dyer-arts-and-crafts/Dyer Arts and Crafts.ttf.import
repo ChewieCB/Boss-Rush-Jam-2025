@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfduksv0gcvwn"
-path="res://.godot/imported/Semplicita Medium Italic.otf-e960fdff9f9da880af7fa5c6938e2cea.fontdata"
+uid="uid://dq3dq2n62svrd"
+path="res://.godot/imported/Dyer Arts and Crafts.ttf-859b24f2c9116af09eb245ffe44ee2af.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf"
-dest_files=["res://.godot/imported/Semplicita Medium Italic.otf-e960fdff9f9da880af7fa5c6938e2cea.fontdata"]
+source_file="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf"
+dest_files=["res://.godot/imported/Dyer Arts and Crafts.ttf-859b24f2c9116af09eb245ffe44ee2af.fontdata"]
 
 [params]
 

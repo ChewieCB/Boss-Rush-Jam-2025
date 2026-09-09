@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfduksv0gcvwn"
-path="res://.godot/imported/Semplicita Medium Italic.otf-e960fdff9f9da880af7fa5c6938e2cea.fontdata"
+uid="uid://blo25nucsod0p"
+path="res://.godot/imported/ParkLaneNF.otf-48e9c5642d2be58ba7c575eb49277443.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf"
-dest_files=["res://.godot/imported/Semplicita Medium Italic.otf-e960fdff9f9da880af7fa5c6938e2cea.fontdata"]
+source_file="res://assets/fonts/parklane/ParkLaneNF.otf"
+dest_files=["res://.godot/imported/ParkLaneNF.otf-48e9c5642d2be58ba7c575eb49277443.fontdata"]
 
 [params]
 

@@ -7,6 +7,14 @@ uniform float repeat_y : hint_range(1, 50) = 12;
 uniform float row_offset : hint_range(0, 1) = 1;
 uniform sampler2D texture_to_scroll;
 
+// Vertex COLOR carries the CanvasItem's modulate * self_modulate; forward it to
+// the fragment stage since we overwrite COLOR there.
+varying vec4 modulate_color;
+
+void vertex() {
+ modulate_color = COLOR;
+}
+
 void fragment() {
  float angle_rad = radians(angle_degrees);
 
@@ -24,5 +32,5 @@ void fragment() {
  vec2 texelSize = vec2(1.0) / vec2(textureSize(texture_to_scroll, 0));
  vec2 snappedUV = round(scaled_uv / texelSize) * texelSize;
 
- COLOR = texture(texture_to_scroll, snappedUV);
+ COLOR = texture(texture_to_scroll, snappedUV) * modulate_color;
 }

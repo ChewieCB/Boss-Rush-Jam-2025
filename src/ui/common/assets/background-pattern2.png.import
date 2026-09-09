@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b81lrms62ooqw"
-path="res://.godot/imported/crapshoot-ui-border3.png-2b7d06b9b769e486f8805400be59019b.ctex"
+uid="uid://hoowxt50whhw"
+path="res://.godot/imported/background-pattern2.png-e7d174fb54b5ce5003b3721dc69f49be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/common/assets/crapshoot-ui-border3.png"
-dest_files=["res://.godot/imported/crapshoot-ui-border3.png-2b7d06b9b769e486f8805400be59019b.ctex"]
+source_file="res://src/ui/common/assets/background-pattern2.png"
+dest_files=["res://.godot/imported/background-pattern2.png-e7d174fb54b5ce5003b3721dc69f49be.ctex"]
 
 [params]
 

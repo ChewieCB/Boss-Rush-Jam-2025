@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfduksv0gcvwn"
-path="res://.godot/imported/Semplicita Medium Italic.otf-e960fdff9f9da880af7fa5c6938e2cea.fontdata"
+uid="uid://cun5r55q1jxwt"
+path="res://.godot/imported/Agamtoh.otf-cd509d15b087182fbabe8f121e4b8612.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf"
-dest_files=["res://.godot/imported/Semplicita Medium Italic.otf-e960fdff9f9da880af7fa5c6938e2cea.fontdata"]
+source_file="res://assets/fonts/agamtoh/Agamtoh.otf"
+dest_files=["res://.godot/imported/Agamtoh.otf-cd509d15b087182fbabe8f121e4b8612.fontdata"]
 
 [params]
 
