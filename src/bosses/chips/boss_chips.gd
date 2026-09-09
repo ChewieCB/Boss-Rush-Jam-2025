@@ -383,7 +383,7 @@ func _on_health_dead_state_entered() -> void:
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
 	#return_big_stack_to_center()
-	merge_stacks()
+	await merge_stacks()
 
 	died.emit()
 	# interlude is 11.3 seconds from here
@@ -799,7 +799,7 @@ func _on_big_stack_state_entered_phase_2() -> void:
 	explosion_inst.global_position = self.global_position
 	explosion_inst.activate()
 
-	merge_stacks()
+	await merge_stacks()
 
 	state_chart.send_event("start_merge_aoe_finisher")
 
@@ -1173,7 +1173,7 @@ func _on_ss_charge_attacking_state_entered() -> void:
 	trigger_substack_attack("start_split_rush_attack")
 
 func _on_ss_charge_merging_state_entered() -> void:
-	merge_stacks()
+	await merge_stacks()
 
 	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
 	big_stack_sfx_player.play()
@@ -1855,7 +1855,7 @@ func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
 	stack.aoe_markers = aoe_markers
 	stack.target = target
 	stack.global_transform = self.global_transform
-	stack.scale = Vector3(0, 1, 0)
+	#stack.scale = Vector3(0, 1, 0)
 	stack.health_component.initialize_health()
 
 	stack.process_mode = Node.PROCESS_MODE_INHERIT
@@ -1933,7 +1933,7 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 		var tween: Tween = get_tree().create_tween()
 		_spawn_tweens.append(tween)
 		tween.tween_property(stack, "global_position", spawn_pos, stack_spawn_time)
-		tween.parallel().tween_property(stack, "scale", Vector3.ONE, stack_spawn_time)
+		#tween.parallel().tween_property(stack, "scale", Vector3.ONE, stack_spawn_time)
 		await tween.finished
 
 		# Restore collision
@@ -1947,6 +1947,12 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 
 func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
+	# Kill any leftover tweens from a previous call
+	for tween in _spawn_tweens:
+		if tween and tween.is_valid():
+			tween.kill()
+	_spawn_tweens.clear()
+	
 	 #SFX trigger
 	if sfx_stack_despawn:
 		big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
@@ -1960,7 +1966,7 @@ func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 	for stack in active_stacks:
 		var tween: Tween = get_tree().create_tween()
 		tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
-		tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
+		#tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
 		last_tween = tween
 
 	if last_tween:
