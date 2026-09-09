@@ -34,7 +34,7 @@ anchor_bottom = 0.5
 offset_left = -1920.0
 offset_top = -540.0
 offset_right = -1366.0
-offset_bottom = -274.0
+offset_bottom = -244.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 0
@@ -188,11 +188,13 @@ theme_override_constants/separation = 14
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("8_drh24")
 theme_override_font_sizes/normal_font_size = 20
 bbcode_enabled = true
-text = "Phasellus malesuada elementum nisi, efficitur finibus justo vestibulum eu. 
+text = "
+Phasellus malesuada elementum nisi, efficitur finibus justo vestibulum eu. 
 Donec congue eget orci at consectetur. 
 "
 fit_content = true

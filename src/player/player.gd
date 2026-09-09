@@ -635,7 +635,7 @@ func _update_effect_ui(idx: int) -> void:
 			effect_ui.icon_rect.texture = _fallback_effect_icon_texture
 		effect_ui.name_label.text = _effect.display_text_title
 		effect_ui.tag_label.text = "[i]" + _effect.display_text_tag + "[/i]"
-		effect_ui.effect_description_label.text = _effect.display_text_desc
+		effect_ui.effect_description_label.text = "\n" + _effect.display_text_desc
 
 		effect_ui.clear_luck_triggers.call_deferred()
 
