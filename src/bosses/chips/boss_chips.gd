@@ -628,14 +628,16 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	var decal_slam := Decal.new()
 	decal_slam.texture_albedo = slam_aoe_decal
 	decal_slam.size = Vector3(6, 6, 6)
-	scene_root.add_child(decal_slam)
 	decal_slam.global_position = self.global_position
 	decal_slam.global_position.y += 1
-
-	var aoe_tween: Tween = get_tree().create_tween()
-	aoe_tween.tween_property(decal_slam, "modulate:a", 0, 1.0).set_ease(Tween.EASE_IN)
-	aoe_tween.tween_callback(decal_slam.queue_free)
-
+	decal_slam.ready.connect(
+		func():
+			var aoe_tween: Tween = get_tree().create_tween()
+			aoe_tween.tween_property(decal_slam, "modulate:a", 0, 1.0).set_ease(Tween.EASE_IN)
+			aoe_tween.tween_callback(decal_slam.queue_free)
+	)
+	scene_root.add_child.call_deferred(decal_slam)
+	
 	return
 
 ##
@@ -819,12 +821,15 @@ func _on_phase_1_state_exited() -> void:
 #
 func _init_backspin_chip() -> void:
 	var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
-	chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
-	chip_inst.deactivate()
+	chip_inst.ready.connect(
+		func():
+			chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
+			chip_inst.deactivate()
+			chip_inst.global_position = despawned_pos
+			rolling_chip_pool.push_back(chip_inst)
+	)
 	scene_root.add_child.call_deferred(chip_inst)
-	chip_inst.set_deferred("global_position", despawned_pos)
 
-	rolling_chip_pool.push_back(chip_inst)
 
 ## BACKSPIN CHIP
 # Big stack fires a spinning chip that rolls back the way it came
@@ -1469,31 +1474,39 @@ func activate_chiptopede() -> void:
 
 func _init_splash_particle() -> void:
 	var splash = splash_particle_prefab.instantiate()
+	splash.ready.connect(
+		func():
+			splash.global_position = despawned_pos
+			splash.emitting = false
+			splash.process_mode = Node.PROCESS_MODE_DISABLED
+			splash_particles_pool.push_back(splash)
+	)
 	scene_root.add_child.call_deferred(splash)
-	splash.global_position = despawned_pos
-	splash.emitting = false
-	splash.process_mode = Node.PROCESS_MODE_DISABLED
-	splash_particles_pool.push_back(splash)
 
 
 func _init_chip_particle() -> void:
 	var chip_particles = chip_stack_particles_prefab.instantiate()
+	chip_particles.ready.connect(
+		func():
+			chip_particles.global_position = despawned_pos
+			chip_particles.process_material.emission_shape_scale = Vector3(1.5, 1.5, 1.5)
+			chip_particles.emitting = false
+			chip_particles.process_mode = Node.PROCESS_MODE_DISABLED
+			chip_particles_pool.push_back(chip_particles)
+	)
 	scene_root.add_child.call_deferred(chip_particles)
-	chip_particles.global_position = despawned_pos
-	chip_particles.process_material.emission_shape_scale = Vector3(1.5, 1.5, 1.5)
-	chip_particles.emitting = false
-	chip_particles.process_mode = Node.PROCESS_MODE_DISABLED
-	chip_particles_pool.push_back(chip_particles)
 
 
 func _init_chiptopede_projectile() -> void:
 	var proj = chiptopede_projectile.instantiate()
-	proj.init(chiptopede_projectile_damage * GameManager.get_risk_dmg_mult(), chiptopede_projectile_speed)
+	proj.ready.connect(
+		func():
+			proj.init(chiptopede_projectile_damage * GameManager.get_risk_dmg_mult(), chiptopede_projectile_speed)
+			proj.deactivate()
+			proj.global_position = despawned_pos
+			chiptopede_projectile_pool.push_back(proj)
+	)
 	scene_root.add_child.call_deferred(proj)
-	await get_tree().physics_frame
-	proj.deactivate()
-	proj.global_position = despawned_pos
-	chiptopede_projectile_pool.push_back(proj)
 
 
 #
@@ -1814,16 +1827,19 @@ func _on_chiptopede_hurt(health_diff: float) -> void:
 func _init_stack_pool() -> void:
 	for i in range(small_stack_count):
 		var stack: ChipBossSubStack = small_stack_prefab.instantiate()
-		get_parent().add_child(stack)
-		stack.big_stack = self
-		# Connect signals
-		stack.health_component.health_diff.connect(_small_stack_hurt)
-		stack.health_component.died.connect(_small_stack_dead.bind(stack))
-		stack.state_chart.event_received.connect(_substack_on_event_received.bind(stack))
-		stack.substack_charge_set.connect(_on_substack_charge_set)
-
-		_deactivate_stack(stack)
-		small_stack_pool.append(stack)
+		stack.ready.connect(
+			func():
+				stack.big_stack = self
+				# Connect signals
+				stack.health_component.health_diff.connect(_small_stack_hurt)
+				stack.health_component.died.connect(_small_stack_dead.bind(stack))
+				stack.state_chart.event_received.connect(_substack_on_event_received.bind(stack))
+				stack.substack_charge_set.connect(_on_substack_charge_set)
+				
+				_deactivate_stack(stack)
+				small_stack_pool.append(stack)
+		)
+		get_parent().add_child.call_deferred(stack)
 
 
 func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
@@ -2066,8 +2082,8 @@ func get_chiptopede_spawn_pos(
 func create_premade_path(start_pos: Vector3, prefab: PackedScene) -> Path3D:
 	# Instance the shooting stance path
 	var path: Path3D = prefab.instantiate()
-	scene_root.add_child.call_deferred(path)
 	path.global_position = start_pos
+	scene_root.add_child.call_deferred(path)
 
 	return path
 
@@ -2200,11 +2216,11 @@ func spawn_segments(path: Path3D) -> Array:
 		new_segment.segment_idx = idx
 
 		# Moving segments
-		path_follow.add_child(new_segment)
 		new_segment.global_position = path_follow.global_position
 		new_segment.visible = true
 		new_segment.splash_particles.emitting = false
 		new_segment.splash_ring_particles.emitting = false
+		path_follow.add_child(new_segment)
 
 		# Enable collision
 		if idx < _segment_col_shapes.size():
@@ -2382,10 +2398,10 @@ func _init_aoe_wave() -> void:
 	var collider_shape := CylinderShape3D.new()
 	collider_shape.radius = 0.01
 	area_collider_shape.shape = collider_shape
-	area_collider.add_child(area_collider_shape)
 	area_collider.collision_layer = int(pow(2, 7))
 	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
 	area_collider_shape.disabled = true
+	area_collider.add_child(area_collider_shape)
 
 	# Generate a visual
 	var wave_mesh := MeshInstance3D.new()
@@ -2399,9 +2415,9 @@ func _init_aoe_wave() -> void:
 
 	wave.add_child(wave_mesh)
 	wave.add_child(area_collider)
+	wave.visible = false
 	scene_root.add_child.call_deferred(wave)
 	wave.set_deferred("global_position", despawned_pos)
-	wave.visible = false
 
 	spawned_area_objects.append([area_collider, wave_mesh])
 	aoe_wave_pool.push_back(wave)
@@ -2456,15 +2472,15 @@ func _init_aoe_bubble() -> void:
 	var collider_shape := SphereShape3D.new()
 	collider_shape.radius = 0.01
 	area_collider_shape.shape = collider_shape
-	area_collider.add_child.call_deferred(area_collider_shape)
 	area_collider.collision_layer = int(pow(2, 7))
 	area_collider.collision_mask = int(pow(2, 2 - 1))
 	area_collider_shape.disabled = true
+	area_collider.add_child.call_deferred(area_collider_shape)
 
 	bubble.add_child(area_collider)
+	bubble.visible = false
 	scene_root.add_child.call_deferred(bubble)
 	bubble.set_deferred("global_position", despawned_pos)
-	bubble.visible = false
 
 	spawned_area_objects.append([area_collider])
 	aoe_bubble_pool.push_back(bubble)
@@ -2476,7 +2492,8 @@ func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration
 	var area_col: CollisionShape3D = area.get_child(0)
 	area_col.shape.radius = radius
 	area_col.disabled = false
-	area.body_entered.connect(_on_wave_collision.bind(damage, pushback_source, radius))
+	if not area.body_entered.is_connected(_on_wave_collision):
+		area.body_entered.connect(_on_wave_collision.bind(damage, pushback_source, radius))
 
 	bubble.global_position = spawn_pos
 
