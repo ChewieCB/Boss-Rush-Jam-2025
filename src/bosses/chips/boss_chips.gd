@@ -626,12 +626,12 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	big_stack_sfx_player.play()
 
 	var decal_slam := Decal.new()
-	decal_slam.texture_albedo = slam_aoe_decal
-	decal_slam.size = Vector3(6, 6, 6)
-	decal_slam.global_position = self.global_position
-	decal_slam.global_position.y += 1
 	decal_slam.ready.connect(
 		func():
+			decal_slam.texture_albedo = slam_aoe_decal
+			decal_slam.size = Vector3(6, 6, 6)
+			decal_slam.global_position = self.global_position
+			decal_slam.global_position.y += 1
 			var aoe_tween: Tween = get_tree().create_tween()
 			aoe_tween.tween_property(decal_slam, "modulate:a", 0, 1.0).set_ease(Tween.EASE_IN)
 			aoe_tween.tween_callback(decal_slam.queue_free)
@@ -1915,8 +1915,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 		_activate_stack(stack, i, stack_count)
 
 		# SFX trigger
-		big_stack_sfx_player.stream = sfx_stack_spawn.pick_random()
-		big_stack_sfx_player.play()
+		if sfx_stack_spawn:
+			big_stack_sfx_player.stream = sfx_stack_spawn.pick_random()
+			big_stack_sfx_player.play()
 
 		var spawn_pos: Vector3
 		if spawn_positions:
@@ -1947,8 +1948,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 	 #SFX trigger
-	big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
-	big_stack_sfx_player.play()
+	if sfx_stack_despawn:
+		big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
+		big_stack_sfx_player.play()
 
 	for stack in active_stacks:
 		stack.set_deferred("collision_layer", 0)
@@ -2626,6 +2628,10 @@ func _spawn_chip() -> void:
 			_init_chip_pool.call_deferred()
 
 	var chip = _chip_spawn_pool.pop_front()
+	# FIXME - resize pool
+	if not chip:
+		return
+	
 	chip.activate()
 	chip.randomise_chip_value()
 	active_chips.append(chip)

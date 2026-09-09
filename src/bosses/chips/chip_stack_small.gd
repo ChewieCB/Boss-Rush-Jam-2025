@@ -503,7 +503,7 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 			await get_tree().create_timer(delay_between_swipe).timeout
 
 			spark(spark_marker.global_position)
-			anim_player.play("substack/slawsh_spark")
+			anim_player.play("substack/slash_spark")
 		sprite.flip_h = !sprite.flip_h
 
 	sprite.flip_h = false
