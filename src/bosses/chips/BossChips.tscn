@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=103 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -82,6 +82,8 @@
 [ext_resource type="Script" path="res://src/bosses/chips/chiptopede_segment_hit_area.gd" id="66_8jaam"]
 [ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="66_ih6eo"]
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="66_vyv8o"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="68_iixbs"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="69_gsiw4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rscgo"]
 resource_local_to_scene = true
@@ -106,6 +108,15 @@ size = Vector3(5.8, 5, 5.9)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oomx2"]
 size = Vector3(5.8, 5, 5.9)
+
+[sub_resource type="Resource" id="Resource_ncg3k"]
+script = ExtResource("68_iixbs")
+state = NodePath("../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_bl2lo"]
+resource_local_to_scene = true
+script = ExtResource("69_gsiw4")
+guard = SubResource("Resource_ncg3k")
 
 [sub_resource type="Animation" id="Animation_8e3f2"]
 length = 0.001
@@ -438,6 +449,21 @@ boss_name = "Shortstack"
 
 [node name="DebugUI" parent="." index="8"]
 process_mode = 4
+
+[node name="toActive" parent="StateChart/Root/Status/Burning/Inactive" index="0"]
+guard = SubResource("Resource_bl2lo")
+
+[node name="toActive" parent="StateChart/Root/Status/Poisoned/Inactive" index="0"]
+guard = SubResource("Resource_bl2lo")
+
+[node name="toActive" parent="StateChart/Root/Status/Frozen/Inactive" index="0"]
+guard = SubResource("Resource_bl2lo")
+
+[node name="toActive" parent="StateChart/Root/Status/Shocked/Inactive" index="0"]
+guard = SubResource("Resource_bl2lo")
+
+[node name="toActive" parent="StateChart/Root/Status/Bleeding/Inactive" index="0"]
+guard = SubResource("Resource_bl2lo")
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
