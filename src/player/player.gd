@@ -704,6 +704,7 @@ func create_jump_dust_ring():
 	var dust_ring_inst = jump_dust_ring_prefab.instantiate()
 	get_tree().get_root().add_child(dust_ring_inst)
 	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
+	dust_ring_inst.activate()
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
