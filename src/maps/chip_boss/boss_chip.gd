@@ -49,10 +49,10 @@ func _ready() -> void:
 		boss.drain_chamber.connect(lower_water)
 		boss.break_floor.connect(break_floor)
 		
-		boss.chiptopede_spawns = chiptopede_spawns
-		boss.chiptopede_snake_spawns = chiptopede_snake_spawns
-		boss.chiptopede_snake_path_points = chiptopede_snake_path_points
-		boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
+		#boss.chiptopede_spawns = chiptopede_spawns
+		#boss.chiptopede_snake_spawns = chiptopede_snake_spawns
+		#boss.chiptopede_snake_path_points = chiptopede_snake_path_points
+		#boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
 
 	waterfalls.visible = false
 	for mesh in waterfall_meshses_vertical:
@@ -107,7 +107,7 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 		# music_playback.switch_to_clip(2)
 		GameManager.change_fmod_bgm_music_state("ChipbossInt")
 		return
-	super (_boss)
+	super(_boss)
 
 
 #func _input(event: InputEvent) -> void:

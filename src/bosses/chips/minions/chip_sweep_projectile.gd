@@ -62,6 +62,7 @@ func remove_chips() -> void:
 
 
 func _add_chip() -> Array:
+	# FIXME - make this a multimesh instance to save draw calls
 	var new_mesh: MeshInstance3D = mesh.duplicate()
 	var new_collider: CollisionShape3D = collider.duplicate()
 	add_child(new_mesh)

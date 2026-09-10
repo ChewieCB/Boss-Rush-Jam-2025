@@ -55,6 +55,7 @@ var big_attacks_performed: int = 0
 @export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 var _spawn_tweens: Array[Tween] = []
+var _stack_transition_locked: bool = false
 
 # SFX
 @export var sfx_stack_split: Array[AudioStream]
@@ -287,11 +288,11 @@ func _ready() -> void:
 		_init_backspin_chip()
 	for i in range(n_chips_per_sweep_volley * chip_sweep_repeat):
 		_init_chip_sweep()
-	for i in range(chiptopede_segments):
-		_init_splash_particle()
-		_init_chip_particle()
-	for i in range(chiptopede_shots_per_burst * chiptopede_projectile_bursts):
-		_init_chiptopede_projectile()
+	#for i in range(chiptopede_segments):
+		#_init_splash_particle()
+		#_init_chip_particle()
+	#for i in range(chiptopede_shots_per_burst * chiptopede_projectile_bursts):
+		#_init_chiptopede_projectile()
 
 	# Stack pool init
 	var _parent = get_parent()
@@ -299,16 +300,16 @@ func _ready() -> void:
 		await _parent.ready
 	_init_stack_pool()
 
-	# Chiptopede init
-	leap_finished.connect(_on_chiptopede_leap_impact)
-	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
-	_create_segment_cache()
-	generate_snake_graph()
-	for i in range(5):
-		_init_aoe_bubble()
-
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# Chiptopede init - TODO: re-implement
+	#leap_finished.connect(_on_chiptopede_leap_impact)
+	#chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
+	#_create_segment_cache()
+	#generate_snake_graph()
+	#for i in range(5):
+		#_init_aoe_bubble()
+#
+	#await get_tree().process_frame
+	#await get_tree().process_frame
 
 	aoe_markers = get_tree().get_nodes_in_group("chip_boss_aoe_marker")
 
@@ -332,7 +333,7 @@ func _physics_process(delta: float) -> void:
 	# Disable big stack processing while hidden but keep ticking the chiptopede
 	if sprite.visible:
 		super(delta)
-	_tick_segments(delta)
+	#_tick_segments(delta)
 
 
 func _tick_segments(delta: float) -> void:
@@ -1444,7 +1445,8 @@ func _on_phase_3_state_entered() -> void:
 	break_floor.emit()
 	# 6.5s  delay
 	await get_tree().create_timer(3.8).timeout
-	activate_chiptopede()
+	#activate_chiptopede()  # TODO - reimplement
+	# TODO - cutscene trigger signal
 
 
 func activate_chiptopede() -> void:
@@ -1947,11 +1949,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 
 func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
-	# Kill any leftover tweens from a previous call
-	for tween in _spawn_tweens:
-		if tween and tween.is_valid():
-			tween.kill()
-	_spawn_tweens.clear()
+	if _stack_transition_locked:
+		return
+	_stack_transition_locked = true
 	
 	 #SFX trigger
 	if sfx_stack_despawn:
@@ -1980,6 +1980,8 @@ func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 
 	if unstable_split_enabled:
 		unstable_split_timer.stop()
+	
+	_stack_transition_locked = false
 
 
 func _substack_on_event_received(event: String, stack: ChipBossSubStack) -> void:
