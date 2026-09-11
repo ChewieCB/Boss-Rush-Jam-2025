@@ -5,7 +5,8 @@ extends BaseBarrelEffect
 @export var heal_interval: float = 5
 @export var low_health_threshold = 0.2
 @export var low_health_bonus = 1.0
-@export var heal_sfx: AudioStream
+
+@onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 
 var timer: Timer
 var regen_inst = null
@@ -28,13 +29,18 @@ func create_effect():
 		GameManager.player.add_child(regen_inst)
 		var status_effect = create_recovery_status_effect()
 		GameManager.player.add_status_effect(status_effect)
+	audio_player.play()
 
 func remove_effect():
 	timer.stop()
 	if regen_inst != null:
 		regen_inst.queue_free()
 		GameManager.player.remove_status_effect_by_name("recovery_effect_regenerate")
+	audio_player.stop()
 
+
+func on_barrel_install():
+	create_effect()
 
 func on_barrel_remove():
 	remove_effect()
@@ -48,7 +54,6 @@ func on_barrel_stop_spin():
 func heal():
 	GameManager.player.health_component.heal(heal_amount)
 	GameManager.player.player_ui.start_heal_flash()
-	SoundManager.play_sound_with_modification(heal_sfx, randf_range(0.7, 1.3), -6, "SFX")
 
 	# Create the recovery status inverval indicator again
 	var status_effect = create_recovery_status_effect()
