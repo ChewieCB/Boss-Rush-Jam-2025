@@ -2,13 +2,12 @@ extends BaseBarrelEffect
 
 @export var damage_to_heal_ratio: float = 100.0
 @export var vfx_heal_orb_prefab: PackedScene
-var heal_orb_pool: Array = []
 @export var heal_cloud_vfx: PackedScene
-var heal_cloud_pool: Array = []
-
 
 const MAX_STORED_HP = 100
 
+var heal_orb_pool: Array = []
+var heal_cloud_pool: Array = []
 var accumulated_damage = 0
 var stored_heal = 0:
 	set(value):
@@ -17,7 +16,6 @@ var stored_heal = 0:
 			add_buff_that_track_recover_amount()
 		if stored_heal == 0:
 			GameManager.player.remove_status_effect_by_name("medical_payout_stored_heal")
-
 var heal_icon = preload("res://assets/sprite/status_icon/medical_payout.png")
 
 

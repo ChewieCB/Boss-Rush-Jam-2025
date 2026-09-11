@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_spphc"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/recovery_effect.gd" id="2_l504x"]
-[ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/gun/vfx/misc/HealBarrier.tscn" id="3_5j62w"]
+[ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/misc/HealBarrier.tscn" id="3_5j62w"]
 
 [node name="DebugBarrelFortitude" type="Node3D"]
 script = ExtResource("1_spphc")

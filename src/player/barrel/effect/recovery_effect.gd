@@ -1,11 +1,14 @@
 extends BaseBarrelEffect
 
-@export var heal_barrier_prefab: PackedScene
-@export var heal_amount: int = 1
-@export var heal_interval: float = 3
+@export var regen_prefab: PackedScene
+@export var heal_amount: int = 5
+@export var heal_interval: float = 5
+@export var low_health_threshold = 0.2
+@export var low_health_bonus = 1.0
+@export var heal_sfx: AudioStream
 
 var timer: Timer
-var heal_barrier_inst = null
+var regen_inst = null
 var recovery_status_icon = preload("res://assets/sprite/status_icon/health_normal.png")
 
 
@@ -20,16 +23,16 @@ func _ready():
 
 func create_effect():
 	timer.start()
-	if heal_barrier_inst == null:
-		heal_barrier_inst = heal_barrier_prefab.instantiate()
-		GameManager.player.add_child(heal_barrier_inst)
+	if regen_inst == null:
+		regen_inst = regen_prefab.instantiate()
+		GameManager.player.add_child(regen_inst)
 		var status_effect = create_recovery_status_effect()
 		GameManager.player.add_status_effect(status_effect)
 
 func remove_effect():
 	timer.stop()
-	if heal_barrier_inst != null:
-		heal_barrier_inst.queue_free()
+	if regen_inst != null:
+		regen_inst.queue_free()
 		GameManager.player.remove_status_effect_by_name("recovery_effect_regenerate")
 
 
@@ -44,6 +47,10 @@ func on_barrel_stop_spin():
 
 func heal():
 	GameManager.player.health_component.heal(heal_amount)
+	GameManager.player.player_ui.start_heal_flash()
+	SoundManager.play_sound_with_modification(heal_sfx, randf_range(0.7, 1.3), -6, "SFX")
+
+	# Create the recovery status inverval indicator again
 	var status_effect = create_recovery_status_effect()
 	GameManager.player.add_status_effect(status_effect)
 

@@ -89,7 +89,7 @@ var drunk_drift_timer: float = 0.0
 var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
 
-@onready var heal_vfx: GPUParticles3D = $HealCloudVFX
+@onready var heal_vfx: GPUParticles3D = $SpinHealVFX
 
 signal movement_dashed
 signal movement_crouched
@@ -252,7 +252,7 @@ func _ready():
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
-	
+
 	GameManager.cheat_godmode_toggle.connect(func(is_invincible: bool): health_component.enabled = !is_invincible)
 
 	update_barrel_effect_ui()
