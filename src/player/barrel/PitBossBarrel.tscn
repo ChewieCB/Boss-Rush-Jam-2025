@@ -33,6 +33,7 @@ display_text_tag = "Don't give up."
 display_text_desc = "Regain 5 HP every 5s. Increased by 100% when under 20% HP."
 positive_desc = Array[String](["Recover health over time"])
 icon_id = 36
+luck_triggers = Array[int]([17])
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="EffectContainer/Fortitude"]
 stream = ExtResource("5_3xcir")

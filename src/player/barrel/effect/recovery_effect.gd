@@ -3,8 +3,8 @@ extends BaseBarrelEffect
 @export var regen_prefab: PackedScene
 @export var heal_amount: int = 5
 @export var heal_interval: float = 5
-@export var low_health_threshold = 0.2
-@export var low_health_bonus = 1.0
+@export var low_health_threshold: float = 0.2
+@export var low_health_bonus: float = 1.0
 
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 
@@ -52,7 +52,12 @@ func on_barrel_stop_spin():
 	create_effect()
 
 func heal():
-	GameManager.player.health_component.heal(heal_amount)
+	if GameManager.player.health_component.current_health_ratio <= low_health_threshold:
+		GameManager.player.health_component.heal(heal_amount * (1 + low_health_bonus))
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.FORTITUDE__PERSISTENT)
+		LuckHandler.increase_luck(5, "+5 Persistent")
+	else:
+		GameManager.player.health_component.heal(heal_amount)
 	GameManager.player.player_ui.start_heal_flash()
 
 	# Create the recovery status inverval indicator again

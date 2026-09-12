@@ -67,19 +67,19 @@ signal setting_back_button_pressed
 
 # DEBUG
 @export var sfx_free_money: AudioStream
-@onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
-@onready var boss_god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossGodMode/BossGodModeToggle
-@onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle
-@onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle
-@onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
-@onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
-@onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
-@onready var barrel_spin_mode_dropdown: OptionButton = $TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown
-@onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
-@onready var debug_jam_controls_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DebugJamControls/DebugJamControlsToggle
-@onready var infinite_ammo_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle
-@onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
-@onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
+@onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode/GodeModeToggle
+@onready var boss_god_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle
+@onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle
+@onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode/GodeModeToggle
+@onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoModeTimeout/SpinBox
+@onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
+@onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossOneShot/BossOneShotToggle
+@onready var barrel_spin_mode_dropdown: OptionButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown
+@onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam/FreecamToggle
+@onready var debug_jam_controls_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls/DebugJamControlsToggle
+@onready var infinite_ammo_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle
+@onready var timescale_slider: HSlider = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider
+@onready var timescale_value: Label = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/Value
 
 const KEYBIND_TIME_LIMIT = 5
 
@@ -113,15 +113,15 @@ func _ready() -> void:
 	keybinding_control_options_section.visible = false
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	GameManager.controller_mouse_override_toggle.connect(
-		func(enabled): 
+		func(enabled):
 			if enabled:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			else:
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	_on_tab_container_tab_changed(0)
-	await get_tree().process_frame
-	await get_tree().process_frame
 	_on_controller_connection(0, GameManager.is_controller_connected)
 
 
@@ -567,6 +567,10 @@ func _on_timescale_slider_value_changed(value: float) -> void:
 func _on_free_money_button_pressed() -> void:
 	GameManager.player_currency += 1000
 	SoundManager.play_ui_sound(sfx_free_money)
+
+func _on_hurt_self_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.player.health_component.damage(10)
 
 
 func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
