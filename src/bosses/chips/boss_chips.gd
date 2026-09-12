@@ -1113,10 +1113,14 @@ func cancel_substack_attacks() -> void:
 		stack.state_chart.send_event("end_attack")
 
 
-func trigger_sequential_substack_attacks(activate_event: String, attack_event: String) -> void:
+func trigger_sequential_substack_attacks(activate_event: String, attack_event: String, activate_stagger: float = 0.06) -> void:
 	finished_stacks = []
 	for stack in active_stacks:
 		stack.state_chart.send_event(activate_event)
+		if activate_stagger:
+			await get_tree().create_timer(activate_stagger).timeout
+			if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
+				return
 	for stack in active_stacks:
 		stack.state_chart.send_event(attack_event)
 		await substack_attack_finished
@@ -1171,7 +1175,7 @@ func _on_ss_charge_solo_attacking_state_entered() -> void:
 # Split into multiple smaller stacks, orbit the player, and charge at them;
 # reforming into the big stack in a big explosion
 func _on_ss_charge_attacking_state_entered() -> void:
-	trigger_substack_attack("start_split_rush_attack")
+	trigger_substack_attack("start_split_rush_attack", 0.1)
 
 func _on_ss_charge_merging_state_entered() -> void:
 	await merge_stacks()

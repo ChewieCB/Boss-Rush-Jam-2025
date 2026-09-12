@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhs4ok0com8cc"
-path.s3tc="res://.godot/imported/texture_red_01.png-1616584a0883f6e58625b2884d20bdfa.s3tc.ctex"
+uid="uid://cjqumjeh782bk"
+path.s3tc="res://.godot/imported/check-floor-border.png-2011603156904d08ace7f28b4986578a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_red_01.png"
-dest_files=["res://.godot/imported/texture_red_01.png-1616584a0883f6e58625b2884d20bdfa.s3tc.ctex"]
+source_file="res://assets/textures/floor/check-floor-border.png"
+dest_files=["res://.godot/imported/check-floor-border.png-2011603156904d08ace7f28b4986578a.s3tc.ctex"]
 
 [params]
 

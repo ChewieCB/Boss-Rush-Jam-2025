@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhs4ok0com8cc"
-path.s3tc="res://.godot/imported/texture_red_01.png-1616584a0883f6e58625b2884d20bdfa.s3tc.ctex"
+uid="uid://fyroqj1uplg0"
+path.s3tc="res://.godot/imported/beerposters_horizontal-luckycat.png-c70bcfd5d17e9f792ddb257825237dc7.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_red_01.png"
-dest_files=["res://.godot/imported/texture_red_01.png-1616584a0883f6e58625b2884d20bdfa.s3tc.ctex"]
+source_file="res://assets/posters/beerposters_horizontal-luckycat.png"
+dest_files=["res://.godot/imported/beerposters_horizontal-luckycat.png-c70bcfd5d17e9f792ddb257825237dc7.s3tc.ctex"]
 
 [params]
 

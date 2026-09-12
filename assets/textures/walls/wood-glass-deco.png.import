@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhs4ok0com8cc"
-path.s3tc="res://.godot/imported/texture_red_01.png-1616584a0883f6e58625b2884d20bdfa.s3tc.ctex"
+uid="uid://2fyyb80vjdwo"
+path.s3tc="res://.godot/imported/wood-glass-deco.png-481018a18f326fc753c4bab1ed65f080.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_red_01.png"
-dest_files=["res://.godot/imported/texture_red_01.png-1616584a0883f6e58625b2884d20bdfa.s3tc.ctex"]
+source_file="res://assets/textures/walls/wood-glass-deco.png"
+dest_files=["res://.godot/imported/wood-glass-deco.png-481018a18f326fc753c4bab1ed65f080.s3tc.ctex"]
 
 [params]
 
