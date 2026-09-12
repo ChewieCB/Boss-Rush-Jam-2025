@@ -51,4 +51,4 @@ func start_heal_flash() -> void:
 	heal_flash_overlay.color = start_color
 	var tween = create_tween()
 	tween.tween_property(heal_flash_overlay, "color:a", 0.0, DURATION)
-	SoundManager.play_sound(heal_flash_sfx)
+	SoundManager.play_sound_with_modification(heal_flash_sfx, randf_range(0.7, 1.3))

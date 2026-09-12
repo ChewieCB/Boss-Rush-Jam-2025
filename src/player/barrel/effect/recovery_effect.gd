@@ -1,11 +1,15 @@
 extends BaseBarrelEffect
 
-@export var heal_barrier_prefab: PackedScene
-@export var heal_amount: int = 1
-@export var heal_interval: float = 3
+@export var regen_prefab: PackedScene
+@export var heal_amount: int = 5
+@export var heal_interval: float = 5
+@export var low_health_threshold: float = 0.2
+@export var low_health_bonus: float = 1.0
+
+@onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 
 var timer: Timer
-var heal_barrier_inst = null
+var regen_inst = null
 var recovery_status_icon = preload("res://assets/sprite/status_icon/health_normal.png")
 
 
@@ -20,18 +24,23 @@ func _ready():
 
 func create_effect():
 	timer.start()
-	if heal_barrier_inst == null:
-		heal_barrier_inst = heal_barrier_prefab.instantiate()
-		GameManager.player.add_child(heal_barrier_inst)
+	if regen_inst == null:
+		regen_inst = regen_prefab.instantiate()
+		GameManager.player.add_child(regen_inst)
 		var status_effect = create_recovery_status_effect()
 		GameManager.player.add_status_effect(status_effect)
+	audio_player.play()
 
 func remove_effect():
 	timer.stop()
-	if heal_barrier_inst != null:
-		heal_barrier_inst.queue_free()
+	if regen_inst != null:
+		regen_inst.queue_free()
 		GameManager.player.remove_status_effect_by_name("recovery_effect_regenerate")
+	audio_player.stop()
 
+
+func on_barrel_install():
+	create_effect()
 
 func on_barrel_remove():
 	remove_effect()
@@ -43,7 +52,15 @@ func on_barrel_stop_spin():
 	create_effect()
 
 func heal():
-	GameManager.player.health_component.heal(heal_amount)
+	if GameManager.player.health_component.current_health_ratio <= low_health_threshold:
+		GameManager.player.health_component.heal(heal_amount * (1 + low_health_bonus))
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.FORTITUDE__PERSISTENT)
+		LuckHandler.increase_luck(5, "+5 Persistent")
+	else:
+		GameManager.player.health_component.heal(heal_amount)
+	GameManager.player.player_ui.start_heal_flash()
+
+	# Create the recovery status inverval indicator again
 	var status_effect = create_recovery_status_effect()
 	GameManager.player.add_status_effect(status_effect)
 

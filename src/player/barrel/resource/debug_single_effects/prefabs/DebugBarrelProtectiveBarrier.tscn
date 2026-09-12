@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_01on3"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_r326p"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="2_wg65y"]
-[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="3_v36ns"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/misc/ShieldBarrier.tscn" id="3_v36ns"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="5_dfllo"]
 [ext_resource type="Texture2D" uid="uid://cgjpqjw32dtqe" path="res://assets/sprite/status_icon/run_speed_down.png" id="6_1i840"]
 

@@ -1037,26 +1037,29 @@ theme_override_font_sizes/font_size = 40
 text = "DEBUG"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/DEBUG"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/DEBUG"]
 layout_mode = 0
 offset_left = 32.0
 offset_top = 80.0
 offset_right = 800.0
-offset_bottom = 472.0
+offset_bottom = 688.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/DEBUG/ScrollContainer"]
+layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="GodMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="GodMode" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/GodMode"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "God Mode"
 
-[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/GodMode"]
+[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1064,18 +1067,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="BossGodMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="BossGodMode" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BossGodMode"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Invincible Bosses ([/])"
 
-[node name="BossGodModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/BossGodMode"]
+[node name="BossGodModeToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1083,18 +1086,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/SkipTutorial"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Skip Tutorial"
 
-[node name="SkipTutorialToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/SkipTutorial"]
+[node name="SkipTutorialToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1102,18 +1105,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="DemoMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="DemoMode" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DemoMode"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Demo Mode"
 
-[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/DemoMode"]
+[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1121,44 +1124,44 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="DemoModeTimeout" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="DemoModeTimeout" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoModeTimeout"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Demo Mode Timeout"
 
-[node name="SpinBox" type="SpinBox" parent="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout"]
+[node name="SpinBox" type="SpinBox" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoModeTimeout"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -90.0
+offset_left = 288.0
 offset_top = -14.0
-offset_right = -10.0
+offset_right = 368.0
 offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 300.0
 
-[node name="FreeMoney" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="FreeMoney" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/FreeMoney"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/FreeMoney"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Give 1000 chips"
 
-[node name="FreeMoneyButton" type="Button" parent="TabContainer/DEBUG/VBoxContainer/FreeMoney"]
+[node name="FreeMoneyButton" type="Button" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/FreeMoney"]
 custom_minimum_size = Vector2(64, 24)
 layout_mode = 1
 anchors_preset = 8
@@ -1166,10 +1169,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -88.0
-offset_top = -12.0
-offset_right = -24.0
-offset_bottom = 12.0
+offset_left = 288.0
+offset_top = -14.0
+offset_right = 352.0
+offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "+1000"
@@ -1177,18 +1180,47 @@ icon = ExtResource("9_akomy")
 icon_alignment = 2
 expand_icon = true
 
-[node name="AlwaysInventory" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="HurtSelf" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/AlwaysInventory"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/HurtSelf"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Hurt self 10 damage"
+
+[node name="HurtSelfButton" type="Button" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/HurtSelf"]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 288.0
+offset_top = -16.0
+offset_right = 352.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "-10 HP"
+icon_alignment = 2
+expand_icon = true
+
+[node name="AlwaysInventory" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/AlwaysInventory"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Inventory always accessible"
 
-[node name="AlwaysInventoryToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/AlwaysInventory"]
+[node name="AlwaysInventoryToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/AlwaysInventory"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1196,18 +1228,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="BossOneShot" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="BossOneShot" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BossOneShot"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossOneShot"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Set all bosses to 1 HP"
 
-[node name="BossOneShotToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/BossOneShot"]
+[node name="BossOneShotToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossOneShot"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1215,18 +1247,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="BarrelSpinMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="BarrelSpinMode" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Barrel Spin Mode"
 
-[node name="BarrelSpinModeDropdown" type="OptionButton" parent="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode"]
+[node name="BarrelSpinModeDropdown" type="OptionButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1240,18 +1272,18 @@ popup/item_1/id = 1
 popup/item_2/text = "Seeded Auto-spin"
 popup/item_2/id = 2
 
-[node name="InfiniteAmmo" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="InfiniteAmmo" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Infinite Ammo"
 
-[node name="InfiniteAmmoToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo"]
+[node name="InfiniteAmmoToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1259,18 +1291,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="DebugJamControls" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="DebugJamControls" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DebugJamControls"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Debug Jam Controls (X/C)"
 
-[node name="DebugJamControlsToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/DebugJamControls"]
+[node name="DebugJamControlsToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1278,18 +1310,18 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="Freecam" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="Freecam" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Freecam"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Unlock freecam mode (`)"
 
-[node name="FreecamToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/Freecam"]
+[node name="FreecamToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam"]
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
@@ -1297,11 +1329,11 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="Timescale" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+[node name="Timescale" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale"]
 layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
@@ -1309,7 +1341,7 @@ theme_override_font_sizes/font_size = 26
 text = "Engine Timescale
 "
 
-[node name="TimescaleSlider" type="HSlider" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+[node name="TimescaleSlider" type="HSlider" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale"]
 layout_mode = 0
 offset_left = 296.0
 offset_top = 16.0
@@ -1320,7 +1352,7 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="Value" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+[node name="Value" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -1431,31 +1463,32 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossGodMode/BossGodModeToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossGodMode/BossGodModeToggle" to="." method="_on_boss_god_mode_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="_on_skip_tutorial_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="_on_demo_mode_toggle_toggled"]
-[connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox" to="." method="_on_demo_timeout_value_changed"]
-[connection signal="pressed" from="TabContainer/DEBUG/VBoxContainer/FreeMoney/FreeMoneyButton" to="." method="_on_free_money_button_pressed"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="_on_always_inventory_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
-[connection signal="item_selected" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="_on_infinite_ammo_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="_on_debug_jam_controls_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
-[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]
-[connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="_on_timescale_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle" to="." method="_on_boss_god_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="_on_skip_tutorial_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode/GodeModeToggle" to="." method="_on_demo_mode_toggle_toggled"]
+[connection signal="value_changed" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoModeTimeout/SpinBox" to="." method="_on_demo_timeout_value_changed"]
+[connection signal="pressed" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/FreeMoney/FreeMoneyButton" to="." method="_on_free_money_button_pressed"]
+[connection signal="pressed" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/HurtSelf/HurtSelfButton" to="." method="_on_hurt_self_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="_on_always_inventory_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="item_selected" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="_on_infinite_ammo_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="_on_debug_jam_controls_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider" to="." method="_on_timescale_slider_value_changed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]

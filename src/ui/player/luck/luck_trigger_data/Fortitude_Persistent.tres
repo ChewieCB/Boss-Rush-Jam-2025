@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://bq65re8j0ol5y"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_r035y"]
+
+[resource]
+script = ExtResource("1_r035y")
+id = 17
+name = "Persistent"
+desc = "+5 luck when recovered while at low health"
+message = ""

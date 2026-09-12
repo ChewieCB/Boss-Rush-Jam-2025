@@ -1,4 +1,5 @@
 extends Node3D
+class_name HealCloud
 
 @export var heal_amount_flat = 100
 

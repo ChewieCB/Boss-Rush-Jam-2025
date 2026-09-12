@@ -162,7 +162,7 @@ health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
 
-[node name="HealCloudVFX" parent="." instance=ExtResource("36_isl1y")]
+[node name="SpinHealVFX" parent="." instance=ExtResource("36_isl1y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
 
 [node name="HealthComponent" type="Node3D" parent="."]

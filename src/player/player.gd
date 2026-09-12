@@ -89,7 +89,7 @@ var drunk_drift_timer: float = 0.0
 var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
 
-@onready var heal_vfx: GPUParticles3D = $HealCloudVFX
+@onready var heal_vfx: GPUParticles3D = $SpinHealVFX
 
 signal movement_dashed
 signal movement_crouched
@@ -252,7 +252,7 @@ func _ready():
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
-	
+
 	GameManager.cheat_godmode_toggle.connect(func(is_invincible: bool): health_component.enabled = !is_invincible)
 
 	update_barrel_effect_ui()
@@ -704,6 +704,7 @@ func create_jump_dust_ring():
 	var dust_ring_inst = jump_dust_ring_prefab.instantiate()
 	get_tree().get_root().add_child(dust_ring_inst)
 	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
+	dust_ring_inst.activate()
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
@@ -980,8 +981,9 @@ func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 
 func _on_health_changed(current_health: float, prev_health: float) -> void:
 	var current_health_ratio: float = current_health / health_component.max_health
-	var health_hurt_opacity = remap(current_health_ratio, 1.0, 0.0, 0.0, 1.0)
-	var anim_speed: float = remap(current_health_ratio, 1.0, 0.0, 1.0, 1.8)
+	# Health hurt overlay stay transparent above 50% heath, then starting to get opaque as normal
+	var health_hurt_opacity = clampf(remap(current_health_ratio, 0.5, 0.0, 0.0, 1.0), 0.0, 1.0)
+	var anim_speed: float = clampf(remap(current_health_ratio, 0.5, 0.0, 1.0, 1.8), 1.0, 1.8)
 	hurt_overlay.update_low_health_anim(health_hurt_opacity, anim_speed)
 	# Health bar shake on heal
 	if current_health > prev_health:

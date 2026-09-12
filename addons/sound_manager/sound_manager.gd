@@ -48,7 +48,7 @@ var music_process_mode: ProcessMode:
 
 
 func _init() -> void:
-	Engine.register_singleton("SoundManager", self )
+	Engine.register_singleton("SoundManager", self)
 
 	add_child(sound_effects)
 	add_child(ui_sound_effects)
@@ -95,6 +95,12 @@ func play_sfx_guarded(player: AudioStreamPlayer3D, cooldown: float = 0.05) -> vo
 func play_sound_with_pitch(resource: AudioStream, pitch: float = 1.0, override_bus: String = "") -> AudioStreamPlayer:
 	var player = sound_effects.play(resource, override_bus)
 	player.pitch_scale = pitch
+	return player
+
+func play_sound_with_modification(resource: AudioStream, pitch: float = 1.0, volume_db: float = 0.0, override_bus: String = "") -> AudioStreamPlayer:
+	var player = sound_effects.play(resource, override_bus)
+	player.pitch_scale = pitch
+	player.volume_db = volume_db
 	return player
 
 
