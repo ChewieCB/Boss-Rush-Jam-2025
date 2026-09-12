@@ -981,8 +981,9 @@ func _on_player_damage(damage: float, damage_pos: Vector3) -> void:
 
 func _on_health_changed(current_health: float, prev_health: float) -> void:
 	var current_health_ratio: float = current_health / health_component.max_health
-	var health_hurt_opacity = remap(current_health_ratio, 1.0, 0.0, 0.0, 1.0)
-	var anim_speed: float = remap(current_health_ratio, 1.0, 0.0, 1.0, 1.8)
+	# Health hurt overlay stay transparent above 50% heath, then starting to get opaque as normal
+	var health_hurt_opacity = clampf(remap(current_health_ratio, 0.5, 0.0, 0.0, 1.0), 0.0, 1.0)
+	var anim_speed: float = clampf(remap(current_health_ratio, 0.5, 0.0, 1.0, 1.8), 1.0, 1.8)
 	hurt_overlay.update_low_health_anim(health_hurt_opacity, anim_speed)
 	# Health bar shake on heal
 	if current_health > prev_health:
