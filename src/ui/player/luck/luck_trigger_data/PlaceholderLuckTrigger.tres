@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://ivtia32b4th5"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_4axvn"]
+
+[resource]
+script = ExtResource("1_4axvn")
+id = 0
+name = "Placeholder"
+desc = ""
+message = ""

@@ -53,16 +53,18 @@ var dps_accumulated_in_window: float = 0.0:
 
 func reset_luck_triggers() -> void:
 	for trigger in luck_triggers:
-		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger.id]
-		luck_trigger_dict[enum_str] = false
+		if trigger != null:
+			var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger.id]
+			luck_trigger_dict[enum_str] = false
 	trigger_discovered.emit()
 
 
 func update_luck_triggers_from_new_patch() -> void:
 	for trigger in luck_triggers:
-		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger.id]
-		if enum_str not in luck_trigger_dict:
-			luck_trigger_dict[enum_str] = false
+		if trigger != null:
+			var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger.id]
+			if enum_str not in luck_trigger_dict:
+				luck_trigger_dict[enum_str] = false
 
 
 ## Modify luck
