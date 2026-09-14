@@ -1,6 +1,5 @@
-[gd_scene load_steps=14 format=4 uid="uid://bqiff67ahg388"]
+[gd_scene load_steps=12 format=4 uid="uid://bqiff67ahg388"]
 
-[ext_resource type="Material" uid="uid://bd30fi2gcimy1" path="res://assets/textures/placeholder/texture_green_green_green_06.tres" id="1_xir2y"]
 [ext_resource type="Script" path="res://src/maps/chip_boss/environment/rising_platform.gd" id="2_34sch"]
 [ext_resource type="Texture2D" uid="uid://drxaghabsqyx1" path="res://assets/textures/platforms/coaster_1.png" id="3_2vnvj"]
 [ext_resource type="Material" uid="uid://626wkiaaixqm" path="res://assets/textures/platforms/coaster_edge_1.tres" id="4_cso7l"]
@@ -8,21 +7,6 @@
 [ext_resource type="Material" uid="uid://bwqavdd4ybutd" path="res://assets/textures/platforms/cork.tres" id="6_jvo8x"]
 [ext_resource type="Material" uid="uid://biycvffy0vqe7" path="res://assets/textures/misc/chiptopede_side.tres" id="7_jf32r"]
 [ext_resource type="Material" uid="uid://dj8c858grcar" path="res://assets/textures/misc/chiptopede_back.tres" id="8_tcbjl"]
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_q1u7m"]
-_surfaces = [{
-"aabb": AABB(-2, -1.78125, -2, 4, 3.5625, 4),
-"attribute_data": PackedByteArray("AAAAvQAAAD4AAMC9AAAAPgAAwL0AAGA8AAAAvQAAYDy2w4c9AAAAPrbDhz0AAGA8MEbiPQAAYDwwRuI9AAAAPrbDhz0AAGA8tsOHPQAAAD4wRuI9AAAAPjBG4j0AAGA8AABgPgAAYDwAACA+AABgPAAAID4AAAA+AABgPgAAAD4AAGC+AAAAAAAAgL4AAAC9AACAvgAAwL0AAGC+AAAAvgAAIL4AAAC+AAAAvgAAwL0AAAC+AAAAvQAAIL4AAAAAAABgPgAAAAAAACA+AAAAAAAAAD4AAAC9AAAAPgAAwL0AACA+AAAAvgAAYD4AAAC+AACAPgAAwL0AAIA+AAAAvQAAYD4AAGA8AABgPgAAAD4AACA+AAAAPgAAID4AAGA8L0biPQAAYDy1w4c9AABgPLXDhz0AAAA+L0biPQAAAD65w4c9AAAAPrnDhz0AAGA8M0biPQAAYDwzRuI9AAAAPgAAwL0AAAA+AADAvQAAYDwAAAC9AABgPAAAAL0AAAA+"),
-"format": 34359742487,
-"index_count": 84,
-"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAEAATABQAEAAUABUAEAAVABYAEAAWABcAGAAZABoAGAAaABsAGAAbABwAGAAcAB0AGAAdAB4AGAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8A"),
-"material": ExtResource("1_xir2y"),
-"name": "placeholder/texture_green_green_green_06",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 48,
-"vertex_data": PackedByteArray("//9/vwAA5L8AAADA//9/PwAA5L8AAADA//9/PwAA5D8AAADA//9/vwAA5D8AAADA//9/vwAA5L8AAADA//9/vwAA5D8AAADAAAAAwAAA5D///3+/AAAAwAAA5L///3+///9/PwAA5D8AAADA//9/PwAA5L8AAADAAAAAQAAA5L///3+/AAAAQAAA5D///3+/AAAAwAAA5D///3+/AAAAwAAA5D///38/AAAAwAAA5L///38/AAAAwAAA5L///3+/AAAAQAAA5L///3+///9/PwAA5L8AAADA//9/vwAA5L8AAADAAAAAwAAA5L///3+/AAAAwAAA5L///38///9/vwAA5L8AAABA//9/PwAA5L8AAABAAAAAQAAA5L///38/AAAAQAAA5D///3+/AAAAQAAA5D///38///9/PwAA5D8AAABA//9/vwAA5D8AAABAAAAAwAAA5D///38/AAAAwAAA5D///3+///9/vwAA5D8AAADA//9/PwAA5D8AAADAAAAAQAAA5D///3+/AAAAQAAA5L///3+/AAAAQAAA5L///38/AAAAQAAA5D///38/AAAAwAAA5D///38///9/vwAA5D8AAABA//9/vwAA5L8AAABAAAAAwAAA5L///38///9/PwAA5L8AAABA//9/PwAA5D8AAABAAAAAQAAA5D///38/AAAAQAAA5L///38///9/vwAA5L8AAABA//9/vwAA5D8AAABA//9/PwAA5D8AAABA//9/PwAA5L8AAABA/////wAA/7//////AAD/v/////8AAP+//////wAA/78AAP+//z//vwAA/7//P/+/AAD/v/8//78AAP+//z//v////7//v/8/////v/+//z////+//7//P////7//v/8/AAD/f///AAAAAP9///8AAAAA/3///wAAAAD/f///AAD/fwAA/3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+//3//////////f/////////9//////////3//////////f/////////9//////////3//////////f////////////3//////////f/////////9//////////3///////z//fwAA/x//P/9/AAD/H/8//38AAP8f/z//fwAA/x//v/9/////3/+//3/////f/7//f////9//v/9/////3/9//3////+//3//f////7//f/9/////v/9//3////+/")
-}]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qnaet"]
 transparency = 1
@@ -112,16 +96,13 @@ _surfaces = [{
 }]
 
 [node name="RisingPlatform" type="StaticBody3D" groups=["chip_boss_rising_platforms"]]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+transform = Transform3D(-1.16498, 0, -0.944903, 0, 1.5, 0, 0.944903, 0, -1.16498, 0, 0, 0)
 collision_mask = 126
 script = ExtResource("2_34sch")
-
-[node name="RisingPlatform" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.781, 0)
-visible = false
-cast_shadow = 2
-gi_mode = 0
-mesh = SubResource("ArrayMesh_q1u7m")
+float_strength = 1.0
+float_frequency = 2.5
+bob_strength = 0.1
+bob_frequency = 1.0
 
 [node name="Marker3D" type="Marker3D" parent="." groups=["chip_boss_aoe_marker"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0189999, 0)
@@ -138,5 +119,17 @@ transform = Transform3D(0.75, 0, 0, 0, 1, 0, 0, 0, 0.75, 0, -0.488756, 0)
 shape = SubResource("CylinderShape3D_8p2mm")
 
 [node name="ChipMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.69, 0, 0, 0, 2.36, 0, 0, 0, 0.69, 1.71443, -0.17806, 0)
+transform = Transform3D(0.69, 0, 2.98023e-08, 0, 1.035, 0, -2.98023e-08, 0, 0.69, 1.71443, -0.00540707, 1.19209e-07)
+mesh = SubResource("ArrayMesh_ff68m")
+
+[node name="ChipMesh2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.00366101, 0, 0.68999, 0, 1.035, 0, -0.68999, 0, -0.00366101, -0.034018, -0.507176, -1.68934)
+mesh = SubResource("ArrayMesh_ff68m")
+
+[node name="ChipMesh3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.568681, 0, -0.390771, 0, 1.035, 0, 0.390771, 0, 0.568681, 1.40222, -1.00363, 1.00586)
+mesh = SubResource("ArrayMesh_ff68m")
+
+[node name="ChipMesh4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.105751, 0, -0.681848, 0, 1.035, 0, 0.681848, 0, 0.105751, 0.209088, -1.50244, 1.69883)
 mesh = SubResource("ArrayMesh_ff68m")

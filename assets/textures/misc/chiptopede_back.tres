@@ -1,8 +1,8 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dj8c858grcar"]
 
-[ext_resource type="Texture2D" uid="uid://bxwtb0gll74t8" path="res://assets/textures/misc/chiptopede_back.png" id="1_r0m3y"]
+[ext_resource type="Texture2D" uid="uid://bwr6bgqhadl1o" path="res://src/bosses/chips/assets/sprites/chiptopede/chiptopede_back-dark_green.png" id="1_g6w4e"]
 
 [resource]
-albedo_texture = ExtResource("1_r0m3y")
+albedo_texture = ExtResource("1_g6w4e")
 metallic_specular = 0.0
 texture_filter = 2

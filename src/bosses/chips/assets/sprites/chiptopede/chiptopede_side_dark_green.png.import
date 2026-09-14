@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3b2kdnkcdn8g"
-path.s3tc="res://.godot/imported/RisingPlatform_1.png-13c7dca9ab72664b209f9a1008e1b77a.s3tc.ctex"
+uid="uid://cu0c10d1ysawt"
+path.s3tc="res://.godot/imported/chiptopede_side_dark_green.png-1a21e730a4ad6ed1e235c8eeef844a7d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "a65cefe63d99175c42b71d38e4cb1245"
-}
 
 [deps]
 
-source_file="res://assets/trenchbroom/models/RisingPlatform_1.png"
-dest_files=["res://.godot/imported/RisingPlatform_1.png-13c7dca9ab72664b209f9a1008e1b77a.s3tc.ctex"]
+source_file="res://src/bosses/chips/assets/sprites/chiptopede/chiptopede_side_dark_green.png"
+dest_files=["res://.godot/imported/chiptopede_side_dark_green.png-1a21e730a4ad6ed1e235c8eeef844a7d.s3tc.ctex"]
 
 [params]
 

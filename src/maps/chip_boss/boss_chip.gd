@@ -152,6 +152,7 @@ func raise_water() -> void:
 	SFXBeerPlayer2.play()
 	SFXBeerFlood.play()
 	SFXBeerFlood2.play()
+	
 	waterfalls.visible = true
 	var water_tween: Tween = get_tree().create_tween()
 	for mesh in waterfall_meshses_vertical:
@@ -162,11 +163,23 @@ func raise_water() -> void:
 			water_raise_time / 3
 		)
 		mesh.get_node("WaterfallArea").set_deferred("monitoring", true)
-	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)
+	water_tween.set_parallel(false)
+	# upper_water level = 0.43
+	# floor level = -0.3
+	# min_water level = -2.5
+	water_tween.tween_property(water_surface, "global_position:y", -0.3, water_raise_time/2)
+	
+	await water_tween.finished
+	
+	water_tween = get_tree().create_tween()
+	water_tween.set_parallel(true)
+	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time/2)
 	
 	for platform in rising_platforms:
-		platform.raise(platform_level, 1.4)
-	
+		platform.raise(platform_level, water_raise_time/2)
+		water_tween.tween_property(
+			platform, "rotation_degrees:y", 360, water_raise_time
+		)
 	
 	await water_tween.finished
 
