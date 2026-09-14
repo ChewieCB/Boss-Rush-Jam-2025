@@ -45,6 +45,7 @@ var center_pos := Vector3(0, 0, -2)
 @export var pushback_force: float = 20.0
 var aoe_wave_pool: Array = []
 var aoe_bubble_pool: Array = []
+var attack_interrupt: bool = false
 # SFX
 @export var sfx_jump: Array[AudioStream]
 @export var sfx_hurt_scream: Array[AudioStream]
@@ -443,6 +444,7 @@ func _on_died() -> void:
 
 func select_attack_phase_1() -> void:
 	state_chart.send_event("end_attack")
+	attack_interrupt = false
 	# Weighted random chance attacks
 	#
 	var attack_str: String = ""
@@ -491,6 +493,7 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_2() -> void:
 	state_chart.send_event("end_attack")
+	attack_interrupt = false
 	# Weighted random chance attacks
 	#
 	var attack_str: String = ""
@@ -841,6 +844,8 @@ func _on_backspin_chip_targeting_state_entered() -> void:
 func _on_backspin_chip_forward_spin_state_entered() -> void:
 	anim_player.play("big_stack/projectile_telegraph")
 	await _telegraph_attack()
+	if attack_interrupt:
+		return
 	anim_player.play("big_stack/projectile_fire")
 
 	var rotate_deg_per_chip_idx = rolling_chip_get_angles(n_chips_per_roll, rolling_chip_spread_deg)
@@ -849,6 +854,7 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 		var chip_inst: RollingChip = rolling_chip_pool.pop_front()
 		active_rolling_chips.append(chip_inst)
 		chip_inst.global_transform = self.global_transform
+		chip_inst.visible = true
 		chip_inst.activate()
 		chip_inst.rotate_y(deg_to_rad(rotate_deg_per_chip_idx[i]))
 
@@ -860,6 +866,8 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 	big_stack_sfx_player.play()
 
 	await active_rolling_chips[0].spin_finished
+	if attack_interrupt:
+		return
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 		return
@@ -874,6 +882,8 @@ func _on_backspin_chip_back_spin_state_entered() -> void:
 	for chip in active_rolling_chips:
 		chip.roll_to_point(self.global_position, 0.8)
 	await active_rolling_chips[0].spin_finished
+	if attack_interrupt:
+		return
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 		return
@@ -891,8 +901,12 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	if chips_fired >= rolling_chip_repeat_per_attack:
 		chips_fired = 0
 		state_chart.send_event("attack_end")
-
+		
+		if attack_interrupt:
+			return
+		
 		await get_tree().create_timer(attack_recovery_time).timeout
+		
 		# Catch and handle a mid-await state change
 		if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 			return
@@ -909,6 +923,7 @@ func _on_backspin_chip_recover_state_entered() -> void:
 func _cleanup_backspin_chip() -> void:
 	for chip in active_rolling_chips:
 		chip.deactivate()
+		chip.visible = false
 		chip.global_position = despawned_pos
 		rolling_chip_pool.push_back(chip)
 
@@ -1225,6 +1240,7 @@ func _on_ss_charge_reform_recover_state_entered() -> void:
 ## Phase 2 - Flooded
 
 func _on_phase_2_state_entered() -> void:
+	attack_interrupt = true
 	flood_chamber.emit()
 	health_ui.empty_phase_marker(-1)
 	health_ui.next_health_bar()
