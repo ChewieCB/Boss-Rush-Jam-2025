@@ -1405,6 +1405,8 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 			#available_markers.size()
 		#)
 		#var new_target_idx = available_markers.pop_at(wrapped_idx)
+	
+	await get_tree().create_timer(0.6).timeout
 
 	for i in range(active_stacks.size()):
 		var stack = active_stacks[i]

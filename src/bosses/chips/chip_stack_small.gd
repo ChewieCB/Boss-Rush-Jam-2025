@@ -642,7 +642,7 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 	GRAVITY = 0
 
 	anim_player.play("substack/jump_telegraph")
-	await split_stack_jump_to_center()
+	split_stack_jump_to_center()
 
 
 func _on_place_your_bets_crashing_state_entered() -> void:
