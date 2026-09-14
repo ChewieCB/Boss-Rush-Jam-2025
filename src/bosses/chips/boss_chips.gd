@@ -413,14 +413,14 @@ func _on_health_dead_state_entered() -> void:
 	explosion_inst.set_damage_radius(8.0)
 	explosion_inst.global_position = self.global_position + Vector3(0, 1.4, 0)
 	explosion_inst.activate()
+	
+	hide_big_stack()
 
 	death_anim_finished.emit()
 
 
 func _on_died() -> void:
 	if current_phase != 3:
-	#if true:
-	#if true:
 		SoundManager.play_sound(sfx_death, "SFX")
 		SoundManager.play_sound(sfx_hurt_scream.pick_random(), "SFX")
 		state_chart.send_event("stop_moving")
