@@ -16,6 +16,8 @@ var movement_sfx_player: AudioStreamPlayer
 @export var sfx_dash_air: Array[AudioStream]
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
+@onready var low_health_audio: AudioStreamPlayer = $LowHealthAudio
+
 
 @export_category("Movement")
 @export var can_wall_jump: bool
@@ -119,6 +121,8 @@ const CROUCH_SPEED_MODIFIER: float = 0.5
 const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to target. 1-10
 const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
 const AIM_ASSIST_MAX_RANGE = 50
+
+const LOW_HEALTH_THRESHOLD: float = 0.5
 
 var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
@@ -860,8 +864,25 @@ func _on_health_changed(current_health: float, prev_health: float) -> void:
 	var anim_speed: float = remap(current_health_ratio, 1.0, 0.0, 1.0, 1.8)
 	hurt_overlay.update_low_health_anim(health_hurt_opacity, anim_speed)
 	# Health bar shake on heal
+	update_low_health_audio(current_health_ratio)
 	if current_health > prev_health:
 		stat_ui.anim_health_ui_scale(1.2)
+
+func update_low_health_audio(current_health_ratio: float) -> void:
+	if current_health_ratio < LOW_HEALTH_THRESHOLD:
+		var intensity: float = remap(current_health_ratio, LOW_HEALTH_THRESHOLD, 0.0, 0.0, 1.0)
+		intensity = clampf(intensity, 0.0, 1.0)
+		low_health_audio.volume_db = linear_to_db(intensity) + 10.0
+		
+		var bus_index: int = AudioServer.get_bus_index("LowHealthReverb")
+		var reverb: AudioEffectReverb = AudioServer.get_bus_effect(bus_index, 0)
+		reverb.wet = intensity * 0.4
+		
+		if not low_health_audio.playing:
+			low_health_audio.play()
+	else:
+		if low_health_audio.playing:
+			low_health_audio.stop()
 
 
 func _on_died() -> void:

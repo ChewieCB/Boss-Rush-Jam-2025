@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=89 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -72,6 +72,7 @@
 [ext_resource type="AudioStream" uid="uid://bpdnxlyoguky5" path="res://src/player/assets/sfx/Bullet Whiz 2.mp3" id="70_733vl"]
 [ext_resource type="AudioStream" uid="uid://dwriy0s2kb1i7" path="res://src/player/assets/sfx/Bullet Whiz 3.mp3" id="71_htgqk"]
 [ext_resource type="AudioStream" uid="uid://dvrx3b03s5o82" path="res://src/player/assets/sfx/Bullet Whiz 4.mp3" id="72_mj3f0"]
+[ext_resource type="AudioStream" uid="uid://c7nenn8cvbkqd" path="res://src/player/assets/sfx/Health Low Just Heart Beat.mp3" id="74_ny6ph"]
 [ext_resource type="Script" path="res://src/player/bullet_whizz_radius.gd" id="119_e0qef"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
@@ -684,6 +685,10 @@ bullet_whizz_sfx = SubResource("AudioStreamRandomizer_x0ll1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BulletWhizzRadius"]
 shape = SubResource("SphereShape3D_dxvay")
+
+[node name="LowHealthAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("74_ny6ph")
+bus = &"LowHealthReverb"
 
 [connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
 [connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]

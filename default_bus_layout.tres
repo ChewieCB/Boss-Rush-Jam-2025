@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=8 format=3 uid="uid://caquc2xndxqf8"]
+[gd_resource type="AudioBusLayout" load_steps=9 format=3 uid="uid://caquc2xndxqf8"]
 
 [sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_y8chw"]
 resource_name = "HighPassFilter"
@@ -26,6 +26,11 @@ wet = 0.66
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_2d7nx"]
 resource_name = "Reverb"
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_ps76l"]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 0.5
 
 [resource]
 bus/1/name = &"BGM"
@@ -84,3 +89,11 @@ bus/7/mute = false
 bus/7/bypass_fx = false
 bus/7/volume_db = -5.04538
 bus/7/send = &"Master"
+bus/8/name = &"LowHealthReverb"
+bus/8/solo = false
+bus/8/mute = false
+bus/8/bypass_fx = false
+bus/8/volume_db = 0.0
+bus/8/send = &"SFX"
+bus/8/effect/0/effect = SubResource("AudioEffectReverb_ps76l")
+bus/8/effect/0/enabled = true
