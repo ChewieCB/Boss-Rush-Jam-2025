@@ -178,7 +178,7 @@ func raise_water() -> void:
 	for platform in rising_platforms:
 		platform.raise(platform_level, water_raise_time/2)
 		water_tween.tween_property(
-			platform, "rotation_degrees:y", 360, water_raise_time
+			platform, "mesh:rotation_degrees:y", 360, water_raise_time
 		)
 	
 	await water_tween.finished

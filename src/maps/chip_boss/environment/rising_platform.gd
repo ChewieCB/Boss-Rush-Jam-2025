@@ -4,6 +4,7 @@ class_name RisingPlatform
 
 
 @onready var marker: Marker3D = $Marker3D
+@onready var mesh: Node3D = $Meshes
 var time: float = randf_range(0.0, 100.0)
 var noise := FastNoiseLite.new()
 @export var float_strength: float = 0.2
