@@ -3272,43 +3272,43 @@ target = NodePath("../../layer_4_elevator/group_673_Elevator/entity_136_PlayerRe
 hit_material = SubResource("ShaderMaterial_4rj7v")
 
 [node name="entity_127_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="12" instance=ExtResource("25_myv0m")]
-transform = Transform3D(-1.1478, 0, 0.965696, 0, 1.5, 0, -0.965696, 0, -1.1478, 0.013625, -0.416, -2.01297)
+transform = Transform3D(1.24291, 0, -0.83976, 0, 1.5, 0, 0.83976, 0, 1.24291, 0.013625, -0.416, -2.01297)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0
 
 [node name="entity_128_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="13" instance=ExtResource("25_myv0m")]
-transform = Transform3D(0.134875, 0, 1.49392, 0, 1.5, 0, -1.49392, 0, 0.134875, 0, -0.416, 10)
+transform = Transform3D(1.40001, 0, 0.538498, 0, 1.5, 0, -0.538498, 0, 1.40001, 0, -0.416, 10)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0
 
 [node name="entity_129_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="14" instance=ExtResource("25_myv0m")]
-transform = Transform3D(-1.22322, 0, -0.86818, 0, 1.5, 0, 0.86818, 0, -1.22322, -9, -0.416, 3)
+transform = Transform3D(0.255695, 0, -1.47805, 0, 1.5, 0, 1.47805, 0, 0.255695, -9, -0.416, 3)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0
 
 [node name="entity_130_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="15" instance=ExtResource("25_myv0m")]
-transform = Transform3D(-0.782981, 0, 1.27944, 0, 1.5, 0, -1.27944, 0, -0.782981, -9, -0.416, -7)
+transform = Transform3D(-1.22199, 0, -0.86992, 0, 1.5, 0, 0.86992, 0, -1.22199, -9, -0.416, -7)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0
 
 [node name="entity_131_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="16" instance=ExtResource("25_myv0m")]
-transform = Transform3D(1.20558, 0, 0.892511, 0, 1.5, 0, -0.892511, 0, 1.20558, 0.00200188, -0.416, -13.9973)
+transform = Transform3D(-1.49385, 0, 0.135647, 0, 1.5, 0, -0.135647, 0, -1.49385, 0.00200188, -0.416, -13.9973)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0
 
 [node name="entity_132_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="17" instance=ExtResource("25_myv0m")]
-transform = Transform3D(0.953834, 0, -1.15767, 0, 1.5, 0, 1.15767, 0, 0.953834, 9, -0.416, -7)
+transform = Transform3D(0.593992, 0, 1.37738, 0, 1.5, 0, -1.37738, 0, 0.593992, 9, -0.416, -7)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0
 
 [node name="entity_133_RisingPlatform" parent="FuncGodotMap/layer_3_entities" index="18" instance=ExtResource("25_myv0m")]
-transform = Transform3D(0.294502, 0, -1.47081, 0, 1.5, 0, 1.47081, 0, 0.294502, 9, -0.416, 3)
+transform = Transform3D(0.901886, 0, 1.19858, 0, 1.5, 0, -1.19858, 0, 0.901886, 9, -0.416, 3)
 float_strength = 0.3
 bob_strength = 0.01
 noise_strength = 0.0

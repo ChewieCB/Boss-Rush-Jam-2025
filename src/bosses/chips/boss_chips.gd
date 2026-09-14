@@ -1244,13 +1244,9 @@ func _on_phase_2_state_entered() -> void:
 	flood_chamber.emit()
 	health_ui.empty_phase_marker(-1)
 	health_ui.next_health_bar()
-	aoe_floor = 2.0
 	big_attacks_performed = 0
 	small_attacks_performed = 0
-
-	# Update the center position to account for the platform
-	center_pos.y = 2.0
-
+	
 	cancel_substack_attacks()
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()

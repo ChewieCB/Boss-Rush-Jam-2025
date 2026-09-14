@@ -182,6 +182,11 @@ func raise_water() -> void:
 		)
 	
 	await water_tween.finished
+	
+	# Update the center position to account for the platforms
+	# FIXME - tie these values to the actual platform heights and handle float movement
+	boss.aoe_floor = 2.641
+	boss.center_pos.y = 2.641
 
 
 func lower_water() -> void:
