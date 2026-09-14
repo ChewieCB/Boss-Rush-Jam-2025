@@ -2455,7 +2455,7 @@ func spawn_aoe_wave(
 	max_radius: float,
 	damage: float = 10.0,
 	spawned_wave_time: float = 1.0,
-	area_pos: Vector3 = self.global_position,
+	area_pos: Vector3 = self.global_position + Vector3(0, 0.6, 0),
 	_pushback_source: Node3D = self,
 	spawned_wave_height: float = 0.3,
 	callback: Callable = func(): pass ,
