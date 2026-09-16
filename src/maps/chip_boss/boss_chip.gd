@@ -42,17 +42,17 @@ const DRUNK_DURATION = 4.0
 
 func _ready() -> void:
 	super()
-	chiptopede_arena.visible = false
+	#chiptopede_arena.visible = false
 	
 	if boss:
 		boss.flood_chamber.connect(raise_water)
 		boss.drain_chamber.connect(lower_water)
 		boss.break_floor.connect(break_floor)
 		
-		boss.chiptopede_spawns = chiptopede_spawns
-		boss.chiptopede_snake_spawns = chiptopede_snake_spawns
-		boss.chiptopede_snake_path_points = chiptopede_snake_path_points
-		boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
+		#boss.chiptopede_spawns = chiptopede_spawns
+		#boss.chiptopede_snake_spawns = chiptopede_snake_spawns
+		#boss.chiptopede_snake_path_points = chiptopede_snake_path_points
+		#boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
 
 	waterfalls.visible = false
 	for mesh in waterfall_meshses_vertical:
@@ -68,8 +68,6 @@ func _ready() -> void:
 	rising_platforms = get_tree().get_nodes_in_group("chip_boss_rising_platforms")
 
 func _process(delta) -> void:
-	if Input.is_action_just_pressed("input_1"):
-		break_floor()
 	if waterfalls.visible:
 		for mesh in waterfall_meshes:
 			mesh.mesh.surface_get_material(0).uv1_offset.x -= delta * waterfall_speed
@@ -83,23 +81,24 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	
-	if boss.current_phase != 3:
-		# Wait for the bar to end then transition
-		# TODO
-		boss.state_chart.send_event("start_phase_3")
-		await boss.chiptopede_emerges
-		# music_playback.switch_to_clip(3)
-	else:
-		win_ui.show_text("Floor Cleared", win_subtext.pick_random())
-		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
-		
-		if not boss.boss_id in GameManager.bosses_defeated:
-			GameManager.bosses_defeated.append(boss.boss_id)
-			print(GameManager.bosses_defeated)
-			GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
+	# TODO - re-implement chiptopede phase
+	#if boss.current_phase != 3:
+		## Wait for the bar to end then transition
+		## TODO
+		#boss.state_chart.send_event("start_phase_3")
+		#await boss.chiptopede_emerges
+		## music_playback.switch_to_clip(3)
+	#else:
+	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
+	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	
+	if not boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(boss.boss_id)
+		print(GameManager.bosses_defeated)
+		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
-		reward_bet_money()
-		show_end_panel()
+	reward_bet_money()
+	show_end_panel()
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
@@ -107,7 +106,7 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 		# music_playback.switch_to_clip(2)
 		GameManager.change_fmod_bgm_music_state("ChipbossInt")
 		return
-	super (_boss)
+	super(_boss)
 
 
 #func _input(event: InputEvent) -> void:
@@ -135,7 +134,7 @@ func break_floor() -> void:
 	
 	water_surface.visible = true
 	water_surface.global_position.y = -20
-	chiptopede_arena.visible = true
+	#chiptopede_arena.visible = true
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
@@ -153,6 +152,7 @@ func raise_water() -> void:
 	SFXBeerPlayer2.play()
 	SFXBeerFlood.play()
 	SFXBeerFlood2.play()
+	
 	waterfalls.visible = true
 	var water_tween: Tween = get_tree().create_tween()
 	for mesh in waterfall_meshses_vertical:
@@ -163,11 +163,23 @@ func raise_water() -> void:
 			water_raise_time / 3
 		)
 		mesh.get_node("WaterfallArea").set_deferred("monitoring", true)
-	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)
+	water_tween.set_parallel(false)
+	# upper_water level = 0.43
+	# floor level = -0.3
+	# min_water level = -2.5
+	water_tween.tween_property(water_surface, "global_position:y", -0.3, water_raise_time/2)
+	
+	await water_tween.finished
+	
+	water_tween = get_tree().create_tween()
+	water_tween.set_parallel(true)
+	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time/2)
 	
 	for platform in rising_platforms:
-		platform.raise(platform_level, 1.4)
-	
+		platform.raise(platform_level, water_raise_time/2)
+		water_tween.tween_property(
+			platform, "mesh:rotation_degrees:y", 360, water_raise_time
+		)
 	
 	await water_tween.finished
 

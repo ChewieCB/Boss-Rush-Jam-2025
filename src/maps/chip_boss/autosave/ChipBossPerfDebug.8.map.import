@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://chd11yquitfgq"
+path="res://.godot/imported/ChipBossPerfDebug.8.map-7c979d7e8ee25f9f3c5c46b2d1600b31.tres"
+
+[deps]
+
+source_file="res://src/maps/chip_boss/autosave/ChipBossPerfDebug.8.map"
+dest_files=["res://.godot/imported/ChipBossPerfDebug.8.map-7c979d7e8ee25f9f3c5c46b2d1600b31.tres"]
+
+[params]
+

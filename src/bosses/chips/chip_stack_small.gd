@@ -17,7 +17,8 @@ signal substack_idle(stack: ChipBossSubStack)
 @export var wave_frequency: float = 5.0
 @export var idle_radius := 1.5
 var idle_time := 0.0
-var center_pos: Vector3
+#var center_pos: Vector3
+@onready var raycast: RayCast3D = $RayCast3D
 
 @export_group("Attacks")
 @export_subgroup("Small Blind Burst")
@@ -126,6 +127,14 @@ func _physics_process(_delta: float) -> void:
 	return
 
 
+func _phase_2_platform_physics_process(delta: float) -> void:
+	if sprite.visible:
+		vel_vertical -= GRAVITY * delta
+		vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
+		velocity.y = vel_vertical
+		move_and_slide()
+
+
 ## MOVEMENT BEHAVIOURS
 #
 func orbit_target_in_group(delta: float) -> void:
@@ -200,7 +209,7 @@ func move_stack_to_pos(goal_pos: Vector3) -> void:
 	return
 
 func return_split_stack_to_center() -> void:
-	var goal_pos: Vector3 = center_pos
+	var goal_pos: Vector3 = aoe_markers[0].global_position
 	if group_size > 1:
 		goal_pos += Vector3(0, 0, 1.0).rotated(
 			Vector3.UP,
@@ -242,7 +251,7 @@ func split_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bo
 	return
 
 func split_stack_jump_to_center(height: float = jump_height, hover: bool = true) -> void:
-	var goal_pos: Vector3 = center_pos
+	var goal_pos: Vector3 = aoe_markers[0].global_position
 	goal_pos.y = jump_height
 	if group_size > 1:
 		goal_pos += Vector3(0, 0, 1.0).rotated(
@@ -306,7 +315,7 @@ func _on_small_blind_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_small_blind_phase_2_targeting_state_entered() -> void:
 	vel_vertical = 0
-	GRAVITY = 0
+	#GRAVITY = 0
 	navigation_component.disable()
 
 	# Pick a free platform far away from the player and move to it
@@ -412,7 +421,7 @@ func _on_arc_swipe_targeting_state_physics_processing(delta: float) -> void:
 func _on_arc_swipe_phase_2_targeting_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Targeting"
 	vel_vertical = 0
-	GRAVITY = 0
+	#GRAVITY = 0
 	navigation_component.disable()
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("start_closing")
@@ -503,7 +512,7 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 			await get_tree().create_timer(delay_between_swipe).timeout
 
 			spark(spark_marker.global_position)
-			anim_player.play("substack/slawsh_spark")
+			anim_player.play("substack/slash_spark")
 		sprite.flip_h = !sprite.flip_h
 
 	sprite.flip_h = false
@@ -639,10 +648,10 @@ func _on_split_rush_recover_state_entered() -> void:
 
 func _on_place_your_bets_jumping_state_entered() -> void:
 	vel_vertical = 0
-	GRAVITY = 0
-
+	
 	anim_player.play("substack/jump_telegraph")
-	await split_stack_jump_to_center()
+	GRAVITY = 0
+	split_stack_jump_to_center()
 
 
 func _on_place_your_bets_crashing_state_entered() -> void:
@@ -651,6 +660,7 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
 
 	await split_stack_slam(target_marker.global_position)
+	GRAVITY = 14
 	sfx_player.stream = sfx_slam.pick_random()
 	sfx_player.play()
 	anim_player.play("substack/slam_end")
@@ -660,7 +670,6 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 
 func _on_place_your_bets_recover_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Recovering"
-	GRAVITY = 14
 	anim_player.play("substack/idle")
 	substack_dive_finished.emit(self)
 	await return_split_stack_to_center()
@@ -820,7 +829,7 @@ func _on_aoe_merge_targeting_state_entered() -> void:
 	debug_state_label.text = "Merge AoE | Targeting"
 
 	vel_vertical = 0
-	GRAVITY = 0
+	#GRAVITY = 0
 	navigation_component.disable()
 
 	state_chart.send_event("start_merge")
