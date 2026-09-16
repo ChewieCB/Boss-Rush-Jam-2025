@@ -302,10 +302,15 @@ func _on_small_blind_targeting_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE * 2
 	navigation_component.enable()
 
-	anim_player.play("substack/idle")
+	anim_player.play("substack/strafe_start")
+	await anim_player.animation_finished
+	anim_player.play("substack/strafe")
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(0.6).timeout
+	state_chart.send_event("start_targeting")
+	anim_player.play("substack/strafe_finish")
+	await anim_player.animation_finished
 	state_chart.send_event("start_shooting")
 
 
@@ -564,13 +569,20 @@ func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:
 
 func _on_split_rush_targeting_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Targeting"
-
+	
+	anim_player.play("substack/strafe_start")
+	await anim_player.animation_finished
+	anim_player.play("substack/strafe")
 	navigation_component.enable()
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	reform_charge_timer.start(split_rush_targeting_time)
 	await reform_charge_timer.timeout
+	
+	state_chart.send_event("start_targeting")
+	anim_player.play("substack/strafe_finish")
+	await anim_player.animation_finished
 
 	state_chart.send_event("attack_telegraph")
 	#
@@ -590,7 +602,7 @@ func _on_split_rush_targeting_state_entered() -> void:
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
-
+	
 	state_chart.send_event("start_charge")
 
 
@@ -687,7 +699,9 @@ func _on_charge_back_targeting_state_entered() -> void:
 	GRAVITY = 14
 	navigation_component.enable()
 
-	anim_player.play("substack/idle")
+	anim_player.play("substack/strafe_start")
+	await anim_player.animation_finished
+	anim_player.play("substack/strafe")
 	state_chart.send_event("start_moving")
 
 
@@ -697,7 +711,7 @@ func _on_charge_back_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_charge_back_charging_state_entered() -> void:
 	debug_state_label.text = "Chargeback | Charging"
-
+	
 	chargeback_return_pos = self.global_position
 	hurtbox.set_deferred("monitoring", true)
 
@@ -761,6 +775,10 @@ func _on_charge_back_leaping_state_entered() -> void:
 	sfx_player.play()
 	#
 	await anim_player.animation_finished
+	
+	anim_player.play("substack/strafe_start")
+	await anim_player.animation_finished
+	anim_player.play("substack/strafe")
 
 	state_chart.send_event("end_leap")
 
