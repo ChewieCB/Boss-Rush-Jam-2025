@@ -37,7 +37,7 @@ var prev_form: ChipBossForms
 @export_group("Movement")
 @export_subgroup("Jumping")
 var aoe_markers: Array[Node]
-var center_pos := Vector3(0, 0, -2)
+@onready var raycast: RayCast3D = $RayCast3D
 @export var slam_aoe_decal: CompressedTexture2D
 
 ## Attacks
@@ -313,12 +313,14 @@ func _ready() -> void:
 	#await get_tree().process_frame
 
 	aoe_markers = get_tree().get_nodes_in_group("chip_boss_aoe_marker")
+	if raycast.is_colliding():
+		aoe_floor = raycast.get_collision_point().y
 
 func activate() -> void:
 	print_debug("BossChips activate called")
 	super()
 	navigation_component.follow_target = false
-	navigation_component.enable()
+	navigation_component.disable()
 	if not self.is_node_ready():
 		await self.ready
 	match current_phase:
@@ -576,12 +578,20 @@ func _play_sfx_from_array(sfx_array_name: String) -> void:
 
 # BIG STACK MOVEMENT TWEENS
 func return_big_stack_to_center() -> void:
+	_disable_gravity()
+	var center_pos: Vector3 = aoe_markers[0].global_position
+	center_pos.y = aoe_floor
 	var tween = get_tree().create_tween()
 	tween.tween_property(
 		self, "global_position", center_pos, 0.8
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
 
 	await tween.finished
+	
+	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
+		return
+
+	_enable_gravity()  
 
 	return
 
@@ -589,7 +599,8 @@ func big_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bool
 	anim_player.play("big_stack/jump_start")
 	big_stack_sfx_player.stream = sfx_jump.pick_random()
 	big_stack_sfx_player.play()
-
+	
+	_disable_gravity()
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
 		self, "global_position", goal_pos, jump_time
@@ -605,7 +616,7 @@ func big_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bool
 	return
 
 func big_stack_jump_to_center(height: float = jump_height, hover: bool = true) -> void:
-	var goal_pos: Vector3 = center_pos
+	var goal_pos: Vector3 = aoe_markers[0].global_position
 	goal_pos.y = jump_height
 
 	await big_stack_jump(goal_pos, height, hover)
@@ -657,6 +668,7 @@ func show_big_stack() -> void:
 	collider.set_deferred("disabled", false)
 	hurtbox_collider.set_deferred("disabled", false)
 	get_node("AimAssistBubble/CollisionShape3D").set_deferred("disabled", false)
+	_enable_gravity()
 
 	sprite.visible = true
 	sprite.layers = 2
@@ -665,7 +677,6 @@ func show_big_stack() -> void:
 
 	#set_physics_process(true)
 	set_process(true)
-	navigation_component.enable()
 
 	return
 
@@ -673,7 +684,7 @@ func show_big_stack() -> void:
 func hide_big_stack() -> void:
 	#set_physics_process(false)
 	set_process(false)
-	navigation_component.disable()
+	_disable_gravity()
 
 	sprite.visible = false
 	sprite.layers = 0
@@ -778,11 +789,13 @@ func _on_split_stacks_state_entered_phase_2() -> void:
 
 
 func _on_big_stack_state_entered_phase_1() -> void:
+	_enable_gravity()
 	_reset_to_big_stack()
 	await return_big_stack_to_center()
 	select_attack()
 
 func _on_big_stack_state_entered_phase_2() -> void:
+	_enable_gravity()
 	# If we already have the Big Stack form before we call _reset_to_big_stack(),
 	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
 	if current_form == ChipBossForms.BIG_STACK:
@@ -1024,10 +1037,9 @@ func _on_stack_slam_targeting_state_entered() -> void:
 
 func _on_stack_slam_jump_state_entered() -> void:
 	debug_state_label.text = "Stack Slam | Jumping"
-	_disable_gravity()
-
+	
 	anim_player.play("big_stack/jump_telegraph")
-
+	
 	await big_stack_jump_to_center(jump_height / 2, false)
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
@@ -1096,6 +1108,7 @@ func _on_stack_slam_slam_state_entered() -> void:
 		state_chart.send_event("start_jump")
 	else:
 		completed_slams = 0
+		_enable_gravity()
 		state_chart.send_event("end_slam")
 
 
@@ -1161,7 +1174,7 @@ func _on_ss_orbiting_projectiles_targeting_state_entered_phase_2() -> void:
 	)
 	# Exclude the central platform
 	furthest_targets = furthest_targets.filter(
-		_filter_out_element_by_pos.bind(center_pos)
+		_filter_out_element_by_pos.bind(aoe_markers[0].global_position)
 	)
 
 	# CHASE PLAYER
@@ -1251,7 +1264,7 @@ func _on_phase_2_state_entered() -> void:
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
 
-	_disable_gravity()
+	#_disable_gravity()
 	if current_form == ChipBossForms.SPLIT_STACKS:
 		state_chart.send_event("phase_2_start_split_stacks")
 		#state_chart.send_event("change_form_big_aoe_merge")
@@ -1287,10 +1300,13 @@ func _on_ss_merge_aoe_recovering_state_entered() -> void:
 #
 # Big Stack Slam down with radial wave
 func _on_merge_aoe_targeting_state_entered() -> void:
+	var center_pos: Vector3 = aoe_markers[0].global_position
+	center_pos.y = aoe_floor
 	await big_stack_slam(center_pos, drop_time / 2)
 	state_chart.send_event("start_slam")
 
 func _on_merge_aoe_slam_state_entered() -> void:
+	_enable_gravity()
 	# Slam down and generate a radial wave AoE on impact
 	var shockwave = slam_shockwave_pool.pop_front()
 	shockwave.global_transform = self.global_transform
@@ -1309,8 +1325,6 @@ func _on_merge_aoe_slam_state_entered() -> void:
 
 	await get_tree().create_timer(slam_delay).timeout
 
-	_enable_gravity()
-
 	state_chart.send_event("end_slam")
 
 ### BIG STACK
@@ -1324,8 +1338,7 @@ func _on_place_your_bets_targeting_state_entered() -> void:
 
 func _on_place_your_bets_jumping_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Jumping"
-	_disable_gravity()
-
+	
 	await big_stack_jump_to_center()
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
@@ -1414,7 +1427,7 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 		closest_targets.sort_custom(
 			_sort_by_distance_to_target
 		)
-		closest_targets = closest_targets.filter(_filter_out_element_by_pos.bind(center_pos))
+		closest_targets = closest_targets.filter(_filter_out_element_by_pos.bind(aoe_markers[0].global_position))
 		var target_marker: Marker3D = closest_targets.pop_front()
 		var new_target_idx: int = aoe_markers.find(target_marker)
 
@@ -1871,7 +1884,6 @@ func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
 
 	stack.group_size = count
 	stack.group_idx = idx
-	stack.center_pos = center_pos
 	stack.aoe_markers = aoe_markers
 	stack.target = target
 	stack.global_transform = self.global_transform
@@ -2674,3 +2686,8 @@ func _spawn_chip() -> void:
 		chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
 
 	chip_dropped.emit(chip.value)
+
+
+func _on_phase_2_state_physics_processing(delta: float) -> void:
+	if raycast.is_colliding():
+		aoe_floor = raycast.get_collision_point().y

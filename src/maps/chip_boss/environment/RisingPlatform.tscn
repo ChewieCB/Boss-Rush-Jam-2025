@@ -96,7 +96,7 @@ _surfaces = [{
 }]
 
 [node name="RisingPlatform" type="StaticBody3D" groups=["chip_boss_rising_platforms"]]
-transform = Transform3D(-1.16498, 0, -0.944903, 0, 1.5, 0, 0.944903, 0, -1.16498, 0, 0, 0)
+transform = Transform3D(-1.32554, 0, -0.702136, 0, 1.5, 0, 0.702136, 0, -1.32554, 0, 0, 0)
 collision_mask = 126
 script = ExtResource("2_34sch")
 float_strength = 1.0
