@@ -7,12 +7,12 @@ class_name MainMenu
 
 @onready var buttons_container: Container = $TitleColumn/VBoxContainer
 @onready var buttons = buttons_container.get_children()
-@onready var settings_ui: SettingUI = $SettingUI
-@onready var credits_ui = $CreditsUI
-@onready var story_ui = $StoryUI
-@onready var save_ui = $SaveUI
+@export var settings_ui: SettingUI 
+@export var credits_ui: Control
+@export var story_ui: Control
+@export var save_ui: Control
 @onready var save_slot_items: Array[Node] = $SaveUI/VBoxContainer.get_children()
-@onready var title_column = $TitleColumn
+@export var title_column: Control
 
 var started_loading: bool = false
 var input_disabled: bool = true
