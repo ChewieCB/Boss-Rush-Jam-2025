@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmktkus46dwow"]
+
+[ext_resource type="Script" path="res://src/ui/boss/debug_boss_attack_input.gd" id="1_65n6o"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="1_gihe5"]
+
+[node name="BossAttackInput" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1564.0
+offset_bottom = -1000.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("1_65n6o")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Highlight" type="ColorRect" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+color = Color(0.97, 0.840667, 0, 0.415686)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="DeviceInputPrompt" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_gihe5")]
+layout_mode = 2
+device_type = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Attack Name Debug"

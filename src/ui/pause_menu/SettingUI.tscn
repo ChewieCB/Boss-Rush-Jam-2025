@@ -1086,7 +1086,25 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
-[node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
+[node name="BossAttackDebug" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BossAttackDebug"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Debug boss attacks"
+
+[node name="BossAttackDebugToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/BossAttackDebug"]
+offset_left = 288.0
+layout_mode = 0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
@@ -1489,6 +1507,8 @@ text = "Back"
 [connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider" to="." method="_on_timescale_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossAttackDebug/BossAttackDebugToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossAttackDebug/BossAttackDebugToggle" to="." method="_on_boss_attack_debug_toggle_toggled"]
 [connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]

@@ -80,6 +80,7 @@ signal setting_back_button_pressed
 @onready var infinite_ammo_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/Value
+@onready var boss_attack_debug_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossAttackDebug/BossAttackDebugToggle
 
 const KEYBIND_TIME_LIMIT = 5
 
@@ -444,6 +445,7 @@ func refresh_setting_value():
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
 	boss_god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_invincible_bosses)
+	boss_attack_debug_toggle.set_pressed_no_signal(GameManager.CHEAT_debug_boss_attacks)
 	skip_tutorial_toggle.set_pressed_no_signal(GameManager.CHEAT_skip_tutorial_on_new_game)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
@@ -609,3 +611,8 @@ func _on_boss_god_mode_toggle_toggled(toggled_on: bool) -> void:
 func _on_force_mouse_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.mouse_controller_override = toggled_on
+
+
+func _on_boss_attack_debug_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_debug_boss_attacks = toggled_on

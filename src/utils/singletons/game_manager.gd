@@ -16,6 +16,7 @@ signal demo_time_changed
 signal player_level_up
 signal cheat_godmode_toggle(value: bool)
 signal cheat_boss_godmode_toggle(value: bool)
+signal cheat_boss_attack_debug_toggle(value: bool)
 signal controller_mouse_override_toggle(value: bool)
 
 # TODO: Use Fmod enum to change music state to avoid mismatched name
@@ -195,6 +196,10 @@ var CHEAT_invincible_bosses: bool = false:
 	set(value):
 		CHEAT_invincible_bosses = value
 		cheat_boss_godmode_toggle.emit(CHEAT_invincible_bosses)
+var CHEAT_debug_boss_attacks: bool = false:
+	set(value):
+		CHEAT_debug_boss_attacks = value
+		cheat_boss_attack_debug_toggle.emit(CHEAT_debug_boss_attacks)
 var CHEAT_skip_tutorial_on_new_game: bool = false
 enum DebugSpinMode {
 	ON_RELOAD,

@@ -132,6 +132,15 @@ func _physics_process(_delta: float) -> void:
 	return
 
 
+func _on_movement_walking_state_physics_processing(delta: float) -> void:
+	super(delta)
+	if current_phase == 1:
+		if self.velocity.length() > 0.2:
+			anim_sm.travel("strafe")
+		else:
+			anim_sm.travel("idle")
+
+
 func _phase_2_platform_physics_process(delta: float) -> void:
 	if sprite.visible:
 		vel_vertical -= GRAVITY * delta
@@ -318,8 +327,8 @@ func _on_small_blind_targeting_state_entered() -> void:
 	
 	#anim_player.play("substack/strafe_start")
 	#await anim_player.animation_finished
-	anim_sm.travel("strafe")
-	await strafe_start_anim_finished
+	#anim_sm.travel("strafe")
+	#await strafe_start_anim_finished
 	#anim_player.play("substack/strafe")
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
@@ -608,7 +617,7 @@ func _on_split_rush_targeting_state_entered() -> void:
 	#anim_player.play("substack/strafe_start")
 	#await anim_player.animation_finished
 	#anim_player.play("substack/strafe")
-	anim_sm.travel("strafe")
+	#anim_sm.travel("strafe")
 	navigation_component.enable()
 
 	state_chart.send_event("start_moving")
@@ -696,6 +705,7 @@ func merge_to_pos(pos: Vector3, time: float, destroy_on_merge: bool = true) -> v
 func _on_split_rush_recover_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Recovering"
 	desired_distance = DESIRED_DISTANCE
+	anim_sm.travel("idle")
 	state_chart.send_event("end_recovery")
 
 
@@ -746,8 +756,8 @@ func _on_charge_back_targeting_state_entered() -> void:
 	#anim_player.play("substack/strafe_start")
 	#await anim_player.animation_finished
 	#anim_player.play("substack/strafe")
-	anim_sm.travel("strafe")
-	await strafe_start_anim_finished
+	#anim_sm.travel("strafe")
+	#await strafe_start_anim_finished
 	state_chart.send_event("start_moving")
 
 
@@ -761,6 +771,7 @@ func _on_charge_back_charging_state_entered() -> void:
 	chargeback_return_pos = self.global_position
 	hurtbox.set_deferred("monitoring", true)
 	
+	state_chart.send_event("start_targeting")
 	anim_sm.travel("idle")
 	await strafe_end_anim_finished
 
@@ -829,7 +840,7 @@ func _on_charge_back_leaping_state_entered() -> void:
 	#anim_player.play("substack/strafe_start")
 	#await anim_player.animation_finished
 	#anim_player.play("substack/strafe")
-	anim_sm.travel("strafe")
+	#anim_sm.travel("strafe")
 
 	state_chart.send_event("end_leap")
 
