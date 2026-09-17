@@ -13,19 +13,18 @@ script = ExtResource("1_54i25")
 
 [node name="RampUp" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w70eq")
-bonus_firerate_per_interval = 5.0
+bonus_firerate_per_interval = 50.0
 interval_time = 0.2
 is_perc = true
-max_bonus = 100.0
+max_bonus = 5000.0
 display_text_title = "Ramp up"
 display_text_tag = "Keep shooting."
-display_text_desc = "+5% firerate per 0.2s
-holding the trigger, up to +100%.
-Reloading does not break the ramp"
-positive_desc = Array[String](["Firerate ramps up while the trigger is held", "Ramp is kept through reloads"])
+display_text_desc = "+5% firerate per 0.2s while holding the trigger, up to +100%."
+positive_desc = Array[String](["Firerate ramps up while the trigger is held"])
 icon_id = 24
 
 [node name="ExtendedDrum" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("4_k0t2c")
 display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"
@@ -48,6 +47,7 @@ modify_value = 150.0
 is_perc = true
 
 [node name="ExplosiveBullet" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("dps_dealt_window_timer")]
+visible = false
 script = ExtResource("6_ayuco")
 damage = 15
 dps_dealt_window_timer = NodePath("DPSWindowTImer")

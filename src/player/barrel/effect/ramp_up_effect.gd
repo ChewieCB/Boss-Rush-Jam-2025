@@ -2,6 +2,7 @@ extends BaseBarrelEffect
 
 # Firerate ramps up based on how long trigger is held, not shots fired
 
+# In percentage
 @export var bonus_firerate_per_interval: float
 # In second. Ex: 1 = bonus x firate per second
 @export var interval_time: float
@@ -26,6 +27,8 @@ func get_current_bonus() -> float:
 
 # Keep ramp while reloading/spinning (as long as player still hold down the trigger tho)
 func is_ramp_frozen() -> bool:
+	if owner_barrel == null:
+		return false
 	var gun = owner_barrel.owner_gun
 	if gun == null:
 		return false
@@ -33,6 +36,8 @@ func is_ramp_frozen() -> bool:
 
 
 func _process(delta: float) -> void:
+	if owner_barrel == null:
+		return
 	if interval_time <= 0:
 		return
 	if is_ramp_frozen():
