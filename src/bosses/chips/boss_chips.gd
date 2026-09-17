@@ -320,6 +320,7 @@ func _ready() -> void:
 	if raycast.is_colliding():
 		aoe_floor = raycast.get_collision_point().y
 
+
 func activate() -> void:
 	print_debug("BossChips activate called")
 	super()
@@ -451,6 +452,29 @@ func _on_died() -> void:
 func select_attack_phase_1() -> void:
 	state_chart.send_event("end_attack")
 	attack_interrupt = false
+	
+	# DEBUG 
+	if DEBUG_boss_attack != -1:
+		var debug_attack_str: String = ""
+		match DEBUG_boss_attack:
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_ROLL:
+				debug_attack_str = "start_backspin_chip"
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_SWEEP:
+				debug_attack_str = "start_chip_sweep"
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_SLAM:
+				debug_attack_str = "start_slam_attack"
+			DEBUG_BOSS_ATTACK_PHASE_1.SMALL_STACK_CANNON:
+				debug_attack_str = "start_split_stack_projectiles"
+			DEBUG_BOSS_ATTACK_PHASE_1.SMALL_STACK_CHARGE:
+				debug_attack_str = "start_split_stack_charge_back_attack"
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_SPLIT:
+				debug_attack_str = "change_form_split"
+			DEBUG_BOSS_ATTACK_PHASE_1.SMALL_STACK_MERGE:
+				debug_attack_str = "change_form_big"
+		
+		state_chart.send_event(debug_attack_str)
+		return
+	
 	# Weighted random chance attacks
 	#
 	var attack_str: String = ""
@@ -553,15 +577,16 @@ func _input(event: InputEvent) -> void:
 				else:
 					if current_phase == 1:
 						DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_CHARGE
-						debug_attack_ui.highlight_attack_ui(3)
+						debug_attack_ui.highlight_attack_ui(2)
 			
 			Key.KEY_4:
 				if current_phase == 2:
 					if current_form == ChipBossForms.BIG_STACK:
 						DEBUG_boss_attack = debug_attack_enum.BIG_STACK_DIVE
+						debug_attack_ui.highlight_attack_ui(4)
 					else:
 						DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_DIVE
-					debug_attack_ui.highlight_attack_ui(4)
+						debug_attack_ui.highlight_attack_ui(3)
 			
 		if DEBUG_boss_attack != -1:
 			match current_phase:
@@ -853,6 +878,7 @@ func split_stacks(spawn_func: Callable) -> void:
 		shot.queue_free()
 
 	state_chart.send_event("end_attack")
+
 
 func _spawn_stacks_close() -> void:
 	active_stacks = await spawn_stacks(small_stack_count, 2.5)

@@ -69,6 +69,7 @@ signal setting_back_button_pressed
 @export var sfx_free_money: AudioStream
 @onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode/GodeModeToggle
 @onready var boss_god_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle
+@onready var boss_attack_debug_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossAttackDebug/BossAttackDebugToggle
 @onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle
 @onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode/GodeModeToggle
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoModeTimeout/SpinBox
@@ -80,7 +81,6 @@ signal setting_back_button_pressed
 @onready var infinite_ammo_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Timescale/Value
-@onready var boss_attack_debug_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossAttackDebug/BossAttackDebugToggle
 
 const KEYBIND_TIME_LIMIT = 5
 
