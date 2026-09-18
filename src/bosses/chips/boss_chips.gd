@@ -338,6 +338,7 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	velocity = Vector3.ZERO
 	# Disable big stack processing while hidden but keep ticking the chiptopede
 	if sprite.visible:
 		super(delta)
