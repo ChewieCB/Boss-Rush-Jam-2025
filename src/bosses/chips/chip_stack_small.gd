@@ -218,15 +218,22 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 ## MOVEMENT UTILS
 #
 func move_stack_to_pos(goal_pos: Vector3) -> void:
+	if self.global_position.distance_to(goal_pos) < 0.2:
+		return
+	
+	anim_sm.travel("jump_start")
 	sfx_player.stream = sfx_charge.pick_random()
 	sfx_player.play()
 	var tween = get_tree().create_tween()
 	tween.tween_property(
 		self, "global_position", goal_pos, 0.8
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
-
+	
+	await get_tree().create_timer(0.4).timeout
+	anim_sm.travel("slam_end")
+	
 	await tween.finished
-
+	
 	return
 
 func return_split_stack_to_center() -> void:
