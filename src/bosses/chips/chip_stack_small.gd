@@ -389,7 +389,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 			await get_tree().create_timer(delay_per_projectile).timeout
 			# HACK - break out of this loop if we've exited the state
 			if not $StateChart/Root/Phase/SmallBlindProjectile.active and not $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
-				anim_sm.travel("cannon_idle")
+				anim_sm.travel("idle")
 				return
 			
 			# Animate shot
@@ -417,7 +417,15 @@ func _on_small_blind_shooting_state_physics_processing(_delta: float) -> void:
 
 func _on_small_blind_recover_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Recovering"
-	_recover_state_entered()
+	anim_sm.travel("idle")
+	desired_distance = DESIRED_DISTANCE
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("cooldown_end")
+	state_chart.send_event("end_attack")
+	state_chart.send_event("end_recovery")
+	# Phase 2 small stack goes back into targeting after it finishes its attack but 
+	# before the rest of the small stacks finish, so we send an "end_attack" signal
+	# to force it to return to Idle.
 
 
 func _recover_state_entered() -> void:
