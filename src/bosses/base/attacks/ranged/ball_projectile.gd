@@ -18,20 +18,20 @@ func init(_damage: float):
 
 func activate() -> void:
 	col.set_deferred("disabled", false)
-	self.monitoring = true
-	self.monitorable = true
+	set_deferred("monitoring", true)
+	set_deferred("monitorable", true)
 	self.visible = true
-	self.process_mode = Node.PROCESS_MODE_INHERIT
+	set_deferred("process_mode", Node.PROCESS_MODE_INHERIT)
 	timer.start()
 
 
 func deactivate() -> void:
 	col.set_deferred("disabled", true)
-	self.monitoring = false
-	self.monitorable = false
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 	self.visible = false
-	self.process_mode = Node.PROCESS_MODE_DISABLED
 	timer.stop()
+	set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)
 
 
 func _physics_process(delta: float) -> void:

@@ -345,6 +345,9 @@ debug_boss_prev_phase={
 
 [layer_names]
 
+2d_render/layer_1="Default"
+2d_render/layer_2="Player Gun Sprite"
+2d_render/layer_3="Effect Icon Subviewport"
 2d_physics/layer_1="World"
 3d_physics/layer_1="World"
 2d_physics/layer_2="Player"

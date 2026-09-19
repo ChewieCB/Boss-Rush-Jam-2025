@@ -62,6 +62,7 @@ var barrel_cached_materials: Array[StandardMaterial3D] = []
 
 var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
+@onready var effect_icons_viewport: SubViewport = $EffectIconsViewport
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 #
@@ -654,7 +655,7 @@ func spin_all_barrels() -> void:
 	# EXPERIMENTAL for hold/release spinning
 	#var state_machine = anim_tree.get("parameters/spin_state/playback")
 	#state_machine.travel("pressed")
-
+	
 	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	await spin_anim_trigger
 
@@ -735,7 +736,10 @@ func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	tween.tween_callback(func():
 		is_spinning = false
 		can_fire = true
+		await get_tree().process_frame
 	)
+	
+	# TODO - wait until all anims have finished then set viewport render update to ONCE
 
 
 func _stop_barrel(barrel_idx: int) -> void:

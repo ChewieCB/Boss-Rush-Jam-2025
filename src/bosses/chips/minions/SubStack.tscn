@@ -56,9 +56,9 @@ shader_parameter/deform_h_scale = 1.0
 shader_parameter/knockback_scale = 0.4
 shader_parameter/depth_bias = 0.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
-height = 4.0
-radius = 1.5
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tv1ek"]
+radius = 0.777801
+height = 3.4935
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_447b3"]
 top_radius = 1.5
@@ -173,7 +173,6 @@ attack_recovery_time = 0.5
 telegraph_time = 0.45
 projectile_scene = null
 delay_per_projectile = 0.6
-GRAVITY = 0.0
 DESIRED_DISTANCE = 20.0
 orbit_radius = 40.0
 hit_effect_squash = Vector2(0.16, 0)
@@ -191,8 +190,8 @@ render_priority = 1
 texture = ExtResource("12_pln03")
 
 [node name="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("CylinderShape3D_ase24")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0787812, 1.76323, 0)
+shape = SubResource("CapsuleShape3D_tv1ek")
 
 [node name="DebugMesh" parent="." index="2"]
 mesh = SubResource("CylinderMesh_447b3")
@@ -698,6 +697,7 @@ bus = &"SFX"
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipe/Closing" to="." method="_on_arc_swipe_closing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Swiping" to="." method="_on_arc_swipe_swiping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Recover" to="." method="_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipePhase2" to="." method="_phase_2_platform_physics_process"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Targeting" to="." method="_on_arc_swipe_phase_2_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Targeting" to="." method="_on_arc_swipe_phase_2_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Closing" to="." method="_on_arc_swipe_phase_2_closing_state_entered"]
@@ -710,6 +710,7 @@ bus = &"SFX"
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Recover" to="." method="_on_small_blind_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectilePhase2" to="." method="_phase_2_platform_physics_process"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Targeting" to="." method="_on_small_blind_phase_2_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Targeting" to="." method="_on_small_blind_phase_2_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Shooting" to="." method="_on_small_blind_shooting_state_entered"]
@@ -721,6 +722,7 @@ bus = &"SFX"
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Jumping" to="." method="_on_place_your_bets_jumping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Crashing" to="." method="_on_place_your_bets_crashing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Recover" to="." method="_on_place_your_bets_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/PlaceYourBets/Recover" to="." method="_phase_2_platform_physics_process"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Targeting" to="." method="_on_charge_back_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Targeting" to="." method="_on_charge_back_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Charging" to="." method="_on_charge_back_charging_state_entered"]
@@ -731,6 +733,7 @@ bus = &"SFX"
 [connection signal="event_received" from="StateChart/Root/Phase/AoeMerge" to="." method="_on_aoe_merge_event_received"]
 [connection signal="state_exited" from="StateChart/Root/Phase/AoeMerge" to="." method="_on_aoe_merge_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Targeting" to="." method="_on_aoe_merge_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AoeMerge/Targeting" to="." method="_platform_physics_process"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Merging" to="." method="_on_aoe_merge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Recover" to="." method="_on_aoe_merge_recover_state_entered"]
 [connection signal="timeout" from="MeleeTargetingTimer" to="." method="_on_melee_targeting_timer_timeout"]

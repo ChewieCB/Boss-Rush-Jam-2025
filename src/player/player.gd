@@ -587,10 +587,9 @@ func hide_barrel_effect_ui() -> void:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
 
-	barrel_ui_tween = get_tree().create_tween()
-
 	Engine.time_scale = 1.0
 
+	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]

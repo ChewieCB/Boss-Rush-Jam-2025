@@ -7,6 +7,9 @@ extends BaseBarrelEffect
 @export var new_color: Color
 
 
+func on_barrel_remove():
+	owner_barrel.owner_gun.remove_elemental_anim()
+
 func on_effect_set():
 	var element: String
 	match status_effect:

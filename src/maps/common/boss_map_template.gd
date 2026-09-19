@@ -175,6 +175,7 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 		LuckHandler.enabled = true
 		if elevator_doors:
 			elevator_doors.close()
+			elevator_doors.is_autodoor = false
 		print_debug("Elevator doors closed, freeing trigger volume")
 		boss_trigger.queue_free()
 

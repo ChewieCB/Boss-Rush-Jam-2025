@@ -144,11 +144,11 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
 ## So hurt frame doesnt override telegraph frames
 var block_hurt_frame = false
-var hit_tween: Tween
 
 @export_group("Phase")
 @export var current_phase: int = 1
 @export var phase_count: int = 2
+var is_initialised: bool = false
 
 # Make sure the boss doesn't spam attacks
 # TODO - make this more modular
@@ -283,7 +283,8 @@ func _ready() -> void:
 		await get_tree().physics_frame
 		health_component.max_health = 1
 		health_component.current_health = 1
-		
+	
+	is_initialised = true
 	print_debug("BossCore ready end")
 
 
@@ -733,21 +734,20 @@ func hit_effect_sprite_squash(duration: float, squash: Vector2):
 	tween.set_parallel(true)
 	tween.tween_method(_update_squash, Vector2.ZERO, squash, duration / 2)
 	for child in sprite.get_children():
-		if is_instance_valid(child):
-			if child is Sprite3D:
+		if is_instance_valid(child) and child is Sprite3D:
 				tween.tween_method(
 					_update_squash.bind(child), 
 					Vector2.ZERO, squash, 
 					duration / 2
 				)
 	
-	tween.chain()
-	
+	tween.set_parallel(false)
+	tween.tween_interval(0.0)
 	tween.set_parallel(true)
+	
 	tween.tween_method(_update_squash, squash, Vector2.ZERO, duration / 2)
 	for child in sprite.get_children():
-		if is_instance_valid(child):
-			if child is Sprite3D:
+		if is_instance_valid(child) and child is Sprite3D:
 				tween.tween_method(
 					_update_squash.bind(child), 
 					squash, Vector2.ZERO,
@@ -813,6 +813,8 @@ func _on_stagger() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
+	if not is_initialised:
+		return
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
 		hurt_sfx_player.stream = sfx_hit.pick_random()
