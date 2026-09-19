@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=62 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -27,7 +27,6 @@
 [ext_resource type="Resource" uid="uid://dpumylpghpaqv" path="res://src/player/barrel/resource/careful_marksman_barrel_data.tres" id="15_4llt6"]
 [ext_resource type="Resource" uid="uid://ntpty3yr1ali" path="res://src/player/barrel/resource/pure_gamble_barrel_data.tres" id="17_ylke2"]
 [ext_resource type="PackedScene" uid="uid://dow4ee3qublb7" path="res://src/maps/common/ShootWallTest.tscn" id="19_cev3k"]
-[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChip.tscn" id="19_sk1dt"]
 [ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="21_7d46j"]
 [ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="21_8043w"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="22_qlyyk"]
@@ -35,6 +34,16 @@
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_x0fgt"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_o1a3k"]
 [ext_resource type="PackedScene" uid="uid://cdkpo8wgm1k46" path="res://src/maps/lobby/vendor/Workbench.tscn" id="34_l06tx"]
+[ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip.gd" id="35_qlm5d"]
+[ext_resource type="Texture2D" uid="uid://bvw52w4qxdtyx" path="res://src/collectibles/poker_chip/assets/chip_white.png" id="36_tslmo"]
+[ext_resource type="Texture2D" uid="uid://dlmpay1afw5o8" path="res://src/collectibles/poker_chip/assets/chip_red.png" id="37_k3ubt"]
+[ext_resource type="Texture2D" uid="uid://bssyw0bap2iux" path="res://src/collectibles/poker_chip/assets/chip_blue.png" id="38_7c26s"]
+[ext_resource type="Texture2D" uid="uid://b4atouetg5pla" path="res://src/collectibles/poker_chip/assets/chip_green.png" id="39_0qgpc"]
+[ext_resource type="Texture2D" uid="uid://co2sgmxi41jsj" path="res://src/collectibles/poker_chip/assets/chip_gold.png" id="40_utdau"]
+[ext_resource type="Texture2D" uid="uid://pgkke4lg1qx7" path="res://src/collectibles/poker_chip/assets/chip_black.png" id="41_hs2d7"]
+[ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="42_ywfk4"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="43_ccai5"]
+[ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="44_t0u0f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -74,6 +83,28 @@ height = 4.0
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_63wrj"]
 height = 4.0
 radius = 4.0
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ipprj"]
+friction = 0.4
+bounce = 0.6
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_npndf"]
+radius = 0.475438
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mxqef"]
+radius = 5.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l3f1v"]
+transparency = 1
+albedo_color = Color(0.992257, 1, 0.923056, 0.713726)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ubspx"]
+
+[sub_resource type="Curve" id="Curve_3o5j5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [node name="TestPlayerMovement" type="Node3D" node_paths=PackedStringArray("elevator_buttons")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0541077, -9.53674e-07, -0.00473499)
@@ -122,10 +153,6 @@ shape = SubResource("BoxShape3D_ygxvf")
 
 [node name="Sprite3D" parent="Workbench" index="3"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.16, 1.44, 0.116325)
-
-[node name="CheatMoney" parent="." instance=ExtResource("19_sk1dt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6221, 1.02637, -11.1613)
-value_array = Array[int]([100000, 100000, 100000, 100000, 100000, 100000, 100000])
 
 [node name="barrel stuff" type="Node3D" parent="."]
 
@@ -335,5 +362,68 @@ mesh = SubResource("CylinderMesh_oe1jg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallStuff/StaticBody3D"]
 shape = SubResource("CylinderShape3D_63wrj")
+
+[node name="CheatMoneyChip" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.0957, 1.13591, -12.2388)
+collision_layer = 16
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_ipprj")
+script = ExtResource("35_qlm5d")
+value_array = Array[int]([10000, 10000, 10000, 10000, 10000, 10000, 10000])
+sprite_array = Array[Texture2D]([ExtResource("36_tslmo"), ExtResource("36_tslmo"), ExtResource("37_k3ubt"), ExtResource("38_7c26s"), ExtResource("39_0qgpc"), ExtResource("40_utdau"), ExtResource("41_hs2d7")])
+sfx_pickup = Array[AudioStream]([ExtResource("42_ywfk4")])
+
+[node name="Sprite3D" type="Sprite3D" parent="CheatMoneyChip"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+texture = ExtResource("37_k3ubt")
+
+[node name="Label3D" type="Label3D" parent="CheatMoneyChip/Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.061468)
+pixel_size = 0.015
+text = "5"
+font_size = 100
+
+[node name="Label3D2" type="Label3D" parent="CheatMoneyChip/Sprite3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.0563511)
+pixel_size = 0.015
+text = "5"
+font_size = 100
+outline_size = 30
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CheatMoneyChip"]
+shape = SubResource("SphereShape3D_npndf")
+
+[node name="PickupArea" type="Area3D" parent="CheatMoneyChip"]
+collision_layer = 0
+collision_mask = 34
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CheatMoneyChip/PickupArea"]
+shape = SubResource("SphereShape3D_mxqef")
+
+[node name="Trail" type="Node3D" parent="CheatMoneyChip"]
+
+[node name="Trail3D" type="MeshInstance3D" parent="CheatMoneyChip/Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_l3f1v")
+mesh = SubResource("ImmediateMesh_ubspx")
+script = ExtResource("43_ccai5")
+segments = 3
+base_width = 0.1
+width_profile = SubResource("Curve_3o5j5")
+
+[node name="Shadow" type="Sprite3D" parent="CheatMoneyChip"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.437256, 0)
+modulate = Color(0, 0, 0, 0.431373)
+texture = ExtResource("44_t0u0f")
+
+[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="CheatMoneyChip"]
+process_mode = 3
+aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+
+[connection signal="body_entered" from="CheatMoneyChip/PickupArea" to="CheatMoneyChip" method="_on_pickup_area_body_entered"]
+[connection signal="screen_entered" from="CheatMoneyChip/VisibleOnScreenNotifier3D" to="CheatMoneyChip" method="_on_visible_on_screen_notifier_3d_screen_entered"]
+[connection signal="screen_exited" from="CheatMoneyChip/VisibleOnScreenNotifier3D" to="CheatMoneyChip" method="_on_visible_on_screen_notifier_3d_screen_exited"]
 
 [editable path="Workbench"]

@@ -6,5 +6,5 @@
 script = ExtResource("1_kukhd")
 id = 9
 name = "Payday"
-desc = "+12 Payday"
+desc = "+12 luck when you trigger payday at maximum stored heal"
 message = ""

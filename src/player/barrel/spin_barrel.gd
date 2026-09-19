@@ -14,7 +14,7 @@ var is_spinning = false
 var chosen_id: int:
 	set(value):
 		chosen_id = value
-		barrel_effect_changed.emit.call_deferred(self , effect_list[chosen_id])
+		barrel_effect_changed.emit.call_deferred(self, effect_list[chosen_id])
 var force_next_spin_id: int = -1
 var is_equipped = false
 var last_chosen_set: Dictionary = {} # effect_idx -> true/false

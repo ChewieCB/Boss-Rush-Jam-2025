@@ -13,9 +13,11 @@ class_name PlayerUI
 @onready var heal_flash_overlay: ColorRect = $StatusOverlay/HealFlash
 
 func _ready() -> void:
+	while GameManager.setting_ui == null:
+		await get_tree().process_frame
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
 	SaveManager.finished_saving.connect(hide_saving_indicator)
-	pause_ui.setting_ui.setting_changed.connect(refresh_after_setting_changed)
+	GameManager.setting_ui.setting_changed.connect(refresh_after_setting_changed)
 	refresh_after_setting_changed()
 
 
