@@ -328,6 +328,9 @@ func _on_small_blind_targeting_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE * 2
 	navigation_component.enable()
 	
+	# FIXME - the move here is very short (0.6s), change to a short hop to a position
+	# TODO - add leap to pos
+	# TODO - triangulate shooting position relative to target and other stacks
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	

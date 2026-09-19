@@ -24,6 +24,8 @@ enum DEBUG_BOSS_ATTACK_PHASE_1 {BIG_STACK_ROLL, BIG_STACK_SWEEP, BIG_STACK_SLAM,
 enum DEBUG_BOSS_ATTACK_PHASE_2 {BIG_STACK_ROLL, BIG_STACK_SWEEP, BIG_STACK_SLAM, BIG_STACK_DIVE, SMALL_STACK_DIVE, SMALL_STACK_CANNON, SMALL_STACK_FAN, SMALL_STACK_MERGE, BIG_STACK_SPLIT} 
 var DEBUG_boss_attack: int = -1
 
+var debug_spheres: Array[MeshInstance3D] = []
+
 ## Phase transitions
 @export_group("Phases")
 var prev_phase
@@ -323,6 +325,9 @@ func _ready() -> void:
 
 func activate() -> void:
 	print_debug("BossChips activate called")
+	sprite.visible = false
+	return
+	#####
 	super()
 	navigation_component.follow_target = false
 	navigation_component.disable()
@@ -534,6 +539,17 @@ func select_attack_phase_1() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		match event.keycode:
+			KEY_1:
+				get_stack_positions_around_target(5.0)
+			KEY_2:
+				get_stack_positions_around_target(10.0)
+			KEY_3:
+				get_stack_positions_around_target(15.0)
+			KEY_4:
+				get_stack_positions_around_target(20.0)
+		
 	if not DEBUG_BOSS_ATTACKS:
 		return
 	
@@ -1312,6 +1328,66 @@ func trigger_sequential_substack_attacks(activate_event: String, attack_event: S
 
 func _start_split_attack() -> void:
 	state_chart.send_event("start_attack")
+
+
+func get_stack_positions_around_target(min_dist: float = 10.0) -> Array[Vector3]:
+	for mesh in debug_spheres:
+		mesh.queue_free()
+	debug_spheres = []
+	
+	var target_pos: Vector3 = target.global_position
+	debug_spheres.append(draw_debug_sphere(target_pos, 1.0, Color.WHITE))
+	# Place a point for each stack at the mininum distance away from target pos
+	var angle: float = (2 * PI) / small_stack_count
+	var angle_increment: float = PI/16
+	var target_facing_dir: Vector3 = -target.global_basis.z
+	var stack_colours: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE]
+	var stack_positions: Array[Vector3] = []
+	var initial_positions_debug: Array[MeshInstance3D] = []
+	
+	for i in range(small_stack_count):
+		var _pos: Vector3 = target_pos + (
+			target_facing_dir.rotated(Vector3.UP, angle * i)
+		) * min_dist
+		var _pos_navmesh: Vector3 = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, _pos)
+		_pos.y = _pos_navmesh.y
+		# If a point isn't on the navmesh, rotate it towards the center point until it is
+		# on the navmesh
+		var end_col: Color = stack_colours[i].lerp(Color.WHITE, 0.5)
+		
+		if _pos.distance_to(_pos_navmesh) > 0.1:
+			var pos_test: Vector3 = _pos
+			var pos_test_goal: Vector3 = _pos_navmesh
+			var angle_diff: float = angle_increment
+			var iteration: int = 1
+			var max_iterations: int = 3
+			var center_pos: Vector3 = target_pos + (target_facing_dir * min_dist)
+			for j in range(max_iterations):
+				# FIXME - this angle needs to move towards the central pos, points are sometimes
+				# going in the wrong direction first.
+				#
+				# Determine which point is the center and rotate all other points towards it
+				var dir: int = sign(_pos.signed_angle_to(center_pos, Vector3.UP))
+				# +ve for ccw, -ve for cw
+				pos_test = target_pos + (
+					target_facing_dir.rotated(Vector3.UP, ((angle * i) + angle_diff) * dir)
+				) * min_dist
+				pos_test_goal = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, pos_test)
+				pos_test.y = pos_test_goal.y
+				debug_spheres.append(draw_debug_sphere(pos_test, 0.4, stack_colours[i].lerp(Color.BLACK, angle_diff/2)))
+				if pos_test.distance_to(pos_test_goal) < 0.1:
+					break 
+				angle_diff += angle_increment
+				iteration += 1
+			
+			# TODO - set furthest points as bounds and re-position center/intermediary
+			# points to make the spread angle between each point equidistant
+			
+			debug_spheres.append(draw_debug_sphere(pos_test, 1.0, end_col))
+		
+		debug_spheres.append(draw_debug_sphere(_pos, 1.0, stack_colours[i]))
+		
+	return []
 
 
 ## SPLIT STACK PROJECTILES
