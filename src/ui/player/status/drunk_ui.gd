@@ -11,6 +11,7 @@ var drunk_tween: Tween
 
 
 func _ready() -> void:
+	await GameManager.ready
 	GameManager.setting_ui.setting_changed.connect(_on_setting_changed)
 
 
