@@ -110,6 +110,7 @@ func _on_credit_button_pressed() -> void:
 
 
 func start_game():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_disabled = true
 	started_loading = true
 	# SoundManager.play_ui_sound(start_game_sfx, "UI")
