@@ -335,10 +335,10 @@ states/strafe_finish/position = Vector2(1072, 342)
 states/strafe_start/node = SubResource("AnimationNodeAnimation_3imjw")
 states/strafe_start/position = Vector2(1072, 198)
 transitions = ["idle", "strafe_start", SubResource("AnimationNodeStateMachineTransition_vw8b5"), "strafe_start", "strafe", SubResource("AnimationNodeStateMachineTransition_yw8o1"), "strafe", "strafe_finish", SubResource("AnimationNodeStateMachineTransition_vmqtt"), "strafe_finish", "idle", SubResource("AnimationNodeStateMachineTransition_a04xy"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_0uhi5"), "idle", "cannon_idle", SubResource("AnimationNodeStateMachineTransition_mdgo6"), "idle", "jump_telegraph", SubResource("AnimationNodeStateMachineTransition_u8cin"), "jump_telegraph", "jump_start", SubResource("AnimationNodeStateMachineTransition_yt7ww"), "slam_start", "slam_end", SubResource("AnimationNodeStateMachineTransition_5c46i"), "slam_end", "idle", SubResource("AnimationNodeStateMachineTransition_xeehw"), "jump_start", "slam_start", SubResource("AnimationNodeStateMachineTransition_3g73i"), "idle", "spark_telegraph", SubResource("AnimationNodeStateMachineTransition_fo6qk"), "spark_telegraph", "idle", SubResource("AnimationNodeStateMachineTransition_emkpv"), "slash_proj_r", "idle", SubResource("AnimationNodeStateMachineTransition_dsis0"), "slash_proj_l", "idle", SubResource("AnimationNodeStateMachineTransition_0ogj7"), "spark_telegraph", "slash_proj_r", SubResource("AnimationNodeStateMachineTransition_xldkd"), "cannon_idle", "idle", SubResource("AnimationNodeStateMachineTransition_npplf"), "spark_telegraph", "slash_proj_l", SubResource("AnimationNodeStateMachineTransition_03nrh"), "spark_telegraph", "charge", SubResource("AnimationNodeStateMachineTransition_os8jq"), "charge", "idle", SubResource("AnimationNodeStateMachineTransition_25sut"), "cannon_idle", "cannon_shoot", SubResource("AnimationNodeStateMachineTransition_yxm53"), "cannon_shoot", "cannon_idle", SubResource("AnimationNodeStateMachineTransition_xohqb")]
-graph_offset = Vector2(-25, 72)
+graph_offset = Vector2(251, 2)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_nxtxm"]
-graph_offset = Vector2(-484.653, 13.0579)
+graph_offset = Vector2(-134.336, 15.0019)
 nodes/hurt_blend/node = SubResource("AnimationNodeBlend2_61lwq")
 nodes/hurt_blend/position = Vector2(182, 177)
 nodes/hurt_frame/node = SubResource("AnimationNodeAnimation_ymguk")
