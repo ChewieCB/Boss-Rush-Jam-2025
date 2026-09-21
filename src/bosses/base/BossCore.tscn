@@ -119,6 +119,7 @@ text_effect_location = NodePath("../DamageTextMarker")
 nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="UI" type="CanvasLayer" parent="."]
+layer = 3
 
 [node name="AttackDebugUI" parent="UI" instance=ExtResource("11_38enu")]
 anchors_preset = 0

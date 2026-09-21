@@ -325,8 +325,8 @@ func _ready() -> void:
 
 func activate() -> void:
 	print_debug("BossChips activate called")
-	sprite.visible = false
-	return
+	#sprite.visible = false
+	#return
 	#####
 	super()
 	navigation_component.follow_target = false

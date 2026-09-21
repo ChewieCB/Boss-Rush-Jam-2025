@@ -284,6 +284,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
+process_mode = 1
+
 [node name="StatusOverlay" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 15
@@ -496,10 +499,7 @@ text = "Saving..."
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
 top_level = true
-z_index = 2
-
-[node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
-process_mode = 1
+z_index = 10
 
 [node name="DebugInventoryUI" parent="UI" instance=ExtResource("60_44qli")]
 visible = false
