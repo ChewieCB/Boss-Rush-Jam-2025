@@ -7,12 +7,12 @@ class_name MainMenu
 
 @onready var buttons_container: Container = $TitleColumn/VBoxContainer
 @onready var buttons = buttons_container.get_children()
-@onready var settings_ui: SettingUI = $SettingUI
-@onready var credits_ui = $CreditsUI
-@onready var story_ui = $StoryUI
-@onready var save_ui = $SaveUI
+@export var settings_ui: SettingUI 
+@export var credits_ui: Control
+@export var story_ui: Control
+@export var save_ui: Control
 @onready var save_slot_items: Array[Node] = $SaveUI/VBoxContainer.get_children()
-@onready var title_column = $TitleColumn
+@export var title_column: Control
 
 var started_loading: bool = false
 var input_disabled: bool = true
@@ -36,6 +36,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	
 	_on_controller_connection(0, GameManager.is_controller_connected)
+	settings_ui.set_controller_mouse_override(GameManager.mouse_controller_override) 
 	
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
@@ -109,6 +110,7 @@ func _on_credit_button_pressed() -> void:
 
 
 func start_game():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_disabled = true
 	started_loading = true
 	# SoundManager.play_ui_sound(start_game_sfx, "UI")

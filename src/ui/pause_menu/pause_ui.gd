@@ -160,8 +160,10 @@ func play_button_hover_sfx():
 
 func _on_controller_connection(_device: int, connected: bool) -> void:
 	is_controller_connected = connected
-	if is_paused and not is_controller_connected:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if is_paused:
+		if not is_controller_connected or \
+		(is_controller_connected and GameManager.mouse_controller_override):
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		setting_button.grab_focus()
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

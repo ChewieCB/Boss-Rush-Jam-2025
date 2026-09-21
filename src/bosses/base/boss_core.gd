@@ -157,6 +157,10 @@ var charge_phase_count: int = 0
 var ranged_phase_count: int = 0
 var area_phase_count: int = 0
 
+var DEBUG_BOSS_ATTACKS: bool = false:
+	set(value):
+		DEBUG_BOSS_ATTACKS = value
+
 @export_group("Attacks")
 @export var attack_targeting_time: float = 0.5
 @export var attack_recovery_time: float = 0.5
@@ -200,6 +204,7 @@ var spawned_area_objects = []
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export_group("UI")
 @export var health_ui: BossHealthBar
+@export var debug_attack_ui: Control
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 @export_group("Movement")
@@ -232,6 +237,7 @@ var vel_vertical: float = 0
 var _original_sprite_position: Vector3
 var _original_sprite_modulate: Color
 
+
 func _ready() -> void:
 	print_debug("BossCore ready")
 	_original_sprite_position = sprite.position
@@ -263,6 +269,13 @@ func _ready() -> void:
 	GameManager.cheat_boss_godmode_toggle.connect(
 		func(enabled: bool):
 			health_component.is_invincible = enabled
+	)
+	debug_attack_ui.visible = GameManager.CHEAT_debug_boss_attacks
+	DEBUG_BOSS_ATTACKS = GameManager.CHEAT_debug_boss_attacks
+	GameManager.cheat_boss_attack_debug_toggle.connect(
+		func(enabled: bool):
+			DEBUG_BOSS_ATTACKS = enabled
+			debug_attack_ui.visible = enabled
 	)
 	
 	var phase_health_arr: Array[int] = []

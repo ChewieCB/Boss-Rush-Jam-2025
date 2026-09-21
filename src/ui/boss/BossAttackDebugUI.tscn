@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpxj1qbbg064d"]
+
+[ext_resource type="Script" path="res://src/ui/boss/boss_attack_debug_ui.gd" id="1_ce17b"]
+[ext_resource type="PackedScene" uid="uid://bmktkus46dwow" path="res://src/ui/boss/DebugBossAttackInput.tscn" id="2_1ey5f"]
+
+[node name="AttackDebugUI" type="Control"]
+custom_minimum_size = Vector2(350, 60)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ce17b")
+debug_attack_input_ui = ExtResource("2_1ey5f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = -16

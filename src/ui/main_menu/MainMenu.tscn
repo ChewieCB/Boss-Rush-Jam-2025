@@ -82,7 +82,7 @@ _data = {
 "spin_chip": SubResource("Animation_bjuou")
 }
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("settings_ui", "credits_ui", "story_ui", "save_ui", "title_column")]
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
 anchors_preset = 15
@@ -96,6 +96,11 @@ script = ExtResource("1_bnujd")
 button_sfx = Array[AudioStream]([ExtResource("3_7ak47"), ExtResource("4_oermb"), ExtResource("5_7tag1"), ExtResource("6_hri1i"), ExtResource("7_bs3mo")])
 start_game_sfx = ExtResource("8_e8blx")
 lobby_scene = ExtResource("8_bx71u")
+settings_ui = NodePath("SettingUI")
+credits_ui = NodePath("CreditsUI")
+story_ui = NodePath("StoryUI")
+save_ui = NodePath("SaveUI")
+title_column = NodePath("TitleColumn")
 
 [node name="IdleDetector" parent="." instance=ExtResource("25_bigae")]
 
