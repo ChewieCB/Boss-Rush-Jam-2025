@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://bsktrskp4qqgt"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_ibgri"]
+
+[resource]
+script = ExtResource("1_ibgri")
+id = 18
+name = "Aerial Critical"
+desc = "+6 luck on aerial critical hit"
+message = ""

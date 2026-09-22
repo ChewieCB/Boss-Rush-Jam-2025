@@ -13,10 +13,12 @@ script = ExtResource("2_mwip8")
 bonus_firerate_per_interval = 5.0
 interval_time = 0.2
 is_perc = true
+max_bonus = 100.0
 display_text_title = "Ramp up"
 display_text_tag = "Keep shooting"
 display_text_desc = "+5% firerate per 0.2s
-non-stop shooting"
-positive_desc = Array[String](["Firerate increases as you keep firing"])
+holding the trigger, up to +100%.
+Reloading does not break the ramp"
+positive_desc = Array[String](["Firerate ramps up while the trigger is held", "Ramp is kept through reloads"])
 negative_desc = Array[String](["Burns through ammo faster"])
 icon_id = 24

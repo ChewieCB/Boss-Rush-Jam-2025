@@ -18,10 +18,10 @@ interval_time = 0.2
 is_perc = true
 display_text_title = "Ramp up"
 display_text_tag = "Keep shooting."
-display_text_desc = "+5% firerate per 0.2s
-Non-stop shooting"
-positive_desc = Array[String](["Firerate increases as you keep firing"])
+display_text_desc = "+5% firerate per 0.2s while holding the trigger, up to +100%."
+positive_desc = Array[String](["Firerate ramps up while the trigger is held"])
 icon_id = 24
+luck_triggers = Array[int]([21])
 
 [node name="ExtendedDrum" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_k0t2c")
@@ -48,7 +48,6 @@ is_perc = true
 [node name="ExplosiveBullet" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("dps_dealt_window_timer")]
 script = ExtResource("6_ayuco")
 damage = 15
-range = 2.5
 dps_dealt_window_timer = NodePath("DPSWindowTImer")
 display_text_title = "Explosive bullets."
 display_text_tag = "Don't hurt yourself!"

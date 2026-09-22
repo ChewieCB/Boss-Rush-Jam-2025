@@ -516,15 +516,20 @@ func play_post_shot_anim() -> bool:
 		"rifle_idle":
 			post_shot_state = "rifle_rack"
 
-	anim_tree.set("parameters/reload_timescale/scale", 1.0)
+	# speed up anim speed for firerate bonus
+	var post_shot_timescale: float = 1.0
+	if base_firerate > 0:
+		post_shot_timescale = max(1.0, modified_firerate / base_firerate)
 	#var reload_timescale: float = 1.35 / modified_reload_time
 	#anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 
 	if post_shot_state:
+		if not is_reloading:
+			anim_tree.set("parameters/reload_timescale/scale", post_shot_timescale)
 		idle_frame_state.travel(post_shot_state)
 		await post_reload_anim_end
-
-	#anim_tree.set("parameters/reload_timescale/scale", 1.0)
+		if not is_reloading:
+			anim_tree.set("parameters/reload_timescale/scale", 1.0)
 	
 	if not GameManager.CHEAT_infinite_ammo:
 		if magazine_ammo_left <= 0:
@@ -1364,7 +1369,6 @@ func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_fin
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:
 	print("Anim state: %s - %s" % [state_name, transition])
-
 
 
 func remove_elemental_anim() -> void:
