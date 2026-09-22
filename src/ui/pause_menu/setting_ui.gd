@@ -118,7 +118,6 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_on_tab_container_tab_changed(0)
 	_on_controller_connection(0, GameManager.is_controller_connected)
-	set_controller_mouse_override(GameManager.mouse_controller_override)                                                                  
 
 
 func _input(event):

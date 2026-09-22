@@ -36,7 +36,6 @@ func _ready() -> void:
 	get_tree().paused = false
 	
 	_on_controller_connection(0, GameManager.is_controller_connected)
-	settings_ui.set_controller_mouse_override(GameManager.mouse_controller_override) 
 	
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
