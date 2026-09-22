@@ -69,6 +69,7 @@ signal setting_back_button_pressed
 @export var sfx_free_money: AudioStream
 @onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode/GodeModeToggle
 @onready var boss_god_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle
+@onready var boss_attack_debug_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossAttackDebug/BossAttackDebugToggle
 @onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle
 @onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode/GodeModeToggle
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoModeTimeout/SpinBox
@@ -112,17 +113,12 @@ func _ready() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
 	Input.joy_connection_changed.connect(_on_controller_connection)
-	GameManager.controller_mouse_override_toggle.connect(
-		func(enabled):
-			if enabled:
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			else:
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	)
+	GameManager.controller_mouse_override_toggle.connect(set_controller_mouse_override)  
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_on_tab_container_tab_changed(0)
 	_on_controller_connection(0, GameManager.is_controller_connected)
+	set_controller_mouse_override(GameManager.mouse_controller_override)                                                                  
 
 
 func _input(event):
@@ -395,7 +391,7 @@ func refresh_setting_value():
 	controller_deadzone_value.text = "{0}".format([GameManager.controller_deadzone])
 	aim_assist_slider.value = GameManager.aim_assist_strength * 100
 	aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])
-	controller_mouse_override_toggle.set_pressed_no_signal(GameManager.mouse_controller_override)
+	controller_mouse_override_toggle.set_pressed_no_signal(GameManager.mouse_controller_override) 
 
 	fov_slider.value = GameManager.camera_fov
 	fov_value.text = "{0}".format([GameManager.camera_fov])
@@ -444,6 +440,7 @@ func refresh_setting_value():
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
 	boss_god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_invincible_bosses)
+	boss_attack_debug_toggle.set_pressed_no_signal(GameManager.CHEAT_debug_boss_attacks)
 	skip_tutorial_toggle.set_pressed_no_signal(GameManager.CHEAT_skip_tutorial_on_new_game)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
@@ -609,3 +606,15 @@ func _on_boss_god_mode_toggle_toggled(toggled_on: bool) -> void:
 func _on_force_mouse_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.mouse_controller_override = toggled_on
+
+
+func _on_boss_attack_debug_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_debug_boss_attacks = toggled_on
+
+
+func set_controller_mouse_override(enabled):
+	if enabled:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

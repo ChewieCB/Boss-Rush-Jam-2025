@@ -20,6 +20,12 @@ signal chiptopede_emerges
 signal leap_finished(head_segment: Node)
 signal segment_deactivated(segment: ChiptopedeSegment)
 
+enum DEBUG_BOSS_ATTACK_PHASE_1 {BIG_STACK_ROLL, BIG_STACK_SWEEP, BIG_STACK_SLAM, SMALL_STACK_CHARGE, SMALL_STACK_CANNON, SMALL_STACK_MERGE, BIG_STACK_SPLIT} 
+enum DEBUG_BOSS_ATTACK_PHASE_2 {BIG_STACK_ROLL, BIG_STACK_SWEEP, BIG_STACK_SLAM, BIG_STACK_DIVE, SMALL_STACK_DIVE, SMALL_STACK_CANNON, SMALL_STACK_FAN, SMALL_STACK_MERGE, BIG_STACK_SPLIT} 
+var DEBUG_boss_attack: int = -1
+
+var debug_spheres: Array[MeshInstance3D] = []
+
 ## Phase transitions
 @export_group("Phases")
 var prev_phase
@@ -316,8 +322,12 @@ func _ready() -> void:
 	if raycast.is_colliding():
 		aoe_floor = raycast.get_collision_point().y
 
+
 func activate() -> void:
 	print_debug("BossChips activate called")
+	#sprite.visible = false
+	#return
+	#####
 	super()
 	navigation_component.follow_target = false
 	navigation_component.disable()
@@ -333,6 +343,7 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	velocity = Vector3.ZERO
 	# Disable big stack processing while hidden but keep ticking the chiptopede
 	if sprite.visible:
 		super(delta)
@@ -447,6 +458,29 @@ func _on_died() -> void:
 func select_attack_phase_1() -> void:
 	state_chart.send_event("end_attack")
 	attack_interrupt = false
+	
+	# DEBUG 
+	if DEBUG_boss_attack != -1:
+		var debug_attack_str: String = ""
+		match DEBUG_boss_attack:
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_ROLL:
+				debug_attack_str = "start_backspin_chip"
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_SWEEP:
+				debug_attack_str = "start_chip_sweep"
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_SLAM:
+				debug_attack_str = "start_slam_attack"
+			DEBUG_BOSS_ATTACK_PHASE_1.SMALL_STACK_CANNON:
+				debug_attack_str = "start_split_stack_projectiles"
+			DEBUG_BOSS_ATTACK_PHASE_1.SMALL_STACK_CHARGE:
+				debug_attack_str = "start_split_stack_charge_back_attack"
+			DEBUG_BOSS_ATTACK_PHASE_1.BIG_STACK_SPLIT:
+				debug_attack_str = "change_form_split"
+			DEBUG_BOSS_ATTACK_PHASE_1.SMALL_STACK_MERGE:
+				debug_attack_str = "change_form_big"
+		
+		state_chart.send_event(debug_attack_str)
+		return
+	
 	# Weighted random chance attacks
 	#
 	var attack_str: String = ""
@@ -454,6 +488,12 @@ func select_attack_phase_1() -> void:
 
 	match current_form:
 		ChipBossForms.BIG_STACK:
+			debug_attack_ui.clear_attack_ui()
+			debug_attack_ui.add_attack_ui("input_0", "Big Stack - Split")
+			debug_attack_ui.add_attack_ui("input_1", "Big Stack - Spinback Chip")
+			debug_attack_ui.add_attack_ui("input_2", "Big Stack - Chip Sweep")
+			debug_attack_ui.add_attack_ui("input_3", "Big Stack - Jump Slam")
+			
 			# Transition between big and small forms:
 			if big_attacks_performed >= max_big_attacks:
 				big_stack_sfx_player.stream = sfx_stack_split.pick_random()
@@ -474,6 +514,11 @@ func select_attack_phase_1() -> void:
 			big_attacks_performed += 1
 
 		ChipBossForms.SPLIT_STACKS:
+			debug_attack_ui.clear_attack_ui()
+			debug_attack_ui.add_attack_ui("input_0", "Small Stacks - Merge")
+			debug_attack_ui.add_attack_ui("input_1", "Small Stacks - Cannon")
+			debug_attack_ui.add_attack_ui("input_3", "Small Stacks - Charge")
+			
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
 				state_chart.send_event("start_charge_reform")
@@ -493,9 +538,113 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event(attack_str)
 
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		match event.keycode:
+			KEY_1:
+				get_stack_positions_around_target(5.0)
+			KEY_2:
+				get_stack_positions_around_target(10.0)
+			KEY_3:
+				get_stack_positions_around_target(15.0)
+			KEY_4:
+				get_stack_positions_around_target(20.0)
+		
+	if not DEBUG_BOSS_ATTACKS:
+		return
+	
+	# FIXME - kinda broken, do a proper pass on this at some point
+	if event is InputEventKey:
+		var phase_enums = [DEBUG_BOSS_ATTACK_PHASE_1, DEBUG_BOSS_ATTACK_PHASE_2, DEBUG_BOSS_ATTACK_PHASE_2]
+		var debug_attack_enum = phase_enums[current_phase - 1]
+		match event.keycode:
+			Key.KEY_0:
+				if current_form == ChipBossForms.BIG_STACK:
+					DEBUG_boss_attack = debug_attack_enum.BIG_STACK_SPLIT
+				else:
+					DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_MERGE
+				debug_attack_ui.highlight_attack_ui(0)
+			
+			# 0 is split/merge
+			# 1 is projectiles
+			# 2 is alt projectiles
+			# 3 is melee
+			# 4 is aoe
+			
+			Key.KEY_1:
+				if current_form == ChipBossForms.BIG_STACK:
+					DEBUG_boss_attack = debug_attack_enum.BIG_STACK_ROLL
+				else:
+					DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_CANNON
+				debug_attack_ui.highlight_attack_ui(1)
+			
+			Key.KEY_2:
+				if current_form == ChipBossForms.BIG_STACK:
+					DEBUG_boss_attack = debug_attack_enum.BIG_STACK_SWEEP
+					debug_attack_ui.highlight_attack_ui(2)
+				else:
+					if current_phase == 2:
+						DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_FAN
+						debug_attack_ui.highlight_attack_ui(2)
+			
+			Key.KEY_3:
+				if current_form == ChipBossForms.BIG_STACK:
+					DEBUG_boss_attack = debug_attack_enum.BIG_STACK_SLAM
+					debug_attack_ui.highlight_attack_ui(3)
+				else:
+					if current_phase == 1:
+						DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_CHARGE
+						debug_attack_ui.highlight_attack_ui(2)
+			
+			Key.KEY_4:
+				if current_phase == 2:
+					if current_form == ChipBossForms.BIG_STACK:
+						DEBUG_boss_attack = debug_attack_enum.BIG_STACK_DIVE
+						debug_attack_ui.highlight_attack_ui(4)
+					else:
+						DEBUG_boss_attack = debug_attack_enum.SMALL_STACK_DIVE
+						debug_attack_ui.highlight_attack_ui(3)
+			
+		if DEBUG_boss_attack != -1:
+			match current_phase:
+				1:
+					debug_state_label.text = "Next attack: %s" % [DEBUG_BOSS_ATTACK_PHASE_1.keys()[DEBUG_boss_attack]]
+				2:
+					debug_state_label.text = "Next attack: %s" % [DEBUG_BOSS_ATTACK_PHASE_2.keys()[DEBUG_boss_attack]]
+			debug_state_label.visible = true
+				
+
+
 func select_attack_phase_2() -> void:
 	state_chart.send_event("end_attack")
 	attack_interrupt = false
+	
+	# DEBUG 
+	if DEBUG_boss_attack != -1:
+		var debug_attack_str: String = ""
+		match DEBUG_boss_attack:
+			DEBUG_BOSS_ATTACK_PHASE_2.BIG_STACK_ROLL:
+				debug_attack_str = "start_backspin_chip"
+			DEBUG_BOSS_ATTACK_PHASE_2.BIG_STACK_SWEEP:
+				debug_attack_str = "start_chip_sweep"
+			DEBUG_BOSS_ATTACK_PHASE_2.BIG_STACK_SLAM:
+				debug_attack_str = "start_slam_attack"
+			DEBUG_BOSS_ATTACK_PHASE_2.BIG_STACK_DIVE:
+				debug_attack_str = "start_place_your_bets_attack"
+			DEBUG_BOSS_ATTACK_PHASE_2.SMALL_STACK_CANNON:
+				debug_attack_str = "start_split_stack_projectiles"
+			DEBUG_BOSS_ATTACK_PHASE_2.SMALL_STACK_FAN:
+				debug_attack_str = "start_split_stack_arc_attack"
+			DEBUG_BOSS_ATTACK_PHASE_2.SMALL_STACK_DIVE:
+				debug_attack_str = "start_split_stack_aoe_attack"
+			DEBUG_BOSS_ATTACK_PHASE_2.BIG_STACK_SPLIT:
+				debug_attack_str = "change_form_split"
+			DEBUG_BOSS_ATTACK_PHASE_2.SMALL_STACK_MERGE:
+				debug_attack_str = "change_form_big"
+		
+		state_chart.send_event(debug_attack_str)
+		return
+	
 	# Weighted random chance attacks
 	#
 	var attack_str: String = ""
@@ -503,13 +652,20 @@ func select_attack_phase_2() -> void:
 
 	match current_form:
 		ChipBossForms.BIG_STACK:
+			debug_attack_ui.clear_attack_ui()
+			debug_attack_ui.add_attack_ui("input_0", "Big Stack - Split")
+			debug_attack_ui.add_attack_ui("input_1", "Big Stack - Spinback Chip")
+			debug_attack_ui.add_attack_ui("input_2", "Big Stack - Chip Sweep")
+			debug_attack_ui.add_attack_ui("input_3", "Big Stack - Jump Slam")
+			debug_attack_ui.add_attack_ui("input_4", "Big Stack - Jump Dive")
+			
 			# Transition between big and small forms:
 			if big_attacks_performed >= max_big_attacks:
 				big_stack_sfx_player.stream = sfx_stack_split.pick_random()
 				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_split")
 				return
-
+		
 			if place_your_bet_attack_enabled:
 				if attack_roll < 25:
 					attack_str = "start_chip_sweep"
@@ -529,6 +685,12 @@ func select_attack_phase_2() -> void:
 			big_attacks_performed += 1
 
 		ChipBossForms.SPLIT_STACKS:
+			debug_attack_ui.clear_attack_ui()
+			debug_attack_ui.add_attack_ui("input_0", "Small Stacks - Merge")
+			debug_attack_ui.add_attack_ui("input_1", "Small Stacks - Cannon Projectile")
+			debug_attack_ui.add_attack_ui("input_2", "Small Stacks - Fan Projectile")
+			debug_attack_ui.add_attack_ui("input_4", "Small Stacks - Jump Dive")
+			
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
 				state_chart.send_event("change_form_big")
@@ -734,6 +896,7 @@ func split_stacks(spawn_func: Callable) -> void:
 
 	state_chart.send_event("end_attack")
 
+
 func _spawn_stacks_close() -> void:
 	active_stacks = await spawn_stacks(small_stack_count, 2.5)
 
@@ -778,6 +941,9 @@ func _on_split_stacks_state_entered_phase_1() -> void:
 func _on_split_stacks_state_entered_phase_2() -> void:
 	# If we already have the Big Stack form before we call _reset_to_big_stack(),
 	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
+	if DEBUG_boss_attack != 1:
+		DEBUG_boss_attack = -1
+	
 	if current_form == ChipBossForms.SPLIT_STACKS:
 		cancel_substack_attacks()
 		state_chart.send_event("change_form_big_aoe_merge")
@@ -798,6 +964,9 @@ func _on_big_stack_state_entered_phase_2() -> void:
 	_enable_gravity()
 	# If we already have the Big Stack form before we call _reset_to_big_stack(),
 	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
+	if DEBUG_boss_attack != 1:
+		DEBUG_boss_attack = -1
+	
 	if current_form == ChipBossForms.BIG_STACK:
 		await big_stack_jump_to_center(jump_height, false)
 		state_chart.send_event("start_merge_aoe_finisher")
@@ -905,8 +1074,6 @@ func _on_backspin_chip_back_spin_state_entered() -> void:
 
 
 func _on_backspin_chip_recover_state_entered() -> void:
-	debug_state_label.text = "Backspin Chip | Recovery"
-
 	_cleanup_backspin_chip()
 	chips_fired += 1
 	anim_player.play("big_stack/projectile_telegraph")
@@ -1163,6 +1330,66 @@ func _start_split_attack() -> void:
 	state_chart.send_event("start_attack")
 
 
+func get_stack_positions_around_target(min_dist: float = 10.0) -> Array[Vector3]:
+	for mesh in debug_spheres:
+		mesh.queue_free()
+	debug_spheres = []
+	
+	var target_pos: Vector3 = target.global_position
+	debug_spheres.append(draw_debug_sphere(target_pos, 1.0, Color.WHITE))
+	# Place a point for each stack at the mininum distance away from target pos
+	var angle: float = (2 * PI) / small_stack_count
+	var angle_increment: float = PI/16
+	var target_facing_dir: Vector3 = -target.global_basis.z
+	var stack_colours: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE]
+	var stack_positions: Array[Vector3] = []
+	var initial_positions_debug: Array[MeshInstance3D] = []
+	
+	for i in range(small_stack_count):
+		var _pos: Vector3 = target_pos + (
+			target_facing_dir.rotated(Vector3.UP, angle * i)
+		) * min_dist
+		var _pos_navmesh: Vector3 = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, _pos)
+		_pos.y = _pos_navmesh.y
+		# If a point isn't on the navmesh, rotate it towards the center point until it is
+		# on the navmesh
+		var end_col: Color = stack_colours[i].lerp(Color.WHITE, 0.5)
+		
+		if _pos.distance_to(_pos_navmesh) > 0.1:
+			var pos_test: Vector3 = _pos
+			var pos_test_goal: Vector3 = _pos_navmesh
+			var angle_diff: float = angle_increment
+			var iteration: int = 1
+			var max_iterations: int = 3
+			var center_pos: Vector3 = target_pos + (target_facing_dir * min_dist)
+			for j in range(max_iterations):
+				# FIXME - this angle needs to move towards the central pos, points are sometimes
+				# going in the wrong direction first.
+				#
+				# Determine which point is the center and rotate all other points towards it
+				var dir: int = sign(_pos.signed_angle_to(center_pos, Vector3.UP))
+				# +ve for ccw, -ve for cw
+				pos_test = target_pos + (
+					target_facing_dir.rotated(Vector3.UP, ((angle * i) + angle_diff) * dir)
+				) * min_dist
+				pos_test_goal = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, pos_test)
+				pos_test.y = pos_test_goal.y
+				debug_spheres.append(draw_debug_sphere(pos_test, 0.4, stack_colours[i].lerp(Color.BLACK, angle_diff/2)))
+				if pos_test.distance_to(pos_test_goal) < 0.1:
+					break 
+				angle_diff += angle_increment
+				iteration += 1
+			
+			# TODO - set furthest points as bounds and re-position center/intermediary
+			# points to make the spread angle between each point equidistant
+			
+			debug_spheres.append(draw_debug_sphere(pos_test, 1.0, end_col))
+		
+		debug_spheres.append(draw_debug_sphere(_pos, 1.0, stack_colours[i]))
+		
+	return []
+
+
 ## SPLIT STACK PROJECTILES
 # Split into multiple smaller stacks, orbit the player, and fire projectiles
 
@@ -1349,8 +1576,6 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 
 
 func _on_place_your_bets_crashing_state_entered() -> void:
-	debug_state_label.text = "Place Your Bets | Crashing"
-
 	var closest_targets = aoe_markers.duplicate()
 	closest_targets.sort_custom(
 		_sort_by_distance_to_target.bind(true)
@@ -1401,7 +1626,7 @@ func _on_ss_arc_wave_attacking_state_entered() -> void:
 # split into several smaller stacks, and crash down on the platforms in sequence
 func _on_ss_place_your_bets_attacking_state_entered() -> void:
 	# Gets all substacks ready to drop
-	trigger_substack_attack("start_place_your_bets_attack")
+	trigger_substack_attack("start_place_your_bets_attack", 0.15)
 
 	# Triggers AoE drops in random order
 	var closest_targets = aoe_markers.duplicate()
@@ -1423,7 +1648,8 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 
 	for i in range(active_stacks.size()):
 		var stack = active_stacks[i]
-
+		
+		# FIXME - possible slowdown?
 		closest_targets.sort_custom(
 			_sort_by_distance_to_target
 		)
@@ -2325,8 +2551,6 @@ func _cleanup_segment_arrays() -> void:
 # Jump up, crash into the ground creating an AoE and
 # make chip mines pop up out of the floor.
 func _on_chip_mines_targeting_state_entered() -> void:
-	debug_state_label.text = "Chip Mines | Targeting"
-
 	# TODO - detonate any existing chip mines before we spawn new ones
 	for mine in active_mines:
 		if is_instance_valid(mine):
@@ -2341,8 +2565,6 @@ func _on_chip_mines_targeting_state_entered() -> void:
 
 
 func _on_chip_mines_jump_state_entered() -> void:
-	debug_state_label.text = "Chip Mines | Jumping"
-
 	vel_vertical = 0
 	GRAVITY = 0
 
@@ -2364,7 +2586,6 @@ func _on_chip_mines_jump_state_entered() -> void:
 
 
 func _on_chip_mines_spawn_mines_state_entered() -> void:
-	debug_state_label.text = "Chip Mines | Spawning Mines"
 	# Animate each chip mine spawning out of floor
 	for i in range(chip_mine_layers):
 		for j in range(chip_mine_count / (chip_mine_layers - i)):

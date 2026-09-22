@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=37 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="2_5bmmu"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_0t8qy"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_lsrry"]
 [ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="9_cunyl"]
+[ext_resource type="PackedScene" uid="uid://dpxj1qbbg064d" path="res://src/ui/boss/BossAttackDebugUI.tscn" id="11_38enu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_j156m"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
@@ -65,7 +66,7 @@ _data = {
 "death": SubResource("Animation_dshkv")
 }
 
-[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("elemental_emitting_vfx", "navigation_component", "health_component", "health_ui")]
+[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("elemental_emitting_vfx", "navigation_component", "health_component", "health_ui", "debug_attack_ui")]
 process_mode = 1
 collision_layer = 4
 collision_mask = 11
@@ -81,6 +82,7 @@ attack_recovery_time = 0.65
 projectile_scene = ExtResource("2_s3pnh")
 delay_per_projectile = 0.3
 health_ui = NodePath("UI/HealthUI/BossHealthContainer")
+debug_attack_ui = NodePath("UI/AttackDebugUI")
 hit_effect_flash_duration = 0.06
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -117,6 +119,20 @@ text_effect_location = NodePath("../DamageTextMarker")
 nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="UI" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="AttackDebugUI" parent="UI" instance=ExtResource("11_38enu")]
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 112.0
+offset_top = 216.0
+offset_right = 462.0
+offset_bottom = 276.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="HealthUI" type="Control" parent="UI"]
 layout_mode = 3

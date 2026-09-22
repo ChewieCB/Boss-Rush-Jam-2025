@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 [ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
-[ext_resource type="Texture2D" uid="uid://hoowxt50whhw" path="res://src/ui/common/assets/background-pattern2.png" id="9_mqlgl"]
+[ext_resource type="Texture2D" uid="uid://df6fclrckyyxb" path="res://src/ui/common/assets/background-pattern1 - Copy.png" id="9_mqlgl"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="9_o2w47"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
 [ext_resource type="Texture2D" uid="uid://c4brubgvfwrmn" path="res://assets/sprite/input/keyboard_and_mouse/keyboard.png" id="11_pg8t6"]
@@ -1086,13 +1086,31 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
+[node name="BossAttackDebug" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossAttackDebug"]
+layout_mode = 2
+offset_right = 175.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Debug boss attacks"
+
+[node name="BossAttackDebugToggle" type="CheckButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossAttackDebug"]
+layout_mode = 2
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 34.0
+text = "Toggle"
+
 [node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial"]
 layout_mode = 0
-offset_right = 59.0
+offset_right = 120.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
 text = "Skip Tutorial"
@@ -1101,8 +1119,8 @@ text = "Skip Tutorial"
 layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
-offset_right = 332.0
-offset_bottom = 30.0
+offset_right = 372.0
+offset_bottom = 34.0
 text = "Toggle"
 
 [node name="DemoMode" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
@@ -1467,6 +1485,8 @@ text = "Back"
 [connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossGodMode/BossGodModeToggle" to="." method="_on_boss_god_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossAttackDebug/BossAttackDebugToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossAttackDebug/BossAttackDebugToggle" to="." method="_on_boss_attack_debug_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="_on_skip_tutorial_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DemoMode/GodeModeToggle" to="." method="play_button_hover_sfx"]

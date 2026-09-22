@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://d4e4xmrpy84ly"]
+[gd_scene load_steps=33 format=3 uid="uid://ck1dkfv413ju"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="1_2elh3"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_c2ut8"]
@@ -22,10 +22,12 @@ shader = ExtResource("4_a4gln")
 shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/y_billboard = false
+shader_parameter/tex_alpha = 1.0
 shader_parameter/scale = 1.0
 shader_parameter/deform = Vector2(0, 0)
 shader_parameter/deform_h_scale = 5.0
 shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
 shader_parameter/tex = ExtResource("3_dt1a4")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hexvc"]
