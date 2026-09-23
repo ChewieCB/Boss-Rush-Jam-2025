@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 [ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
-[ext_resource type="Texture2D" uid="uid://df6fclrckyyxb" path="res://src/ui/common/assets/background-pattern1 - Copy.png" id="9_mqlgl"]
+[ext_resource type="Texture2D" uid="uid://df6fclrckyyxb" path="res://src/ui/common/assets/background-pattern2.png" id="9_mqlgl"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="9_o2w47"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
 [ext_resource type="Texture2D" uid="uid://c4brubgvfwrmn" path="res://assets/sprite/input/keyboard_and_mouse/keyboard.png" id="11_pg8t6"]
@@ -1290,6 +1290,29 @@ popup/item_1/id = 1
 popup/item_2/text = "Seeded Auto-spin"
 popup/item_2/id = 2
 
+[node name="SpinCost" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SpinCost"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Spin Cost Type"
+
+[node name="SpinCostDropdown" type="OptionButton" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SpinCost"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 413.0
+offset_bottom = 34.0
+selected = 0
+item_count = 2
+popup/item_0/text = "Chip Cost"
+popup/item_1/text = "Cooldown"
+popup/item_1/id = 1
+
 [node name="InfiniteAmmo" type="Control" parent="TabContainer/DEBUG/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -1501,6 +1524,8 @@ text = "Back"
 [connection signal="item_selected" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="item_selected" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SpinCost/SpinCostDropdown" to="." method="_on_spin_cost_dropdown_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/SpinCost/SpinCostDropdown" to="." method="play_button_hover_sfx"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle" to="." method="_on_infinite_ammo_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls/DebugJamControlsToggle" to="." method="play_button_hover_sfx"]

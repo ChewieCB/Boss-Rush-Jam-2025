@@ -207,6 +207,11 @@ enum DebugSpinMode {
 	SEEDED_AUTO_SPIN,
 }
 var CHEAT_spin_mode: int = DebugSpinMode.MANUAL_SPIN
+enum DebugSpinCost {
+	CHIP_COST,
+	COOLDOWN
+}
+var CHEAT_spin_cost: int = DebugSpinCost.COOLDOWN
 var CHEAT_freecam: bool = false
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = false

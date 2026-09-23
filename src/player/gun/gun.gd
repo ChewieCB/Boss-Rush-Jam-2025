@@ -58,8 +58,6 @@ var muzzle_flash_sprite: Sprite3D
 @export var barrel_jam_mat: StandardMaterial3D
 @export var jam_time: float = 0.6
 var barrel_cached_materials: Array[StandardMaterial3D] = []
-
-
 var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 @onready var effect_icons_viewport: SubViewport = $EffectIconsViewport
@@ -725,6 +723,26 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel_spin_started.emit(barrel, barrel_idx)
 
 
+func _highlight_barrel(barrel_idx: int) -> void:
+	var barrel = installed_barrels[barrel_idx]
+	if barrel == null:
+		return
+	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
+	state_machine.travel("glow")
+
+
+func highlight_equipped_barrels() -> void:
+	var spin_idx: int = 0
+	for barrel in installed_barrels:
+		if barrel == null:
+			spin_idx += 1
+			continue
+		# Optional delay between each barrel spinning
+		await get_tree().create_timer(0.1).timeout
+		_highlight_barrel(spin_idx)
+		spin_idx += 1
+
+
 func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	reset_modifier(true)
 
@@ -1014,6 +1032,9 @@ func crit_damage(_damage: int) -> void:
 	pass
 	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
 	#SoundManager.play_sound(TEMP_crit, "Gun")
+
+func play_crit_sfx() -> void:
+	SoundManager.play_sound(TEMP_crit, "Gun")
 
 
 #func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
@@ -1353,6 +1374,10 @@ func _remove_icon_jam_overlay(idx: int) -> void:
 	if _cached_mat:
 		_cached_mat.next_pass = null
 		barrel_icon_meshes[idx].set_surface_override_material(0, _cached_mat)
+
+
+func spark_barrel(idx: int) -> void: 
+	barrel_sparks[idx].restart()
 
 
 func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:
