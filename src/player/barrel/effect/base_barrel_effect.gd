@@ -53,6 +53,7 @@ func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, r
 	return new_value
 
 
+## Call when an effect is applied right after a barrel install
 func on_barrel_install():
 	return
 
