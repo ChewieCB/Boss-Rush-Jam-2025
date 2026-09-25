@@ -195,10 +195,11 @@ const BULLET_SPAWN_POS_VARIATION = 10
 const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 var current_reload_anim_time: float
+var cooldown_disabled: bool = false
 
 
 func _ready() -> void:
-	ScreenTransition.transition_midpoint.connect(equip_active)
+	ScreenTransition.transition_midpoint_in.connect(equip_active)
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
@@ -492,8 +493,9 @@ func play_active_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -
 
 func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
 	_play_anim_cancel("equip", frame_id, spin_all_barrels)
-	await spin_anim_finished
-	GameManager.player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
+	if not cooldown_disabled:
+		await spin_anim_finished
+		GameManager.player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
 
 
 func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:

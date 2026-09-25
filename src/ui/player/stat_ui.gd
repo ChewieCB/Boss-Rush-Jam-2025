@@ -25,6 +25,7 @@ var out_of_reroll = false
 
 @export var radial_ui_center_node: Control
 @export var spin_icon: TextureRect
+@export var spin_particles: GPUParticles2D
 @export var spin_label: Label
 @export var currency_ui: Control
 
@@ -67,11 +68,13 @@ func _ready() -> void:
 		GameManager.player.status_effect_removed.connect(remove_status_ui)
 		GameManager.player.spin_cooldown_started.connect(spin_ability_start_cooldown)
 		GameManager.player.spin_cooldown_finished.connect(spin_ability_end_cooldown)
-	#_update_roll_left_label()
+	
+	_spin_cooldown_empty()
 
 func _process(delta: float) -> void:
 	if is_cooldown_active:
-		spin_ability_ui.value += delta
+		spin_ability_ui.value += (spin_ability_ui.max_value / (GameManager.player.spin_cooldown_time - 0.25)) * delta
+		# FIXME - triggers spin "early" if you spin -> change frame -> spin
 
 
 func spin_ability_start_cooldown() -> void:
@@ -84,8 +87,6 @@ func spin_ability_start_cooldown() -> void:
 	
 	await _spin_cooldown_anim_drain()
 	is_cooldown_active = true
-	# TODO - replace this tween fill with a physics tick fill we use to lerp the progress/ui properties
-	# this way we can dynamically influence the fill amount with things like luck triggers
 	_spin_cooldown_anim_fill()
 
 
@@ -99,10 +100,22 @@ func spin_ability_end_cooldown() -> void:
 	progress_tween.set_parallel(false)
 	progress_tween.tween_property(spin_label, "scale", Vector2(1.2, 1.2), fill_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	progress_tween.tween_property(spin_label, "scale", Vector2(1, 1), fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
+	
+	spin_particles.restart()
+	UIUtils.anim_ui_elem_scale(spin_ability_ui)
 
+
+func _spin_cooldown_empty() -> void:
+	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
+	spin_ability_ui.value = 0
+	spin_icon.rotation = 0
+	spin_icon.scale = Vector2(0.5, 0.5)
+	spin_label.scale = Vector2(0.5, 0.5)
 
 
 func _spin_cooldown_anim_instant_drain_to_fill(time: float = fill_time * 4) -> void:
+	is_cooldown_active = false
+	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
 	# Tween setup
 	var progress_tween: Tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
@@ -119,9 +132,13 @@ func _spin_cooldown_anim_instant_drain_to_fill(time: float = fill_time * 4) -> v
 	progress_tween.tween_property(spin_icon, "rotation", 2 * PI, time)
 	progress_tween.tween_property(spin_icon, "scale", Vector2(1, 1), time)
 	# Update player cooldown state at end of anim
-	progress_tween.tween_callback(func(): GameManager.player.spin_cooldown_active = false)
+	progress_tween.tween_callback(
+		func(): 
+			GameManager.player.spin_cooldown_active = false
+	)
 
 func _spin_cooldown_anim_drain(time: float = 0.2) -> void:
+	is_cooldown_active = false
 	var progress_tween: Tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.set_parallel(true)
@@ -130,7 +147,7 @@ func _spin_cooldown_anim_drain(time: float = 0.2) -> void:
 	progress_tween.tween_property(spin_ability_ui, "value", 0.0, time)
 	progress_tween.tween_property(spin_icon, "rotation", -90, time)
 	progress_tween.tween_property(spin_icon, "scale", Vector2(0.5, 0.5), time)
-	progress_tween.tween_property(spin_label, "scale", Vector2(0.2, 0.2), time)
+	progress_tween.tween_property(spin_label, "scale", Vector2(0.5, 0.5), time)
 	
 	await progress_tween.finished
 	
@@ -143,7 +160,6 @@ func _spin_cooldown_anim_fill(time: float = GameManager.player.spin_cooldown_tim
 	progress_tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
 	
 	progress_tween.tween_property(spin_icon, "rotation", 2 * PI, time)
-	progress_tween.tween_property(spin_ability_ui, "value", spin_ability_ui.max_value, time)
 	progress_tween.tween_property(spin_icon, "scale", Vector2(1, 1), time)
 	progress_tween.tween_property(spin_label, "scale", Vector2(1, 1), time)
 	
@@ -155,8 +171,8 @@ func _spin_cooldown_anim_fill(time: float = GameManager.player.spin_cooldown_tim
 func _on_spin_ability_progress_changed(value: float) -> void:
 	#var progress_mat: ShaderMaterial = spin_ability_ui.material
 	#progress_mat.set_shader_parameter("progress", value) 
-	if spin_ability_ui.value >= spin_ability_ui.max_value:
-		spin_ability_end_cooldown()
+	#if spin_ability_ui.value >= spin_ability_ui.max_value:
+		#spin_ability_end_cooldown()
 	#
 	if out_of_reroll:
 		spin_ability_ui.tint_progress = Color.GRAY

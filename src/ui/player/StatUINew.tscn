@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://d2m0w0bro5j5l"]
+[gd_scene load_steps=44 format=3 uid="uid://d2m0w0bro5j5l"]
 
 [ext_resource type="Script" path="res://src/ui/player/radial_ammo_ui.gd" id="1_awes1"]
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
@@ -83,6 +83,51 @@ grow_begin = 0.0
 grow_end = 2.0
 thickness = 4
 vertical = true
+
+[sub_resource type="Gradient" id="Gradient_7vtjk"]
+offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
+colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tbotl"]
+gradient = SubResource("Gradient_7vtjk")
+
+[sub_resource type="Curve" id="Curve_30p40"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_i788r"]
+curve = SubResource("Curve_30p40")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_exu46"]
+lifetime_randomness = 0.39
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 100.0
+emission_ring_inner_radius = 60.0
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 20.0
+initial_velocity_max = 40.0
+angular_velocity_min = -45.0
+angular_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = -2.23517e-06
+radial_accel_min = 50.0
+radial_accel_max = 70.0
+tangential_accel_min = -117.82
+tangential_accel_max = 64.58
+scale_min = 0.1
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_i788r")
+color_ramp = SubResource("GradientTexture1D_tbotl")
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 1
 
 [sub_resource type="Animation" id="Animation_kjov7"]
 length = 0.001
@@ -176,7 +221,7 @@ _data = {
 "show_non_luck": SubResource("Animation_pwctn")
 }
 
-[node name="StatUI" type="Control" node_paths=PackedStringArray("health_ui", "luck_bar_ui", "luck_buffs_ui", "anim_player", "status_ui_container", "spin_ability_ui", "radial_ui_center_node", "spin_icon", "spin_label", "currency_ui")]
+[node name="StatUI" type="Control" node_paths=PackedStringArray("health_ui", "luck_bar_ui", "luck_buffs_ui", "anim_player", "status_ui_container", "spin_ability_ui", "radial_ui_center_node", "spin_icon", "spin_particles", "spin_label", "currency_ui")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -194,6 +239,7 @@ status_ui_container = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsV
 spin_ability_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI")
 radial_ui_center_node = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter")
 spin_icon = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/SpinIcon")
+spin_particles = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/SpinReadyParticles")
 spin_label = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/SpinLabel")
 currency_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/PanelContainer/CurrencyUI")
 
@@ -523,6 +569,16 @@ theme_override_font_sizes/font_size = 48
 text = "SPIN"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SpinReadyParticles" type="GPUParticles2D" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
+position = Vector2(65.5, 67)
+emitting = false
+amount = 70
+process_material = SubResource("ParticleProcessMaterial_exu46")
+texture = ExtResource("12_o6f4s")
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.81
 
 [node name="SpinIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
 modulate = Color(0.113329, 0.113329, 0.113329, 1)

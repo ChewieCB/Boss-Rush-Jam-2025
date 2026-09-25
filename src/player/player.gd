@@ -722,6 +722,7 @@ func create_jump_dust_ring():
 	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
 	dust_ring_inst.activate()
 
+
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
 	dash_disabled = true
