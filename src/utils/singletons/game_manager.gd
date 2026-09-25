@@ -384,7 +384,6 @@ func equip_gun_frame(search_frame_id: GunFrameResource.GunFrameIdEnum) -> String
 		inventory_gun_frames.append(equipped_gun_frame)
 		equipped_gun_frame = found_data
 		inventory_gun_frames.erase(found_data)
-		GameManager.player.gun.set_stat_from_gun_frame()
 		refresh_shop_ui.emit()
 	return ""
 

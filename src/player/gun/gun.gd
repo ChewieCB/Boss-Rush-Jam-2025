@@ -9,6 +9,7 @@ signal magazine_size_changed(current_ammo: int, new_mag_size: int)
 signal full_clip_reload_started
 signal gun_reloaded
 signal jam_cleared
+signal spin_anim_finished
 
 signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
 signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
@@ -92,7 +93,6 @@ var _barrel_materials: Array[StandardMaterial3D] = []
 @export var sfx_shotgun_shell_reload: Array[AudioStream]
 @export_subgroup("SMG")
 @export_subgroup("Rifle")
-
 
 # Init gun stat values
 const BASE_DAMAGE: int = 20
@@ -198,7 +198,6 @@ var current_reload_anim_time: float
 
 
 func _ready() -> void:
-	LoadingHandler.loaded_seamless.connect(equip_active)
 	ScreenTransition.transition_midpoint.connect(equip_active)
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
 	barrel_equipped.connect(_on_archetype_equipped)
@@ -244,14 +243,6 @@ func _process(delta: float) -> void:
 
 
 func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip_animation: bool = false) -> void:
-	# DEBUG:
-	# enum GunFrameIdEnum {
-	#	NONE,
-	#	DEFAULT,
-	#	SHOTGUN,
-	#	SMG,
-	#	SNIPER
-	#}
 	var flare_sprites = [null, null, shotgun_flare_sprite, smg_flare_sprite, rifle_flare_sprite]
 	var flash_sprites = [null, null, shotgun_flash_sprite, smg_flash_sprite, rifle_flash_sprite]
 	barrel_flare_sprite = flare_sprites[frame_id]
@@ -267,8 +258,6 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip
 		idle_frame_state.travel(idle_state)
 	
 	anim_tree["parameters/elemental_state/transition_request"] = frame
-	#anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
-	#anim_tree["parameters/elemental_add/add_amount"] = 1.0
 
 
 func set_stat_from_gun_frame() -> void:
@@ -306,8 +295,6 @@ func set_stat_from_gun_frame() -> void:
 			play_equip_anim(current_frame.frame_id)
 	
 	LoadingHandler.skip_equip_anim = false
-	
-	highlight_equipped_barrels()
 
 
 func clear_gun_stats() -> void:
@@ -505,6 +492,8 @@ func play_active_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -
 
 func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
 	_play_anim_cancel("equip", frame_id, spin_all_barrels)
+	await spin_anim_finished
+	GameManager.player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
 
 
 func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
@@ -737,7 +726,6 @@ func _highlight_barrel(barrel_idx: int) -> void:
 		return
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("glow")
-	SoundManager.play_sound(sfx_gp_crit.pick_random(), "Gun")
 
 
 func highlight_equipped_barrels() -> void:
@@ -759,13 +747,15 @@ func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	reset_modifier(true)
 
 	var tween := get_tree().create_tween()
-	for i in installed_barrels.size():
+	var installed_count: int = installed_barrels.size()
+	for i in installed_count:
 		if installed_barrels[i] == null:
 			continue
 		tween.tween_callback(_stop_barrel.bind(i)).set_delay(delay_offset * i)
 	tween.tween_callback(func():
 		is_spinning = false
 		can_fire = true
+		spin_anim_finished.emit()
 	)
 	
 	# TODO - wait until all anims have finished then set viewport render update to ONCE

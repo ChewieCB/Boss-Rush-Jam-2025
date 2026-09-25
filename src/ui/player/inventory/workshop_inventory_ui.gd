@@ -82,6 +82,7 @@ func close() -> void:
 	for i in range(equip_barrel_container.get_child_count()):
 		var equip_ui = equip_barrel_container.get_child(i).item_ui
 		clear_item_ui_highlight(equip_ui)
+	GameManager.player.gun.set_stat_from_gun_frame()
 	super()
 
 
