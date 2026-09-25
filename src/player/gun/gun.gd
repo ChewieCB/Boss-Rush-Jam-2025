@@ -8,6 +8,7 @@ signal spin_anim_trigger
 signal magazine_size_changed(current_ammo: int, new_mag_size: int)
 signal full_clip_reload_started
 signal gun_reloaded
+signal jam_cleared
 
 signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
 signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
@@ -150,7 +151,12 @@ var can_fire: bool = true
 var is_reloading: bool = false
 var is_reload_disabled: bool = false
 var is_spinning: bool = false
-var is_jammed: bool = false
+var is_jammed: bool = false:
+	set(value):
+		is_jammed = value
+		if is_jammed == false:
+			jam_cleared.emit()
+		
 var time_since_last_shot: float = 0.0
 
 var installed_barrels: Array[SpinBarrel] = [null, null, null]
@@ -269,7 +275,7 @@ func set_stat_from_gun_frame() -> void:
 	var current_frame: GunFrameResource = GameManager.equipped_gun_frame
 	if current_frame.frame_id == GunFrameResource.GunFrameIdEnum.NONE:
 		return
-
+	
 	base_damage = current_frame.base_damage
 	base_projectile_amount = current_frame.base_projectile_amount
 	base_firerate = current_frame.base_firerate
@@ -290,7 +296,7 @@ func set_stat_from_gun_frame() -> void:
 			barrel.get_active_effect().on_effect_set()
 	reload_no_anim()
 	set_frame_art(current_frame.frame_id)
-
+	
 	if current_frame.frame_id != GunFrameResource.GunFrameIdEnum.NONE:
 		if LoadingHandler.skip_equip_anim:
 			play_equip_anim(current_frame.frame_id)
@@ -298,8 +304,10 @@ func set_stat_from_gun_frame() -> void:
 			#play_active_anim(current_frame.frame_id)
 		else:
 			play_equip_anim(current_frame.frame_id)
-
+	
 	LoadingHandler.skip_equip_anim = false
+	
+	highlight_equipped_barrels()
 
 
 func clear_gun_stats() -> void:
@@ -729,9 +737,13 @@ func _highlight_barrel(barrel_idx: int) -> void:
 		return
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("glow")
+	SoundManager.play_sound(sfx_gp_crit.pick_random(), "Gun")
 
 
 func highlight_equipped_barrels() -> void:
+	if is_jammed:
+		await jam_cleared
+	
 	var spin_idx: int = 0
 	for barrel in installed_barrels:
 		if barrel == null:
@@ -754,7 +766,6 @@ func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	tween.tween_callback(func():
 		is_spinning = false
 		can_fire = true
-		await get_tree().process_frame
 	)
 	
 	# TODO - wait until all anims have finished then set viewport render update to ONCE
