@@ -3,6 +3,7 @@ class_name BarrelItemUI
 
 @export var spin_value_label: RichTextLabel
 @export var locked_panel: Control
+@export var boss_locked_panel: Control
 
 
 func _ready() -> void:
@@ -16,6 +17,7 @@ func empty_slot() -> void:
 	texture = null
 	is_locked = false
 	locked_panel.visible = false
+	boss_locked_panel.visible = false
 	is_equipped = false
 	is_purchased = false
 	is_empty = true
@@ -42,6 +44,7 @@ func set_barrel_data(_data: BarrelDataResource, _is_equipped: bool = false, _is_
 	
 	is_locked = data.locked_for_demo
 	locked_panel.visible = data.locked_for_demo
+	boss_locked_panel.visible = data.locked_for_boss
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	is_empty = false

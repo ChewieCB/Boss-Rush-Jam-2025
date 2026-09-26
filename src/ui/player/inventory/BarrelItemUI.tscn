@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpyj480amlor7"]
+[gd_scene load_steps=9 format=3 uid="uid://dpyj480amlor7"]
 
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_tbrlo"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_item_ui.gd" id="2_2nkrm"]
@@ -7,8 +7,9 @@
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="5_qrpjr"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="6_01o4k"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="7_67n3m"]
+[ext_resource type="Texture2D" uid="uid://x1u3l24tpr03" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-027.png" id="8_l10ta"]
 
-[node name="BarrelItemUI" type="TextureRect" node_paths=PackedStringArray("spin_value_label", "locked_panel", "button", "border_selected")]
+[node name="BarrelItemUI" type="TextureRect" node_paths=PackedStringArray("spin_value_label", "locked_panel", "boss_locked_panel", "button", "border_selected")]
 custom_minimum_size = Vector2(100, 100)
 offset_right = 100.0
 offset_bottom = 100.0
@@ -19,6 +20,7 @@ expand_mode = 1
 script = ExtResource("2_2nkrm")
 spin_value_label = NodePath("CenterContainer/ReloadSpinValueLabel")
 locked_panel = NodePath("LockedPanel")
+boss_locked_panel = NodePath("BossLocked")
 button = NodePath("Button")
 border_selected = NodePath("BorderSelected")
 
@@ -48,7 +50,6 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="BorderSelected" type="NinePatchRect" parent="."]
-visible = false
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -63,6 +64,7 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -76,6 +78,7 @@ grow_vertical = 0
 mouse_filter = 2
 
 [node name="ReloadSpinValueLabel" type="RichTextLabel" parent="CenterContainer"]
+visible = false
 clip_contents = false
 layout_mode = 2
 mouse_filter = 2
@@ -119,6 +122,48 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("7_67n3m")
+
+[node name="BossLocked" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.32, 0.277333, 0, 0.419608)
+
+[node name="TextureRect" type="TextureRect" parent="BossLocked"]
+modulate = Color(0.88275, 0.761105, 0.00781262, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_67n3m")
+
+[node name="BorderSelected" type="NinePatchRect" parent="BossLocked"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_l10ta")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [connection signal="focus_entered" from="Button" to="." method="_on_button_focus_entered"]
 [connection signal="focus_exited" from="Button" to="." method="_on_button_focus_exited"]

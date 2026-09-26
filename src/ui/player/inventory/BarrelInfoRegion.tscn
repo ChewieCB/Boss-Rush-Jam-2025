@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://eo0lldpw8no2" path="res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png" id="12_nehlt"]
 [ext_resource type="FontFile" uid="uid://d0cj5y3xr0366" path="res://assets/fonts/namesake-nf/NamesakeNF.otf" id="14_y80cl"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "luck_trigger_container", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "effect_detail_spin_prompt", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "luck_trigger_container", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "effect_detail_spin_prompt", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay", "boss_locked_barrel_overlay", "boss_locked_overlay_label")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -50,6 +50,8 @@ effect_detail_spin_prompt = NodePath("HBoxContainer/MarginContainer/DeviceInputP
 barrel_overview_detail = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail")
 single_effect_detail = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail")
 locked_barrel_overlay = NodePath("HBoxContainer/PanelDescription/LockedBarrelOverlay")
+boss_locked_barrel_overlay = NodePath("HBoxContainer/PanelDescription/BossLockedBarrelOverlay")
+boss_locked_overlay_label = NodePath("HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer/VBoxContainer/RichTextLabel")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -439,6 +441,90 @@ stretch_mode = 5
 [node name="Border" type="NinePatchRect" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 2
+texture = ExtResource("6_lxvge")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BossLockedBarrelOverlay" type="MarginContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="PanelFadeout" type="ColorRect" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.517647)
+
+[node name="LockedPanel" type="ColorRect" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout"]
+custom_minimum_size = Vector2(448, 192)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -224.0
+offset_top = -97.0
+offset_right = 224.0
+offset_bottom = 95.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.08, 0.831373)
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout/LockedPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = -32
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer/VBoxContainer"]
+modulate = Color(0.902281, 0.776745, 0, 1)
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("10_xfxnq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.902281, 0.776745, 0, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = -2
+theme_override_fonts/bold_font = ExtResource("14_y80cl")
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
+bbcode_enabled = true
+text = "[center][b]Unlock by defeating 
+The Mechanic[/b][/center]"
+fit_content = true
+
+[node name="Border" type="NinePatchRect" parent="HBoxContainer/PanelDescription/BossLockedBarrelOverlay/PanelFadeout/LockedPanel"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 2
+offset_right = 448.0
+offset_bottom = 192.0
 texture = ExtResource("6_lxvge")
 patch_margin_left = 20
 patch_margin_top = 20
