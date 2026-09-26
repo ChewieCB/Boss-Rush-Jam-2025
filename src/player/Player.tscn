@@ -322,6 +322,7 @@ offset_right = 75.5
 offset_bottom = 87.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("48_hxlt6")
 
 [node name="Label" type="Label" parent="UI/InteractUI"]
@@ -335,6 +336,7 @@ vertical_alignment = 1
 
 [node name="DeviceInputPrompt" parent="UI/InteractUI" instance=ExtResource("46_br567")]
 layout_mode = 2
+mouse_filter = 2
 assigned_action = "interact"
 
 [node name="StatUI" parent="UI" node_paths=PackedStringArray("health_component", "luck_component") instance=ExtResource("51_vst8k")]
@@ -401,6 +403,7 @@ offset_right = 16.0
 offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("4_ymis7")
 script = ExtResource("42_rky08")
 
@@ -419,6 +422,7 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.1, 1.1)
+mouse_filter = 2
 texture = ExtResource("4_ymis7")
 script = ExtResource("42_rky08")
 
@@ -437,6 +441,7 @@ offset_right = 32.0
 offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("5_nkt42")
 
 [node name="BossSpecialDialog" type="Control" parent="UI"]

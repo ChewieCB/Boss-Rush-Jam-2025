@@ -54,6 +54,9 @@ func _ready() -> void:
 	#hide_all_ui()
 	
 	# Spin abiltiy UI
+	if progress_tween:
+		progress_tween.kill()
+	
 	match GameManager.CHEAT_spin_cost:
 		GameManager.DebugSpinCost.CHIP_COST:
 			_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))

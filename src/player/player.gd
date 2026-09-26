@@ -203,8 +203,10 @@ var is_in_menu = false:
 		is_in_menu = value
 		if is_in_menu:
 			stat_ui.hide_all_ui(true)
+			toggle_anim_reticle(false)
 		else:
 			stat_ui.show_all_ui(true)
+			toggle_anim_reticle(true)
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []

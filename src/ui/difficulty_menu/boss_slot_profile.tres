@@ -6,5 +6,6 @@
 script = ExtResource("1_tyj4h")
 boss_id = 1
 boss_quote = "\"Feeling lucky?\""
-ante_names = Array[String](["Coin Burst", "Fortune Bell", "Pit of Despair", "", ""])
+ante_names = Array[String](["Coin Burst", "Fortune Bell", "Pit of Despair"])
+ante_descriptions = Array[String](["[center]1x Boss Health[/center]", "[center]1.5x Boss Health[/center]", "[center]2x Boss Health[/center]"])
 boss_risk_reward_mult = 1.0

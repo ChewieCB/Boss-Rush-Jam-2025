@@ -6,5 +6,6 @@
 script = ExtResource("1_rqeet")
 boss_id = 6
 boss_quote = "\"Time for a tune up!\""
-ante_names = Array[String](["", "", "", "", ""])
+ante_names = Array[String](["Regular Maintenance", "Shock Hazard", "Heavy Machinery"])
+ante_descriptions = Array[String](["[center]1x Boss Health[/center]", "[center]1.5x Boss Health[/center]", "[center]2x Boss Health[/center]"])
 boss_risk_reward_mult = 1.0

@@ -75,10 +75,11 @@ func show_menu():
 	GameManager.player.controls_disabled = true
 	visible = true
 	GameManager.player.is_in_menu = true
+	is_controller_connected = Input.get_connected_joypads() != []
 	if not is_controller_connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-	
-	ante_card_container.get_child(0).button.grab_focus()
+	else:
+		ante_card_container.get_child(0).button.grab_focus()
 	
 	refresh_display()
 
@@ -102,6 +103,7 @@ func refresh_display():
 		var ante_item: AnteItem = ante_card_container.get_child(i)
 		ante_item.ante_number = i + 1
 		ante_item.set_ante_label(boss_profile.ante_names[i])
+		ante_item.set_ante_description(boss_profile.ante_descriptions[i])
 		if _ante_textures.size() > 0:
 			ante_item.set_ante_texture(_ante_textures[i])
 #

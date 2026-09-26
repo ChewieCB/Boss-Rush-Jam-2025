@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgdrie48ccxvw"]
+[gd_scene load_steps=7 format=3 uid="uid://bgdrie48ccxvw"]
 
 [ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="1_dsftp"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_3gy6e"]
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/ante_item.gd" id="2_a8k7o"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="5_kdfri"]
 [ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="5_qr8jw"]
+[ext_resource type="Texture2D" uid="uid://bjxsljtv5nhy8" path="res://src/collectibles/poker_chip/assets/chip_icon_64.png" id="6_kfcxg"]
 
-[node name="AnteItem" type="Control"]
+[node name="AnteItem" type="Control" node_paths=PackedStringArray("ante_icon", "ante_label", "button", "currency_ui", "currency_label")]
 custom_minimum_size = Vector2(384, 720)
 layout_mode = 3
 anchors_preset = 8
@@ -16,7 +17,16 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("2_a8k7o")
+ante_icon = NodePath("VBoxContainer/AnteItem")
+ante_label = NodePath("VBoxContainer/AnteTitleContainer/Label")
+button = NodePath("VBoxContainer/AnteItem/Button")
+currency_ui = NodePath("VBoxContainer/AnteLabelContainer/CurrencyUI")
+currency_label = NodePath("VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer2/CurrencyLabel")
+locked = true
+cost = null
+purchased = null
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -31,6 +41,25 @@ offset_right = 192.0
 offset_bottom = 338.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="AnteTitleContainer" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/AnteTitleContainer"]
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
+text = "ANTE 1: ANTE NAME HERE"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="AnteItem" type="TextureRect" parent="VBoxContainer"]
 custom_minimum_size = Vector2(384, 560)
@@ -51,6 +80,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.595, 0.595)
 pivot_offset = Vector2(4.295, 0)
+mouse_filter = 2
 texture = ExtResource("1_dsftp")
 expand_mode = 3
 stretch_mode = 3
@@ -118,6 +148,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.141176, 0.141176, 0.141176, 0.694118)
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/AnteItem/LockedOverlay"]
@@ -133,51 +164,120 @@ offset_right = 48.0
 offset_bottom = 112.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 96
 theme_override_constants/margin_bottom = 64
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/AnteItem/LockedOverlay/MarginContainer"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("5_kdfri")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="AnteLabelContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="DescriptionOverlay" type="MarginContainer" parent="VBoxContainer/AnteItem"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 32
+
+[node name="Panel" type="Panel" parent="VBoxContainer/AnteItem/DescriptionOverlay"]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/AnteItem/DescriptionOverlay/Panel"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+offset_right = 320.0
+offset_bottom = 221.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 
-[node name="Panel" type="Panel" parent="VBoxContainer/AnteLabelContainer"]
-self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(320, 64)
+[node name="Label" type="RichTextLabel" parent="VBoxContainer/AnteItem/DescriptionOverlay/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "[center]1.5x Boss Health[/center]"
+fit_content = true
+
+[node name="BorderNormal" type="NinePatchRect" parent="VBoxContainer/AnteItem/DescriptionOverlay"]
+modulate = Color(0.309804, 0.301961, 0.247059, 1)
+layout_mode = 2
+texture = ExtResource("2_3gy6e")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="AnteLabelContainer" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/margin_bottom = 32
+
+[node name="CurrencyUI" type="MarginContainer" parent="VBoxContainer/AnteLabelContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/AnteLabelContainer/CurrencyUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-mouse_filter = 2
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="Label" type="Label" parent="VBoxContainer/AnteLabelContainer/Panel"]
-custom_minimum_size = Vector2(192, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -96.0
-offset_top = -18.5
-offset_right = 96.0
-offset_bottom = 18.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.901961, 0.776471, 0, 1)
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="StaticChipIcon" type="TextureRect" parent="VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_kfcxg")
+expand_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="CurrencyLabel" type="Label" parent="VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 8
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 30
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "10,000"
 horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 3
 
 [connection signal="focus_entered" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_focus_entered"]
 [connection signal="focus_exited" from="VBoxContainer/AnteItem/Button" to="." method="_on_button_focus_exited"]
