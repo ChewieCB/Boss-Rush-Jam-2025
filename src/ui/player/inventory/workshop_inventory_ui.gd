@@ -6,6 +6,14 @@ class_name WorkshopInventoryUI
 @export var inventory_normal_barrel_container: GridContainer
 
 var active_equip_idx: int = -1
+var can_change_frame: bool = true:
+	set(value):
+		can_change_frame = value
+		var ui_color: Color = Color("#ffffff") if can_change_frame else Color("#4d4d4d")
+		input_prompt_tab_left.modulate = ui_color
+		input_prompt_tab_right.modulate = ui_color
+		inventory_gun_frame_container.input_prompt_left.modulate = ui_color
+		inventory_gun_frame_container.input_prompt_right.modulate = ui_color
 
 var available_gun_frames: Array
 
@@ -51,17 +59,20 @@ func _input(event: InputEvent) -> void:
 			if dir == 0:
 				return
 
-			var input_prompt = input_prompt_tab_left if dir < 0 else input_prompt_tab_right
-			var input_prompt_extra = inventory_gun_frame_container.input_prompt_left if dir < 0 else inventory_gun_frame_container.input_prompt_right
-			input_prompt.animate()
-			input_prompt_extra.animate()
-
 			get_viewport().set_input_as_handled()
 			if equipped_ui.item_ui.clicked_once:
 				move_equip_slot(active_equip_idx, dir)
 				input_prompt_tab_right.update_text("Change Frame")
-			else:
+				can_change_frame = true
+			elif can_change_frame:
 				change_gun_frame(dir)
+			else:
+				return
+			
+			var input_prompt = input_prompt_tab_left if dir < 0 else input_prompt_tab_right
+			var input_prompt_extra = inventory_gun_frame_container.input_prompt_left if dir < 0 else inventory_gun_frame_container.input_prompt_right
+			input_prompt.animate()
+			input_prompt_extra.animate()
 
 		elif event.is_action_pressed("interact"):
 			close()
@@ -183,6 +194,7 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 	_reset_sibling_saturation(focused_ui)
 	get_viewport().set_input_as_handled()
 	full_refresh_ui(cancel_focus)
+	can_change_frame = true
 
 
 func show_effect_detail_view(focused_ui: Control) -> void:
@@ -226,6 +238,8 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 		toggle_ui_focus_neighbors(_ui.button, false)
 		var detail_focus: Control = get_barrel_detail_focus(0)
 		detail_focus.grab_focus.call_deferred()
+	
+	can_change_frame = false
 
 
 func hide_effect_detail_view(focused_ui: Control) -> void:
@@ -258,6 +272,8 @@ func hide_effect_detail_view(focused_ui: Control) -> void:
 		inventory_normal_barrel_container:
 			focus_control = get_inventory_focus(active_focus_idx)
 	focus_control.grab_focus.call_deferred()
+	
+	can_change_frame = true
 
 ### FOCUS METHODS
 
@@ -474,12 +490,16 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	can_change_frame = false
 	super(item_ui, data)
 	if item_ui.get_parent() is BarrelEquipSlotUI:
 		input_prompt_tab_right.update_text("Move Barrel")
+		input_prompt_tab_left.modulate = Color("ffffff")
+		input_prompt_tab_right.modulate = Color("ffffff")
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	can_change_frame = false
 	super(item_ui, data)
 	if item_ui.is_locked:
 		return
@@ -533,5 +553,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 			if equip_slots[i].item_ui.is_empty:
 				active_equip_idx = i
 				break
+		
+		can_change_frame = true
 
 	full_refresh_ui(focus_area_callable)
