@@ -1,4 +1,4 @@
-[gd_scene load_steps=565 format=4 uid="uid://fccl23tqjubn"]
+[gd_scene load_steps=567 format=4 uid="uid://fccl23tqjubn"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_e32ik"]
 [ext_resource type="Script" path="res://src/maps/slots_boss/boss_map_slots.gd" id="1_wilwm"]
@@ -32,6 +32,7 @@
 [ext_resource type="Material" uid="uid://boe1pn246iwrh" path="res://assets/textures/posters/grand_opening_scuffed.tres" id="21_lstvs"]
 [ext_resource type="Material" uid="uid://bc40wnkmbkgcl" path="res://assets/textures/floor/carpet-blue.tres" id="24_0wu1r"]
 [ext_resource type="PackedScene" uid="uid://crgts86aoqg47" path="res://src/bosses/slots/SlotWallDecal.tscn" id="25_l15rp"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="25_mjfo4"]
 [ext_resource type="Material" uid="uid://buxdsvn8edclc" path="res://assets/textures/placeholder/texture_dark_08.tres" id="26_bubii"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="26_t55c0"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="27_6a3fw"]
@@ -549,6 +550,20 @@ points = PackedVector3Array(-3.5, 87.1875, 2.125, -3.5, 86.25, 2.125, -2.25, 86.
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3mdu7"]
 points = PackedVector3Array(-3.34719, 84.553, 4.96147, -3.303, 84.5972, 4.96147, -3.30602, 84.6002, 4.96262, -3.35021, 84.556, 4.96262, -3.30899, 84.5148, 4.99266, -3.2648, 84.559, 4.99266, -3.30086, 84.5067, 5.03558, -3.25667, 84.5509, 5.03559, -3.27869, 84.5729, 5.08952, -3.30602, 84.6002, 5.09988, -3.35021, 84.556, 5.09988, -3.32288, 84.5287, 5.08952)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xv4ul"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_mjfo4")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d2gkh"]
 load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
@@ -9405,21 +9420,25 @@ shape = SubResource("BoxShape3D_vt4q5")
 transform = Transform3D(0.996204, 1.97605e-09, 0.0870505, 0.0870505, -4.5314e-08, -0.996204, 1.97605e-09, 1, -4.5314e-08, -4.53138, 66.371, -3.2)
 size = Vector3(2, 5, 2)
 texture_albedo = ExtResource("35_icct7")
+cull_mask = 1
 
 [node name="Decal2" type="Decal" parent="Decals" index="1"]
 transform = Transform3D(-4.14735e-08, 1, -4.58401e-08, 0.049948, -4.37114e-08, -0.998752, -0.998752, -4.37114e-08, -0.049948, -34.5, 11.5535, -7.54119)
 size = Vector3(5, 4, 8)
 texture_albedo = ExtResource("5_plfyl")
+cull_mask = 1
 
 [node name="Decal3" type="Decal" parent="Decals" index="2"]
 transform = Transform3D(-4.4358e-08, 1, -4.3055e-08, -0.0149046, -4.37114e-08, -0.999889, -0.999889, -4.37114e-08, 0.0149046, -34.5, 10, 0.905962)
 size = Vector3(5, 4, 9)
 texture_albedo = ExtResource("6_xtkbg")
+cull_mask = 1
 
 [node name="Decal4" type="Decal" parent="Decals" index="3"]
 transform = Transform3D(1.32267e-07, -1, -4.15388e-08, 0.0263863, 4.50144e-08, -0.999652, 0.999652, 1.31124e-07, 0.0263863, 27.5, 8.75543, 12.262)
 size = Vector3(5, 4, 7.6)
 texture_albedo = ExtResource("8_xtfgm")
+cull_mask = 1
 
 [node name="StainGlassEmission1" type="Node3D" parent="Decals" index="4"]
 
@@ -9429,6 +9448,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission1/Decal" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9444,6 +9464,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission1/Decal2" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9459,6 +9480,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission1/Decal3" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9477,6 +9499,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission2/Decal" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9492,6 +9515,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission2/Decal2" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9507,6 +9531,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission2/Decal3" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9525,6 +9550,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission3/Decal" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9540,6 +9566,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission3/Decal2" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9555,6 +9582,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission3/Decal3" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9573,6 +9601,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission4/Decal" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9588,6 +9617,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission4/Decal2" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9603,6 +9633,7 @@ size = Vector3(5.35698, 2, 1.6)
 texture_emission = ExtResource("8_utf8f")
 emission_energy = 16.0
 modulate = Color(0.77, 0.58135, 0.0154, 1)
+cull_mask = 1
 
 [node name="StainGlassLight1" type="OmniLight3D" parent="Decals/StainGlassEmission4/Decal3" index="0"]
 transform = Transform3D(1, 0, 0, 0, -8.74228e-08, 1, 0, -1, -4.37114e-08, 0.0618563, -0.461273, 0.15)
@@ -9927,6 +9958,7 @@ entProperties = {
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.75, 0.75, -21.625)
 charge_knockback = 30.0
 target = NodePath("../entity_43_PlayerRef")
+hit_material = SubResource("ShaderMaterial_xv4ul")
 
 [node name="entity_4_SlotRollerDecal" parent="FuncGodotMap" index="4" instance=ExtResource("25_l15rp")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 28.5, 9.25, -1.1875)

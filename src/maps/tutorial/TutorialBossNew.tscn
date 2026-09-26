@@ -5052,6 +5052,7 @@ size = Vector3(3, 1.26416, 4)
 texture_albedo = ExtResource("16_bs4kf")
 upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
+cull_mask = 1
 
 [node name="Decal2" type="Decal" parent="Decals" index="1"]
 transform = Transform3D(0.5, 0.866025, -1.49012e-08, 8.44221e-08, -5.96046e-08, -1, -0.866026, 0.5, -2.58096e-08, -44.7321, 4.2, 20.1238)
@@ -5059,6 +5060,7 @@ size = Vector3(3, 1.30559, 4)
 texture_albedo = ExtResource("17_6i3pt")
 upper_fade = 3.73213e-05
 lower_fade = 1.03526e-05
+cull_mask = 1
 
 [node name="Lights" type="Node3D" parent="." index="8"]
 
