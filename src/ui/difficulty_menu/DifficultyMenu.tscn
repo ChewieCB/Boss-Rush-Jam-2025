@@ -63,6 +63,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_5c00o")
 chip_sfx = ExtResource("2_0aqwx")
 locked_sfx = ExtResource("3_v8cf1")
@@ -206,7 +207,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 10
 theme_override_constants/shadow_offset_y = 10
 theme_override_font_sizes/font_size = 80
-text = "ESCALATING STAKES"
+text = "Select Difficulty"
 
 [node name="TargetLabel" type="Label" parent="TitleRegion"]
 layout_mode = 1
@@ -403,6 +404,7 @@ anchors_preset = 0
 offset_top = 208.0
 offset_right = 960.0
 offset_bottom = 1080.0
+mouse_filter = 1
 
 [node name="RiskTitle" type="Label" parent="LeftRegion"]
 modulate = Color(1, 0.252252, 0.162162, 1)
@@ -552,17 +554,13 @@ text = "Cancel"
 
 [node name="RightRegion" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -480.0
-offset_top = -332.0
-offset_right = 480.0
-offset_bottom = 540.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 210.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="AnteSection" type="HBoxContainer" parent="RightRegion"]
 layout_mode = 1
@@ -572,49 +570,34 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -656.0
-offset_top = -394.0
+offset_top = -435.0
 offset_right = 656.0
-offset_bottom = 395.0
+offset_bottom = 435.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 80
 
 [node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
+locked = false
+cost = 2000
+purchased = true
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-locked = true
+cost = 2000
+purchased = false
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-locked = true
-
-[node name="RatioLabel" type="Label" parent="RightRegion"]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -176.0
-offset_top = -96.0
-offset_right = 176.0
-offset_bottom = -62.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.515625, 0.515625, 0.515625, 1)
-theme_override_font_sizes/font_size = 28
-text = "Ratio: 2 to 1"
-horizontal_alignment = 1
+cost = 2000
+purchased = false
 
 [node name="NotEnoughChipTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
 
 [node name="CurrencyUI" parent="." instance=ExtResource("34_xjabm")]
-visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -627,6 +610,7 @@ offset_right = -4.0
 offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 2
 theme_override_constants/margin_right = 64
 theme_override_constants/margin_bottom = 64
 

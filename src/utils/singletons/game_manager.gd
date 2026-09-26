@@ -112,6 +112,7 @@ var barrel_tutorial_shown: bool = false
 
 var tutorial_completed: bool = false
 
+@export var boss_diff_profiles: Array[BossDifficultyProfile]
 var bosses_defeated: Array[BossCore.BossIdEnum] = []
 var all_bosses_defeated: bool = false
 var victory_ui_shown: bool = false
@@ -443,6 +444,9 @@ func load_new_save_data():
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		shop_barrels.append(data)
+	
+	for i in range(boss_diff_profiles.size()):
+		boss_diff_profiles[i].ante_purchased_states = [true, false, false]
 
 	LuckHandler.reset_luck_triggers()
 

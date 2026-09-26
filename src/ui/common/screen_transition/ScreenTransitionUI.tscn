@@ -23,7 +23,7 @@ shader_parameter/texture_to_scroll = ExtResource("3_c4553")
 [node name="TransitionUI" type="CanvasLayer"]
 process_mode = 3
 process_priority = -1
-layer = 2
+layer = 5
 script = ExtResource("1_8ukgo")
 
 [node name="UI" type="Control" parent="."]

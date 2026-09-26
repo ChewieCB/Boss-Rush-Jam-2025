@@ -19,6 +19,7 @@ enum ResourceTypeEnum {
 	NONE,
 	BARREL,
 	GUN_FRAME,
+	BOSS_DIFFICULTY_PROFILE
 }
 
 
@@ -39,8 +40,14 @@ func delete_save_file(slot_id: int):
 func save_game(slot_id):
 	is_saving = true
 	started_saving.emit()
+	
 	if not GameManager.equipped_gun_frame:
 		GameManager.equipped_gun_frame = GameManager.starting_gun_frame
+	
+	var ante_states = []
+	for _profile in GameManager.boss_diff_profiles:
+		ante_states.append(_profile.ante_purchased_states)
+	
 	var save_dict = {
 		# Stats
 		"player_currency": GameManager.player_currency,
@@ -65,6 +72,9 @@ func save_game(slot_id):
 		"tutorial_completed": GameManager.tutorial_completed,
 		"player_gained_first_barrel": GameManager.player_gained_first_barrel,
 		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
+		
+		# Boss ante tracking
+		"ante_purchased_states": convert_resources_to_ids(ante_states, ResourceTypeEnum.BOSS_DIFFICULTY_PROFILE),
 
 		# Metadata
 		"total_playtime": GameManager.total_playtime,
@@ -104,9 +114,9 @@ func load_game(slot_id):
 		GameManager.load_new_save_data()
 		savefile_loaded.emit()
 		return
-
+	
 	save_data = patch_save_version(save_data)
-
+	
 	# Stats
 	GameManager.player_currency = save_data.get("player_currency", 0)
 	GameManager.player_level = save_data.get("player_level", 1)
@@ -128,13 +138,19 @@ func load_game(slot_id):
 	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME).front()
 	GameManager.inventory_gun_frames = convert_ids_to_resources(save_data["inventory_gun_frames"], ResourceTypeEnum.GUN_FRAME)
 	GameManager.shop_gun_frames = convert_ids_to_resources(save_data["shop_gun_frames"], ResourceTypeEnum.GUN_FRAME)
-
+	
 	# First time player flags
 	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
 	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
 	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
 	GameManager.tutorial_completed = save_data.get("tutorial_completed", false)
-
+	
+	# Boss ante tracking
+	var ante_purchased_states = save_data.get("ante_purchased_states", [])
+	for i in range(ante_purchased_states.size()):
+		var _state = ante_purchased_states[i]
+		GameManager.boss_diff_profiles[i].ante_purchased_states = convert_id_to_ante_state(_state)
+	
 	# Metadata
 	GameManager.total_playtime = save_data.get("total_playtime", 0)
 	var _this_file_save_version = save_data.get("save_version", SAVE_VERSION)
@@ -232,7 +248,7 @@ func check_for_new_update_barrels():
 			GameManager.shop_barrels.append(barrel_data)
 
 
-func convert_resources_to_ids(array_resource: Array[Resource], resource_type: ResourceTypeEnum) -> Array[int]:
+func convert_resources_to_ids(array_resource: Array, resource_type: ResourceTypeEnum) -> Array[int]:
 	var result: Array[int] = []
 	match resource_type:
 		ResourceTypeEnum.BARREL:
@@ -247,6 +263,12 @@ func convert_resources_to_ids(array_resource: Array[Resource], resource_type: Re
 			for elem in array_resource:
 				var gun_frame: GunFrameResource = elem as GunFrameResource
 				result.append(gun_frame.frame_id)
+		ResourceTypeEnum.BOSS_DIFFICULTY_PROFILE:
+				var _ante_states: int = 0
+				for elem in array_resource:
+					for state in elem:
+						_ante_states = (_ante_states << 1) | int(state)
+					result.append(_ante_states)
 	return result
 
 
@@ -288,6 +310,16 @@ func convert_id_to_skill_enum(dict_id: Dictionary) -> Dictionary:
 		var new_key = (key as SkillItemUI.SkillIdEnum)
 		result[new_key] = dict_id[key]
 	return result
+
+func convert_id_to_ante_state(ante_state_int: int) -> Array[bool]:
+	var arr_length: int = 3
+	var ante_states: Array[bool] = []
+	for i in range(arr_length - 1, -1, -1):
+		var _bit = (ante_state_int >> i) & 1
+		ante_states.append(_bit == 1)
+	
+	return ante_states
+	
 
 
 func patch_save_version(save_data) -> Dictionary:

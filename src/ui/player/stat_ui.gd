@@ -54,6 +54,9 @@ func _ready() -> void:
 	#hide_all_ui()
 	
 	# Spin abiltiy UI
+	if progress_tween:
+		progress_tween.kill()
+	
 	match GameManager.CHEAT_spin_cost:
 		GameManager.DebugSpinCost.CHIP_COST:
 			_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
@@ -141,8 +144,9 @@ func _spin_cooldown_anim_instant_drain_to_fill(time: float = fill_time * 4) -> v
 	# Update player cooldown state at end of anim
 	progress_tween.tween_callback(
 		func(): 
-			GameManager.player.spin_cooldown_timer = 0.0
-			GameManager.player.spin_cooldown_active = false
+			if is_instance_valid(GameManager.player):
+				GameManager.player.spin_cooldown_timer = 0.0
+				GameManager.player.spin_cooldown_active = false
 	)
 
 func _spin_cooldown_anim_drain(time: float = 0.2) -> void:

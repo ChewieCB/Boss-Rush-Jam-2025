@@ -3,31 +3,61 @@ extends Control
 class_name AnteItem
 
 signal ante_selected(ante_number: int)
+signal ante_purchased(ante_number: int)
 
 ## Max 5
 @export var ante_number: int
 @export_multiline var ante_name: String
 @export var icon_sprite: Texture2D
 
-@onready var ante_icon: TextureRect = $VBoxContainer/AnteItem
-@onready var ante_label: Label = $VBoxContainer/AnteLabelContainer/Panel/Label
+@export var ante_icon: TextureRect
+@export var ante_label: Label
 @onready var deselected_overlay: ColorRect = $VBoxContainer/AnteItem/DeselectedOverlay
 @onready var locked_overlay: ColorRect = $VBoxContainer/AnteItem/LockedOverlay
-@onready var button: Button = $VBoxContainer/AnteItem/Button
+@onready var description_overlay: MarginContainer = $VBoxContainer/AnteItem/DescriptionOverlay
+@onready var description_label: RichTextLabel = $VBoxContainer/AnteItem/DescriptionOverlay/Panel/MarginContainer/Label
+@export var button: Button
 @onready var border: NinePatchRect = $VBoxContainer/AnteItem/BorderNormal
 @onready var border_selected: NinePatchRect = $VBoxContainer/AnteItem/BorderSelected
-
+@export var currency_ui: MarginContainer
+@export var currency_label: Label
 
 @export var scale_factor: float = 1.15
 
-@export var locked: bool = false
+@export var locked: bool = false:
+	set(value):
+		locked = value
+		if not is_node_ready():
+			await ready
+		locked_overlay.visible = locked
+@export var cost: int = 2000:
+	set(value):
+		cost = value
+		if not is_node_ready():
+			await ready
+		currency_label.text = str(cost)
+@export var purchased: bool = false:
+	set(value):
+		purchased = value
+		locked = !purchased
+		currency_ui.visible = !purchased
+
+# SFX
+@export var sfx_select_ante: AudioStream
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
+
 
 func _ready() -> void:
 	ante_label.text = ante_name
 	ante_icon.texture = icon_sprite
 	locked_overlay.visible = locked
 	deselected_overlay.visible = true
-	button.disabled = locked
+	locked = !purchased
+	#button.disabled = locked
+	currency_label.text = str(cost)
+	currency_ui.visible = !purchased
+	description_overlay.visible = false
 
 	if not Engine.is_editor_hint():
 		await get_tree().process_frame
@@ -59,15 +89,38 @@ func set_ante_label(content: String):
 			ante_label.text = "Ante IV:"
 		5:
 			ante_label.text = "Ante V:"
-	ante_label.text += "\n{0}".format([content])
+	ante_label.text += " {0}".format([content])
+
+
+func set_ante_description(content: String) -> void:
+	description_label.text = content
 
 
 func set_ante_texture(tex: Texture2D) -> void:
 	ante_icon.texture = tex
 
+
+func purchase_ante(idx: int) -> void:
+	if GameManager.player_currency >= cost:
+		GameManager.player_currency -= cost
+		purchased = true
+		locked = false
+		SoundManager.play_ui_sound(sfx_purchase, "UI")
+		await UIUtils.animate_ui_elem_shake(self)
+		ante_purchased.emit(idx)
+	else:
+		SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+		UIUtils.animate_ui_elem_shake(self)
+
+
 func _on_button_pressed() -> void:
-	ante_selected.emit(ante_number)
-	_on_button_focus_exited()
+	if purchased:
+		SoundManager.play_ui_sound(sfx_select_ante, "UI")
+		await UIUtils.animate_ui_elem_shake(self)
+		ante_selected.emit(ante_number)
+		_on_button_focus_exited()
+	else:
+		purchase_ante(self.get_index())
 
 
 func play_button_hover_sfx():
@@ -108,9 +161,11 @@ func _on_button_focus_entered(_grab_focus: bool = true) -> void:
 	border.modulate = Color("#e6c600")
 	border_selected.visible = true
 	deselected_overlay.visible = false
+	description_overlay.visible = true
 
 func _on_button_focus_exited() -> void:
 	return_button_size()
 	border.modulate = Color("#4f4d3f")
 	border_selected.visible = false
 	deselected_overlay.visible = true
+	description_overlay.visible = false

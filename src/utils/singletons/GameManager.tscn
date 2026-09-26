@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=90 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrel_data.tres" id="3_23s84"]
@@ -80,7 +80,15 @@
 [ext_resource type="Resource" uid="uid://dl715empacnm0" path="res://src/player/gun/gun_frame/smg_gun_frame.tres" id="77_6d5uj"]
 [ext_resource type="Resource" uid="uid://geogstu8o3bh" path="res://src/player/gun/gun_frame/sniper_gun_frame.tres" id="78_tmpnu"]
 [ext_resource type="Resource" uid="uid://cid07th4gi8ov" path="res://src/player/gun/gun_frame/default_frame.tres" id="79_sm3w3"]
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="80_cp5oa"]
 [ext_resource type="Script" path="res://src/maps/common/main_bgm_emitter.gd" id="81_rhasn"]
+[ext_resource type="Resource" uid="uid://bblkebtod2bhm" path="res://src/ui/difficulty_menu/boss_slot_profile.tres" id="81_ywr8k"]
+[ext_resource type="Resource" uid="uid://dwnejm41e6krv" path="res://src/ui/difficulty_menu/boss_roulette_profile.tres" id="82_jtrnv"]
+[ext_resource type="Resource" uid="uid://t8i2rvgy7p2i" path="res://src/ui/difficulty_menu/boss_bartender_profile.tres" id="83_q5bc8"]
+[ext_resource type="Resource" uid="uid://dknw5bjh6ipm5" path="res://src/ui/difficulty_menu/boss_pit_profile.tres" id="84_xbtox"]
+[ext_resource type="Resource" uid="uid://cev06jj3f40kv" path="res://src/ui/difficulty_menu/boss_chip_profile.tres" id="85_y011l"]
+[ext_resource type="Resource" uid="uid://bq1gw2oin0tuo" path="res://src/ui/difficulty_menu/boss_elevator_profile.tres" id="86_0ohkx"]
+[ext_resource type="Resource" uid="uid://bfmgyr7k0l1xt" path="res://src/ui/difficulty_menu/boss_blackjack_profile.tres" id="87_sfjhx"]
 
 [node name="GameManager" type="Node"]
 process_mode = 3
@@ -91,6 +99,7 @@ debug_barrel_database = Array[Resource]([ExtResource("21_dy2lq"), ExtResource("2
 starting_gun_frame = ExtResource("76_i6j6r")
 starting_shop_gun_frame = Array[Resource]([ExtResource("77_6d5uj"), ExtResource("78_tmpnu")])
 gun_frame_database = Array[Resource]([ExtResource("79_sm3w3"), ExtResource("76_i6j6r"), ExtResource("77_6d5uj"), ExtResource("78_tmpnu")])
+boss_diff_profiles = Array[ExtResource("80_cp5oa")]([ExtResource("81_ywr8k"), ExtResource("82_jtrnv"), ExtResource("83_q5bc8"), ExtResource("84_xbtox"), ExtResource("85_y011l"), ExtResource("86_0ohkx"), ExtResource("87_sfjhx")])
 sfx_screenshot = ExtResource("45_64xou")
 
 [node name="FmodBankLoader" type="FmodBankLoader" parent="."]

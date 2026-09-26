@@ -41,6 +41,9 @@ enum BossStatusEffect {
 @export var phase_4_health: int = 0
 @export var phase_5_health: int = 0
 
+var ante_health_mod: float = 1.0
+var ante_damage_mod: float = 1.0  # TODO - add damage scaling per ante, balance damage values first
+
 @export var target: Node3D:
 	set(value):
 		target = value
@@ -262,7 +265,14 @@ func _ready() -> void:
 	
 	for i in range(50):
 		_init_chip_pool.call_deferred()
-
+	
+	main_health *= ante_health_mod
+	phase_1_health *= ante_health_mod
+	phase_2_health *= ante_health_mod
+	phase_3_health *= ante_health_mod
+	phase_4_health *= ante_health_mod
+	phase_5_health *= ante_health_mod
+	
 	health_component.max_health = main_health
 	health_component.initialize_health()
 	health_component.is_invincible = GameManager.CHEAT_invincible_bosses
@@ -281,7 +291,7 @@ func _ready() -> void:
 	var phase_health_arr: Array[int] = []
 	for health in [phase_1_health, phase_2_health, phase_3_health, phase_4_health, phase_5_health]:
 		if health > 0:
-			phase_health_arr.append(health)
+			phase_health_arr.append(int(health))
 	health_ui.phase_health_arr = phase_health_arr
 	health_ui.init_boss_health_ui()
 
@@ -447,8 +457,17 @@ func activate() -> void:
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
+
 func apply_risk_modifier():
-	return
+	# HACK - just health buffs for now, but should be expanded in future
+	match GameManager.boss_ante:
+		1:
+			ante_health_mod = 1.0
+		2:
+			ante_health_mod = 1.5
+		3:
+			ante_health_mod = 2.0
+	
 	#health_component.max_health *= GameManager.get_risk_max_hp_mult()
 	#health_component.initialize_health()
 	#for key in status_resist.keys():

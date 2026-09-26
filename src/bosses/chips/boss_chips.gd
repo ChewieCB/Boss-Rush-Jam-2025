@@ -1715,8 +1715,8 @@ func activate_chiptopede() -> void:
 	health_component.has_died = false
 	if GameManager.CHEAT_oneshot:
 		chiptopede_max_health = 1
-	health_component.max_health = chiptopede_max_health
-	health_component.current_health = chiptopede_max_health
+	health_component.max_health = chiptopede_max_health * ante_health_mod
+	health_component.current_health = chiptopede_max_health * ante_health_mod
 	health_component.received_dmg_multiplier = 0.5
 	health_ui.phase_health_arr = []
 	health_ui.init_boss_health_ui(0)
