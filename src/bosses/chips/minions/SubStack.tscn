@@ -57,7 +57,7 @@ shader_parameter/knockback_scale = 0.4
 shader_parameter/depth_bias = 0.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tv1ek"]
-radius = 0.777801
+radius = 1.0
 height = 3.4935
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_447b3"]
@@ -160,6 +160,54 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("CollisionShape3D:shape:radius")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("CollisionShape3D:shape:height")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.4935]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("CollisionShape3D:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0787812, 1.76323, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("CollisionShape3D:rotation")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -335,10 +383,10 @@ states/strafe_finish/position = Vector2(1072, 342)
 states/strafe_start/node = SubResource("AnimationNodeAnimation_3imjw")
 states/strafe_start/position = Vector2(1072, 198)
 transitions = ["idle", "strafe_start", SubResource("AnimationNodeStateMachineTransition_vw8b5"), "strafe_start", "strafe", SubResource("AnimationNodeStateMachineTransition_yw8o1"), "strafe", "strafe_finish", SubResource("AnimationNodeStateMachineTransition_vmqtt"), "strafe_finish", "idle", SubResource("AnimationNodeStateMachineTransition_a04xy"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_0uhi5"), "idle", "cannon_idle", SubResource("AnimationNodeStateMachineTransition_mdgo6"), "idle", "jump_telegraph", SubResource("AnimationNodeStateMachineTransition_u8cin"), "jump_telegraph", "jump_start", SubResource("AnimationNodeStateMachineTransition_yt7ww"), "slam_start", "slam_end", SubResource("AnimationNodeStateMachineTransition_5c46i"), "slam_end", "idle", SubResource("AnimationNodeStateMachineTransition_xeehw"), "jump_start", "slam_start", SubResource("AnimationNodeStateMachineTransition_3g73i"), "idle", "spark_telegraph", SubResource("AnimationNodeStateMachineTransition_fo6qk"), "spark_telegraph", "idle", SubResource("AnimationNodeStateMachineTransition_emkpv"), "slash_proj_r", "idle", SubResource("AnimationNodeStateMachineTransition_dsis0"), "slash_proj_l", "idle", SubResource("AnimationNodeStateMachineTransition_0ogj7"), "spark_telegraph", "slash_proj_r", SubResource("AnimationNodeStateMachineTransition_xldkd"), "cannon_idle", "idle", SubResource("AnimationNodeStateMachineTransition_npplf"), "spark_telegraph", "slash_proj_l", SubResource("AnimationNodeStateMachineTransition_03nrh"), "spark_telegraph", "charge", SubResource("AnimationNodeStateMachineTransition_os8jq"), "charge", "idle", SubResource("AnimationNodeStateMachineTransition_25sut"), "cannon_idle", "cannon_shoot", SubResource("AnimationNodeStateMachineTransition_yxm53"), "cannon_shoot", "cannon_idle", SubResource("AnimationNodeStateMachineTransition_xohqb")]
-graph_offset = Vector2(251, 2)
+graph_offset = Vector2(270, 102)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_nxtxm"]
-graph_offset = Vector2(-134.336, 15.0019)
+graph_offset = Vector2(-365, 116)
 nodes/hurt_blend/node = SubResource("AnimationNodeBlend2_61lwq")
 nodes/hurt_blend/position = Vector2(182, 177)
 nodes/hurt_frame/node = SubResource("AnimationNodeAnimation_ymguk")
@@ -356,7 +404,6 @@ _data = {
 point_count = 13
 
 [node name="SubStack" node_paths=PackedStringArray("elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_t3h5b")]
-collision_mask = 9
 motion_mode = 1
 script = ExtResource("2_u1ibk")
 spark_scene = ExtResource("3_0yylu")
@@ -465,7 +512,7 @@ follow_target = false
 process_mode = 4
 visible = false
 
-[node name="HealthUI" parent="UI" index="0"]
+[node name="HealthUI" parent="UI" index="1"]
 process_mode = 4
 visible = false
 

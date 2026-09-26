@@ -1,6 +1,8 @@
 extends CanvasLayer
 
 signal transition_midpoint
+signal transition_midpoint_in
+signal transition_midpoint_out
 signal transition_finished
 
 @onready var ui: ColorRect = $UI/ColorRect
@@ -42,18 +44,18 @@ func _clear_screen() -> void:
 func transition_in(duration: float = 0.7) -> void:
 	set_loading_visible(false)
 	_clear_screen()
-	await tween_transition(1.0, -1.0, duration)
+	await tween_transition(1.0, -1.0, duration, false)
 	transition_finished.emit()
 
 
 func transition_out(duration: float = 0.7) -> void:
 	_fill_screen()
-	await tween_transition(0.0, 2.0, duration)
+	await tween_transition(0.0, 2.0, duration, true)
 	set_loading_visible()
 	transition_finished.emit()
 
 
-func tween_transition(start: float, finish: float, duration: float = 0.7) -> void:
+func tween_transition(start: float, finish: float, duration: float = 0.7, out: bool = false) -> void:
 	var diff: float = finish - start
 	var transition_tween := get_tree().create_tween()
 	transition_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -61,15 +63,19 @@ func tween_transition(start: float, finish: float, duration: float = 0.7) -> voi
 	transition_tween.tween_method(
 		_set_transition_height, start, start + diff / 2, duration / 2
 	)
-	transition_tween.tween_callback(_transition_midway)
+	transition_tween.tween_callback(_transition_midway.bind(out))
 	transition_tween.tween_method(
 		_set_transition_height, start + diff / 2, finish, duration / 2
 	)
 	await transition_tween.finished
 
 
-func _transition_midway() -> void:
+func _transition_midway(out: bool) -> void:
 	transition_midpoint.emit()
+	if out:
+		transition_midpoint_out.emit()
+	else:
+		transition_midpoint_in.emit()
 
 
 func _set_transition_height(height: float) -> void:
