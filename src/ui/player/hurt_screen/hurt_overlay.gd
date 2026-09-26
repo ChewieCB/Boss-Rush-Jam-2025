@@ -7,8 +7,11 @@ extends Control
 @onready var stun_shader: ColorRect = $StunShader
 @onready var damage_dir_markers: ColorRect = $DamageDirectionMarkers
 @onready var player: Player = get_parent().get_parent()
+const MAX_DAMAGE_MARKERS: int = 16
 var active_damage_markers: Array = []
 var hit_trackers: Array[Node3D] = []
+var marker_generations: Array[int] = []
+var oldest_marker_idx: int = 0
 
 @onready var hurt_blood: TextureRect = $HurtFlash/BloodSplatter
 @export var hurt_blood_textures: Array[Texture]
@@ -18,11 +21,12 @@ var low_health_tween: Tween
 
 
 func _ready() -> void:
-	for i in range(16):
+	for i in range(MAX_DAMAGE_MARKERS):
 		active_damage_markers.append(null)
+		marker_generations.append(0)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	for i in range(16):
+	for i in range(MAX_DAMAGE_MARKERS):
 		var _tracker := Node3D.new()
 		damage_dir_markers.add_child(_tracker)
 		hit_trackers.append(_tracker)
@@ -61,7 +65,7 @@ func update_low_health_anim(base_alpha: float, speed: float = 1.0) -> void:
 
 
 func get_marker_dir(source_pos: Vector3) -> float:
-	var player_forward: Vector3 = -player.global_transform.basis.z
+	var player_forward: Vector3 = - player.global_transform.basis.z
 	var to_source: Vector3 = player.global_position.direction_to(source_pos)
 	var forward_2d := Vector2(player_forward.x, player_forward.z)
 	var source_2d := Vector2(to_source.x, to_source.z)
@@ -78,29 +82,29 @@ func get_marker_dir(source_pos: Vector3) -> float:
 
 
 func add_damage_dir_marker(damage_pos: Vector3) -> void:
-	var damage_source: Node3D
-	var active_arcs: int = damage_dir_markers.material.get_shader_parameter("active_arcs_count")
+	if hit_trackers.size() < MAX_DAMAGE_MARKERS:
+		return # Trackers not created yet
+
 	var arc_alphas = damage_dir_markers.material.get_shader_parameter("arc_alpha")
-	var new_idx: int
 
-	if active_arcs >= 16:
-		remove_damage_dir_marker(0)
-		new_idx = 0
-		# TODO - handle timers to not fire after a marker is removed
-	else:
-		new_idx = active_arcs
-		active_arcs += 1
+	# Use the first free slot, or recycle the oldest marker if all are in use
+	var new_idx: int = active_damage_markers.find(null)
+	if new_idx == -1:
+		new_idx = oldest_marker_idx
+		oldest_marker_idx = (oldest_marker_idx + 1) % MAX_DAMAGE_MARKERS
+	marker_generations[new_idx] += 1
 
-	damage_source = hit_trackers[new_idx]
+	var damage_source: Node3D = hit_trackers[new_idx]
 	damage_source.global_position = damage_pos
 	active_damage_markers[new_idx] = damage_source
-	hit_trackers[new_idx] = damage_source
 	arc_alphas[new_idx] = 1.0
 
-	damage_dir_markers.material.set_shader_parameter("active_arcs_count", active_arcs)
+	damage_dir_markers.material.set_shader_parameter("active_arcs_count", _count_active_markers())
 	damage_dir_markers.material.set_shader_parameter("arc_alpha", arc_alphas)
 
-	get_tree().create_timer(1.0, false).timeout.connect(remove_damage_dir_marker.bind(new_idx))
+	get_tree().create_timer(1.0, false).timeout.connect(
+		remove_damage_dir_marker.bind(new_idx, marker_generations[new_idx])
+	)
 
 
 func update_damage_dir_markers(delta: float) -> void:
@@ -128,12 +132,17 @@ func update_damage_dir_markers(delta: float) -> void:
 	damage_dir_markers.material.set_shader_parameter("arc_alpha", arc_alphas)
 
 
-func remove_damage_dir_marker(idx: int) -> void:
-	active_damage_markers[idx] = null
+func remove_damage_dir_marker(idx: int, generation: int) -> void:
+	# Slot was reused by a newer marker since this timer was created
+	if marker_generations[idx] != generation:
+		return
 
-	var active_arcs: int = damage_dir_markers.material.get_shader_parameter("active_arcs_count")
-	active_arcs -= 1
-	damage_dir_markers.material.set_shader_parameter("active_arcs_count", active_arcs)
+	active_damage_markers[idx] = null
+	damage_dir_markers.material.set_shader_parameter("active_arcs_count", _count_active_markers())
+
+
+func _count_active_markers() -> int:
+	return active_damage_markers.size() - active_damage_markers.count(null)
 
 
 func stun(stun_time: float) -> void:
@@ -155,17 +164,17 @@ func dead() -> void:
 		return
 
 	hurt_blood.texture = hurt_blood_textures.pick_random()
-	anim_tree["parameters/death_transition/transition_request"] =  "dead"
-	anim_tree["parameters/low_health_blend/blend_amount"] =  1.0
-	anim_tree["parameters/low_health_seek/seek_request"] =  0.5
-	anim_tree["parameters/low_health_speed/scale"] =  0.0
+	anim_tree["parameters/death_transition/transition_request"] = "dead"
+	anim_tree["parameters/low_health_blend/blend_amount"] = 1.0
+	anim_tree["parameters/low_health_seek/seek_request"] = 0.5
+	anim_tree["parameters/low_health_speed/scale"] = 0.0
 
 
 func revive() -> void:
 	if GameManager.hide_hurt_overlay:
 		return
 
-	anim_tree["parameters/death_transition/transition_request"] =  "revive"
-	anim_tree["parameters/low_health_blend/blend_amount"] =  0.0
-	anim_tree["parameters/low_health_seek/seek_request"] =  0.0
-	anim_tree["parameters/low_health_speed/scale"] =  0.0
+	anim_tree["parameters/death_transition/transition_request"] = "revive"
+	anim_tree["parameters/low_health_blend/blend_amount"] = 0.0
+	anim_tree["parameters/low_health_seek/seek_request"] = 0.0
+	anim_tree["parameters/low_health_speed/scale"] = 0.0
