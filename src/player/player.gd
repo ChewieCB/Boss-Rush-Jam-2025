@@ -114,6 +114,14 @@ const MOUSE_SENSITIVITY_COEEFICIENT = 10000
 const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
 
 const DASH_SPEED: float = 15
+# Dash speed fast at the start, then easen down
+const DASH_SPEED_START_MULT: float = 3
+const DASH_SPEED_END_MULT: float = 0.5
+const DASH_SPEED_EASE: float = 0.4
+# Dash roll/tilt camera even more
+const DASH_ROLL_DEG: float = 7.0
+const DASH_ROLL_RECOVER_RATE: float = 6.0
+const DASH_SHAKE_TRAUMA: float = 0.15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
@@ -165,6 +173,7 @@ var slide_jump_grace: float = 0.0
 var slide_chain_window: float = 0.0
 
 var internal_bonus_speed: float = 0
+var dash_roll: float = 0.0
 
 var raw_input_dir = Vector2(0, 0):
 	set(value):
@@ -349,6 +358,7 @@ func _unhandled_input(event):
 			dash_duration_timer.start(current_stats[StatusEffect.PlayerStatEnum.DASH_DURATION])
 			movement_dashed.emit()
 			add_iframe_on_dash()
+			play_dash_feel(raw_input_dir)
 
 			var dash_dir = raw_input_dir
 			# Swap speedline direction for horizontal dash
@@ -510,7 +520,12 @@ func _physics_process(delta):
 
 	# Bonus speed
 	if is_dashing:
-		internal_bonus_speed = DASH_SPEED
+		var dash_t := 0.0
+		if dash_duration_timer.wait_time > 0:
+			dash_t = 1.0 - dash_duration_timer.time_left / dash_duration_timer.wait_time
+		internal_bonus_speed = DASH_SPEED * lerpf(
+			DASH_SPEED_START_MULT, DASH_SPEED_END_MULT, ease(dash_t, DASH_SPEED_EASE)
+		)
 	else:
 		if is_on_floor():
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
@@ -760,13 +775,16 @@ func special_camera_control(delta):
 	const TILT_AMOUNT = 3.0
 	const TILT_TIME = 5.0
 
+	dash_roll = lerpf(dash_roll, 0.0, delta * DASH_ROLL_RECOVER_RATE)
 	if GameManager.camera_tilt:
+		var tilt_target := 0.0
 		if raw_input_dir.x < -MIN_DIR_TO_TILT:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
+			tilt_target = deg_to_rad(TILT_AMOUNT * abs(raw_input_dir.x))
 		elif raw_input_dir.x > MIN_DIR_TO_TILT:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
-		else:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * TILT_TIME)
+			tilt_target = deg_to_rad(-TILT_AMOUNT * abs(raw_input_dir.x))
+		# Dash roll is added on top of the strafe tilt, and lerped faster so the lean snaps in
+		var tilt_speed = TILT_TIME * 2.0 if absf(dash_roll) > 0.01 else TILT_TIME
+		neck.rotation.z = lerp(neck.rotation.z, tilt_target + dash_roll, delta * tilt_speed)
 
 	# Lower camera
 	if is_crouching:
@@ -789,6 +807,19 @@ func apply_impulse_to_player(impulse_force: Vector3):
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
+
+
+# Camera lean and shake on dash. dir is the local input dir: x = right, y = back.
+func play_dash_feel(dir: Vector2) -> void:
+	dir = dir.normalized()
+
+	# Lean into side dashes, same sign as the strafe tilt. Decays in special_camera_control()
+	if GameManager.camera_tilt:
+		dash_roll = deg_to_rad(-DASH_ROLL_DEG * dir.x)
+
+	# add_trauma() replaces trauma, so don't cut short a bigger shake (e.g. getting hit)
+	if player_camera.trauma < DASH_SHAKE_TRAUMA:
+		player_camera.add_trauma(DASH_SHAKE_TRAUMA)
 
 
 # Only converts existing momentum into a slide - it never adds speed, so you cannot
