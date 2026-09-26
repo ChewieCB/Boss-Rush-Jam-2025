@@ -26,6 +26,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
 @export var jump_dust_ring_prefab: PackedScene
+@onready var dust_trail: GPUParticles3D = $DustTrail
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
@@ -812,6 +813,9 @@ func _on_dash_duration_timeout() -> void:
 # Camera lean and shake on dash. dir is the local input dir: x = right, y = back.
 func play_dash_feel(dir: Vector2) -> void:
 	dir = dir.normalized()
+
+	# One-shot, restart() so a dash during a still-playing burst re-triggers it
+	dust_trail.restart()
 
 	# Lean into side dashes, same sign as the strafe tilt. Decays in special_camera_control()
 	if GameManager.camera_tilt:
