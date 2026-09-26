@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgdrie48ccxvw"]
+[gd_scene load_steps=10 format=3 uid="uid://bgdrie48ccxvw"]
 
 [ext_resource type="Texture2D" uid="uid://cr2c7vdp26ong" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_4.png" id="1_dsftp"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_3gy6e"]
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/ante_item.gd" id="2_a8k7o"]
+[ext_resource type="AudioStream" uid="uid://bvfd0na411nvf" path="res://src/ui/common/assets/sfx/gui_click.ogg" id="2_mnmu4"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="3_ln6kn"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="4_fq8ri"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="5_kdfri"]
 [ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="5_qr8jw"]
 [ext_resource type="Texture2D" uid="uid://bjxsljtv5nhy8" path="res://src/collectibles/poker_chip/assets/chip_icon_64.png" id="6_kfcxg"]
@@ -27,6 +30,9 @@ currency_label = NodePath("VBoxContainer/AnteLabelContainer/CurrencyUI/MarginCon
 locked = true
 cost = null
 purchased = null
+sfx_select_ante = ExtResource("2_mnmu4")
+sfx_purchase = ExtResource("3_ln6kn")
+sfx_too_expensive = ExtResource("4_fq8ri")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1

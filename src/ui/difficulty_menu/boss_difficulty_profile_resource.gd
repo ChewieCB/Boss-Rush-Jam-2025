@@ -7,3 +7,4 @@ class_name BossDifficultyProfile
 @export var ante_descriptions: Array[String] = ["", "", ""]
 @export var ante_purchased_states: Array[bool] = [true, false, false]
 @export var boss_risk_reward_mult: float = 1.0
+@export var ante_costs: Array[int] = [0, 2000, 5000]

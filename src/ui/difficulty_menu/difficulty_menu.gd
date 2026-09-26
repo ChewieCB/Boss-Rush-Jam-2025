@@ -3,6 +3,7 @@ class_name DifficultyMenu
 
 @export var chip_sfx: AudioStream
 @export var locked_sfx: AudioStream
+
 ## Order matter
 @export var boss_sprites: Array[TextureRect]
 @export var boss_ante_textures: Array[Array]
@@ -115,6 +116,7 @@ func refresh_display():
 		ante_item.ante_number = i + 1
 		ante_item.set_ante_label(boss_profile.ante_names[i])
 		ante_item.set_ante_description(boss_profile.ante_descriptions[i])
+		ante_item.cost = boss_profile.ante_costs[i]
 		ante_item.purchased = boss_profile.ante_purchased_states[i]
 		if _ante_textures.size() > 0:
 			ante_item.set_ante_texture(_ante_textures[i])

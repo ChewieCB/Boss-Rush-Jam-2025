@@ -22,7 +22,6 @@ signal ante_purchased(ante_number: int)
 @export var currency_ui: MarginContainer
 @export var currency_label: Label
 
-
 @export var scale_factor: float = 1.15
 
 @export var locked: bool = false:
@@ -31,12 +30,22 @@ signal ante_purchased(ante_number: int)
 		if not is_node_ready():
 			await ready
 		locked_overlay.visible = locked
-@export var cost: int = 2000
+@export var cost: int = 2000:
+	set(value):
+		cost = value
+		if not is_node_ready():
+			await ready
+		currency_label.text = str(cost)
 @export var purchased: bool = false:
 	set(value):
 		purchased = value
 		locked = !purchased
 		currency_ui.visible = !purchased
+
+# SFX
+@export var sfx_select_ante: AudioStream
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
 
 
 func _ready() -> void:
@@ -96,15 +105,18 @@ func purchase_ante(idx: int) -> void:
 		GameManager.player_currency -= cost
 		purchased = true
 		locked = false
-		# TODO play sfx
+		SoundManager.play_ui_sound(sfx_purchase, "UI")
+		await UIUtils.animate_ui_elem_shake(self)
 		ante_purchased.emit(idx)
 	else:
-		# TODO - play sfx
-		pass
+		SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+		UIUtils.animate_ui_elem_shake(self)
 
 
 func _on_button_pressed() -> void:
 	if purchased:
+		SoundManager.play_ui_sound(sfx_select_ante, "UI")
+		await UIUtils.animate_ui_elem_shake(self)
 		ante_selected.emit(ante_number)
 		_on_button_focus_exited()
 	else:
