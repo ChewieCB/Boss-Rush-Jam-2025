@@ -76,6 +76,7 @@ signal setting_back_button_pressed
 @onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
 @onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BossOneShot/BossOneShotToggle
 @onready var barrel_spin_mode_dropdown: OptionButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown
+@onready var spin_cost_dropdown: OptionButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/SpinCost/SpinCostDropdown
 @onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/Freecam/FreecamToggle
 @onready var debug_jam_controls_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/DebugJamControls/DebugJamControlsToggle
 @onready var infinite_ammo_toggle: CheckButton = $TabContainer/DEBUG/ScrollContainer/VBoxContainer/InfiniteAmmo/InfiniteAmmoToggle
@@ -118,7 +119,6 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_on_tab_container_tab_changed(0)
 	_on_controller_connection(0, GameManager.is_controller_connected)
-	set_controller_mouse_override(GameManager.mouse_controller_override)                                                                  
 
 
 func _input(event):
@@ -449,6 +449,7 @@ func refresh_setting_value():
 	debug_jam_controls_toggle.set_pressed_no_signal(GameManager.CHEAT_debug_jam_controls)
 	infinite_ammo_toggle.set_pressed_no_signal(GameManager.CHEAT_infinite_ammo)
 	barrel_spin_mode_dropdown.selected = GameManager.CHEAT_spin_mode
+	spin_cost_dropdown.selected = GameManager.CHEAT_spin_cost
 	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
 
 	timescale_slider.value = Engine.time_scale
@@ -618,3 +619,7 @@ func set_controller_mouse_override(enabled):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _on_spin_cost_dropdown_item_selected(index: int) -> void:
+	GameManager.CHEAT_spin_cost = index

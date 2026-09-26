@@ -24,7 +24,13 @@ signal hide
 var out_of_reroll = false
 
 @export var radial_ui_center_node: Control
+@export var spin_icon: TextureRect
+@export var spin_particles: GPUParticles2D
+@export var spin_label: Label
 @export var currency_ui: Control
+
+var is_cooldown_active: bool = false
+var progress_tween: Tween
 
 
 func _ready() -> void:
@@ -44,67 +50,197 @@ func _ready() -> void:
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
 		luck_component.high_luck_entered.connect(luck_bar_ui._on_high_luck_entered)
 		luck_component.high_luck_exited.connect(luck_bar_ui._on_high_luck_exited)
-	# FIXME - remove conditional after debugging?
-	if GameManager.player:
-		GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
-		GameManager.player.status_effect_removed.connect(remove_status_ui)
 	
 	#hide_all_ui()
 	
 	# Spin abiltiy UI
-	_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
+	match GameManager.CHEAT_spin_cost:
+		GameManager.DebugSpinCost.CHIP_COST:
+			_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
+		GameManager.DebugSpinCost.COOLDOWN:
+			_update_reroll_max(int(GameManager.player.spin_cooldown_time))
+	
 	GameManager.currency_changed.connect(_on_currency_changed)
 	GameManager.reroll_cost_changed.connect(_update_reroll_max)
 	GameManager.free_rerolls.connect(_update_reroll_max.bind(spin_ability_ui.max_value))
-	#_update_roll_left_label()
+	# FIXME - remove conditional after debugging?
+	if GameManager.player:
+		GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
+		GameManager.player.status_effect_removed.connect(remove_status_ui)
+		GameManager.player.spin_cooldown_started.connect(spin_ability_start_cooldown)
+		GameManager.player.spin_cooldown_finished.connect(spin_ability_end_cooldown)
+	
+	_spin_cooldown_empty()
+
+func _process(delta: float) -> void:
+	if is_cooldown_active:
+		spin_ability_ui.value += (spin_ability_ui.max_value / (GameManager.player.spin_cooldown_time - 0.25)) * delta
+		# FIXME - triggers spin "early" if you spin -> change frame -> spin
+
+
+func spin_ability_start_cooldown() -> void:
+	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
+	
+	if GameManager.is_free_reroll and \
+	GameManager.CHEAT_spin_mode == GameManager.DebugSpinCost.CHIP_COST:
+		_spin_cooldown_anim_instant_drain_to_fill()
+		return
+	
+	await _spin_cooldown_anim_drain()
+	is_cooldown_active = true
+	_spin_cooldown_anim_fill()
+
+
+func spin_ability_end_cooldown() -> void:
+	is_cooldown_active = false
+	spin_ability_ui.value = spin_ability_ui.max_value
+	
+	spin_label.add_theme_color_override("font_color", Color("#dfbb1b"))
+	
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.set_parallel(false)
+	progress_tween.tween_property(spin_label, "scale", Vector2(1.2, 1.2), fill_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	progress_tween.tween_property(spin_label, "scale", Vector2(1, 1), fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN)
+	
+	spin_particles.restart()
+	UIUtils.anim_ui_elem_scale(spin_ability_ui)
+
+
+func _spin_cooldown_empty() -> void:
+	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
+	is_cooldown_active = false
+	spin_ability_ui.value = 0
+	spin_icon.rotation = 0
+	spin_icon.scale = Vector2(0.5, 0.5)
+	spin_label.scale = Vector2(0.5, 0.5)
+
+
+func _spin_cooldown_anim_instant_drain_to_fill(time: float = fill_time * 4) -> void:
+	is_cooldown_active = false
+	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
+	# Tween setup
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.set_parallel(true)
+	progress_tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	# Drain cooldown UI
+	progress_tween.tween_property(spin_ability_ui, "value", 0, time)
+	progress_tween.tween_property(spin_icon, "rotation", -90, time)
+	progress_tween.tween_property(spin_icon, "scale", Vector2(0.5, 0.5), time)
+	# Fill cooldown UI
+	progress_tween.set_parallel(false)
+	progress_tween.tween_property(spin_ability_ui, "value", spin_ability_ui.max_value, time)
+	progress_tween.set_parallel(true)
+	progress_tween.tween_property(spin_icon, "rotation", 2 * PI, time)
+	progress_tween.tween_property(spin_icon, "scale", Vector2(1, 1), time)
+	# Update player cooldown state at end of anim
+	progress_tween.tween_callback(
+		func(): 
+			GameManager.player.spin_cooldown_timer = 0.0
+			GameManager.player.spin_cooldown_active = false
+	)
+
+func _spin_cooldown_anim_drain(time: float = 0.2) -> void:
+	is_cooldown_active = false
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.set_parallel(true)
+	progress_tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	
+	progress_tween.tween_property(spin_ability_ui, "value", 0.0, time)
+	progress_tween.tween_property(spin_icon, "rotation", -90, time)
+	progress_tween.tween_property(spin_icon, "scale", Vector2(0.5, 0.5), time)
+	progress_tween.tween_property(spin_label, "scale", Vector2(0.5, 0.5), time)
+	
+	await progress_tween.finished
+	
+	return
+
+func _spin_cooldown_anim_fill(time: float = GameManager.player.spin_cooldown_time - 0.2) -> void:
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.set_parallel(true)
+	progress_tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
+	
+	progress_tween.tween_property(spin_icon, "rotation", 2 * PI, time)
+	progress_tween.tween_property(spin_icon, "scale", Vector2(1, 1), time)
+	progress_tween.tween_property(spin_label, "scale", Vector2(1, 1), time)
+	
+	await progress_tween.finished
+	
+	return
 
 
 func _on_spin_ability_progress_changed(value: float) -> void:
-	var progress_mat: ShaderMaterial = spin_ability_ui.material
-	progress_mat.set_shader_parameter("progress", value)
-	
+	#var progress_mat: ShaderMaterial = spin_ability_ui.material
+	#progress_mat.set_shader_parameter("progress", value) 
+	#if spin_ability_ui.value >= spin_ability_ui.max_value:
+		#spin_ability_end_cooldown()
+	#
 	if out_of_reroll:
 		spin_ability_ui.tint_progress = Color.GRAY
-		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GRAY)
+		#spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GRAY)
 		#progress_label.text = "Limited"
 		#anim_player.stop()
 		return
 		
 	if value >= spin_ability_ui.max_value:
 		spin_ability_ui.tint_progress = Color.GOLD
-		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GOLD)
+		#spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GOLD)
 		#progress_label.modulate = Color.GOLD
 		#anim_player.play("spin")
 	else:
 		spin_ability_ui.tint_progress = Color.LIGHT_GREEN
-		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.LIGHT_GREEN)
+		#spin_ability_ui.material.set_shader_parameter("fill_colour", Color.LIGHT_GREEN)
 		#progress_label.modulate = Color.GRAY
 		#anim_player.stop()
 
 
-func _on_currency_changed(new_value: int) -> void:
-	var current_changed_fill_time: float = 0.5
-	var progress_tween: Tween = get_tree().create_tween()
-	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
-	progress_tween.tween_property(spin_ability_ui, "value", new_value, current_changed_fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-
-
 func _update_reroll_max(new_max: int) -> void:
 	spin_ability_ui.max_value = float(new_max)
-	spin_ability_ui.material.set_shader_parameter("max_value", new_max)
+	#spin_ability_ui.material.set_shader_parameter("max_value", new_max)
 	
 	var new_value: int
 	if not GameManager.is_free_reroll:
-		new_value = min(GameManager.player_currency, spin_ability_ui.max_value)
+		match GameManager.CHEAT_spin_cost:
+			GameManager.DebugSpinCost.CHIP_COST:
+				new_value = min(GameManager.player_currency, spin_ability_ui.max_value)
+			GameManager.DebugSpinCost.COOLDOWN:
+				new_value = int(spin_ability_ui.max_value)
 		#progress_label.text = "%s" % new_max
 	else:
 		new_value = int(spin_ability_ui.max_value)
+		spin_ability_ui.tint_progress = Color.GOLD
 		#progress_label.text = "Free"
-	var progress_tween: Tween = get_tree().create_tween()
+	
+	#match GameManager.CHEAT_spin_cost:
+		#GameManager.DebugSpinCost.CHIP_COST:
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.tween_property(spin_ability_ui, "value", 0, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	progress_tween.chain().tween_property(spin_ability_ui, "value", new_value, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	#_update_roll_left_label()
+			#_update_roll_left_label()
+
+
+func _on_currency_changed(new_value: int) -> void:
+	if GameManager.CHEAT_spin_cost == GameManager.DebugSpinCost.CHIP_COST:
+		var current_changed_fill_time: float = 0.5
+		if progress_tween:
+			progress_tween.kill()
+		progress_tween = get_tree().create_tween()
+		progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+		progress_tween.tween_property(spin_ability_ui, "value", new_value, current_changed_fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
 
 ## Only for adding or refreshing status UI. UI usually be removed by the
