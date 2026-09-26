@@ -360,6 +360,7 @@ func _unhandled_input(event):
 			add_child(pe)
 			pe.global_position = global_position
 			pe.rotate_y(angle_radians)
+			pe.activate()
 
 	if Input.is_action_just_pressed("interact"):
 		if object_to_be_interacted:

@@ -1,6 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://dj22bp2g01voq"]
+[gd_scene load_steps=9 format=3 uid="uid://dn3jierj8cai5"]
 
 [ext_resource type="Script" path="res://src/player/gun/vfx/self_destruct_3dparticle.gd" id="1_sn6j6"]
+
+[sub_resource type="Gradient" id="Gradient_4yknl"]
+colors = PackedColorArray(0.996, 0.677, 0, 0.487, 1, 1, 1, 0.47)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_05xwp"]
+gradient = SubResource("Gradient_4yknl")
 
 [sub_resource type="Curve" id="Curve_da08b"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.74, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -19,11 +25,13 @@ initial_velocity_min = 25.0
 initial_velocity_max = 35.0
 gravity = Vector3(0, 0, 0)
 scale_curve = SubResource("CurveTexture_stfbt")
+color = Color(1, 1, 1, 0.535)
+color_initial_ramp = SubResource("GradientTexture1D_05xwp")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s1qoi"]
 transparency = 1
 cull_mode = 2
-albedo_color = Color(1, 1, 1, 0.14902)
+vertex_color_use_as_albedo = true
 billboard_keep_scale = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_aq07r"]
