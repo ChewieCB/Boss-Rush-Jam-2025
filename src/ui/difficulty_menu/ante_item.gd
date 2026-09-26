@@ -3,6 +3,7 @@ extends Control
 class_name AnteItem
 
 signal ante_selected(ante_number: int)
+signal ante_purchased(ante_number: int)
 
 ## Max 5
 @export var ante_number: int
@@ -90,15 +91,24 @@ func set_ante_texture(tex: Texture2D) -> void:
 	ante_icon.texture = tex
 
 
+func purchase_ante(idx: int) -> void:
+	if GameManager.player_currency >= cost:
+		GameManager.player_currency -= cost
+		purchased = true
+		locked = false
+		# TODO play sfx
+		ante_purchased.emit(idx)
+	else:
+		# TODO - play sfx
+		pass
+
+
 func _on_button_pressed() -> void:
 	if purchased:
 		ante_selected.emit(ante_number)
 		_on_button_focus_exited()
 	else:
-		if GameManager.player_currency >= cost:
-			GameManager.player_currency -= cost
-			purchased = true
-			locked = false
+		purchase_ante(self.get_index())
 
 
 func play_button_hover_sfx():

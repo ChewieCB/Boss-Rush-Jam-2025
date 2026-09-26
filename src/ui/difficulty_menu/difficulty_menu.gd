@@ -41,6 +41,9 @@ var reward_sprite_scale_tween = null
 var is_controller_connected: bool = false
 var locked: bool = false
 
+var boss_profile: BossDifficultyProfile
+
+
 func _ready() -> void:
 	visible = false
 	set_risk_level(0)
@@ -53,6 +56,7 @@ func _ready() -> void:
 	
 	for ante in ante_card_container.get_children():
 		ante.ante_selected.connect(_on_ante_selected)
+		ante.ante_purchased.connect(_on_ante_purchased)
 
 
 func _on_ante_selected(ante_number: int) -> void:
@@ -62,6 +66,12 @@ func _on_ante_selected(ante_number: int) -> void:
 	bet_started.emit()
 	
 	# TODO - clear this to 0 when we exit a boss map
+
+
+func _on_ante_purchased(ante_number: int) -> void:
+	GameManager.boss_diff_profiles[int(GameManager.selected_boss_id) - 1].ante_purchased_states[ante_number] = true
+	boss_diff_profiles = GameManager.boss_diff_profiles
+
 
 func _input(event: InputEvent) -> void:
 	if visible:
@@ -92,18 +102,20 @@ func hide_menu():
 
 
 func refresh_display():
+	boss_profile = GameManager.boss_diff_profiles[int(GameManager.selected_boss_id) - 1]
+	
 	for elem in boss_sprites:
 		elem.visible = false
-	var boss_profile = boss_diff_profiles[int(GameManager.selected_boss_id) - 1]
 	boss_sprites[int(GameManager.selected_boss_id) - 1].visible = true
 	var _ante_textures = boss_ante_textures[int(GameManager.selected_boss_id) - 1]
 	target_quite_label.text = boss_profile.boss_quote
-
+	
 	for i in range(ante_card_container.get_child_count()):
 		var ante_item: AnteItem = ante_card_container.get_child(i)
 		ante_item.ante_number = i + 1
 		ante_item.set_ante_label(boss_profile.ante_names[i])
 		ante_item.set_ante_description(boss_profile.ante_descriptions[i])
+		ante_item.purchased = boss_profile.ante_purchased_states[i]
 		if _ante_textures.size() > 0:
 			ante_item.set_ante_texture(_ante_textures[i])
 #
