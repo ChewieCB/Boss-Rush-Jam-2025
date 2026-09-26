@@ -30,6 +30,7 @@ var out_of_reroll = false
 @export var currency_ui: Control
 
 var is_cooldown_active: bool = false
+var progress_tween: Tween
 
 
 func _ready() -> void:
@@ -92,10 +93,13 @@ func spin_ability_start_cooldown() -> void:
 
 func spin_ability_end_cooldown() -> void:
 	is_cooldown_active = false
+	spin_ability_ui.value = spin_ability_ui.max_value
 	
 	spin_label.add_theme_color_override("font_color", Color("#dfbb1b"))
 	
-	var progress_tween: Tween = get_tree().create_tween()
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.set_parallel(false)
 	progress_tween.tween_property(spin_label, "scale", Vector2(1.2, 1.2), fill_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
@@ -107,6 +111,7 @@ func spin_ability_end_cooldown() -> void:
 
 func _spin_cooldown_empty() -> void:
 	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
+	is_cooldown_active = false
 	spin_ability_ui.value = 0
 	spin_icon.rotation = 0
 	spin_icon.scale = Vector2(0.5, 0.5)
@@ -117,7 +122,9 @@ func _spin_cooldown_anim_instant_drain_to_fill(time: float = fill_time * 4) -> v
 	is_cooldown_active = false
 	spin_label.add_theme_color_override("font_color", Color.DIM_GRAY)
 	# Tween setup
-	var progress_tween: Tween = get_tree().create_tween()
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.set_parallel(true)
 	progress_tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
@@ -134,12 +141,15 @@ func _spin_cooldown_anim_instant_drain_to_fill(time: float = fill_time * 4) -> v
 	# Update player cooldown state at end of anim
 	progress_tween.tween_callback(
 		func(): 
+			GameManager.player.spin_cooldown_timer = 0.0
 			GameManager.player.spin_cooldown_active = false
 	)
 
 func _spin_cooldown_anim_drain(time: float = 0.2) -> void:
 	is_cooldown_active = false
-	var progress_tween: Tween = get_tree().create_tween()
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.set_parallel(true)
 	progress_tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
@@ -154,7 +164,9 @@ func _spin_cooldown_anim_drain(time: float = 0.2) -> void:
 	return
 
 func _spin_cooldown_anim_fill(time: float = GameManager.player.spin_cooldown_time - 0.2) -> void:
-	var progress_tween: Tween = get_tree().create_tween()
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.set_parallel(true)
 	progress_tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
@@ -212,7 +224,9 @@ func _update_reroll_max(new_max: int) -> void:
 	
 	#match GameManager.CHEAT_spin_cost:
 		#GameManager.DebugSpinCost.CHIP_COST:
-	var progress_tween: Tween = get_tree().create_tween()
+	if progress_tween:
+		progress_tween.kill()
+	progress_tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.tween_property(spin_ability_ui, "value", 0, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	progress_tween.chain().tween_property(spin_ability_ui, "value", new_value, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
@@ -222,7 +236,9 @@ func _update_reroll_max(new_max: int) -> void:
 func _on_currency_changed(new_value: int) -> void:
 	if GameManager.CHEAT_spin_cost == GameManager.DebugSpinCost.CHIP_COST:
 		var current_changed_fill_time: float = 0.5
-		var progress_tween: Tween = get_tree().create_tween()
+		if progress_tween:
+			progress_tween.kill()
+		progress_tween = get_tree().create_tween()
 		progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 		progress_tween.tween_property(spin_ability_ui, "value", new_value, current_changed_fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
