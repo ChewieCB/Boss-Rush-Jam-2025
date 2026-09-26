@@ -43,9 +43,9 @@
 [ext_resource type="Texture2D" uid="uid://doqufls8drckk" path="res://src/player/gun/assets/sprite/fixed/Shotgun-Base-v2.png" id="30_6r4kx"]
 [ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
 [ext_resource type="Texture2D" uid="uid://fgciio6ax0wg" path="res://src/player/gun/assets/sprite/fixed/SMG-Base-v2.png" id="35_xeof8"]
-[ext_resource type="Texture2D" uid="uid://cx7pua2nra75m" path="res://src/player/gun/assets/sprite/fixed/Rollers/idle/Roller-backplate.png" id="38_ts1hx"]
-[ext_resource type="Texture2D" uid="uid://b2qxlnph22hv4" path="res://src/player/gun/assets/sprite/fixed/Rollers/spin-2/Spin-2 Roller Background.png" id="40_6n0ul"]
-[ext_resource type="Texture2D" uid="uid://ouepa8g4x46k" path="res://src/player/gun/assets/sprite/fixed/Covers/Third-Roller-Cover-v2.png" id="41_pxpj0"]
+[ext_resource type="Texture2D" uid="uid://b8bi0wj7ggrqa" path="res://src/player/gun/assets/sprite/fixed/Rollers/idle/Roller-backplate.png" id="38_ts1hx"]
+[ext_resource type="Texture2D" uid="uid://bm2668ifgm6ne" path="res://src/player/gun/assets/sprite/fixed/Rollers/spin-2/Spin-2 Roller Background.png" id="40_6n0ul"]
+[ext_resource type="Texture2D" uid="uid://cdgbktth8q5g6" path="res://src/player/gun/assets/sprite/fixed/Covers/Third-Roller-Cover-v2.png" id="41_pxpj0"]
 [ext_resource type="Texture2D" uid="uid://mvodghq1nj5c" path="res://src/player/gun/assets/sprite/elemental/fire/shotgun/Asset-Overheat-shotgun-multiply-02.png" id="43_70w2b"]
 [ext_resource type="Texture2D" uid="uid://dniak7wtu517c" path="res://src/player/gun/assets/sprite/elemental/fire/rifle/Sniper-Fire-03/Front Fire/Sniper_Fire_Stage3-FrontFire_0000.png" id="43_oc85d"]
 [ext_resource type="Texture2D" uid="uid://cysge7mi7k2it" path="res://src/player/gun/assets/sprite/elemental/fire/Asset-Fire-02-Roller-Cover-Front.png" id="44_0pg5e"]
@@ -1397,16 +1397,19 @@ horizontal_alignment = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 
 [node name="BarrelCover3Sprite" type="Sprite3D" parent="SpriteParent"]
+visible = false
 layers = 2
 render_priority = 2
 texture = ExtResource("41_pxpj0")
 
 [node name="BarrelCover2Sprite" type="Sprite3D" parent="SpriteParent"]
+visible = false
 layers = 2
 render_priority = 2
 texture = ExtResource("41_pxpj0")
 
 [node name="BarrelCover1Sprite" type="Sprite3D" parent="SpriteParent"]
+visible = false
 layers = 2
 render_priority = 2
 texture = ExtResource("41_pxpj0")
