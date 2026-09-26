@@ -622,4 +622,4 @@ func set_controller_mouse_override(enabled):
 
 
 func _on_spin_cost_dropdown_item_selected(index: int) -> void:
-	pass # Replace with function body.
+	GameManager.CHEAT_spin_cost = index
