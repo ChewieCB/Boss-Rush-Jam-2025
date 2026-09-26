@@ -202,6 +202,7 @@ func _ready() -> void:
 	health_component.initialize_health()
 	
 	health_ui.phase_health_arr = [phase_1_health, phase_2_health, phase_3_health]
+	phase_5_health_threshold = main_health - phase_4_health
 	health_ui.init_boss_health_ui()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	#

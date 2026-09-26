@@ -210,18 +210,6 @@ var absorb_chip_enabled = false
 
 func _ready() -> void:
 	super()
-	if GameManager.boss_ante >= 1:
-		# pinball_enabled = true
-		pass
-	if GameManager.boss_ante >= 2:
-		pass
-	if GameManager.boss_ante >= 3:
-		slot_icons_parent.visible = false
-	if GameManager.boss_ante >= 4:
-		pass
-	if GameManager.boss_ante >= 5:
-		absorb_chip_enabled = true
-		absorb_chip_timer.start(absorb_chip_interval)
 	
 	for i in range(coin_burst_repeat * coin_shots_per_burst):
 		_init_coin_proj.call_deferred()
