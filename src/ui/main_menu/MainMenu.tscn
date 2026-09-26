@@ -700,7 +700,7 @@ theme_override_font_sizes/mono_font_size = 32
 theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 32
 bbcode_enabled = true
-text = "Armed with a unique weapon whose [color=dark_turquoise]interchangeable barrels[/color] spin random effects on each reload, you must acquire new barrels from every boss you defeat to build a weapon that can [color=lawn_green]change your odds[/color]. "
+text = "Armed with a unique weapon whose [color=dark_turquoise]interchangeable barrels[/color] spin random effects, you must acquire new barrels from every boss you defeat to build a weapon that can [color=lawn_green]change your odds[/color]. "
 fit_content = true
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer"]

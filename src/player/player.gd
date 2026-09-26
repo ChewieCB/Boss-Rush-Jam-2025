@@ -91,10 +91,24 @@ var drunk_target_drift_vector := Vector2.ZERO
 
 @onready var heal_vfx: GPUParticles3D = $SpinHealVFX
 
+@export_group("Spin")
+@export_subgroup("Cooldown")
+@export var spin_cooldown_time: float = 30.0
+var spin_cooldown_active: bool = false:
+	set(value):
+		spin_cooldown_active = value
+		if spin_cooldown_active:
+			spin_cooldown_started.emit()
+		else:
+			spin_cooldown_finished.emit()
+var spin_cooldown_timer: float = 0.0
+
 signal movement_dashed
 signal movement_crouched
 signal new_status_effect_added(status)
 signal status_effect_removed(status_effect_code)
+signal spin_cooldown_started
+signal spin_cooldown_finished
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 70.0
@@ -117,29 +131,23 @@ const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
-# Crouch slide. A slide never grants speed of its own - it suppresses friction and lets
-# slopes do the accelerating, so it stays a momentum tech instead of a second dash.
-const SLIDE_MIN_SPEED_RATIO: float = 0.9 # Must already be this fraction of MAX_SPEED to start
-const SLIDE_END_SPEED_RATIO: float = 0.35 # Slide breaks off below this fraction of MAX_SPEED
+# Crouch slide
+const SLIDE_MIN_SPEED_RATIO: float = 0.9
+const SLIDE_END_SPEED_RATIO: float = 0.35
 const SLIDE_FRICTION_MODIFIER: float = 0.05
-const SLIDE_SLOPE_ACCEL: float = 22.0 # Gravity projected along the floor slope
-const SLIDE_UPHILL_FRICTION: float = 3.0 # Uphill bleeds much faster than downhill gains
-const SLIDE_STEER_RATE: float = 60.0 # Degrees per second the locked slide direction may turn
+const SLIDE_SLOPE_ACCEL: float = 22.0
+const SLIDE_UPHILL_FRICTION: float = 3.0
+const SLIDE_STEER_RATE: float = 60.0
 const SLIDE_MAX_SPEED: float = MAX_SPEED * 1.75
-const SLIDE_JUMP_GRACE: float = 1.0 # Seconds of low air friction after jumping out of a slide
-# Running is already pinned at MAX_SPEED, so a slide has to push you above that cap before
-# the friction suppression is worth anything. Multiplicative, so chains compound but the
-# gain per link shrinks as it approaches SLIDE_MAX_SPEED.
-const SLIDE_ENTRY_BOOST: float = 1.5 # Speed multiplier when opening a slide from a run
-const SLIDE_CHAIN_BOOST: float = 1.15 # Smaller multiplier when re-sliding out of a slide jump
-const SLIDE_CHAIN_WINDOW: float = 0.5 # Seconds after a slide jump that still counts as a chain
-# Above MAX_SPEED the normal add_speed is clamped to zero, so air control has to redirect
-# momentum rather than add to it - otherwise a fast chain is stuck flying in a straight line.
-const AIR_STEER_RATE: float = 180.0 # Degrees per second of air steering while above the run cap
-const AIR_JUMP_REDIRECT_KEEP: float = 0.85 # Speed kept when an air jump re-aims your momentum
+const SLIDE_JUMP_GRACE: float = 1.0
+const SLIDE_ENTRY_BOOST: float = 1.5
+const SLIDE_CHAIN_BOOST: float = 1.15
+const SLIDE_CHAIN_WINDOW: float = 0.5
+const AIR_STEER_RATE: float = 180.0
+const AIR_JUMP_REDIRECT_KEEP: float = 0.85
 
-const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to target. 1-10
-const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
+const AIM_ASSIST_STRENGTH_COEFFICIENT = 4
+const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8
 const AIM_ASSIST_MAX_RANGE = 50
 
 var max_speed: float = MAX_SPEED
@@ -252,6 +260,8 @@ func _ready():
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
+	
+	spin_cooldown_finished.connect(_spin_ready)
 
 	GameManager.cheat_godmode_toggle.connect(func(is_invincible: bool): health_component.enabled = !is_invincible)
 
@@ -538,6 +548,13 @@ func _physics_process(delta):
 
 	if aim_assist_ray_boss_check.is_colliding():
 		last_look_enemy_target = aim_assist_ray_boss_check.get_collider()
+	
+	if GameManager.CHEAT_spin_cost == GameManager.DebugSpinCost.COOLDOWN:
+		if spin_cooldown_active:
+			spin_cooldown_timer += delta
+			if spin_cooldown_timer >= spin_cooldown_time:
+				spin_cooldown_timer = 0.0
+				spin_cooldown_active = false
 
 
 func update_ammo_counter_ui() -> void:
@@ -705,6 +722,7 @@ func create_jump_dust_ring():
 	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
 	dust_ring_inst.activate()
 
+
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
 	dash_disabled = true
@@ -712,6 +730,10 @@ func stun(time: float) -> void:
 	await get_tree().create_timer(time).timeout
 	max_speed = MAX_SPEED
 	dash_disabled = false
+
+
+func _spin_ready() -> void:
+	current_gun.highlight_equipped_barrels()
 
 
 func spin_reload() -> void:
@@ -1170,11 +1192,26 @@ func get_barrel_sprite_screen_positions() -> Array[Vector2]:
 	return sprite_positions
 
 
+func check_spin_cooldown() -> bool:
+	if spin_cooldown_active:
+		return false
+	else:
+		spin_cooldown_active = true
+		return true
+
+
 func spin_barrels() -> void:
-	if current_gun.installed_barrels == [null, null, null] or current_gun.is_reloading or current_gun.is_spinning:
+	if current_gun.installed_barrels == [null, null, null] or current_gun.is_reloading or current_gun.is_spinning or current_gun.is_jammed:
 		return
-	# Check if we have enough chips
-	if GameManager.purchase_reroll():
+	
+	var check_func: Callable
+	match GameManager.CHEAT_spin_cost:
+		GameManager.DebugSpinCost.CHIP_COST:
+			check_func = GameManager.purchase_reroll
+		GameManager.DebugSpinCost.COOLDOWN:
+			check_func = check_spin_cooldown
+	
+	if check_func.call():
 		cash_in_luck()
 		current_gun.spin_all_barrels()
 		GameManager.player.player_ui.start_heal_flash()

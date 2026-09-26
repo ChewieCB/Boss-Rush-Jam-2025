@@ -234,7 +234,9 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 	player.current_gun.gun_shot.connect(_check_for_reload_tutorial)
 	player.dash_disabled = true
 	player.max_air_jump = 0
+	player.current_gun.cooldown_disabled = true
 	player.current_gun.equip_active()
+	player.stat_ui._spin_cooldown_empty()
 	player.stat_ui.show_all_ui()
 
 	boss.state_chart.send_event("start_tutorial_arena_1")
@@ -429,6 +431,8 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	# Auto-equip the barrel onto the gun
 	player.gun.cancel_reload()
 	GameManager.equip_barrel(barrel_data.barrel_id)
+	player.current_gun.cooldown_disabled = false
+	player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
 
 	# Force effect to non-electric and 1st spin to electric
 	await player.current_gun.recheck_installed_barrels()
@@ -447,7 +451,7 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	# TODO - modulate coloured mesh around box
 	#
 	# Trigger spin tutorial prompt
-	GameManager.is_free_reroll = true
+	#GameManager.is_free_reroll = true
 	show_tutorial_panel(tutorial_6_trigger_spin)
 	
 	await player.current_gun.barrel_spin_started

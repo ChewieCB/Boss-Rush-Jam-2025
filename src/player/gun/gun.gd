@@ -8,6 +8,8 @@ signal spin_anim_trigger
 signal magazine_size_changed(current_ammo: int, new_mag_size: int)
 signal full_clip_reload_started
 signal gun_reloaded
+signal jam_cleared
+signal spin_anim_finished
 
 signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
 signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
@@ -58,8 +60,6 @@ var muzzle_flash_sprite: Sprite3D
 @export var barrel_jam_mat: StandardMaterial3D
 @export var jam_time: float = 0.6
 var barrel_cached_materials: Array[StandardMaterial3D] = []
-
-
 var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 @onready var effect_icons_viewport: SubViewport = $EffectIconsViewport
@@ -93,7 +93,6 @@ var _barrel_materials: Array[StandardMaterial3D] = []
 @export var sfx_shotgun_shell_reload: Array[AudioStream]
 @export_subgroup("SMG")
 @export_subgroup("Rifle")
-
 
 # Init gun stat values
 const BASE_DAMAGE: int = 20
@@ -152,7 +151,12 @@ var can_fire: bool = true
 var is_reloading: bool = false
 var is_reload_disabled: bool = false
 var is_spinning: bool = false
-var is_jammed: bool = false
+var is_jammed: bool = false:
+	set(value):
+		is_jammed = value
+		if is_jammed == false:
+			jam_cleared.emit()
+		
 var time_since_last_shot: float = 0.0
 
 var installed_barrels: Array[SpinBarrel] = [null, null, null]
@@ -191,11 +195,11 @@ const BULLET_SPAWN_POS_VARIATION = 10
 const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 var current_reload_anim_time: float
+var cooldown_disabled: bool = false
 
 
 func _ready() -> void:
-	LoadingHandler.loaded_seamless.connect(equip_active)
-	ScreenTransition.transition_midpoint.connect(equip_active)
+	ScreenTransition.transition_midpoint_in.connect(equip_active)
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
@@ -240,14 +244,6 @@ func _process(delta: float) -> void:
 
 
 func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip_animation: bool = false) -> void:
-	# DEBUG:
-	# enum GunFrameIdEnum {
-	#	NONE,
-	#	DEFAULT,
-	#	SHOTGUN,
-	#	SMG,
-	#	SNIPER
-	#}
 	var flare_sprites = [null, null, shotgun_flare_sprite, smg_flare_sprite, rifle_flare_sprite]
 	var flash_sprites = [null, null, shotgun_flash_sprite, smg_flash_sprite, rifle_flash_sprite]
 	barrel_flare_sprite = flare_sprites[frame_id]
@@ -263,15 +259,13 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip
 		idle_frame_state.travel(idle_state)
 	
 	anim_tree["parameters/elemental_state/transition_request"] = frame
-	#anim_tree["parameters/elemental_%s/playback" % [frame]].travel("%s_equip" % [element])
-	#anim_tree["parameters/elemental_add/add_amount"] = 1.0
 
 
 func set_stat_from_gun_frame() -> void:
 	var current_frame: GunFrameResource = GameManager.equipped_gun_frame
 	if current_frame.frame_id == GunFrameResource.GunFrameIdEnum.NONE:
 		return
-
+	
 	base_damage = current_frame.base_damage
 	base_projectile_amount = current_frame.base_projectile_amount
 	base_firerate = current_frame.base_firerate
@@ -292,7 +286,7 @@ func set_stat_from_gun_frame() -> void:
 			barrel.get_active_effect().on_effect_set()
 	reload_no_anim()
 	set_frame_art(current_frame.frame_id)
-
+	
 	if current_frame.frame_id != GunFrameResource.GunFrameIdEnum.NONE:
 		if LoadingHandler.skip_equip_anim:
 			play_equip_anim(current_frame.frame_id)
@@ -300,7 +294,7 @@ func set_stat_from_gun_frame() -> void:
 			#play_active_anim(current_frame.frame_id)
 		else:
 			play_equip_anim(current_frame.frame_id)
-
+	
 	LoadingHandler.skip_equip_anim = false
 
 
@@ -499,6 +493,9 @@ func play_active_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -
 
 func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
 	_play_anim_cancel("equip", frame_id, spin_all_barrels)
+	if not cooldown_disabled:
+		await spin_anim_finished
+		GameManager.player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
 
 
 func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
@@ -725,18 +722,42 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel_spin_started.emit(barrel, barrel_idx)
 
 
+func _highlight_barrel(barrel_idx: int) -> void:
+	var barrel = installed_barrels[barrel_idx]
+	if barrel == null:
+		return
+	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
+	state_machine.travel("glow")
+
+
+func highlight_equipped_barrels() -> void:
+	if is_jammed:
+		await jam_cleared
+	
+	var spin_idx: int = 0
+	for barrel in installed_barrels:
+		if barrel == null:
+			spin_idx += 1
+			continue
+		# Optional delay between each barrel spinning
+		await get_tree().create_timer(0.1).timeout
+		_highlight_barrel(spin_idx)
+		spin_idx += 1
+
+
 func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	reset_modifier(true)
 
 	var tween := get_tree().create_tween()
-	for i in installed_barrels.size():
+	var installed_count: int = installed_barrels.size()
+	for i in installed_count:
 		if installed_barrels[i] == null:
 			continue
 		tween.tween_callback(_stop_barrel.bind(i)).set_delay(delay_offset * i)
 	tween.tween_callback(func():
 		is_spinning = false
 		can_fire = true
-		await get_tree().process_frame
+		spin_anim_finished.emit()
 	)
 	
 	# TODO - wait until all anims have finished then set viewport render update to ONCE
@@ -1014,6 +1035,9 @@ func crit_damage(_damage: int) -> void:
 	pass
 	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
 	#SoundManager.play_sound(TEMP_crit, "Gun")
+
+func play_crit_sfx() -> void:
+	SoundManager.play_sound(TEMP_crit, "Gun")
 
 
 #func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
@@ -1353,6 +1377,10 @@ func _remove_icon_jam_overlay(idx: int) -> void:
 	if _cached_mat:
 		_cached_mat.next_pass = null
 		barrel_icon_meshes[idx].set_surface_override_material(0, _cached_mat)
+
+
+func spark_barrel(idx: int) -> void: 
+	barrel_sparks[idx].restart()
 
 
 func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:
