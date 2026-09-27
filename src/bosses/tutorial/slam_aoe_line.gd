@@ -120,6 +120,7 @@ func _on_wave_collision(
 				return
 			has_hit_player = true
 			if body.is_dashing:
+				body.health_component.block_damage(fired_by.global_position)
 				SoundManager.play_sound(sfx_flame_wall_dashed.pick_random(), "SFX")
 				InputHelper.rumble_small()
 				# Disable collision to prevent double-hits
