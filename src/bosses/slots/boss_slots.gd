@@ -384,14 +384,12 @@ func _on_died() -> void:
 	death_torso_rigid.visible = true
 	death_torso_rigid.apply_central_impulse(Vector3.DOWN * 15.0)
 	
-	drop_barrel()
-	
 	var tween = get_tree().create_tween()
 	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 
 	await death_anim_finished
-	await get_tree().create_timer(10.0, false).timeout
 	await boss_death_slow_mo()
+	defeated.emit(self)
 
 
 func _death_explosion() -> void:

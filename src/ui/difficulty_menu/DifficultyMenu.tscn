@@ -580,18 +580,13 @@ theme_override_constants/separation = 80
 [node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 locked = false
-cost = 2000
 purchased = true
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-cost = 2000
-purchased = false
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
-cost = 2000
-purchased = false
 
 [node name="NotEnoughChipTimer" type="Timer" parent="."]
 wait_time = 3.0

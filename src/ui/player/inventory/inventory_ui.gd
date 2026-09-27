@@ -322,7 +322,7 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	
 	if item_ui.is_locked:
-		barrel_info_region.set_barrel_overview_data(data, true)
+		barrel_info_region.set_barrel_overview_data(data, true, data.locked_for_boss)
 		input_prompt_accept.modulate = Color("#4d4d4d")
 		return
 	
@@ -406,16 +406,15 @@ func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false
 	if data:
 		barrel_info_region.populate_detail_circle_ui(data)
 		barrel_info_region.set_effect_detail_data(0)
-		barrel_info_region.set_barrel_overview_data(data, is_locked)
 		
 		if barrel_info_region.single_effect_detail.visible and not is_locked:
 			barrel_info_region.show_effect_detail()
 		else:
-			barrel_info_region.show_barrel_overview(true, is_locked)
+			barrel_info_region.show_barrel_overview(true, is_locked, data.locked_for_boss, data)
 	else:
 		if current_selected_item_ui:
 			return
-		barrel_info_region.show_barrel_overview(false, is_locked)
+		barrel_info_region.show_barrel_overview(false, is_locked, false)
 
 
 func update_gun_frame_info(data: GunFrameResource = null, is_locked: bool = false) -> void:

@@ -550,7 +550,6 @@ func _on_player_death() -> void:
 		boss.velocity = Vector3.ZERO
 		boss.taunt()
 		boss.cleanup_shock_hazards()
-		win_ui.lose()
 		show_end_panel()
 	else:
 		# Put the boss in a passive state while we play the tutorial
@@ -653,19 +652,17 @@ func play_vo_with_captions(sfx_stream: AudioStream, caption_text: String) -> voi
 	return
 
 
-func show_end_panel() -> void:
+func show_end_panel(is_win: bool = false) -> void:
 	boss.cleanup_pools.call_deferred()
 	
 	LuckHandler.enabled = false
 	win_ui.visible = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
-	await tween.finished
-	await get_tree().create_timer(2.5, false).timeout
-	tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	await tween.finished
-
+	if is_win:
+		await win_ui.win(boss.barrel_to_drop)
+		unlock_boss_barrel(boss.barrel_to_drop)
+	else:
+		await win_ui.lose()
+	
 	# TODO - have the player respawn at the boss fight, maybe load TUTORIAL_BOSS_ONLY instead?
 	LoadingHandler.start_loading(
 		LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
@@ -697,7 +694,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 
 	# TODO - re-apply this when we re-visit the tutorial boss
 	#reward_bet_money()
-	show_end_panel()
+	show_end_panel(true)
 
 
 func _check_for_reload_tutorial() -> void:

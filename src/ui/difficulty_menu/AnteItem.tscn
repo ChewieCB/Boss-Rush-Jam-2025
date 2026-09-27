@@ -28,8 +28,6 @@ button = NodePath("VBoxContainer/AnteItem/Button")
 currency_ui = NodePath("VBoxContainer/AnteLabelContainer/CurrencyUI")
 currency_label = NodePath("VBoxContainer/AnteLabelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer2/CurrencyLabel")
 locked = true
-cost = null
-purchased = null
 sfx_select_ante = ExtResource("2_mnmu4")
 sfx_purchase = ExtResource("3_ln6kn")
 sfx_too_expensive = ExtResource("4_fq8ri")
@@ -62,7 +60,6 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 30
-text = "ANTE 1: ANTE NAME HERE"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -147,7 +144,6 @@ grow_vertical = 2
 flat = true
 
 [node name="LockedOverlay" type="ColorRect" parent="VBoxContainer/AnteItem"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -183,6 +179,7 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="DescriptionOverlay" type="MarginContainer" parent="VBoxContainer/AnteItem"]
+visible = false
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 1
 anchors_preset = 10
@@ -281,7 +278,7 @@ size_flags_horizontal = 8
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 24
-text = "10,000"
+text = "2000"
 horizontal_alignment = 1
 vertical_alignment = 1
 

@@ -38,6 +38,30 @@ func _input(event: InputEvent) -> void:
 			input_prompt_cancel.animate()
 
 
+func open() -> void:
+	super()
+	var new_unlock: BarrelDataResource = GameManager.newly_unlocked_barrel
+	if new_unlock:
+		if new_unlock not in current_inventory:
+			return
+		# If we've unlocked a new barrel, find the barrel id in the inventory, and play an animation to unlock it
+		var anim_slot = current_inventory.find(new_unlock)
+		for ui in shop_barrel_container.get_children():
+			if ui.item_ui.data == new_unlock:
+				ui.item_ui.boss_locked_panel.visible = true
+				ui.item_ui.is_locked = true
+				ui.item_ui.is_disabled = false
+				_desaturate_siblings(ui)
+				ui.grab_focus()
+				SoundManager.play_sound(sfx_purchase, "UI")  # TODO - add unlock specific sound
+				await ui.item_ui.unlock_anim()
+				GameManager.newly_unlocked_barrel = null
+				_reset_sibling_saturation(ui)
+				ui.init(self, ui.item_ui.data)
+				ui.grab_focus()
+				return
+
+
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = false):
 	if not visible and not forced:
 		return
@@ -212,7 +236,8 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 
 	if _ui.is_empty or _ui.is_locked:
 		return
-
+	
+	barrel_info_region.barrel_data = data
 	barrel_info_region.show_effect_detail()
 
 	current_selected_item_ui = _ui

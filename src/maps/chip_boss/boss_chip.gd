@@ -89,7 +89,6 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		#await boss.chiptopede_emerges
 		## music_playback.switch_to_clip(3)
 	#else:
-	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	
 	if not boss.boss_id in GameManager.bosses_defeated:
@@ -98,7 +97,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
 	reward_bet_money()
-	show_end_panel()
+	show_end_panel(true)
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:

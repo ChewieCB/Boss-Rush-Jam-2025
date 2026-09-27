@@ -20,5 +20,7 @@ func init(_parent_ui: InventoryUI, _data: BarrelDataResource, _is_equipped: bool
 	price_label.text = str(_data.barrel_cost)
 	if _data.barrel_cost > GameManager.player_currency:
 		item_ui.is_disabled = true
+	if _data.locked_for_boss and GameManager.boss_barrels_unlocked[_data.boss_id] == 0:
+		item_ui.is_locked = true
 	for elem in [price_icon, price_label]:
 		elem.modulate = Color.DIM_GRAY if item_ui.is_disabled else Color.WHITE

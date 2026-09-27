@@ -53,6 +53,7 @@ var intro_drop_landed_y: float = 0.0
 @export var sfx_tutorial_end_taunts: Array[AudioStream]
 @export var tutorial_end_taunt_captions: Array[String]
 #
+@export var tutorial_barrel: BarrelDataResource
 @export var sfx_tutorial_barrel: Array[AudioStream]
 @export var tutorial_barrel_captions: Array[String]
 
@@ -374,8 +375,8 @@ func _on_died() -> void:
 		state_chart.send_event("deactivate")
 		anim_tree["parameters/mechanic_attack_states/conditions/dead"] = true
 		await death_anim_finished
-		drop_barrel()
 		await boss_death_slow_mo()
+		defeated.emit(self)
 
 
 func cleanup_shock_hazards() -> void:
@@ -385,6 +386,10 @@ func cleanup_shock_hazards() -> void:
 
 func throw_tutorial_barrel() -> void:
 	anim_player.play("elevator_boss/throw_barrel")
+
+
+func drop_tutorial_barrel(pos: Vector3) -> void:
+	drop_barrel(pos, tutorial_barrel)
 
 
 func _on_barrel_collected(data: BarrelDataResource) -> void:

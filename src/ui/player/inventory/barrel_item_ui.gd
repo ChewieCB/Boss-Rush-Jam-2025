@@ -3,6 +3,8 @@ class_name BarrelItemUI
 
 @export var spin_value_label: RichTextLabel
 @export var locked_panel: Control
+@export var boss_locked_panel: Control
+@export var boss_unlock_particles: GPUParticles2D
 
 
 func _ready() -> void:
@@ -16,6 +18,7 @@ func empty_slot() -> void:
 	texture = null
 	is_locked = false
 	locked_panel.visible = false
+	boss_locked_panel.visible = false
 	is_equipped = false
 	is_purchased = false
 	is_empty = true
@@ -23,6 +26,18 @@ func empty_slot() -> void:
 	button.text = "Equip Roller"
 	spin_value_label.text = ""
 	spin_value_label.visible = false
+
+
+func unlock_anim() -> void:
+	boss_unlock_particles.restart()
+	var tween = get_tree().create_tween()
+	tween.tween_property(boss_locked_panel, "modulate:a", 0.0, boss_unlock_particles.lifetime)
+	tween.tween_callback(
+		func(): 
+			boss_locked_panel.visible = false
+			boss_locked_panel.modulate.a = 1.0
+	)
+	await boss_unlock_particles.finished
 
 
 func deselect() -> void:
@@ -42,6 +57,7 @@ func set_barrel_data(_data: BarrelDataResource, _is_equipped: bool = false, _is_
 	
 	is_locked = data.locked_for_demo
 	locked_panel.visible = data.locked_for_demo
+	boss_locked_panel.visible = data.locked_for_boss and GameManager.boss_barrels_unlocked[data.boss_id] == 0
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	is_empty = false

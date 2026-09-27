@@ -154,6 +154,7 @@ func _on_wave_collision(
 ) -> void:
 		if body is Player:
 			if body.is_dashing:
+				body.health_component.block_damage(fired_by.global_position)
 				SoundManager.play_sound(sfx_flame_wall_dashed.pick_random(), "SFX")
 				InputHelper.rumble_small()
 				_end_wall()

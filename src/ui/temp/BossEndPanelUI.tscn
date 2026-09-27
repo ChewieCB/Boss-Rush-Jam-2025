@@ -1,10 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://bboeh48xujyik"]
+[gd_scene load_steps=18 format=3 uid="uid://bboeh48xujyik"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="1_75thx"]
+[ext_resource type="Texture2D" uid="uid://brufsqhjciuy7" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border5.png" id="2_3bcnb"]
 [ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="2_rfed8"]
-[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="2_tbhyd"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="2_ss6py"]
 [ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="4_okr4h"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="5_640q8"]
+[ext_resource type="Texture2D" uid="uid://dlv6wfbrinq53" path="res://src/player/barrel/resource/sprite/pure_gamble.png" id="6_lmftb"]
+[ext_resource type="Texture2D" uid="uid://c8ldthsl3pjtx" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border1.png" id="6_t0dye"]
+[ext_resource type="FontFile" uid="uid://d0cj5y3xr0366" path="res://assets/fonts/namesake-nf/NamesakeNF.otf" id="7_7jxf6"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="8_4peuf"]
 
 [sub_resource type="Theme" id="Theme_5idyq"]
 default_font = ExtResource("2_rfed8")
@@ -17,6 +22,48 @@ texture_margin_right = 16.0
 region_rect = Rect2(0, 0, 93.7968, 22)
 modulate_color = Color(0.901961, 0.776471, 0, 1)
 
+[sub_resource type="Gradient" id="Gradient_rck1n"]
+offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
+colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d31q3"]
+gradient = SubResource("Gradient_rck1n")
+
+[sub_resource type="Curve" id="Curve_1i6e0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_jpoiq"]
+curve = SubResource("Curve_1i6e0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o66qy"]
+lifetime_randomness = 0.39
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(128, 128, 1)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 20.0
+initial_velocity_max = 40.0
+angular_velocity_min = -45.0
+angular_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = -2.23517e-06
+radial_accel_min = 100.0
+radial_accel_max = 140.0
+tangential_accel_min = -117.82
+tangential_accel_max = 64.58
+scale_min = 0.1
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_jpoiq")
+color_ramp = SubResource("GradientTexture1D_d31q3")
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 1
+
 [node name="BossDefeatedUI" type="Control"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
@@ -27,8 +74,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_75thx")
+sfx_unlock = ExtResource("2_ss6py")
 
 [node name="PanelContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(0, 423)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -51,7 +100,7 @@ color = Color(0, 0, 0, 0.72549)
 [node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 2
-texture = ExtResource("2_tbhyd")
+texture = ExtResource("2_3bcnb")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -73,9 +122,10 @@ mouse_filter = 2
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(0.902281, 0.776745, 0, 1)
 theme_override_fonts/normal_font = ExtResource("4_okr4h")
 bbcode_enabled = true
-text = "[center]Floor Cleared[/center]"
+text = "[center]Boss Defeated[/center]"
 fit_content = true
 scroll_active = false
 
@@ -90,20 +140,92 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/separator = SubResource("StyleBoxTexture_vbj68")
 
-[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BossLockedBarrelOverlay" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="WinLabelSubHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay"]
 layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = -32
+
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 96
+
+[node name="UnlockParticles" type="GPUParticles2D" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer2"]
+position = Vector2(160, 96)
+emitting = false
+amount = 170
+process_material = SubResource("ParticleProcessMaterial_o66qy")
+texture = ExtResource("8_4peuf")
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.81
+
+[node name="Panel" type="Panel" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer2/Panel"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+z_index = 1
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_t0dye")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer2/Panel/NinePatchRect"]
+modulate = Color(0.902281, 0.776745, 0, 1)
+z_index = -1
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
 mouse_filter = 2
-theme = SubResource("Theme_5idyq")
-theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
-theme_override_fonts/normal_font = ExtResource("4_okr4h")
-theme_override_font_sizes/normal_font_size = 96
+texture = ExtResource("6_lmftb")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 96
+theme_override_constants/margin_top = 48
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = -2
+theme_override_fonts/bold_font = ExtResource("7_7jxf6")
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
 bbcode_enabled = true
+text = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]"
 fit_content = true
-scroll_active = false

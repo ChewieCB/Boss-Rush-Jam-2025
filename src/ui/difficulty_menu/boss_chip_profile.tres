@@ -8,4 +8,6 @@ boss_id = 5
 boss_quote = "\"Let the chips fall as they may.\""
 ante_names = Array[String](["Short Stacked", "Bomb Pot", "The Chiptopede"])
 ante_descriptions = Array[String](["[center]1x Boss Health[/center]", "[center]1.5x Boss Health[/center]", "[center]2x Boss Health[/center]"])
+ante_purchased_states = Array[bool]([true, false, false])
 boss_risk_reward_mult = 1.5
+ante_costs = Array[int]([0, 2000, 5000])

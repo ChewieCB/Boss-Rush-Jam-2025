@@ -41,5 +41,9 @@ _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String 
 			current_health -= _damage
 			player_damage.emit(_damage, _damage_pos)
 		else:
-			damage_blocked.emit(_damage_pos)
-			LuckHandler.increase_luck(10, "+10 Dodged", LuckHandler.LuckTriggerType.RARE)
+			block_damage(_damage_pos)
+
+
+func block_damage(pos: Vector3) -> void:
+	damage_blocked.emit(pos)
+	LuckHandler.increase_luck(10, "+10 Dodged", LuckHandler.LuckTriggerType.RARE)

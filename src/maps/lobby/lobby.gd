@@ -73,7 +73,7 @@ func _ready() -> void:
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
 			info_ui.text_no_resize(
-				"You've gained a barrel!",
+				"[center]You've gained a barrel![/center]",
 				"Talk to the vendor to change your loadout and buy new barrels."
 			)
 			show_panel(info_ui)
