@@ -1,13 +1,15 @@
 extends HealthComponent
 
 signal player_damage(damage: float, damage_pos: Vector3)
+# Hit landed while invincible (dash/crouch i-frames)
+signal damage_blocked(damage_pos: Vector3)
 
 func _ready() -> void:
 	super()
 	enabled = !GameManager.CHEAT_godmode
 
 
-func damage(_damage: float, _damage_pos: Vector3 = Vector3.ZERO, 
+func damage(_damage: float, _damage_pos: Vector3 = Vector3.ZERO,
 _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String = "") -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 
@@ -38,4 +40,6 @@ _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String 
 			health_changed.emit(current_health - _damage, current_health)
 			current_health -= _damage
 			player_damage.emit(_damage, _damage_pos)
-			
+		else:
+			damage_blocked.emit(_damage_pos)
+			LuckHandler.increase_luck(10, "+10 Dodged", LuckHandler.LuckTriggerType.RARE)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=92 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -42,8 +42,11 @@
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
 [ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
 [ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w verb.mp3" id="30_bfwyi"]
+[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="31_f53bv"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="31_uqkio"]
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
+[ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="32_xio04"]
+[ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="33_mlp18"]
 [ext_resource type="Script" path="res://src/components/health/health_component_player.gd" id="34_6waar"]
 [ext_resource type="PackedScene" uid="uid://di1fwsgnfbfd" path="res://src/utils/freecam/FreeCam.tscn" id="34_kq3ih"]
 [ext_resource type="PackedScene" uid="uid://by55cbg34v6j7" path="res://src/player/misc/DustRing.tscn" id="34_ph8h0"]
@@ -153,6 +156,7 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("29_5swy3")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_5swy3")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
+sfx_dodge = Array[AudioStream]([ExtResource("31_f53bv"), ExtResource("32_xio04"), ExtResource("33_mlp18")])
 sfx_purchase = ExtResource("31_uqkio")
 sfx_too_expensive = ExtResource("32_vsild")
 can_crouch_slide = true

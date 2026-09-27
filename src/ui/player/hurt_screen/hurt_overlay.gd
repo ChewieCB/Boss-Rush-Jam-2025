@@ -6,6 +6,7 @@ extends Control
 @onready var vignette: ColorRect = $LowHealthOverlay/HurtVignette
 @onready var stun_shader: ColorRect = $StunShader
 @onready var damage_dir_markers: ColorRect = $DamageDirectionMarkers
+@onready var dodge_flash: ColorRect = $DodgeFlash
 @onready var player: Player = get_parent().get_parent()
 const MAX_DAMAGE_MARKERS: int = 16
 var active_damage_markers: Array = []
@@ -18,6 +19,10 @@ var oldest_marker_idx: int = 0
 @onready var low_health_overlay: Control = $LowHealthOverlay
 
 var low_health_tween: Tween
+var dodge_flash_tween: Tween
+
+const DODGE_FLASH_IN_TIME: float = 0.03
+const DODGE_FLASH_OUT_TIME: float = 0.3
 
 
 func _ready() -> void:
@@ -45,6 +50,20 @@ func hurt(damage_pos: Vector3 = Vector3.INF) -> void:
 
 	if damage_pos != Vector3.INF:
 		add_damage_dir_marker(damage_pos)
+
+
+# Active the dodge shader effect
+func dodge() -> void:
+	if dodge_flash_tween:
+		dodge_flash_tween.kill()
+
+	dodge_flash_tween = create_tween().set_speed_scale(1 / Engine.time_scale)
+	dodge_flash_tween.tween_method(_set_dodge_flash_intensity, 0.0, 1.0, DODGE_FLASH_IN_TIME)
+	dodge_flash_tween.tween_method(_set_dodge_flash_intensity, 1.0, 0.0, DODGE_FLASH_OUT_TIME).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+
+
+func _set_dodge_flash_intensity(value: float) -> void:
+	dodge_flash.material.set_shader_parameter("intensity", value)
 
 
 func update_low_health_anim(base_alpha: float, speed: float = 1.0) -> void:

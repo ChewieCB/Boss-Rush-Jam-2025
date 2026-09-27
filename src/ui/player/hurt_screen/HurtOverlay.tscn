@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://bjaq7wtuojgjb"]
+[gd_scene load_steps=48 format=3 uid="uid://bjaq7wtuojgjb"]
 
 [ext_resource type="Script" path="res://src/ui/player/hurt_screen/hurt_overlay.gd" id="1_46sc2"]
 [ext_resource type="Shader" path="res://assets/shaders/blur_vignette.gdshader" id="1_ovsjd"]
@@ -19,6 +19,16 @@
 [ext_resource type="Texture2D" uid="uid://b48r73f8roulp" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay V3.png" id="12_vts24"]
 [ext_resource type="Texture2D" uid="uid://dsmqmuys5r4j4" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Smear Overlay V2.png" id="17_o31l4"]
 [ext_resource type="Texture2D" uid="uid://byg2lf8dx8p3n" path="res://src/ui/player/hurt_screen/assets/screen_overlays/blurry Blood Smear Overlay V3.png" id="18_do8a7"]
+[ext_resource type="Shader" path="res://src/ui/player/hurt_screen/dodge_flash.gdshader" id="19_dgfls"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dgfls"]
+shader = ExtResource("19_dgfls")
+shader_parameter/intensity = 0.0
+shader_parameter/edge_color = Color(0, 0.944863, 1, 1)
+shader_parameter/edge_glow = 0.55
+shader_parameter/aberration_strength = 0.018
+shader_parameter/inner_radius = 0.35
+shader_parameter/outer_radius = 1.25
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_42wcf"]
 shader = ExtResource("2_lhucw")
@@ -480,6 +490,16 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_46sc2")
 hurt_blood_textures = Array[Texture]([ExtResource("4_nh1ch"), ExtResource("3_syllw"), ExtResource("4_fxgpc"), ExtResource("5_1dlhj"), ExtResource("6_mprmg"), ExtResource("7_bmyds"), ExtResource("8_uy1th"), ExtResource("9_r0gl4"), ExtResource("10_gqxip"), ExtResource("3_qnulk"), ExtResource("12_vts24"), ExtResource("5_1hqwy")])
+
+[node name="DodgeFlash" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_dgfls")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="DamageDirectionMarkers" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_42wcf")
