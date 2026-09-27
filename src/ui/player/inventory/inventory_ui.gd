@@ -406,7 +406,6 @@ func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false
 	if data:
 		barrel_info_region.populate_detail_circle_ui(data)
 		barrel_info_region.set_effect_detail_data(0)
-		barrel_info_region.set_barrel_overview_data(data, is_locked, data.locked_for_boss)
 		
 		if barrel_info_region.single_effect_detail.visible and not is_locked:
 			barrel_info_region.show_effect_detail()
