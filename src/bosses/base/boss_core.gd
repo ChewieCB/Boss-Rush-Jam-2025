@@ -559,9 +559,10 @@ func play_positional_sound(stream: AudioStream) -> AudioStreamPlayer3D:
 	return _player
 
 
-func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
+func drop_barrel(target_pos: Vector3 = target.global_position, barrel_data: BarrelDataResource = barrel_to_drop) -> void:
+	# DEPRECATED
 	# Check if we've already given the player this barrel
-	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
+	if barrel_data in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
 		defeated.emit(self)
@@ -574,7 +575,7 @@ func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
 
 	# Instance a pickup object with the barrel data
 	var barrel = barrel_pickup_scene.instantiate()
-	barrel.data = barrel_to_drop
+	barrel.data = barrel_data
 
 	# Calculate a path for the barrel to move
 	var collider_height: float
@@ -915,8 +916,8 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	await death_anim_finished
-	drop_barrel()
 	await boss_death_slow_mo()
+	defeated.emit(self)
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:

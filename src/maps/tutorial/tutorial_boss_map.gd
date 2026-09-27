@@ -658,13 +658,15 @@ func show_end_panel() -> void:
 	
 	LuckHandler.enabled = false
 	win_ui.visible = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
-	await tween.finished
-	await get_tree().create_timer(2.5, false).timeout
-	tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	await tween.finished
+	await win_ui.win(boss.barrel_to_drop)
+	unlock_boss_barrel(boss.barrel_to_drop)
+	#var tween = get_tree().create_tween()
+	#tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	#await tween.finished
+	#await get_tree().create_timer(2.5, false).timeout
+	#tween = get_tree().create_tween()
+	#tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
+	#await tween.finished
 
 	# TODO - have the player respawn at the boss fight, maybe load TUTORIAL_BOSS_ONLY instead?
 	LoadingHandler.start_loading(

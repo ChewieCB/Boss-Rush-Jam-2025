@@ -44,7 +44,7 @@ func set_barrel_data(_data: BarrelDataResource, _is_equipped: bool = false, _is_
 	
 	is_locked = data.locked_for_demo
 	locked_panel.visible = data.locked_for_demo
-	boss_locked_panel.visible = data.locked_for_boss
+	boss_locked_panel.visible = data.locked_for_boss and GameManager.boss_barrels_unlocked[data.boss_id] == 0
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	is_empty = false

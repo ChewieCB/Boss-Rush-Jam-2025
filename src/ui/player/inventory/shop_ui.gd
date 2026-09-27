@@ -212,7 +212,8 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 
 	if _ui.is_empty or _ui.is_locked:
 		return
-
+	
+	barrel_info_region.barrel_data = data
 	barrel_info_region.show_effect_detail()
 
 	current_selected_item_ui = _ui

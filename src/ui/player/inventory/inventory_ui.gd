@@ -411,7 +411,7 @@ func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false
 		if barrel_info_region.single_effect_detail.visible and not is_locked:
 			barrel_info_region.show_effect_detail()
 		else:
-			barrel_info_region.show_barrel_overview(true, is_locked, data.locked_for_boss)
+			barrel_info_region.show_barrel_overview(true, is_locked, data.locked_for_boss, data)
 	else:
 		if current_selected_item_ui:
 			return

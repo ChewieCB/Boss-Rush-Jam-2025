@@ -81,11 +81,11 @@ func _show_ui(show_circle: bool, show_barrel: bool, show_effect: bool) -> void:
 	refresh_ui()
 
 
-func show_barrel_overview(show_content: bool = true, is_locked: bool = false, is_locked_boss: bool = false) -> void:
+func show_barrel_overview(show_content: bool = true, is_locked: bool = false, is_locked_boss: bool = false, data: BarrelDataResource = null) -> void:
 	_show_ui(false, true, false)
 	barrel_overview_detail.visible = show_content
 	locked_barrel_overlay.visible = is_locked and !is_locked_boss
-	boss_locked_barrel_overlay.visible = is_locked_boss
+	boss_locked_barrel_overlay.visible = is_locked_boss and GameManager.boss_barrels_unlocked[data.boss_id] == 0 if data else true
 	active_detail_icon = null
 	active_effect_detail_idx = 0
 
@@ -108,12 +108,12 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false,
 			6:
 				boss_name = "The Mechanic"
 		boss_locked_overlay_label.text = "[center][b]Unlock by defeating\n%s[/b][/center]" % [boss_name]
-		show_barrel_overview(true, true, true)
+		show_barrel_overview(true, true, true, data)
 	
 	elif is_locked:
 		for label in barrel_effect_list_labels:
 			label.visible = false
-		show_barrel_overview(true, true, false)
+		show_barrel_overview(true, true, false, data)
 		return
 
 	for i in range(barrel_info_icon_effect_pool.size()):

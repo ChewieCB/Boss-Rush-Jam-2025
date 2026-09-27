@@ -7559,6 +7559,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623195, 0, -2.3356)
 [node name="UI" parent="Vendor" index="5"]
 process_mode = 4
 
+[node name="ShopUI" parent="Vendor/UI" index="0"]
+has_custom_inventory = false
+current_inventory = Array[Resource]([])
+
 [node name="Workbench" parent="." instance=ExtResource("18_dv650")]
 transform = Transform3D(-0.556629, 0, 0.830761, 0, 1, 0, -0.830761, 0, -0.556629, -0.0977012, -0.00194585, 2.12347)
 

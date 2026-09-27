@@ -116,13 +116,15 @@ func _rebake_nav() -> void:
 func show_end_panel() -> void:
 	LuckHandler.enabled = false
 	win_ui.visible = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
-	await tween.finished
-	await get_tree().create_timer(2.5).timeout
-	tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	await tween.finished
+	await win_ui.win(boss.barrel_to_drop)
+	unlock_boss_barrel(boss.barrel_to_drop)
+	#var tween = get_tree().create_tween()
+	#tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	#await tween.finished
+	#await get_tree().create_timer(2.5).timeout
+	#tween = get_tree().create_tween()
+	#tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
+	#await tween.finished
 	
 	LoadingHandler.start_loading(
 		LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
@@ -143,6 +145,11 @@ func collect_all_chips() -> void:
 		tween.tween_property(chip, "global_position", player.global_position, chip_move_time)
 
 
+func unlock_boss_barrel(barrel_data: BarrelDataResource) -> void:
+	GameManager.boss_barrels_unlocked[boss.boss_id] = 1
+	SaveManager.save_game(GameManager.chosen_slot_id)
+
+
 func _on_boss_died(_boss: BossCore = boss) -> void:
 	var tween = self.create_tween()
 	tween.tween_property(directional_light, "light_energy", 0, 1)
@@ -159,7 +166,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 	
 	reward_bet_money()
-	show_end_panel()
+	await show_end_panel()
 
 
 func _on_player_death() -> void:

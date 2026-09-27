@@ -124,6 +124,7 @@ var total_playtime = 0
 # Difficulty modifiers
 var selected_level_path: String
 var selected_boss_id: BossCore.BossIdEnum
+var boss_barrels_unlocked: Array = [0, 0, 0, 0, 0, 0, 0, 0]
 var bet_value = 0
 var reward_value = 0
 var risk_modifier_level_dict = _default_risk_modifier_level_dict()

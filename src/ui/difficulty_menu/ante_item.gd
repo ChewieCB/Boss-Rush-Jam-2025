@@ -106,6 +106,7 @@ func purchase_ante(idx: int) -> void:
 		purchased = true
 		locked = false
 		SoundManager.play_ui_sound(sfx_purchase, "UI")
+		SaveManager.save_game(GameManager.chosen_slot_id)
 		await UIUtils.animate_ui_elem_shake(self)
 		ante_purchased.emit(idx)
 	else:

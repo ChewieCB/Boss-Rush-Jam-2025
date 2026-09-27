@@ -74,6 +74,7 @@ func save_game(slot_id):
 		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
 		
 		# Boss ante tracking
+		"boss_barrels_unlocked": GameManager.boss_barrels_unlocked,
 		"ante_purchased_states": convert_resources_to_ids(ante_states, ResourceTypeEnum.BOSS_DIFFICULTY_PROFILE),
 
 		# Metadata
@@ -146,6 +147,7 @@ func load_game(slot_id):
 	GameManager.tutorial_completed = save_data.get("tutorial_completed", false)
 	
 	# Boss ante tracking
+	GameManager.boss_barrels_unlocked = save_data.get("boss_barrels_unlocked", [0, 0, 0, 0, 0, 0, 0])
 	var ante_purchased_states = save_data.get("ante_purchased_states", [])
 	for i in range(ante_purchased_states.size()):
 		var _state = ante_purchased_states[i]
