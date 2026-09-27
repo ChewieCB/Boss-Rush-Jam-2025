@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dpyj480amlor7"]
+[gd_scene load_steps=14 format=3 uid="uid://dpyj480amlor7"]
 
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_tbrlo"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_item_ui.gd" id="2_2nkrm"]
@@ -9,7 +9,49 @@
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="7_67n3m"]
 [ext_resource type="Texture2D" uid="uid://x1u3l24tpr03" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-027.png" id="8_l10ta"]
 
-[node name="BarrelItemUI" type="TextureRect" node_paths=PackedStringArray("spin_value_label", "locked_panel", "boss_locked_panel", "button", "border_selected")]
+[sub_resource type="Gradient" id="Gradient_cjphy"]
+offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
+colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 0.844366, 0.382962, 0.177323, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_t2p5s"]
+gradient = SubResource("Gradient_cjphy")
+
+[sub_resource type="Curve" id="Curve_x1f1l"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_bgxh1"]
+curve = SubResource("Curve_x1f1l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mruxh"]
+lifetime_randomness = 0.39
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(64, 64, 1)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 20.0
+initial_velocity_max = 40.0
+angular_velocity_min = -45.0
+angular_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = -2.23517e-06
+radial_accel_min = 100.0
+radial_accel_max = 140.0
+tangential_accel_min = -117.82
+tangential_accel_max = 64.58
+scale_min = 0.1
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_bgxh1")
+color_ramp = SubResource("GradientTexture1D_t2p5s")
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 1
+
+[node name="BarrelItemUI" type="TextureRect" node_paths=PackedStringArray("spin_value_label", "locked_panel", "boss_locked_panel", "boss_unlock_particles", "button", "border_selected")]
 custom_minimum_size = Vector2(100, 100)
 offset_right = 100.0
 offset_bottom = 100.0
@@ -21,8 +63,19 @@ script = ExtResource("2_2nkrm")
 spin_value_label = NodePath("CenterContainer/ReloadSpinValueLabel")
 locked_panel = NodePath("LockedPanel")
 boss_locked_panel = NodePath("BossLocked")
+boss_unlock_particles = NodePath("UnlockParticles")
 button = NodePath("Button")
 border_selected = NodePath("BorderSelected")
+
+[node name="UnlockParticles" type="GPUParticles2D" parent="."]
+position = Vector2(50, 50)
+emitting = false
+amount = 170
+process_material = SubResource("ParticleProcessMaterial_mruxh")
+texture = ExtResource("1_tbrlo")
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.9
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
@@ -124,7 +177,6 @@ mouse_filter = 2
 texture = ExtResource("7_67n3m")
 
 [node name="BossLocked" type="ColorRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

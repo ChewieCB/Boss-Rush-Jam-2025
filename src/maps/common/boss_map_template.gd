@@ -147,6 +147,7 @@ func collect_all_chips() -> void:
 
 func unlock_boss_barrel(barrel_data: BarrelDataResource) -> void:
 	GameManager.boss_barrels_unlocked[boss.boss_id] = 1
+	GameManager.newly_unlocked_barrel = barrel_data
 	SaveManager.save_game(GameManager.chosen_slot_id)
 
 

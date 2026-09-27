@@ -125,6 +125,7 @@ var total_playtime = 0
 var selected_level_path: String
 var selected_boss_id: BossCore.BossIdEnum
 var boss_barrels_unlocked: Array = [0, 0, 0, 0, 0, 0, 0, 0]
+var newly_unlocked_barrel: BarrelDataResource
 var bet_value = 0
 var reward_value = 0
 var risk_modifier_level_dict = _default_risk_modifier_level_dict()
@@ -421,6 +422,8 @@ func load_new_save_data():
 	equipped_gun_frame = starting_gun_frame
 	inventory_gun_frames = []
 	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
+	boss_barrels_unlocked = [0, 0, 0, 0, 0, 0, 0, 0]
+	newly_unlocked_barrel = null
 
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
@@ -463,6 +466,8 @@ func reset_current_save_data():
 	barrel_tutorial_shown = false
 	bosses_defeated = []
 	all_bosses_defeated = false
+	boss_barrels_unlocked = [0, 0, 0, 0, 0, 0, 0, 0]
+	newly_unlocked_barrel = null
 	victory_ui_shown = false
 	chosen_slot_id = -1
 	start_record_timestamp = 0

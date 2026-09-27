@@ -26,14 +26,14 @@ modulate_color = Color(0.901961, 0.776471, 0, 1)
 offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
 colors = PackedColorArray(1, 0.979754, 0.536224, 1, 1, 0.968976, 0.0244693, 1, 1, 0.544708, 0.0127771, 1, 1, 0.0810753, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_xtk4w"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d31q3"]
 gradient = SubResource("Gradient_rck1n")
 
 [sub_resource type="Curve" id="Curve_1i6e0"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_oa1em"]
+[sub_resource type="CurveTexture" id="CurveTexture_jpoiq"]
 curve = SubResource("Curve_1i6e0")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o66qy"]
@@ -58,8 +58,8 @@ tangential_accel_min = -117.82
 tangential_accel_max = 64.58
 scale_min = 0.1
 scale_max = 0.2
-scale_curve = SubResource("CurveTexture_oa1em")
-color_ramp = SubResource("GradientTexture1D_xtk4w")
+scale_curve = SubResource("CurveTexture_jpoiq")
+color_ramp = SubResource("GradientTexture1D_d31q3")
 collision_mode = 2
 sub_emitter_mode = 3
 sub_emitter_amount_at_collision = 1

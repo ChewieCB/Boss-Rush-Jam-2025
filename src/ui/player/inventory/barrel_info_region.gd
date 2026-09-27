@@ -85,7 +85,7 @@ func show_barrel_overview(show_content: bool = true, is_locked: bool = false, is
 	_show_ui(false, true, false)
 	barrel_overview_detail.visible = show_content
 	locked_barrel_overlay.visible = is_locked and !is_locked_boss
-	boss_locked_barrel_overlay.visible = is_locked_boss and GameManager.boss_barrels_unlocked[data.boss_id] == 0 if data else true
+	boss_locked_barrel_overlay.visible = is_locked_boss and (GameManager.boss_barrels_unlocked[data.boss_id] == 0 if data else true)
 	active_detail_icon = null
 	active_effect_detail_idx = 0
 

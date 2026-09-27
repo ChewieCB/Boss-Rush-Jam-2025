@@ -415,7 +415,7 @@ func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false
 	else:
 		if current_selected_item_ui:
 			return
-		barrel_info_region.show_barrel_overview(false, is_locked)
+		barrel_info_region.show_barrel_overview(false, is_locked, false)
 
 
 func update_gun_frame_info(data: GunFrameResource = null, is_locked: bool = false) -> void:
