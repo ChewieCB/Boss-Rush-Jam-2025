@@ -15,71 +15,56 @@ class_name InfoBox
 @export var sfx_unlock: AudioStream
 
 
-func text_no_resize(header_text: String) -> void:
-	header_label.text = "[center]%s[/center]" % [header_text]
-	unlock_container.visible = false
-
-
-func _resize_font(label: RichTextLabel) -> void:
-	var font_size = label.get_theme_font_size("normal_font_size")
-	var font = label.get_theme_font("font")
-	
-	var line := TextLine.new()
-	for i in range(max_resize_steps):
-		line.clear()
-		var created = line.add_string(label.text, font, font_size)
-		if created:
-			var text_size = line.get_line_width()
-			if text_size > floor(content_container.size.x):
-				font_size -= 1
-			else:
-				break
-		else:
-			push_warning("Could not resize label")
-	
-	label.add_theme_font_size_override("font_size", font_size)
-
-
-func show_text(header_text: String, subheader_text: String) -> void:
-	unlock_container.visible = false
-	
-	if not show_header:
-		header_label.visible = false
-		separator.visible = false
-	text_no_resize(header_text)
-	_resize_font(header_label)
-
-
-func win(barrel_data: BarrelDataResource) -> void:
-	if GameManager.boss_barrels_unlocked[barrel_data.boss_id] == 1:
-		unlock_container.visible = false
-	else:
-		unlock_container.visible = true
-		var unlock_string: String = "[i]Unlocked [wave amp=30.0 freq=3.0 connected=0][color=green][font_size=64]%s[/font_size][/color][/wave][/i]" % barrel_data.barrel_name
-		unlock_label.text = unlock_string
-		unlock_icon.texture = barrel_data.barrel_image
-	
+func anim_fade_in(time: float) -> void:
 	var tween = get_tree().create_tween()
-	tween.tween_property(self, "modulate", Color(Color.WHITE, 1.0), 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	await tween.finished
-	
-	if unlock_container.visible:
-		particles.restart()
-		SoundManager.play_sound(sfx_unlock, "UI")
-	
-	await get_tree().create_timer(4.5).timeout
-	
-	tween = get_tree().create_tween()
-	tween.tween_property(self, "modulate", Color(Color.WHITE, 0.0), 0.6).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "modulate", Color(Color.WHITE, 1.0), time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await tween.finished
 	
 	return
 
 
+func anim_fade_out(time: float) -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "modulate", Color(Color.WHITE, 0.0), time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	
+	return
+
+
+func win(barrel_data: BarrelDataResource) -> void:
+	unlock_icon.texture = barrel_data.barrel_image
+	var unlock_string: String = ""
+	if GameManager.boss_barrels_unlocked[barrel_data.boss_id] == 0:
+		unlock_string = "[i]Unlocked [wave amp=30.0 freq=3.0 connected=0][color=green][font_size=64]%s[/font_size][/color][/wave][/i]" % barrel_data.barrel_name
+		unlock_icon.modulate = Color.WHITE
+	else:
+		unlock_string = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]" 
+		unlock_icon.modulate = Color.DARK_GRAY
+	
+	unlock_label.text = unlock_string
+	unlock_container.visible = true
+	
+	await anim_fade_in(0.6)
+	
+	if unlock_container.visible:
+		particles.restart()
+		SoundManager.play_sound(sfx_unlock, "UI")
+	
+	await get_tree().create_timer(4.5).timeout
+	await anim_fade_out(0.6)
+	
+	return
+
+
 func lose(hint_text: String = "") -> void:
 	var _header_text = "[center]The House always wins[/center]"
-	var _sub_text = "[center]%s[/center]" % [hint_text]
-	text_no_resize(_header_text)
-	_resize_font(header_label)
+	header_label.text = _header_text
 	unlock_container.visible = false
+	
+	await anim_fade_in(0.6)
+	await get_tree().create_timer(2.0).timeout
+	await anim_fade_out(0.6)
+	
+	return

@@ -162,7 +162,7 @@ theme_override_constants/separation = -32
 
 [node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 64
+theme_override_constants/margin_left = 96
 
 [node name="UnlockParticles" type="GPUParticles2D" parent="PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer2"]
 position = Vector2(160, 96)
@@ -227,5 +227,5 @@ theme_override_font_sizes/italics_font_size = 48
 theme_override_font_sizes/normal_font_size = 48
 theme_override_font_sizes/bold_font_size = 48
 bbcode_enabled = true
-text = "[i]Unlocked [wave amp=30.0 freq=3.0 connected=0][color=green][font_size=64]Barrel Name[/font_size][/color][/wave][/i]"
+text = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]"
 fit_content = true

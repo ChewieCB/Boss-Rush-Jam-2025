@@ -113,11 +113,14 @@ func _rebake_nav() -> void:
 	nav_region.bake_navigation_mesh()
 
 
-func show_end_panel() -> void:
+func show_end_panel(is_win: bool = false) -> void:
 	LuckHandler.enabled = false
 	win_ui.visible = true
-	await win_ui.win(boss.barrel_to_drop)
-	unlock_boss_barrel(boss.barrel_to_drop)
+	if is_win:
+		await win_ui.win(boss.barrel_to_drop)
+		unlock_boss_barrel(boss.barrel_to_drop)
+	else:
+		await win_ui.lose()
 	#var tween = get_tree().create_tween()
 	#tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
 	#await tween.finished
@@ -146,9 +149,10 @@ func collect_all_chips() -> void:
 
 
 func unlock_boss_barrel(barrel_data: BarrelDataResource) -> void:
-	GameManager.boss_barrels_unlocked[boss.boss_id] = 1
-	GameManager.newly_unlocked_barrel = barrel_data
-	SaveManager.save_game(GameManager.chosen_slot_id)
+	if GameManager.boss_barrels_unlocked[boss.boss_id] != 1:
+		GameManager.boss_barrels_unlocked[boss.boss_id] = 1
+		GameManager.newly_unlocked_barrel = barrel_data
+		SaveManager.save_game(GameManager.chosen_slot_id)
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
@@ -158,7 +162,6 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 
 func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
-	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	
 	if not boss.boss_id in GameManager.bosses_defeated:
@@ -167,7 +170,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 	
 	reward_bet_money()
-	await show_end_panel()
+	await show_end_panel(true)
 
 
 func _on_player_death() -> void:
