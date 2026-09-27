@@ -47,8 +47,8 @@ const player_base_stats = {
 	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
 	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
 	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
-	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
-	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.3,
+	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.3,
 	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
 	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
 	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
@@ -238,7 +238,7 @@ func _ready() -> void:
 	#await get_tree().process_frame
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
-	Input.joy_connection_changed.connect(_on_controller_connection)       
+	Input.joy_connection_changed.connect(_on_controller_connection)
 	if InputHelper.device == InputHelper.DEVICE_STEAMDECK_CONTROLLER:
 		if scaling_3d > 90.0:
 			scaling_3d = 90.0

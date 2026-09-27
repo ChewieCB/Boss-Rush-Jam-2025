@@ -14,6 +14,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var sfx_jump_air: Array[AudioStream]
 @export var sfx_dash_floor: Array[AudioStream]
 @export var sfx_dash_air: Array[AudioStream]
+@export var sfx_dodge: Array[AudioStream]
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
 
@@ -137,6 +138,10 @@ const DASH_SPEED_EASE: float = 0.4
 const DASH_ROLL_DEG: float = 7.0
 const DASH_ROLL_RECOVER_RATE: float = 6.0
 const DASH_SHAKE_TRAUMA: float = 0.15
+# Dodge = dash that iframe-ed the attack
+const DODGE_SLOWMO_TIME_SCALE: float = 0.25
+const DODGE_SLOWMO_HOLD: float = 0.2
+const DODGE_SLOWMO_RECOVER: float = 0.15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
@@ -195,6 +200,9 @@ var raw_input_dir = Vector2(0, 0):
 var input_dir = Vector2(0, 0)
 
 var last_dashed_timestamp
+var last_dodge_feel_dash_timestamp = -1
+var dodge_slowmo_tween: Tween
+var dodge_slowmo_time_scale: float = 1.0
 var current_air_jump_count: int = 0
 var slide_dir = Vector2(0, 0)
 
@@ -249,6 +257,7 @@ func _ready():
 	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.player_damage.connect(_on_player_damage)
+	health_component.damage_blocked.connect(_on_damage_blocked)
 	health_component.died.connect(_on_died)
 	health_component.is_owned_by_player = true
 
@@ -832,6 +841,42 @@ func apply_impulse_to_player(impulse_force: Vector3):
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
+
+
+func _on_damage_blocked(_damage_pos: Vector3) -> void:
+	if not check_if_has_status_effect_by_name("iframe_on_dash"):
+		return
+	# only trigger one per dash
+	if last_dodge_feel_dash_timestamp == last_dashed_timestamp:
+		return
+	last_dodge_feel_dash_timestamp = last_dashed_timestamp
+	play_dodge_vfx()
+
+
+func play_dodge_vfx() -> void:
+	hurt_overlay.dodge()
+	if not sfx_dodge.is_empty():
+		SoundManager.play_sound_with_pitch(sfx_dodge.pick_random(), randf_range(1.05, 1.2), "SFX")
+	InputHelper.rumble_small()
+	# Avoid conflict with other time scale modifier (like barrel UI viewing)
+	if Engine.time_scale != 1.0:
+		return
+
+	if dodge_slowmo_tween:
+		dodge_slowmo_tween.kill()
+	_set_dodge_slowmo_time_scale(DODGE_SLOWMO_TIME_SCALE, true)
+	dodge_slowmo_tween = create_tween().set_speed_scale(1 / Engine.time_scale)
+	dodge_slowmo_tween.tween_interval(DODGE_SLOWMO_HOLD)
+	dodge_slowmo_tween.tween_method(_set_dodge_slowmo_time_scale, DODGE_SLOWMO_TIME_SCALE, 1.0, DODGE_SLOWMO_RECOVER).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+
+
+func _set_dodge_slowmo_time_scale(value: float, force: bool = false) -> void:
+	# In case sth changed the timescale mid slowmo, we keep it other timescale
+	if not force and not is_equal_approx(Engine.time_scale, dodge_slowmo_time_scale):
+		dodge_slowmo_tween.kill()
+		return
+	Engine.time_scale = value
+	dodge_slowmo_time_scale = value
 
 
 # Camera lean and shake on dash. dir is the local input dir: x = right, y = back.
