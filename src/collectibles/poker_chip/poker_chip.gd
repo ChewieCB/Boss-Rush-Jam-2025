@@ -8,11 +8,14 @@ signal finished
 @export var chance_array: Array[int] = [5, 5, 25, 35, 15, 10, 5]
 @export var sprite_array: Array[Texture2D] = []
 @export var sfx_pickup: Array[AudioStream]
+@export var sfx_spark: Array[AudioStream]
 
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var value_label_1: Label3D = $Sprite3D/Label3D
 @onready var value_label_2: Label3D = $Sprite3D/Label3D2
 @onready var col: CollisionShape3D = $CollisionShape3D
+@onready var spark_particles: GPUParticles3D = $StackSpark
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 var chosen_idx: int = -1
 var value: int = 0
@@ -130,6 +133,15 @@ func activate() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	self.freeze = false
 	self.visible = true
+
+
+func spark() -> void:
+	spark_particles.process_mode = Node.PROCESS_MODE_PAUSABLE
+	sfx_player.stream = sfx_spark.pick_random()
+	sfx_player.play()
+	spark_particles.restart()
+	await spark_particles.finished
+	spark_particles.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func deactivate(disable_process: bool = true, hide_sprite: bool = true) -> void:

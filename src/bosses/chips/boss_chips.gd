@@ -439,6 +439,9 @@ func _on_died() -> void:
 		state_chart.send_event("stop_moving")
 		state_chart.call_deferred("send_event", "deactivate")
 		_on_health_dead_state_entered()
+		for i in chip_bonus_on_kill:
+			_spawn_chip(true)
+			await get_tree().create_timer(0.1).timeout
 		# 4s delay
 		await death_anim_finished
 		# 0.2s delay
@@ -2879,7 +2882,7 @@ func _on_sticky_bomb_detonate_segment(explosion_inst: ExplosionDamageArea, segme
 		explosion_inst._on_body_entered(self, false)
 
 
-func _spawn_chip() -> void:
+func _spawn_chip(spark: bool = false) -> void:
 	if _chip_spawn_pool.size() == 0:
 		_init_chip_pool()
 		for i in range(10):
@@ -2904,6 +2907,9 @@ func _spawn_chip() -> void:
 		chip.rotate_y(randf_range(0, 2 * PI))
 		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
 		chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+	
+	if spark:
+		chip.spark()
 
 	chip_dropped.emit(chip.value)
 

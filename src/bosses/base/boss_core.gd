@@ -62,6 +62,7 @@ var cached_target: Node3D
 @export_subgroup("Health Chunk Spawning")
 @export var health_chunk_increment: float = 3.0  # Each X% health lost
 @export var chips_spawned_per_chunk: int = 3
+@export var chip_bonus_on_kill: int = 5
 var _health_chunks_claimed: int = 0
 @export_subgroup("DPS Spawning (OLD)")
 @export var chip_spawn_dps_threshold: float = 25.0
@@ -919,7 +920,7 @@ func _spawn_chip_batch(count: int, spawn_chance: float) -> void:
 		_spawn_chip()
 
 
-func _spawn_chip() -> void:
+func _spawn_chip(spark: bool = false) -> void:
 	if _chip_spawn_pool.size() == 0:
 		_init_chip_pool()
 		for i in range(10):
@@ -934,8 +935,16 @@ func _spawn_chip() -> void:
 	active_chips.append(chip)
 	chip.global_position = self.global_position
 	chip.rotate_y(randf_range(0, 2 * PI))
-	chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-	chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+	if spark:
+		chip.global_position.y += 2.0
+		chip.spark()
+		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+		chip.apply_central_force(Vector3.UP * chip_spawn_force)
+		
+	else:
+		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+		chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+	
 	
 	chip_dropped.emit(chip.value)
 
@@ -963,6 +972,8 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	await death_anim_finished
+	for i in chip_bonus_on_kill:
+		_spawn_chip(true)
 	await boss_death_slow_mo()
 	defeated.emit(self)
 

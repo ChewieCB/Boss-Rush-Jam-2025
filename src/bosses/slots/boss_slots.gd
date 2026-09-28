@@ -386,7 +386,11 @@ func _on_died() -> void:
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
-
+	
+	for i in chip_bonus_on_kill:
+		_spawn_chip(true)
+		await get_tree().create_timer(0.1).timeout
+	
 	await death_anim_finished
 	await boss_death_slow_mo()
 	defeated.emit(self)

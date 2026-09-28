@@ -375,6 +375,11 @@ func _on_died() -> void:
 		state_chart.send_event("deactivate")
 		anim_tree["parameters/mechanic_attack_states/conditions/dead"] = true
 		await death_anim_finished
+		
+		for i in chip_bonus_on_kill:
+			_spawn_chip(true)
+			await get_tree().create_timer(0.1).timeout
+		
 		await boss_death_slow_mo()
 		defeated.emit(self)
 
