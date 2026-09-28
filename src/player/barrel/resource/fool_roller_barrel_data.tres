@@ -8,7 +8,9 @@
 script = ExtResource("3_pahdn")
 barrel_id = 4
 barrel_name = "Fool Roller"
-barrel_desc = "A simple barrel with risky effects, but great rewards for skilful use."
+barrel_desc = "Effects that reward hits but punish misses.
+
+Steady your aim, push yourself to breaking point, reclaim what's yours."
 barrel_info_summary = "High risk, high reward."
 barrel_image = ExtResource("1_0ubde")
 barrel_cost = 650
@@ -16,3 +18,5 @@ barrel_prefab = ExtResource("2_gxri0")
 is_archetype_barrel = false
 reloads_before_spin = 3
 locked_for_demo = false
+locked_for_boss = false
+boss_id = -1

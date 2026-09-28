@@ -8,8 +8,10 @@
 script = ExtResource("1_wmb4n")
 barrel_id = 3
 barrel_name = "Dynamic Advantage"
-barrel_desc = "A weird mix of effects. Change things up to keep the odds in your favour."
-barrel_info_summary = "Change things up to keep the odds in your favour."
+barrel_desc = "Effects that scale the power of your build.
+
+Lay down supressing fire, increase the tempo, finish with some fireworks."
+barrel_info_summary = "Go big or go home."
 barrel_image = ExtResource("1_vp1f6")
 barrel_cost = 1558
 barrel_prefab = ExtResource("1_nrto8")

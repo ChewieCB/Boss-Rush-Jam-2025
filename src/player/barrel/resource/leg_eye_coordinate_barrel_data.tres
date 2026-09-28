@@ -8,11 +8,13 @@
 script = ExtResource("3_567sj")
 barrel_id = 44
 barrel_name = "Leg Eye Coordinate"
-barrel_desc = "Effects focus on your movement and verticality."
-barrel_info_summary = "Focus on your movement and verticality."
+barrel_desc = "???"
+barrel_info_summary = "???"
 barrel_image = ExtResource("1_khihb")
 barrel_cost = 1650
 barrel_prefab = ExtResource("2_wlqqv")
 is_archetype_barrel = false
 reloads_before_spin = 3
 locked_for_demo = true
+locked_for_boss = false
+boss_id = -1

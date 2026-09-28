@@ -8,8 +8,10 @@
 script = ExtResource("3_gceaa")
 barrel_id = 76
 barrel_name = "Careful Marskman"
-barrel_desc = "When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
-barrel_info_summary = "When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
+barrel_desc = "Effects that give you a high amount of situational control.
+
+Choose your moment to strike, buy yourself some breathing room, steer towards victory."
+barrel_info_summary = "Cool under pressure."
 barrel_image = ExtResource("1_7xvkd")
 barrel_cost = 779
 barrel_prefab = ExtResource("1_et1i6")

@@ -8,8 +8,10 @@
 script = ExtResource("3_ja2bu")
 barrel_id = 2
 barrel_name = "Archetype"
-barrel_desc = "Change the innate nature of the gun."
-barrel_info_summary = "Change the innate nature of the gun."
+barrel_desc = "Effects that change the current gun frame.
+
+Scattershot, rapid fire, in your sights."
+barrel_info_summary = "Can't decide? Don't."
 barrel_image = ExtResource("1_1q24l")
 barrel_cost = 2682
 barrel_prefab = ExtResource("2_6yxa3")
