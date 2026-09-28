@@ -2894,7 +2894,7 @@ func _spawn_chip(spark: bool = false) -> void:
 		return
 	
 	chip.activate()
-	chip.randomise_chip_value()
+	chip.set_value()
 	active_chips.append(chip)
 	if chiptopede_last_hit_segment:
 		chip.global_position = chiptopede_last_hit_segment.global_position
