@@ -5,6 +5,7 @@ signal collected(chip: PokerChip, value: int)
 signal finished
 
 @export var value_array: Array[int] = [1, 2, 5, 10, 25, 50, 100]
+@export var chance_array: Array[int] = [5, 5, 25, 35, 15, 10, 5]
 @export var sprite_array: Array[Texture2D] = []
 @export var sfx_pickup: Array[AudioStream]
 
@@ -13,43 +14,55 @@ signal finished
 @onready var value_label_2: Label3D = $Sprite3D/Label3D2
 @onready var col: CollisionShape3D = $CollisionShape3D
 
-var chosen_idx = -1
-var value = 0
+var chosen_idx: int = -1
+var value: int = 0
+var _chip_value_bag: Array[int] = []
 
-var collecting_by_player = false
-var absorbing_by_boss = false
+const SPIN_RATE: int = 5
 
-const SPIN_RATE = 5
+var collecting_by_player: bool = false
+var absorbing_by_boss: bool = false
+
 
 func _ready() -> void:
 	add_to_group("currency_chips")
 	randomise_chip_value()
 
 
-func randomise_chip_value() -> void:
-	# Roll random for chip value
-	# 5% chip 1
-	# 5% chip 2
-	# 25% chip 5
-	# 35% chip 10
-	# 15% chip 25
-	# 10% chip 50
-	# 5% chip 100
-	for i in randi_range(0, 99):
-		if i < 5:
-			chosen_idx = 0
-		elif i < 10:
-			chosen_idx = 1
-		elif i < 35:
-			chosen_idx = 2
-		elif i < 70:
-			chosen_idx = 3
-		elif i < 85:
-			chosen_idx = 4
-		elif i < 95:
-			chosen_idx = 5
-		else:
-			chosen_idx = 6
+func _sum_int_arr(arr: Array[int], end: int = 0x7FFFFFFF) -> int:
+	var result: int = 0
+	var _slice = arr.slice(0, end)
+	for i in _slice:
+		result += i
+	
+	return result
+
+
+func _refill_chip_bag() -> void:
+	_chip_value_bag.clear()
+	for idx in chance_array.size():
+		for i in chance_array[idx]:
+			_chip_value_bag.append(idx)
+	_chip_value_bag.shuffle()
+
+
+func randomise_chip_value_from_bag() -> int:
+	if _chip_value_bag.is_empty():
+		_refill_chip_bag()
+	return _chip_value_bag.pop_back()
+
+
+# OLD method, wider variance
+func randomise_chip_value() -> int:
+	var roll: int = randi_range(0, 99)
+	for i in range(0, 6):
+		if roll < _sum_int_arr(chance_array, i + 1):
+			return i
+	return 6
+
+
+func set_value(high_variance: bool = false) -> void:
+	chosen_idx = randomise_chip_value() if high_variance else randomise_chip_value_from_bag()
 	
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.JACKPOT):
 		var min_chosen_idx = GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.JACKPOT]

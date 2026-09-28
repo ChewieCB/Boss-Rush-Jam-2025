@@ -3226,7 +3226,6 @@ phase_3_health = 1200
 phase_4_health = 3000
 phase_5_health = 3000
 boss_id = 6
-chip_spawn_chance = 0.05
 chip_spawn_dps_threshold = 70.0
 chip_spawn_mult_cap = 1
 elemental_emitting_vfx = [null, null, null, null, null]

@@ -40,6 +40,7 @@ axis_lock_angular_y = true
 axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_ipprj")
 script = ExtResource("1_1s0ep")
+chance_array = Array[int]([15, 25, 25, 20, 10, 4, 1])
 sprite_array = Array[Texture2D]([ExtResource("2_1g755"), ExtResource("2_1g755"), ExtResource("3_soabj"), ExtResource("4_c5koj"), ExtResource("5_nd3i0"), ExtResource("6_kxhky"), ExtResource("6_pkt8q")])
 sfx_pickup = Array[AudioStream]([ExtResource("2_td1fs")])
 
