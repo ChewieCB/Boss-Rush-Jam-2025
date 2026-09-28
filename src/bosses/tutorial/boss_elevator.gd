@@ -375,6 +375,11 @@ func _on_died() -> void:
 		state_chart.send_event("deactivate")
 		anim_tree["parameters/mechanic_attack_states/conditions/dead"] = true
 		await death_anim_finished
+		
+		for i in chip_bonus_on_kill:
+			_spawn_chip(true)
+			await get_tree().create_timer(0.1).timeout
+		
 		await boss_death_slow_mo()
 		defeated.emit(self)
 
@@ -1832,6 +1837,7 @@ func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
 
 #
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
+	navigation_component.end_if_blocked = false  # HACK
 	navigation_component.follow_target = true
 	state_chart.send_event("start_moving")
 	anim_sm.travel("walk")
@@ -1880,6 +1886,7 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	
 	await get_tree().create_timer(shock_duration_tutorial, false).timeout
 	
+	navigation_component.end_if_blocked = true  # HACK
 	shock_slam_sm.travel("slam_end")
 	state_chart.send_event("end_shock")
 
@@ -2245,6 +2252,7 @@ func _on_phase_5_state_entered() -> void:
 	health_ui.empty_phase_marker(-1)
 	health_ui.next_health_bar()
 	velocity = Vector3.ZERO
+	state_chart.send_event("start_targeting")
 	anim_sm.travel("idle")
 	melee_phase_count = 0
 	ranged_phase_count = 0

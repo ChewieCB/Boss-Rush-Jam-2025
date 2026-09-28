@@ -30,10 +30,6 @@ enum AttributeNameEnum {
 @export var luck_triggers: Array[LuckTriggerInfo.LuckTriggerIdEnum]
 
 var owner_barrel: SpinBarrel
-## This variable is to prevent a single shot trigger the effect multiple times.
-## Usually common case with shotgun with or gun with lots of projectile count.
-## For example, a shotgun with 20 projectile counts may trigger refund bullet 
-## effect up to 20 times, while only cost 1 ammo, in a single shot.
 var triggered_this_shot = false
 
 

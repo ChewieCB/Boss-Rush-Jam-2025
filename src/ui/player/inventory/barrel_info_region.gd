@@ -94,7 +94,7 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false,
 	barrel_panel_barrel_icon.texture = data.barrel_image
 	barrel_name_label.text = "[b]%s[/b]" % [data.barrel_name]
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.barrel_info_summary]
-	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.barrel_desc
+	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if (is_locked and not is_locked_boss) else data.barrel_desc
 
 	gun_frame_icon_container.visible = false
 	

@@ -8,11 +8,13 @@
 script = ExtResource("3_d7woh")
 barrel_id = 78
 barrel_name = "Pure Gamble"
-barrel_desc = "When you really believe in luck over skill."
-barrel_info_summary = "When you really believe in luck over skill."
+barrel_desc = "???"
+barrel_info_summary = "???"
 barrel_image = ExtResource("1_sic7u")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_8d67m")
 is_archetype_barrel = false
 reloads_before_spin = 3
 locked_for_demo = true
+locked_for_boss = false
+boss_id = -1

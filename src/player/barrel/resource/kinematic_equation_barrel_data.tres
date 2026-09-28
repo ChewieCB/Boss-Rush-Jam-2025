@@ -8,11 +8,15 @@
 script = ExtResource("3_15ils")
 barrel_id = 45
 barrel_name = "Kinematic Equation"
-barrel_desc = "Keep your distance and pick your placements."
-barrel_info_summary = "Inspired by a classic physics formula."
+barrel_desc = "Effects that build damage from shot behaviour.
+
+Put the time in, build momentum, go the distance."
+barrel_info_summary = "Get the shot."
 barrel_image = ExtResource("1_k28iw")
-barrel_cost = 1850
+barrel_cost = 1246
 barrel_prefab = ExtResource("2_rn8gl")
 is_archetype_barrel = false
 reloads_before_spin = 3
 locked_for_demo = false
+locked_for_boss = false
+boss_id = -1

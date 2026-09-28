@@ -18,6 +18,8 @@ signal destination_reached
 @export var max_intersect_results := 8
 @export_category("Avoidance")
 @export var avoid_radius: float = 4.0
+@export_category("Troubleshooting")
+@export var end_if_blocked: bool = true  # HACK to prevent getting stuck during certain impossible navigations
 
 var target: Node3D:
 	set(value):
@@ -89,7 +91,8 @@ func _physics_process(_delta) -> void:
 		# Do not query when the map has never synchronized and is empty.
 		if NavigationServer3D.map_get_iteration_id(nav_agent.get_navigation_map()) == 0:
 			return
-		if nav_agent.is_navigation_finished():
+		
+		if nav_agent.is_navigation_finished() and end_if_blocked:
 			return
 		
 		if follow_target:

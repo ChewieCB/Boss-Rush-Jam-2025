@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b3x1bn1jpkwjo"]
+[gd_scene load_steps=19 format=3 uid="uid://b3x1bn1jpkwjo"]
 
 [ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip.gd" id="1_1s0ep"]
 [ext_resource type="Texture2D" uid="uid://bvw52w4qxdtyx" path="res://src/collectibles/poker_chip/assets/chip_white.png" id="2_1g755"]
@@ -9,7 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://b4atouetg5pla" path="res://src/collectibles/poker_chip/assets/chip_green.png" id="5_nd3i0"]
 [ext_resource type="Texture2D" uid="uid://co2sgmxi41jsj" path="res://src/collectibles/poker_chip/assets/chip_gold.png" id="6_kxhky"]
 [ext_resource type="Texture2D" uid="uid://pgkke4lg1qx7" path="res://src/collectibles/poker_chip/assets/chip_black.png" id="6_pkt8q"]
+[ext_resource type="AudioStream" uid="uid://jpfqefwrvbbr" path="res://src/bosses/tutorial/assets/sfx/Ding.mp3" id="9_83ca7"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="9_gmasi"]
+[ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="11_vdflb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ipprj"]
 friction = 0.4
@@ -40,8 +42,10 @@ axis_lock_angular_y = true
 axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_ipprj")
 script = ExtResource("1_1s0ep")
+chance_array = Array[int]([15, 25, 25, 20, 10, 4, 1])
 sprite_array = Array[Texture2D]([ExtResource("2_1g755"), ExtResource("2_1g755"), ExtResource("3_soabj"), ExtResource("4_c5koj"), ExtResource("5_nd3i0"), ExtResource("6_kxhky"), ExtResource("6_pkt8q")])
 sfx_pickup = Array[AudioStream]([ExtResource("2_td1fs")])
+sfx_spark = Array[AudioStream]([ExtResource("9_83ca7")])
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
@@ -89,6 +93,12 @@ texture = ExtResource("9_gmasi")
 [node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
 process_mode = 3
 aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+
+[node name="StackSpark" parent="." instance=ExtResource("11_vdflb")]
+process_mode = 4
+layers = 1
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
 
 [connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
 [connection signal="screen_entered" from="VisibleOnScreenNotifier3D" to="." method="_on_visible_on_screen_notifier_3d_screen_entered"]

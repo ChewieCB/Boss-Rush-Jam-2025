@@ -4,11 +4,13 @@ extends BaseBarrelEffect
 
 func on_projectile_spawn(projectile: BaseBullet):
 	projectile.crit_chance += bonus_flat_crit_chance
+	GameManager.player_currency -= 1
 
 
-func on_damage_applied(damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	var rounded_damage = int(damage)
-	if GameManager.player_currency >= rounded_damage:
-		GameManager.player_currency -= rounded_damage
-	else:
-		GameManager.player.health_component.damage(rounded_damage)
+# OLD FUNCTIONALITY - DEPRECATED
+#func on_damage_applied(damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+	#var rounded_damage = int(damage)
+	#if GameManager.player_currency >= rounded_damage:
+		#GameManager.player_currency -= rounded_damage
+	#else:
+		#GameManager.player.health_component.damage(rounded_damage)

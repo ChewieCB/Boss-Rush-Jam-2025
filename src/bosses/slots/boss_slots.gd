@@ -386,7 +386,11 @@ func _on_died() -> void:
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
-
+	
+	for i in chip_bonus_on_kill:
+		_spawn_chip(true)
+		await get_tree().create_timer(0.1).timeout
+	
 	await death_anim_finished
 	await boss_death_slow_mo()
 	defeated.emit(self)
@@ -740,7 +744,7 @@ func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
 	
 	desired_distance = 2.4
-	desired_height = 1.5
+	desired_height = DESIRED_HEIGHT
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	
@@ -1013,7 +1017,7 @@ func _on_charge_charging_state_entered() -> void:
 	state_chart.send_event("attack_start")
 
 	MAX_SPEED /= 1.6
-	desired_height = 1.6
+	desired_height = DESIRED_HEIGHT
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	drop_factor = 12.0

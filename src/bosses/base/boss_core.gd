@@ -54,15 +54,24 @@ var ante_damage_mod: float = 1.0  # TODO - add damage scaling per ante, balance 
 var cached_target: Node3D
 
 @export var boss_id: BossIdEnum
+
+@export_group("Chip Spawning")
 @export var chip_scene: PackedScene
-@export var chip_spawn_chance: float = 0.4
+@export var chip_spawn_chance: float = 0.85
 @export var chip_spawn_force: float = 700.0
+@export_subgroup("Health Chunk Spawning")
+@export var health_chunk_increment: float = 3.0  # Each X% health lost
+@export var chips_spawned_per_chunk: int = 3
+@export var chip_bonus_on_kill: int = 5
+var _health_chunks_claimed: int = 0
+@export_subgroup("DPS Spawning (OLD)")
 @export var chip_spawn_dps_threshold: float = 25.0
 @export var chip_spawn_mult_cap: int = 3
+
 var _chip_spawn_pool: Array = []
 var active_chips: Array = []
 
-@export_subgroup("Resistance")
+@export_category("Resistances")
 @onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
 @onready var poisoned_timer: Timer = $StateChart/Root/Status/Poisoned/PoisonedTimer
 ## 1 = BURN, 2 = POISON
@@ -98,7 +107,7 @@ var current_status_buildup: Dictionary = {
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 const SHOCKED_DMG_MULTIPLIER = 0.25
 
-@export_subgroup("DPS Dealt In Last X Seconds")
+@export_category("DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
 @onready var dps_dealt_window_timer: Timer = $DPSWindowTimer
 var dps_accumulated_in_window: float = 0.0:
@@ -848,41 +857,70 @@ func _on_stagger() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if not is_initialised:
 		return
-	if new_health < prev_health:
-		state_chart.send_event("start_damage")
-		hurt_sfx_player.stream = sfx_hit.pick_random()
-		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
-		hurt_sfx_player.play()
-
-		dps_accumulated_in_window += abs(prev_health - new_health)
-		if dps_accumulated_in_window > chip_spawn_dps_threshold:
-			_on_stagger()
-			# Increase chip spawn rate based on DPS
-			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
-			chip_mult = min(chip_mult, chip_spawn_mult_cap)
-			chip_mult = chip_mult * GameManager.get_boss_chip_amount_drop_multiplier()
-			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
-			
-			for i in chip_mult:
-				if randf() < chip_spawn_chance:
-					continue
-				_spawn_chip()
-			# Stop the dps timer and set the accumulated dps to 0
-			dps_dealt_window_timer.stop()
-			dps_accumulated_in_window = 0.0
+	
+	if new_health > prev_health:
+		return
+	
+	state_chart.send_event("start_damage")
+	hurt_sfx_player.stream = sfx_hit.pick_random()
+	hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
+	hurt_sfx_player.play()
+	
+	# Chip drop calc
+	drop_chip_health_chunk(new_health, prev_health)
+	#drop_chip_dps_window(new_health, prev_health)
+	
 
 
-func _init_chip_pool() -> void:
-	var chip = chip_scene.instantiate() as RigidBody3D
-	chip.collected.connect(_on_chip_collected)
-	scene_root.add_child.call_deferred(chip)
-	await get_tree().physics_frame
-	chip.deactivate.call_deferred()
-	chip.global_position = Vector3.ZERO
-	_chip_spawn_pool.push_back(chip)
+func drop_chip_health_chunk(new_health: float, prev_health: float) -> void:
+	var depleted_before: float = (1.0 - prev_health / health_component.max_health) * 100.0
+	var depleted_after: float = (1.0 - new_health / health_component.max_health) * 100.0
+	var line_before := int(floor(depleted_before / health_chunk_increment))
+	var line_after := int(floor(depleted_after / health_chunk_increment))
+	var chunks_claimed: int = line_after - line_before
+	
+	if chunks_claimed > 0:
+		_health_chunks_claimed += chunks_claimed
+		_on_stagger()
+		print(
+			"Milestones crossed: %s | chips rolled: %s" % [
+				chunks_claimed, 
+				chunks_claimed * chips_spawned_per_chunk
+			]
+		)
+		_spawn_chip_batch(chunks_claimed * chips_spawned_per_chunk, chip_spawn_chance)
 
 
-func _spawn_chip() -> void:
+# OLD DPS SYSTEM - DEPRECATE
+func drop_chip_dps_window(new_health: float, prev_health: float) -> void:
+	dps_accumulated_in_window += abs(prev_health - new_health)
+	if dps_accumulated_in_window > chip_spawn_dps_threshold:
+		_on_stagger()
+		# Increase chip spawn rate based on DPS
+		var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
+		chip_mult = min(chip_mult, chip_spawn_mult_cap)
+		chip_mult = chip_mult * GameManager.get_boss_chip_amount_drop_multiplier()
+		print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
+		
+		for i in chip_mult:
+			if randf() > chip_spawn_chance:
+				continue
+			_spawn_chip()
+		# Stop the dps timer and set the accumulated dps to 0
+		dps_dealt_window_timer.stop()
+		dps_accumulated_in_window = 0.0
+
+
+func _spawn_chip_batch(count: int, spawn_chance: float) -> void:
+	var mult: int = GameManager.get_boss_chip_amount_drop_multiplier()
+	var total := int(round(count * mult))
+	for i in total:
+		if randf() > chip_spawn_chance:
+			continue
+		_spawn_chip()
+
+
+func _spawn_chip(spark: bool = false) -> void:
 	if _chip_spawn_pool.size() == 0:
 		_init_chip_pool()
 		for i in range(10):
@@ -893,14 +931,31 @@ func _spawn_chip() -> void:
 	if not chip:
 		return
 	chip.activate()
-	chip.randomise_chip_value()
+	chip.set_value()
 	active_chips.append(chip)
 	chip.global_position = self.global_position
 	chip.rotate_y(randf_range(0, 2 * PI))
-	chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-	chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+	if spark:
+		chip.global_position.y += 2.0
+		chip.spark()
+		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+		chip.apply_central_force(Vector3.UP * chip_spawn_force)
+		
+	else:
+		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+		chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
 	
 	chip_dropped.emit(chip.value)
+
+
+func _init_chip_pool() -> void:
+	var chip = chip_scene.instantiate() as RigidBody3D
+	chip.collected.connect(_on_chip_collected)
+	scene_root.add_child.call_deferred(chip)
+	await get_tree().physics_frame
+	chip.deactivate.call_deferred()
+	chip.global_position = Vector3.ZERO
+	_chip_spawn_pool.push_back(chip)
 
 
 func _on_chip_collected(chip: PokerChip, _value: int) -> void:
@@ -916,6 +971,8 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	await death_anim_finished
+	for i in chip_bonus_on_kill:
+		_spawn_chip(true)
 	await boss_death_slow_mo()
 	defeated.emit(self)
 
