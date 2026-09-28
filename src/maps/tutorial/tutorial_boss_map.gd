@@ -70,7 +70,6 @@ var active_tutorial_panel: Control
 
 func _ready() -> void:
 	if not GameManager.tutorial_completed:
-		player.toggle_anim_reticle(false)
 		GameManager.equipped_barrels = [null, null, null]
 		GameManager.inventory_barrels = []
 		player.gun.reinstall_barrels()
@@ -117,11 +116,13 @@ func _ready() -> void:
 		player.global_transform = player_spawn_post_tutorial.global_transform
 
 	if boss.current_phase < 4:
+		boss.chip_spawn_chance = 0.3
 		await ScreenTransition.transition_finished
 		$AnimationPlayer.play("pit_boss_shove")
 		await $AnimationPlayer.animation_finished
 		_on_boss_trigger_volume_body_entered_tutorial(player)
 	else:
+		boss.chip_spawn_chance = 0.85
 		_add_boss_to_intro_path()
 		_remove_boss_from_intro_path()
 		boss.global_position = arena_2_center.global_position
@@ -373,6 +374,8 @@ func _on_tutorial_finished() -> void:
 	
 	await boss_move_tween.finished
 	
+	boss.navigation_component.disable()
+	boss.velocity = Vector3.ZERO
 	var final_move_tween = get_tree().create_tween()
 	final_move_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	final_move_tween.tween_property(boss, "global_position", move_pos, 0.2)
@@ -401,6 +404,7 @@ func _on_tutorial_finished() -> void:
 	# Move through doors, locking doors behind
 	$AnimationPlayer.play("tutorial_end_3")
 	await $AnimationPlayer.animation_finished
+	boss.navigation_component.enable()
 
 	# Tween the camera back
 	# TODO - make the player now face the final cutscene camera position
