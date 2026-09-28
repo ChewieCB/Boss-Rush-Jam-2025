@@ -744,7 +744,7 @@ func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
 	
 	desired_distance = 2.4
-	desired_height = 1.5
+	desired_height = DESIRED_HEIGHT
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	
@@ -1017,7 +1017,7 @@ func _on_charge_charging_state_entered() -> void:
 	state_chart.send_event("attack_start")
 
 	MAX_SPEED /= 1.6
-	desired_height = 1.6
+	desired_height = DESIRED_HEIGHT
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	drop_factor = 12.0
