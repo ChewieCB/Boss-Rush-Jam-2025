@@ -14,9 +14,11 @@ script = ExtResource("1_or1fu")
 
 [node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_80x4o")
+min_minus_cap = 0.0
 min_distance_to_boss = 7.0
 display_text_title = "Daredevil"
-display_text_tag = "Stick close to the enemy"
+display_text_tag = "Danger Close!"
+display_text_desc = "Damage increases the closer you are to an enemy."
 positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
 negative_desc = Array[String](["Decreases damage otherwise"])
 icon_id = 60
@@ -25,21 +27,24 @@ icon_id = 60
 script = ExtResource("3_r1t4a")
 bonus_flat_crit_chance = 0.35
 display_text_title = "Loaded Wallet"
-display_text_tag = "I hope you had some savings."
+display_text_tag = "Pay to play."
+display_text_desc = "Increased crit chance, but each shot costs a chip."
 positive_desc = Array[String](["+35% crit chance"])
 negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
 icon_id = 61
 
 [node name="Overdrive" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_0ksuw")
-display_text_title = "Overdrive"
-display_text_tag = "Keep count the ammo you spent"
+display_text_title = "Unstable Magazine"
+display_text_tag = "Don't let your clip empty!"
+display_text_desc = "Shots do more damage and fire-rate is increased, but if the ammo runs out before reloading the magazine self-detonates."
 positive_desc = Array[String](["+2 flat magazine size", "+2 flat firerate (rounds per second)"])
 negative_desc = Array[String](["+1% chance to explode the gun per ammo spent", "100% will explode when you empty the magazine"])
 icon_id = 62
 
 [node name="OverdriveEffect" type="Node3D" parent="EffectContainer/Overdrive"]
 script = ExtResource("5_1hola")
+chance_per_ammo_spent = 0
 
 [node name="IncreaseFlatMagazineSize" type="Node3D" parent="EffectContainer/Overdrive"]
 script = ExtResource("7_vis85")

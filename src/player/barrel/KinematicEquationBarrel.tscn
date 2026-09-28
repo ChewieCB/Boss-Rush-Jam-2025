@@ -16,9 +16,8 @@ script = ExtResource("1_v4d5e")
 visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Slow Roller"
-display_text_tag = "Play with your target"
-display_text_desc = "More damage with bullet flight time
--50% projectile speed"
+display_text_tag = "Slow and steady."
+display_text_desc = "Damage increases the longer the shot is in-flight."
 positive_desc = Array[String](["Damage increases the longer the round is in-flight"])
 negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 29
@@ -42,9 +41,8 @@ script = ExtResource("3_b2svt")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0242209, 0, 0.0132322)
 script = ExtResource("2_yv5q3")
 display_text_title = "Long Shot"
-display_text_tag = "Keep distance"
-display_text_desc = "More damage with distance
--50% spread"
+display_text_tag = "Keep your distance."
+display_text_desc = "Damage increases the further the shot travels."
 positive_desc = Array[String](["Shots from further away do more damage", "-50% bullets spread"])
 negative_desc = Array[String](["Close range shots do less damage"])
 icon_id = 28
@@ -63,10 +61,8 @@ is_perc = true
 visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
-display_text_tag = "Transfer your speed"
-display_text_desc = "More damage with bullet speed
-Bullet gain projectile speed based on your speed
-Convert hitscan shot to projectile"
+display_text_tag = "Supersonic!"
+display_text_desc = "Shots move faster through the air."
 positive_desc = Array[String](["Damage increased with projectile speed", "Bullet gain projectile speed based on player momentum"])
 negative_desc = Array[String](["Convert hitscan shot to projectile"])
 icon_id = 30

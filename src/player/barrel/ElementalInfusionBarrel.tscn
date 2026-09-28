@@ -14,8 +14,7 @@ script = ExtResource("1_glc3y")
 script = ExtResource("2_ycsp2")
 display_text_title = "Fire Infusion"
 display_text_tag = "Toasty!"
-display_text_desc = "-20% damage
-Bullets build up Burn effect"
+display_text_desc = "Applies burning status over time."
 positive_desc = Array[String](["Applies burning status"])
 negative_desc = Array[String](["Reduced damage"])
 icon_id = 48
@@ -35,9 +34,8 @@ is_perc = true
 [node name="PoisonInfusion" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_ycsp2")
 display_text_title = "Poison Infusion"
-display_text_tag = "With Iocane powder."
-display_text_desc = "-20% fire rate
-Bullets build up Poison effect"
+display_text_tag = "Sickening."
+display_text_desc = "Applies poisoned status over time."
 positive_desc = Array[String](["Applies poison status"])
 negative_desc = Array[String](["Slower firerate"])
 icon_id = 49
@@ -58,8 +56,7 @@ is_perc = true
 script = ExtResource("2_ycsp2")
 display_text_title = "Cold Infusion"
 display_text_tag = "Let it go!"
-display_text_desc = "-20% magazine size
-Bullets build up Frozen effect"
+display_text_desc = "Applies frozen status over time"
 positive_desc = Array[String](["Applies frozen status"])
 negative_desc = Array[String](["Smaller magazine size"])
 icon_id = 47
@@ -79,9 +76,8 @@ is_perc = true
 [node name="ElectricInfusion" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_ycsp2")
 display_text_title = "Electric Infusion"
-display_text_tag = "...and his music was..."
-display_text_desc = "+20% recoil
-Bullets build up Shocked effect"
+display_text_tag = "Grounded."
+display_text_desc = "Applies shocked status over time."
 positive_desc = Array[String](["Applies shocked status"])
 negative_desc = Array[String](["Increased recoil"])
 icon_id = 50

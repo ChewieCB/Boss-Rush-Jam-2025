@@ -8,19 +8,13 @@
 script = ExtResource("3_ja2bu")
 barrel_id = 2
 barrel_name = "Archetype"
-barrel_desc = "[b]Archetype Barrel[/b]
-Change the innate nature of the gun.
-
-Possible rolls:
-[ul]
-SMG: High firerate and magazine. Low damage.
-Shotgun: High damage and multiple projectiles, but high spread.
-Railgun: Low magazine size and firerate, but high damage and high bullet velocity.
-[/ul]"
+barrel_desc = "Change the innate nature of the gun."
 barrel_info_summary = "Change the innate nature of the gun."
 barrel_image = ExtResource("1_1q24l")
-barrel_cost = 2200
+barrel_cost = 2682
 barrel_prefab = ExtResource("2_6yxa3")
 is_archetype_barrel = false
 reloads_before_spin = 3
 locked_for_demo = false
+locked_for_boss = false
+boss_id = -1

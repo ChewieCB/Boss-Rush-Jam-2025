@@ -945,7 +945,6 @@ func _spawn_chip(spark: bool = false) -> void:
 		chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
 		chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
 	
-	
 	chip_dropped.emit(chip.value)
 
 
