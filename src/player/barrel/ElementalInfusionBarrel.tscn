@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_o15qj"]
 [ext_resource type="AudioStream" uid="uid://dianaisrjvjxq" path="res://src/player/gun/assets/sfx/effects/elemental_fire/Elemental Barrels Fire Loop.mp3" id="4_ocryd"]
 [ext_resource type="AudioStream" uid="uid://cpkkfm7aex161" path="res://src/player/gun/assets/sfx/effects/elemental_poison/BARTENDER POISON PUDDLE LOOP(1).mp3" id="6_ehujw"]
-[ext_resource type="AudioStream" uid="uid://cbd1us3uqaxo" path="res://src/player/gun/assets/sfx/effects/elemental_ice/Elemental Ice Loop 2 Cracking plus Extra Ice Noises.mp3" id="7_5uvb2"]
+[ext_resource type="AudioStream" uid="uid://beqjd14wsaloh" path="res://src/player/gun/assets/sfx/effects/elemental_ice/Elemental Ice Loop 2 All 3 Quiet Chimes.mp3" id="7_rtld8"]
 [ext_resource type="AudioStream" uid="uid://bg4wqcjbggxy1" path="res://src/player/gun/assets/sfx/effects/elemental_lightning/Elemental Barrels Electricity Loop.mp3" id="8_yjsn1"]
 
 [node name="ElementalBarrel" type="Node3D"]
@@ -76,7 +76,7 @@ status_effect = 3
 change_color = true
 new_color = Color(0, 0.533333, 0.658824, 0.866667)
 sfx_player = NodePath("../../../SFXPlayer")
-sfx_loop = Array[AudioStream]([ExtResource("7_5uvb2")])
+sfx_loop = Array[AudioStream]([ExtResource("7_rtld8")])
 
 [node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ColdInfusion"]
 script = ExtResource("4_o15qj")
