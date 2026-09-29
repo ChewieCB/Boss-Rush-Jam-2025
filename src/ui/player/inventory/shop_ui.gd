@@ -39,6 +39,7 @@ func _input(event: InputEvent) -> void:
 
 
 func open() -> void:
+	super()
 	var new_unlock: BarrelDataResource = GameManager.newly_unlocked_barrel
 	if new_unlock:
 		if new_unlock not in current_inventory:
@@ -58,8 +59,7 @@ func open() -> void:
 				_reset_sibling_saturation(ui)
 				ui.init(self, ui.item_ui.data)
 				ui.grab_focus()
-				break
-	super()
+				return
 
 
 func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = false):

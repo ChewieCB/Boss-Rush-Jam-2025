@@ -115,7 +115,10 @@ func _process(_delta: float) -> void:
 
 
 func toggle():
-	close() if visible else open()
+	if visible:
+		close()
+	else:
+		open()
 
 
 func open():
