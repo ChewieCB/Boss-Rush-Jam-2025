@@ -176,6 +176,7 @@ render_priority = 0
 shader = ExtResource("75_5w0xk")
 shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_alpha = 1.0
 shader_parameter/y_billboard = true
 shader_parameter/tex_alpha = 1.0
 shader_parameter/scale = 1.0

@@ -63,8 +63,8 @@ func fire_laser() -> void:
 		mat,
 		"albedo_color:a",
 		0.0,
-		2.0
-	)
+		0.7
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await laser_tween.finished
 	
 	finished.emit()

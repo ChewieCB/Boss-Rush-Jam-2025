@@ -151,13 +151,15 @@ var nail_proj_pool: Array = []
 var laser_aoe_pool: Array = []
 @export var laser_spawn: Marker3D
 @export var laser_damage: float = 40.0
+var turn_speed_fast: float = TURN_SPEED_FAST
 @export var laser_turn_speed: float = 100.0
 @export var laser_targeting_time: float = 1.5
 @export var laser_hold_time: float = 0.025
 var aoe_warn_decal: Decal
 var laser_target_pos: Vector3
 @export var laser_aoe_marker: CompressedTexture2D
-@onready var laser_particles: GPUParticles3D = $LaserSpawn/LaserEndParticles
+@onready var laser_particles_pivot: Node3D = $LaserParticlePivot
+@onready var laser_particles: GPUParticles3D = $LaserParticlePivot/LaserSpawn/LaserEndParticles
 # SFX
 @export var sfx_laser_arm: Array[AudioStream]
 @export var sfx_laser_charging: Array[AudioStream]
@@ -255,6 +257,13 @@ func  _init_laser_aoe() -> void:
 	scene_root.add_child(laser)
 	laser.deactivate()
 	laser_aoe_pool.push_front(laser)
+
+
+func _play_laser_fire_sfx() -> void:
+	var laser_charge_stream: AudioStream = sfx_laser_shoot.pick_random()
+	if laser_sfx_player:
+		laser_sfx_player.stream = laser_charge_stream
+		laser_sfx_player.play()
 
 
 func activate() -> void:
@@ -1061,24 +1070,16 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
+	await get_tree().create_timer(0.4).timeout
+	
 	state_chart.send_event("charge_laser")
 
 
 func _on_laser_aoe_charging_state_entered() -> void:
 	debug_state_label.text = "Spartan Laser Level | Charging"
-	
-	var _cached_turn_speed = TURN_SPEED_FAST
 	TURN_SPEED_FAST = laser_turn_speed
-	
 	state_chart.send_event("attack_buildup")
-	# FIXME - why is the audio borked?
-	laser_sfx_player = get_available_sfx_player()
-	var laser_charge_stream: AudioStream = sfx_laser_charging.pick_random()
-	if laser_sfx_player:
-		laser_sfx_player.stream = laser_charge_stream
-		laser_sfx_player.play()
-	laser_anim_sm.travel("telegraph")
-	#anim_player.play("elevator_boss/laser_telegraph")
+	laser_anim_sm.travel("buildup")
 	
 	# AoE warning visual
 	if aoe_warn_decal:
@@ -1087,7 +1088,7 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	
 	aoe_warn_decal = Decal.new()
 	aoe_warn_decal.texture_albedo = laser_aoe_marker
-	aoe_warn_decal.cull_mask = int(pow(2, 1 - 1))
+	aoe_warn_decal.cull_mask = int(pow(2, 3 - 1))
 	aoe_warn_decal.size = Vector3(4, 4, 1)
 	scene_root.add_child(aoe_warn_decal)
 	aoe_warn_decal.global_position = laser_spawn.global_position
@@ -1104,16 +1105,16 @@ func _on_laser_aoe_charging_state_entered() -> void:
 		100,
 		0.175 * 6
 	)
-	warn_tween.tween_callback(
-		func():
-			state_chart.send_event("stop_moving")
-			await get_tree().create_timer(laser_hold_time, false).timeout
-			if laser_sfx_player:
-				laser_sfx_player.stop()
-				laser_sfx_player = null
-			TURN_SPEED_FAST = _cached_turn_speed
-			state_chart.send_event("start_firing")
-	).set_delay(laser_charge_stream.get_length())
+
+func _telegraph_laser() -> void:
+	state_chart.send_event("stop_moving")
+	laser_anim_sm.travel("telegraph")
+
+func _laser_firing_delay() -> void:
+	TURN_SPEED_FAST = turn_speed_fast
+
+func _fire_laser() -> void:
+	state_chart.send_event("start_firing")
 
 
 func _on_laser_aoe_charging_state_physics_processing(_delta: float) -> void:
@@ -1146,6 +1147,7 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	#anim_player.play("elevator_boss/laser_fire")
 	#laser_particles.emitting = false
 	var laser_inst: LaserAoE = laser_aoe_pool.pop_back()
+	laser_inst.damage = laser_damage
 	laser_inst.global_position = laser_spawn.global_position
 	laser_inst.global_position.y -= 2
 	#laser_instance.global_position.x -= 2
@@ -1699,6 +1701,13 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 
 
 func taunt() -> void:
+	# Don't taunt if we're in laser form
+	if next_attack == "start_laser_aoe_attack":
+		return
+	
+	velocity = Vector3.ZERO
+	state_chart.send_event("start_targeting")
+	
 	# Pick a random taunt sound
 	var taunt_sfx: AudioStream
 	match current_phase:
@@ -1730,15 +1739,16 @@ func taunt() -> void:
 	# Scale the animation length to the sound
 	var sfx_length: float = taunt_sfx.get_length()
 	SoundManager.play_sound(taunt_sfx, "SFX")
-	# Don't taunt if we're in laser form
-	if next_attack != "start_laser_aoe_attack":
-		anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
-		anim_sm.travel("taunt")
-		hit_effect_sprite_squash(sfx_length, Vector2(0, -0.1))
-		
+	
+	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
+	anim_sm.travel("taunt")
+	hit_effect_sprite_squash(sfx_length, Vector2(0, -0.1))
+	
 	await get_tree().create_timer(sfx_length, false).timeout
 	
 	anim_player.speed_scale = 1.0
+	
+	return
 
 
 func _on_tutorial_phase_1_taunt_taunting_state_physics_processing(delta: float) -> void:
@@ -2271,3 +2281,8 @@ func _on_inactive_state_physics_processing(delta: float) -> void:
 	velocity.z = 0
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+
+
+func _on_laser_ao_e_state_physics_processing(delta: float) -> void:
+	if target:
+		laser_particles_pivot.look_at(target.global_position)
