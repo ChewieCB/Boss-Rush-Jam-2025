@@ -9,6 +9,7 @@ signal finished
 
 @onready var mesh := $MeshInstance3D
 @onready var col := $CollisionShape3D
+@onready var particles := $LaserEndParticles
 var mat: StandardMaterial3D
 const ALPHA_INIT: float =  0.557
 
@@ -26,6 +27,7 @@ func _make_material_unique() -> void:
 
 func activate() -> void:
 	self.process_mode = Node.PROCESS_MODE_INHERIT
+	particles.process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(true)
 	
 	self.collision_layer = pow(2, 4-1)
@@ -39,6 +41,8 @@ func activate() -> void:
 
 func deactivate() -> void:
 	self.visible = false
+	particles.emitting = false
+	particles.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	self.collision_layer = 0
 	self.collision_mask = 0
@@ -54,6 +58,8 @@ func fire_laser() -> void:
 	set_deferred("monitoring", true)
 	
 	#await get_tree().physics_frame
+	particles.draw_pass_1.material.albedo_color.a = 1.0
+	particles.emitting = true
 	var laser_tween := get_tree().create_tween().set_parallel(true)
 	laser_tween.tween_callback(
 		func():
@@ -65,6 +71,12 @@ func fire_laser() -> void:
 		0.0,
 		0.7
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	laser_tween.tween_property(
+		particles,
+		"draw_pass_1:material:albedo_color:a",
+		0.0,
+		0.7
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await laser_tween.finished
 	
 	finished.emit()
@@ -73,7 +85,10 @@ func fire_laser() -> void:
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		knockback(body, damage, 15.0)
+		if body.is_dashing:
+			body.health_component.block_damage(body.global_position)
+		else:
+			knockback(body, damage, 15.0)
 
 
 func knockback(body: Node3D, knockback_damage: float, force: float) -> void:
