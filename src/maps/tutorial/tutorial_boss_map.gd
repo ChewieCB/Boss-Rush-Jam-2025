@@ -548,7 +548,7 @@ func _align_player_camera_to_cutscene_camera() -> void:
 func _on_player_death() -> void:
 	if GameManager.tutorial_completed:
 		boss.attack_interrupt = true
-		await boss.taunt()
+		await boss.player_death_taunt()
 		boss.state_chart.send_event("deactivate")
 		boss.cleanup_shock_hazards()
 		show_end_panel()

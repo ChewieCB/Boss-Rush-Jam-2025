@@ -1,4 +1,4 @@
-[gd_scene load_steps=309 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=329 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -53,18 +53,23 @@
 [ext_resource type="AudioStream" uid="uid://7354rx1g75ec" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 8-1 show me somethin.mp3" id="18_ybn3j"]
 [ext_resource type="Texture2D" uid="uid://c7sifgttsfnh6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_4.png" id="19_3rgkr"]
 [ext_resource type="AudioStream" uid="uid://chmnwoa6yea8j" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 9-1 you gotta do more than that.mp3" id="19_8hxb3"]
+[ext_resource type="AudioStream" uid="uid://b35grr1vutnm7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Main Arena Intro 1.mp3" id="19_81mhk"]
 [ext_resource type="AudioStream" uid="uid://dfqd3mr6bdaj4" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 2.mp3" id="19_upudo"]
 [ext_resource type="Texture2D" uid="uid://c4pai2cb140fx" path="res://src/bosses/tutorial/assets/sprites/1_HIT_3.png" id="19_xriv7"]
 [ext_resource type="Texture2D" uid="uid://ble8jl11xasb5" path="res://src/bosses/tutorial/assets/sprites/1_HIT_4.png" id="20_5ckod"]
 [ext_resource type="Texture2D" uid="uid://b8g53jvhe8v7v" path="res://src/bosses/tutorial/assets/sprites/3_HIT_5.png" id="20_7eher"]
+[ext_resource type="AudioStream" uid="uid://c2v1v8tpgt4jt" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Main Arena Intro 2.mp3" id="20_dtnpa"]
 [ext_resource type="AudioStream" uid="uid://btioybgukily3" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 3.mp3" id="20_dvqnx"]
 [ext_resource type="AudioStream" uid="uid://b66b4e5dge5wb" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 10-1 you cheater.mp3" id="20_xgklq"]
 [ext_resource type="AudioStream" uid="uid://cbate11bgay6b" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Deactivation.mp3" id="21_4s6ft"]
 [ext_resource type="Texture2D" uid="uid://dtj5yqywecnt" path="res://src/bosses/tutorial/assets/sprites/3_HIT_6.png" id="21_dj0x0"]
 [ext_resource type="AudioStream" uid="uid://btaowfhyqxw3m" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 11-1 unless you like the rest.mp3" id="21_u66vn"]
+[ext_resource type="AudioStream" uid="uid://cy0r8t55dagl1" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Main Arena Intro 3.mp3" id="21_wjdoh"]
 [ext_resource type="Texture2D" uid="uid://dji3qkffxpmm3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_5.png" id="21_yqrf4"]
+[ext_resource type="AudioStream" uid="uid://bpej46d7g51e4" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Main Arena Intro 4.mp3" id="22_h24px"]
 [ext_resource type="AudioStream" uid="uid://yblih3q14qku" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 12-1 no discipline.mp3" id="22_qulmj"]
 [ext_resource type="AudioStream" uid="uid://dp87b0efsfkvb" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 13-1 is that all you got .mp3" id="23_17nhe"]
+[ext_resource type="AudioStream" uid="uid://lnv3viilg1ll" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Main Arena Intro 5.mp3" id="23_ee7tl"]
 [ext_resource type="Texture2D" uid="uid://ktyfbh7u0l3q" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_2.png" id="23_m0iiy"]
 [ext_resource type="Texture2D" uid="uid://mj1luucsg1dc" path="res://src/bosses/tutorial/assets/sprites/LAZER_1.png" id="23_td4gs"]
 [ext_resource type="AudioStream" uid="uid://c8t7wq0ookess" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 14-1 youre wasting my time .mp3" id="24_1roa2"]
@@ -96,17 +101,28 @@
 [ext_resource type="Texture2D" uid="uid://hbv3qixprt55" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_5.png" id="36_8adwb"]
 [ext_resource type="Shader" path="res://src/player/gun/vfx/elemental/shock/lightning.gdshader" id="36_lfiw1"]
 [ext_resource type="Texture2D" uid="uid://bhetlriykonh6" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_6.png" id="37_8ivp5"]
+[ext_resource type="AudioStream" uid="uid://duo5eboxri5fp" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby 2.mp3" id="38_3ygjf"]
 [ext_resource type="AudioStream" uid="uid://dr2a3cibksmi7" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 1.mp3" id="38_5huc8"]
 [ext_resource type="Texture2D" uid="uid://c52mo1qekknqm" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_7.png" id="38_x4twh"]
 [ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
+[ext_resource type="AudioStream" uid="uid://b5rdr2vf2qvbl" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby 3.mp3" id="39_w4g5n"]
 [ext_resource type="AudioStream" uid="uid://b5yf2b5712obg" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL 2.mp3" id="39_wm3h1"]
 [ext_resource type="PackedScene" uid="uid://c1ep56bju50j3" path="res://src/bosses/tutorial/SlamAoELine.tscn" id="39_ybm4c"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="40_0xhcc"]
+[ext_resource type="AudioStream" uid="uid://bqi1gv6uceihk" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby 4.mp3" id="40_qgr6q"]
 [ext_resource type="PackedScene" uid="uid://cx0o0nh68vxt5" path="res://src/bosses/tutorial/SlamAoEWall.tscn" id="40_tqwob"]
+[ext_resource type="AudioStream" uid="uid://48xbfluxxge4" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby 5.mp3" id="41_i1ldm"]
 [ext_resource type="AudioStream" uid="uid://qg61conv8q8a" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 2.mp3" id="41_y5q8h"]
 [ext_resource type="AudioStream" uid="uid://cg2blsh10wqvv" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 1.mp3" id="42_gym33"]
+[ext_resource type="AudioStream" uid="uid://cnm7k6k2frysr" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby 6.mp3" id="42_o0kps"]
 [ext_resource type="AudioStream" uid="uid://0qoqwlp6f05d" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 2.mp3" id="43_04ooh"]
+[ext_resource type="AudioStream" uid="uid://bo8svkp4aaxbt" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby.mp3" id="43_m7imi"]
 [ext_resource type="Texture2D" uid="uid://b50hajeka4cfw" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_1.png" id="43_r6ljj"]
+[ext_resource type="AudioStream" uid="uid://po2hrq3uxynp" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player wins main fight and defeats boss 1.mp3" id="44_lu6sq"]
+[ext_resource type="AudioStream" uid="uid://df0g5b8g4tks" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player wins main fight and defeats boss 2.mp3" id="45_qbxhf"]
+[ext_resource type="AudioStream" uid="uid://do2feghg4g7qn" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player wins main fight and defeats boss 3.mp3" id="46_5bvc8"]
+[ext_resource type="AudioStream" uid="uid://d0dsqg8ttd71h" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player wins main fight and defeats boss 4.mp3" id="47_hkkgv"]
+[ext_resource type="AudioStream" uid="uid://c6bfuyl880ljr" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player wins main fight and defeats boss 5.mp3" id="48_2fyx8"]
 [ext_resource type="AudioStream" uid="uid://cokhf6uo2u3p1" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 1 V3.mp3" id="53_vhfhh"]
 [ext_resource type="AudioStream" uid="uid://hg0ps0ucdseu" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 2 V3.mp3" id="54_hfxh4"]
 [ext_resource type="AudioStream" uid="uid://djcacot1ktwg4" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 3 V3.mp3" id="55_nk5pw"]
@@ -127,6 +143,10 @@
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
 [ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="76_rjrpv"]
+[ext_resource type="AudioStream" uid="uid://dnxu8sbbu7fmc" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Boss mech attack 1.mp3" id="77_52rfa"]
+[ext_resource type="AudioStream" uid="uid://dvcc6gvrirgq4" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Boss mech attack 2.mp3" id="78_a26b0"]
+[ext_resource type="AudioStream" uid="uid://73bl4odfllh2" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Boss mech attack 3.mp3" id="79_tv60w"]
+[ext_resource type="AudioStream" uid="uid://dwvskp0a3derf" path="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Boss mech attack 4.mp3" id="80_g2q1p"]
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="84_s600r"]
 [ext_resource type="Texture2D" uid="uid://dyqem8rv1515n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_idle_top.png" id="84_siud8"]
 [ext_resource type="AudioStream" uid="uid://chl4kfxabg06s" path="res://src/maps/tutorial/assets/sfx/Pipe Burst Steam Loop.wav" id="97_dp741"]
@@ -3744,10 +3764,12 @@ melee_max_chase_distance = 9.0
 sfx_taunt_phase_1 = Array[AudioStream]([ExtResource("11_fobd3"), ExtResource("12_22t0e"), ExtResource("13_b8a3y"), ExtResource("14_xtwbu")])
 sfx_taunt_phase_2 = Array[AudioStream]([ExtResource("15_bsimv"), ExtResource("16_yk562"), ExtResource("17_kr1cs")])
 sfx_taunt_phase_3 = Array[AudioStream]([ExtResource("16_yk562"), ExtResource("17_kr1cs"), ExtResource("15_bsimv"), ExtResource("11_fobd3"), ExtResource("12_22t0e"), ExtResource("13_b8a3y"), ExtResource("14_xtwbu")])
-sfx_taunt_phase_4 = Array[AudioStream]([ExtResource("18_ybn3j"), ExtResource("19_8hxb3"), ExtResource("20_xgklq"), ExtResource("21_u66vn"), ExtResource("22_qulmj"), ExtResource("23_17nhe"), ExtResource("24_1roa2")])
+sfx_taunt_phase_4 = Array[AudioStream]([ExtResource("19_81mhk"), ExtResource("20_dtnpa"), ExtResource("21_wjdoh"), ExtResource("22_h24px"), ExtResource("23_ee7tl")])
 sfx_taunt_phase_5 = Array[AudioStream]([ExtResource("18_ybn3j"), ExtResource("19_8hxb3"), ExtResource("20_xgklq"), ExtResource("21_u66vn"), ExtResource("22_qulmj"), ExtResource("23_17nhe"), ExtResource("24_1roa2")])
 sfx_player_defeated_taunt = Array[AudioStream]([ExtResource("25_bkqgv"), ExtResource("26_x0wxk"), ExtResource("27_beqjm"), ExtResource("28_kc6if"), ExtResource("29_0mcru"), ExtResource("30_nc3s2"), ExtResource("31_w4244")])
 player_defeated_taunt_captions = Array[String](["Pathetic.", "Not quick enough, weakling.", "I ain't done with you yet.", "You'll have to do better than that!", "Degenerates never fail to dissapoint.", "Another sore loser that can't back it up.", "Oil and ash, cheater. Just another stain on the wall."])
+sfx_player_defeated_main_fight = Array[AudioStream]([ExtResource("38_3ygjf"), ExtResource("39_w4g5n"), ExtResource("40_qgr6q"), ExtResource("41_i1ldm"), ExtResource("42_o0kps"), ExtResource("43_m7imi")])
+sfx_boss_defeated = Array[AudioStream]([ExtResource("44_lu6sq"), ExtResource("45_qbxhf"), ExtResource("46_5bvc8"), ExtResource("47_hkkgv"), ExtResource("48_2fyx8")])
 swipe_damage = 20.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])
@@ -3789,6 +3811,7 @@ laser_turn_speed = 100.0
 laser_targeting_time = 1.5
 laser_hold_time = 0.025
 laser_aoe_marker = ExtResource("5_pbhfx")
+sfx_laser_taunt = Array[AudioStream]([ExtResource("77_52rfa"), ExtResource("78_a26b0"), ExtResource("79_tv60w"), ExtResource("80_g2q1p")])
 sfx_laser_arm = Array[AudioStream]([ExtResource("60_ic00a")])
 sfx_laser_charging = Array[AudioStream]([ExtResource("61_w2upm")])
 sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_upudo"), ExtResource("20_dvqnx")])

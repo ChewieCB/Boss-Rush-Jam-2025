@@ -78,6 +78,7 @@ var taunt_cooldown: int = TAUNT_COOLDOWN
 @export var melee_max_chase_distance: float = 9.0
 
 @export_subgroup("Taunt")
+var is_taunting: bool = false
 @export var sfx_taunt_phase_1: Array[AudioStream]
 var sfx_taunt_phase_1_active: Array[AudioStream] = sfx_taunt_phase_1
 @export var sfx_taunt_phase_2: Array[AudioStream]
@@ -92,6 +93,9 @@ var sfx_taunt_phase_5_active: Array[AudioStream] = sfx_taunt_phase_5
 # TODO - combine these in a resource class
 @export var sfx_player_defeated_taunt: Array[AudioStream]
 @export var player_defeated_taunt_captions: Array[String]
+
+@export var sfx_player_defeated_main_fight: Array[AudioStream]
+@export var sfx_boss_defeated: Array[AudioStream]
 
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 20.0
@@ -161,6 +165,7 @@ var laser_target_pos: Vector3
 @onready var laser_particles_pivot: Node3D = $LaserParticlePivot
 @onready var laser_particles: GPUParticles3D = $LaserParticlePivot/LaserSpawn/LaserEndParticles
 # SFX
+@export var sfx_laser_taunt: Array[AudioStream]
 @export var sfx_laser_arm: Array[AudioStream]
 @export var sfx_laser_charging: Array[AudioStream]
 @export var sfx_laser_shoot: Array[AudioStream]
@@ -264,6 +269,24 @@ func _play_laser_fire_sfx() -> void:
 	if laser_sfx_player:
 		laser_sfx_player.stream = laser_charge_stream
 		laser_sfx_player.play()
+
+
+func player_death_taunt() -> void:
+	var taunt_sfx: AudioStream = sfx_player_defeated_main_fight.pick_random()
+	await wait_for_sfx(taunt_sfx)
+
+
+func wait_for_sfx(stream: AudioStream) -> void:
+	var sfx_length: float = stream.get_length()
+	SoundManager.play_sound(stream, "SFX")
+	
+	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
+	anim_sm.travel("taunt")
+	hit_effect_sprite_squash(sfx_length, Vector2(0, -0.1))
+	
+	await get_tree().create_timer(sfx_length, false).timeout
+	
+	anim_player.speed_scale = 1.0
 
 
 func activate() -> void:
@@ -383,6 +406,7 @@ func _on_died() -> void:
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		anim_tree["parameters/mechanic_attack_states/conditions/dead"] = true
+		SoundManager.play_sound(sfx_boss_defeated.pick_random(), "SFX")
 		await death_anim_finished
 		
 		for i in chip_bonus_on_kill:
@@ -1053,6 +1077,7 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	desired_distance = 80
 	
 	state_chart.send_event("start_targeting")
+	SoundManager.play_sound(sfx_laser_taunt.pick_random(), "SFX")
 	
 	# Laser drops from the sky
 	var sfx_player = get_available_sfx_player()
@@ -1705,6 +1730,11 @@ func taunt() -> void:
 	if next_attack == "start_laser_aoe_attack":
 		return
 	
+	if is_taunting:
+		return
+	
+	is_taunting = true
+	
 	velocity = Vector3.ZERO
 	state_chart.send_event("start_targeting")
 	
@@ -1736,17 +1766,9 @@ func taunt() -> void:
 		_:
 			taunt_sfx = sfx_taunt_all.pick_random()
 	
-	# Scale the animation length to the sound
-	var sfx_length: float = taunt_sfx.get_length()
-	SoundManager.play_sound(taunt_sfx, "SFX")
+	await wait_for_sfx(taunt_sfx)
 	
-	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / sfx_length
-	anim_sm.travel("taunt")
-	hit_effect_sprite_squash(sfx_length, Vector2(0, -0.1))
-	
-	await get_tree().create_timer(sfx_length, false).timeout
-	
-	anim_player.speed_scale = 1.0
+	is_taunting = false
 	
 	return
 
@@ -1822,7 +1844,8 @@ func _on_tutorial_phase_2_state_entered() -> void:
 	nails_anim_sm.travel("disarm")
 	anim_sm.travel("idle")
 	tutorial_phase_2_started.emit()
-	SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
+	if not is_taunting:
+		SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
 
 
 func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
@@ -2268,7 +2291,7 @@ func _on_phase_5_state_entered() -> void:
 	ranged_phase_count = 0
 	attack_interrupt = false
 	phase_5_started.emit()
-	SoundManager.play_sound(sfx_taunt_phase_5.pick_random(), "SFX")
+	await wait_for_sfx(sfx_taunt_phase_5.pick_random())
 	
 	select_attack()
 
