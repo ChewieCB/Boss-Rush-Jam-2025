@@ -31,7 +31,7 @@ var rising_platforms: Array[Node]
 @export var water_damage_tick: float = 1.0
 @export var water_damage_amount: float = 2.0
 var water_damage_enabled = false
-const DRUNK_DURATION = 4.0
+@export var drunk_buildup_per_tick: float = 35.0
 @export var splash_particle_prefab: PackedScene
 @export var sfx_splash: Array[AudioStream]
 
@@ -211,9 +211,8 @@ func _on_water_damage_area_body_entered(body: Node3D) -> void:
 		splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
 	splash.emitting = true
 	
-	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
-		player.apply_drunk_status(DRUNK_DURATION)
+		player.add_status_buildup(&"drunk", drunk_buildup_per_tick)
 		water_damage_timer.start(water_damage_tick)
 		if water_damage_enabled:
 			player.health_component.damage(water_damage_amount)
@@ -262,6 +261,6 @@ func _on_waterfall_area_entered(area: Area3D) -> void:
 
 
 func _on_water_damage_timer_timeout() -> void:
-	player.apply_drunk_status(DRUNK_DURATION)
+	player.add_status_buildup(&"drunk", drunk_buildup_per_tick)
 	if water_damage_enabled:
 		player.health_component.damage(water_damage_amount)

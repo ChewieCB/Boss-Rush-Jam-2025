@@ -26,7 +26,7 @@ enum ResourceTypeEnum {
 func delete_save_file(slot_id: int):
 	var save_path = get_savefile_name(slot_id)
 	var dir = DirAccess.open("user://")
-	
+
 	if dir and dir.file_exists(save_path):
 		var result = dir.remove(save_path)
 		if result == OK:
@@ -40,14 +40,14 @@ func delete_save_file(slot_id: int):
 func save_game(slot_id):
 	is_saving = true
 	started_saving.emit()
-	
+
 	if not GameManager.equipped_gun_frame:
 		GameManager.equipped_gun_frame = GameManager.starting_gun_frame
-	
+
 	var ante_states = []
 	for _profile in GameManager.boss_diff_profiles:
 		ante_states.append(_profile.ante_purchased_states)
-	
+
 	var save_dict = {
 		# Stats
 		"player_currency": GameManager.player_currency,
@@ -55,10 +55,10 @@ func save_game(slot_id):
 		"bosses_defeated": GameManager.bosses_defeated,
 		"player_skill_points": GameManager.player_skill_points,
 		"player_skill_dict": GameManager.player_skill_dict,
-		
+
 		# Luck
 		"luck_trigger_dict": LuckHandler.luck_trigger_dict,
-		
+
 		# Inventory & Shop
 		"equipped_barrels": convert_resources_to_ids(GameManager.equipped_barrels, ResourceTypeEnum.BARREL),
 		"inventory_barrels": convert_resources_to_ids(GameManager.inventory_barrels, ResourceTypeEnum.BARREL),
@@ -72,7 +72,7 @@ func save_game(slot_id):
 		"tutorial_completed": GameManager.tutorial_completed,
 		"player_gained_first_barrel": GameManager.player_gained_first_barrel,
 		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
-		
+
 		# Boss ante tracking
 		"boss_barrels_unlocked": GameManager.boss_barrels_unlocked,
 		"newly_unlocked_barrel": convert_resources_to_ids([GameManager.newly_unlocked_barrel], ResourceTypeEnum.BARREL),
@@ -116,22 +116,22 @@ func load_game(slot_id):
 		GameManager.load_new_save_data()
 		savefile_loaded.emit()
 		return
-	
+
 	save_data = patch_save_version(save_data)
-	
+
 	# Stats
 	GameManager.player_currency = save_data.get("player_currency", 0)
 	GameManager.player_level = save_data.get("player_level", 1)
 	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
 	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
 	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data.get("bosses_defeated", []))
-	
+
 	# Luck
 	LuckHandler.luck_trigger_dict = save_data.get("luck_trigger_dict", {})
 	if LuckHandler.luck_trigger_dict == {}:
 		LuckHandler.reset_luck_triggers()
 	LuckHandler.update_luck_triggers_from_new_patch()
-	
+
 	# Inventory & Shop
 	# These don't use save_data.get() since if it corrupted, it better to know about the error right away and not overwrite the save
 	GameManager.equipped_barrels = convert_ids_to_resources(save_data["equipped_barrels"], ResourceTypeEnum.BARREL)
@@ -140,13 +140,13 @@ func load_game(slot_id):
 	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME).front()
 	GameManager.inventory_gun_frames = convert_ids_to_resources(save_data["inventory_gun_frames"], ResourceTypeEnum.GUN_FRAME)
 	GameManager.shop_gun_frames = convert_ids_to_resources(save_data["shop_gun_frames"], ResourceTypeEnum.GUN_FRAME)
-	
+
 	# First time player flags
 	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
 	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
 	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
 	GameManager.tutorial_completed = save_data.get("tutorial_completed", false)
-	
+
 	# Boss ante tracking
 	GameManager.boss_barrels_unlocked = save_data.get("boss_barrels_unlocked", [0, 0, 0, 0, 0, 0, 0])
 	GameManager.newly_unlocked_barrel = convert_ids_to_resources(save_data.get("newly_unlocked_barrel"), ResourceTypeEnum.BARREL).front()
@@ -154,13 +154,13 @@ func load_game(slot_id):
 	for i in range(ante_purchased_states.size()):
 		var _state = ante_purchased_states[i]
 		GameManager.boss_diff_profiles[i].ante_purchased_states = convert_id_to_ante_state(_state)
-	
+
 	# Metadata
 	GameManager.total_playtime = save_data.get("total_playtime", 0)
 	var _this_file_save_version = save_data.get("save_version", SAVE_VERSION)
-	
+
 	check_for_new_update_barrels()
-	
+
 	savefile_loaded.emit()
 
 
@@ -199,7 +199,7 @@ func save_setting_config():
 	config.set_value("DEBUG", "always_inventory", GameManager.CHEAT_always_inventory)
 	config.set_value("DEBUG", "boss_one_shot", GameManager.CHEAT_oneshot)
 	config.set_value("DEBUG", "freecam", GameManager.CHEAT_freecam)
-	
+
 	config.save("user://setting.cfg")
 
 
@@ -232,14 +232,14 @@ func load_setting_config():
 	GameManager.bgm_audio = config.get_value("Audio", "bgm_audio", 100)
 	GameManager.sfx_audio = config.get_value("Audio", "sfx_audio", 100)
 	GameManager.ui_audio = config.get_value("Audio", "ui_audio", 100)
-	
+
 	GameManager.CHEAT_godmode = config.get_value("DEBUG", "god_mode", false)
 	GameManager.CHEAT_demomode = config.get_value("DEBUG", "demo_mode", false)
 	GameManager.CHEAT_demomode_timeout = config.get_value("DEBUG", "demo_mode_timeout", 5)
 	GameManager.CHEAT_always_inventory = config.get_value("DEBUG", "always_inventory", false)
 	GameManager.CHEAT_oneshot = config.get_value("DEBUG", "boss_one_shot", false)
 	GameManager.CHEAT_freecam = config.get_value("DEBUG", "freecam", false)
-	
+
 	setting_config_loaded.emit()
 
 # If we update the game and add new barrel into GameManager's shop,
@@ -321,9 +321,9 @@ func convert_id_to_ante_state(ante_state_int: int) -> Array[bool]:
 	for i in range(arr_length - 1, -1, -1):
 		var _bit = (ante_state_int >> i) & 1
 		ante_states.append(_bit == 1)
-	
+
 	return ante_states
-	
+
 
 
 func patch_save_version(save_data) -> Dictionary:

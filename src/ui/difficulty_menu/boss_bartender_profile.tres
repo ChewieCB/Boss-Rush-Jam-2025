@@ -7,4 +7,7 @@ script = ExtResource("1_tllfo")
 boss_id = 3
 boss_quote = "\"Every level up’s another shot of danger. But hey, the top shelf was never meant for cowards.\""
 ante_names = Array[String](["TBD", "TBD", "TBD", "Premium Bullets", "Sleight of Hand"])
+ante_descriptions = Array[String](["", "", ""])
+ante_purchased_states = Array[bool]([true, false, false])
 boss_risk_reward_mult = 1.2
+ante_costs = Array[int]([0, 2000, 5000])

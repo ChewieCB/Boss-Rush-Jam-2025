@@ -7,4 +7,7 @@ script = ExtResource("1_68u2d")
 boss_id = 7
 boss_quote = "\"Let's have fun together, shall we?\""
 ante_names = Array[String](["", "", "", "", ""])
+ante_descriptions = Array[String](["", "", ""])
+ante_purchased_states = Array[bool]([true, false, false])
 boss_risk_reward_mult = 1.5
+ante_costs = Array[int]([0, 2000, 5000])

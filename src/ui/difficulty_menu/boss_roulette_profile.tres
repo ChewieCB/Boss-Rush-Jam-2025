@@ -7,4 +7,7 @@ script = ExtResource("1_yj4co")
 boss_id = 2
 boss_quote = "\"Go on, handsome… give the wheel something worth spinning for.\""
 ante_names = Array[String](["House of Cards", "Unstable Platforms", "Double Sweep", "Lasting Heat", "Center of Anttention"])
+ante_descriptions = Array[String](["", "", ""])
+ante_purchased_states = Array[bool]([true, false, false])
 boss_risk_reward_mult = 1.0
+ante_costs = Array[int]([0, 2000, 5000])

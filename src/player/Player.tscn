@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=96 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -66,6 +66,7 @@
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
 [ext_resource type="Script" path="res://src/player/interact_ui.gd" id="48_hxlt6"]
 [ext_resource type="PackedScene" uid="uid://dymal26tqayfd" path="res://src/ui/player/luck/LuckMessageUI.tscn" id="49_7wxbq"]
+[ext_resource type="PackedScene" uid="uid://bcb626m7hxgwo" path="res://src/ui/player/status/StatusBuildupGauge.tscn" id="51_gdc44"]
 [ext_resource type="PackedScene" uid="uid://d2m0w0bro5j5l" path="res://src/ui/player/StatUINew.tscn" id="51_vst8k"]
 [ext_resource type="PackedScene" uid="uid://dn3jierj8cai5" path="res://src/player/misc/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
@@ -77,6 +78,9 @@
 [ext_resource type="AudioStream" uid="uid://dvrx3b03s5o82" path="res://src/player/assets/sfx/Bullet Whiz 4.mp3" id="72_mj3f0"]
 [ext_resource type="PackedScene" uid="uid://bk3ihkwl0pq3k" path="res://src/player/misc/DustTrail.tscn" id="74_87vqs"]
 [ext_resource type="Script" path="res://src/player/bullet_whizz_radius.gd" id="119_e0qef"]
+[ext_resource type="Script" path="res://src/ui/player/status/status_buildup_gauge_container.gd" id="120_sbgc"]
+[ext_resource type="Script" path="res://src/components/status_buildup/status_buildup_component.gd" id="121_sbc"]
+[ext_resource type="Texture2D" uid="uid://cs3pihvswdkxr" path="res://assets/sprite/status_icon/drunk.png" id="122_drnk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -311,6 +315,24 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.472, 0.826, 0, 0)
+
+[node name="StatusBuildupGaugeContainer" type="VBoxContainer" parent="UI/StatusOverlay" node_paths=PackedStringArray("buildups_root")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -232.0
+offset_right = 232.0
+offset_bottom = -212.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+script = ExtResource("120_sbgc")
+gauge_scene = ExtResource("51_gdc44")
+buildups_root = NodePath("../../../StatusBuildups")
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
@@ -676,7 +698,15 @@ to = NodePath("../../Inactive")
 event = &"remove_status_drunk"
 delay_in_seconds = "0.0"
 
-[node name="DrunkTimer" type="Timer" parent="StateChart/Root/Status/Drunk"]
+[node name="StatusBuildups" type="Node" parent="."]
+
+[node name="Drunk" type="Node" parent="StatusBuildups" node_paths=PackedStringArray("state_chart")]
+script = ExtResource("121_sbc")
+status_id = &"drunk"
+state_chart = NodePath("../../StateChart")
+display_name = "Drunk"
+icon = ExtResource("122_drnk")
+gauge_color = Color(1, 0.240817, 0, 1)
 
 [node name="NearEnemyRadius" type="Area3D" parent="."]
 collision_layer = 0
@@ -716,7 +746,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.886171, 0)
 [connection signal="state_entered" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
-[connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
 [connection signal="body_entered" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_entered"]
 [connection signal="body_exited" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_exited"]
 [connection signal="area_entered" from="BulletWhizzRadius" to="BulletWhizzRadius" method="_on_area_entered"]
