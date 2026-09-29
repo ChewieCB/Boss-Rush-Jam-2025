@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cqkah5sayxi1q"
+path="res://.godot/imported/Health Low One-Shots Standard 3.mp3-c2db556228ed2d9a0fd83c0615f84b0b.mp3str"
+
+[deps]
+
+source_file="res://src/ui/player/hurt_screen/assets/sfx/Health Low One-Shots Standard 3.mp3"
+dest_files=["res://.godot/imported/Health Low One-Shots Standard 3.mp3-c2db556228ed2d9a0fd83c0615f84b0b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

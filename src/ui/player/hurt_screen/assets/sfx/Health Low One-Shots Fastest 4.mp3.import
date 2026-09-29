@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dodvcysimvnm"
+path="res://.godot/imported/Health Low One-Shots Fastest 4.mp3-570ee1d4eb4c6d1155938d5d2ad1514c.mp3str"
+
+[deps]
+
+source_file="res://src/ui/player/hurt_screen/assets/sfx/Health Low One-Shots Fastest 4.mp3"
+dest_files=["res://.godot/imported/Health Low One-Shots Fastest 4.mp3-570ee1d4eb4c6d1155938d5d2ad1514c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

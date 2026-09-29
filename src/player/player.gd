@@ -1095,6 +1095,10 @@ func _on_health_changed(current_health: float, prev_health: float) -> void:
 	var health_hurt_opacity = clampf(remap(current_health_ratio, 0.5, 0.0, 0.0, 1.0), 0.0, 1.0)
 	var anim_speed: float = clampf(remap(current_health_ratio, 0.5, 0.0, 1.0, 1.8), 1.0, 1.8)
 	hurt_overlay.update_low_health_anim(health_hurt_opacity, anim_speed)
+	# SFX lengths:
+	# normal: ~0.8s
+	# fast: ~0.7s
+	# fasted: ~0.6s
 	# Health bar shake on heal
 	if current_health > prev_health:
 		stat_ui.anim_health_ui_scale(1.2)

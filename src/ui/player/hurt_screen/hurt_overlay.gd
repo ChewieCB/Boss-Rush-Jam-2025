@@ -17,12 +17,18 @@ var oldest_marker_idx: int = 0
 @onready var hurt_blood: TextureRect = $HurtFlash/BloodSplatter
 @export var hurt_blood_textures: Array[Texture]
 @onready var low_health_overlay: Control = $LowHealthOverlay
+@onready var sfx_player: AudioStreamPlayer = $SFXPlayer
 
 var low_health_tween: Tween
 var dodge_flash_tween: Tween
 
 const DODGE_FLASH_IN_TIME: float = 0.03
 const DODGE_FLASH_OUT_TIME: float = 0.3
+
+@export var sfx_low_health_slow: Array[AudioStream]
+@export var sfx_low_health_medium: Array[AudioStream]
+@export var sfx_low_health_fast: Array[AudioStream]
+var sfx_low_health_arr: Array[AudioStream] = sfx_low_health_slow
 
 
 func _ready() -> void:
@@ -73,6 +79,17 @@ func _set_dodge_flash_intensity(value: float) -> void:
 
 func update_low_health_anim(base_alpha: float, speed: float = 1.0) -> void:
 	anim_tree["parameters/low_health_blend/blend_amount"] = base_alpha
+	
+	# Speed ranges from 1.0 -> 1.8
+	var _sfx_idx: int = int(roundf(remap(speed, 1.0, 1.8, 1, 3)))
+	match _sfx_idx:
+		1:
+			sfx_low_health_arr = sfx_low_health_slow
+		2:
+			sfx_low_health_arr = sfx_low_health_medium
+		3:
+			sfx_low_health_arr = sfx_low_health_fast
+	sfx_player.volume_db = remap(speed, 1.0, 1.6, -20.0, 0.0)
 
 	if base_alpha == 0.0:
 		return
@@ -86,6 +103,11 @@ func update_low_health_anim(base_alpha: float, speed: float = 1.0) -> void:
 	low_health_anim.track_set_key_value(0, 1, Color(1, 1, 1, high_alpha * base_alpha))
 	low_health_anim.track_set_key_value(0, 2, Color(1, 1, 1, low_alpha * base_alpha))
 	anim_tree["parameters/low_health_speed/scale"] = speed
+
+
+func _heartbeat_sfx() -> void:
+	sfx_player.stream = sfx_low_health_arr.pick_random()
+	sfx_player.play()
 
 
 func get_marker_dir(source_pos: Vector3) -> float:
