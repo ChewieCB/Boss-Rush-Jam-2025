@@ -84,12 +84,13 @@ var enemy_near_counter = 0
 
 @export_group("Status Effects")
 @export_subgroup("Drunk")
-@onready var drunk_timer: Timer = $StateChart/Root/Status/Drunk/DrunkTimer
 @export var drunk_movement_drift: float = 1.0
 @export var drunk_movement_drift_change_interval: float = 0.8
 var drunk_drift_timer: float = 0.0
 var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
+
+@onready var status_buildups_root: Node = $StatusBuildups
 
 @onready var heal_vfx: GPUParticles3D = $SpinHealVFX
 
@@ -1376,9 +1377,24 @@ func check_permanent_buffs():
 		GameManager.create_and_add_status_effect("Cheat Death", "cheat_death_buff",
 		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, false, true, cheat_death_icon)
 
-func apply_drunk_status(duration: float) -> void:
-	state_chart.send_event("add_status_drunk")
-	drunk_timer.start(duration)
+func get_status_buildup(status_id: StringName) -> StatusBuildupComponent:
+	for child in status_buildups_root.get_children():
+		if child is StatusBuildupComponent and child.status_id == status_id:
+			return child
+	push_warning("Player has no StatusBuildupComponent for '%s'" % status_id)
+	return null
+
+
+func add_status_buildup(status_id: StringName, amount: float) -> void:
+	var buildup := get_status_buildup(status_id)
+	if buildup:
+		buildup.add_buildup(amount)
+
+
+func apply_status(status_id: StringName, duration: float = -1.0) -> void:
+	var buildup := get_status_buildup(status_id)
+	if buildup:
+		buildup.trigger(duration)
 
 
 func _on_status_drunk_active_state_entered() -> void:
@@ -1388,7 +1404,6 @@ func _on_status_drunk_active_state_entered() -> void:
 func _on_status_drunk_active_state_exited() -> void:
 	drunk_ui.end_drunk()
 	player_camera.target_drunk_intensity = 0.0
-	drunk_timer.stop()
 
 func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 	# Don't move the player when they're standing still
@@ -1406,10 +1421,6 @@ func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 	# Add to input direction
 	velocity = Vector3(drunk_drift_vector.x, 0, drunk_drift_vector.y)
 	move_and_slide()
-
-func _on_drunk_timer_timeout() -> void:
-	state_chart.send_event("remove_status_drunk")
-
 
 func _on_check_standing_collision_body_exited(_body: Node3D) -> void:
 	uncrouch_collision_check_count -= 1

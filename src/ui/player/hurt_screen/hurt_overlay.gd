@@ -26,6 +26,9 @@ const DODGE_FLASH_OUT_TIME: float = 0.3
 
 
 func _ready() -> void:
+	dodge_flash.hide()
+	_set_dodge_flash_intensity(0.0)
+
 	for i in range(MAX_DAMAGE_MARKERS):
 		active_damage_markers.append(null)
 		marker_generations.append(0)
@@ -57,9 +60,11 @@ func dodge() -> void:
 	if dodge_flash_tween:
 		dodge_flash_tween.kill()
 
+	dodge_flash.show()
 	dodge_flash_tween = create_tween().set_speed_scale(1 / Engine.time_scale)
 	dodge_flash_tween.tween_method(_set_dodge_flash_intensity, 0.0, 1.0, DODGE_FLASH_IN_TIME)
 	dodge_flash_tween.tween_method(_set_dodge_flash_intensity, 1.0, 0.0, DODGE_FLASH_OUT_TIME).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	dodge_flash_tween.tween_callback(dodge_flash.hide)
 
 
 func _set_dodge_flash_intensity(value: float) -> void:

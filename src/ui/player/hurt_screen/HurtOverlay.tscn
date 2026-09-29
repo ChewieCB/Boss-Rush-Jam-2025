@@ -23,7 +23,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dgfls"]
 shader = ExtResource("19_dgfls")
-shader_parameter/intensity = 1.0
+shader_parameter/intensity = 0.0
 shader_parameter/edge_color = Color(0, 0.944863, 1, 1)
 shader_parameter/edge_glow = 0.55
 shader_parameter/aberration_strength = 0.018
@@ -492,7 +492,6 @@ script = ExtResource("1_46sc2")
 hurt_blood_textures = Array[Texture]([ExtResource("4_nh1ch"), ExtResource("3_syllw"), ExtResource("4_fxgpc"), ExtResource("5_1dlhj"), ExtResource("6_mprmg"), ExtResource("7_bmyds"), ExtResource("8_uy1th"), ExtResource("9_r0gl4"), ExtResource("10_gqxip"), ExtResource("3_qnulk"), ExtResource("12_vts24"), ExtResource("5_1hqwy")])
 
 [node name="DodgeFlash" type="ColorRect" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_dgfls")
 layout_mode = 1
 anchors_preset = 15
