@@ -1,4 +1,4 @@
-[gd_scene load_steps=276 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=279 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -20,8 +20,11 @@
 [ext_resource type="AudioStream" uid="uid://do01knxdpu7lh" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun-Jam Demo-ed-v2 2.mp3" id="10_jmovd"]
 [ext_resource type="AudioStream" uid="uid://ck4rb1a6pc5qs" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun-Jam Demo-ed-v2 3.mp3" id="11_0fqem"]
 [ext_resource type="Texture2D" uid="uid://dh6t8spyrx65x" path="res://src/player/gun/assets/sprite/rescale/idle/gun_barrel_firing.png" id="11_cwod4"]
+[ext_resource type="AudioStream" uid="uid://ce7sm4xghrbou" path="res://src/player/gun/assets/sfx/Roller Ready 1.mp3" id="11_vb1wv"]
+[ext_resource type="AudioStream" uid="uid://cicqsbrp8r7x8" path="res://src/player/gun/assets/sfx/Roller Ready 2.mp3" id="12_5gp5f"]
 [ext_resource type="Texture2D" uid="uid://fnlwhdnqu56f" path="res://src/player/gun/assets/sprite/rescale/idle/muzzle_flash.png" id="12_fgtrf"]
 [ext_resource type="AudioStream" uid="uid://w4ogokuga5dy" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun-Jam Demo-ed-v2 4.mp3" id="12_ptdav"]
+[ext_resource type="AudioStream" uid="uid://bi7cxgpfdl4un" path="res://src/player/gun/assets/sfx/Roller Ready 3.mp3" id="13_d53q5"]
 [ext_resource type="AudioStream" uid="uid://duw122bhvfvwi" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/clear/Gun-Jam Clear Demo-ed-v2 1.mp3" id="13_ffwy5"]
 [ext_resource type="AudioStream" uid="uid://bcney53foa2xa" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/clear/Gun-Jam Clear Demo-ed-v2 2.mp3" id="14_00j2m"]
 [ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="14_8rp44"]
@@ -1202,6 +1205,7 @@ TEMP_sfx_spin = ExtResource("4_jq6y4")
 TEMP_sfx_click = ExtResource("5_cutjd")
 TEMP_regain_ammo = ExtResource("6_j7hjd")
 TEMP_crit = SubResource("AudioStreamRandomizer_bp0ml")
+sfx_roller_ready = Array[AudioStream]([ExtResource("11_vb1wv"), ExtResource("12_5gp5f"), ExtResource("13_d53q5")])
 sfx_gp_jam = Array[AudioStream]([ExtResource("9_edpb2"), ExtResource("10_jmovd"), ExtResource("11_0fqem"), ExtResource("12_ptdav")])
 sfx_gp_clear = Array[AudioStream]([ExtResource("13_ffwy5"), ExtResource("14_00j2m"), ExtResource("15_5n4th"), ExtResource("16_njnu4")])
 sfx_gp_crit = Array[AudioStream]([ExtResource("10_gvm27"), ExtResource("9_5wtdt"), ExtResource("8_exu4s")])

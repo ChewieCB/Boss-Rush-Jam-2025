@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b5rdr2vf2qvbl"
+path="res://.godot/imported/Mechanic Player loses main fight and kicked back to the lobby 3.mp3-5953ee0d89402c72071cb07c6d9e8005.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/Mechanic Player loses main fight and kicked back to the lobby 3.mp3"
+dest_files=["res://.godot/imported/Mechanic Player loses main fight and kicked back to the lobby 3.mp3-5953ee0d89402c72071cb07c6d9e8005.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

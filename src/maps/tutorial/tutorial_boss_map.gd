@@ -548,11 +548,8 @@ func _align_player_camera_to_cutscene_camera() -> void:
 func _on_player_death() -> void:
 	if GameManager.tutorial_completed:
 		boss.attack_interrupt = true
+		await boss.player_death_taunt()
 		boss.state_chart.send_event("deactivate")
-		if boss.next_attack != "start_laser_aoe_attack":
-			boss.state_chart.send_event("start_targeting")
-		boss.velocity = Vector3.ZERO
-		boss.taunt()
 		boss.cleanup_shock_hazards()
 		show_end_panel()
 	else:

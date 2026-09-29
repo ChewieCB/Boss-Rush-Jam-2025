@@ -35,9 +35,9 @@ func _ready() -> void:
 			ui_layer.visible = false
 			ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	)
-	for vendor in vendors:
-		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
-		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
+	#for vendor in vendors:
+		#vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
+		#vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
 	
 	ui_layer.visible = false
 	ui_layer.process_mode = Node.PROCESS_MODE_DISABLED

@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8idyobhu4ucw"]
+[gd_scene load_steps=9 format=3 uid="uid://b8idyobhu4ucw"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_glc3y"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_ycsp2"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_lgco5"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_o15qj"]
+[ext_resource type="AudioStream" uid="uid://dianaisrjvjxq" path="res://src/player/gun/assets/sfx/effects/elemental_fire/Elemental Barrels Fire Loop.mp3" id="4_ocryd"]
+[ext_resource type="AudioStream" uid="uid://cpkkfm7aex161" path="res://src/player/gun/assets/sfx/effects/elemental_poison/BARTENDER POISON PUDDLE LOOP(1).mp3" id="6_ehujw"]
+[ext_resource type="AudioStream" uid="uid://beqjd14wsaloh" path="res://src/player/gun/assets/sfx/effects/elemental_ice/Elemental Ice Loop 2 All 3 Quiet Chimes.mp3" id="7_rtld8"]
+[ext_resource type="AudioStream" uid="uid://bg4wqcjbggxy1" path="res://src/player/gun/assets/sfx/effects/elemental_lightning/Elemental Barrels Electricity Loop.mp3" id="8_yjsn1"]
 
 [node name="ElementalBarrel" type="Node3D"]
 script = ExtResource("1_glc3y")
@@ -19,11 +23,13 @@ positive_desc = Array[String](["Applies burning status"])
 negative_desc = Array[String](["Reduced damage"])
 icon_id = 48
 
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion"]
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion" node_paths=PackedStringArray("sfx_player")]
 script = ExtResource("3_lgco5")
 status_effect = 1
 change_color = true
 new_color = Color(1, 0.324769, 0, 1)
+sfx_player = NodePath("../../../SFXPlayer")
+sfx_loop = Array[AudioStream]([ExtResource("4_ocryd")])
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/FireInfusion"]
 script = ExtResource("4_o15qj")
@@ -40,11 +46,14 @@ positive_desc = Array[String](["Applies poison status"])
 negative_desc = Array[String](["Slower firerate"])
 icon_id = 49
 
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion"]
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion" node_paths=PackedStringArray("sfx_player")]
 script = ExtResource("3_lgco5")
 status_effect = 2
 change_color = true
 new_color = Color(0.253167, 0, 0.49, 1)
+sfx_player = NodePath("../../../SFXPlayer")
+sfx_loop = Array[AudioStream]([ExtResource("6_ehujw")])
+sfx_db = -3.0
 
 [node name="ModifyFirerate" type="Node3D" parent="EffectContainer/PoisonInfusion"]
 script = ExtResource("4_o15qj")
@@ -61,11 +70,13 @@ positive_desc = Array[String](["Applies frozen status"])
 negative_desc = Array[String](["Smaller magazine size"])
 icon_id = 47
 
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion"]
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion" node_paths=PackedStringArray("sfx_player")]
 script = ExtResource("3_lgco5")
 status_effect = 3
 change_color = true
 new_color = Color(0, 0.533333, 0.658824, 0.866667)
+sfx_player = NodePath("../../../SFXPlayer")
+sfx_loop = Array[AudioStream]([ExtResource("7_rtld8")])
 
 [node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ColdInfusion"]
 script = ExtResource("4_o15qj")
@@ -82,14 +93,21 @@ positive_desc = Array[String](["Applies shocked status"])
 negative_desc = Array[String](["Increased recoil"])
 icon_id = 50
 
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ElectricInfusion"]
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ElectricInfusion" node_paths=PackedStringArray("sfx_player")]
 script = ExtResource("3_lgco5")
 status_effect = 4
 change_color = true
 new_color = Color(0.981201, 1, 0.496776, 1)
+sfx_player = NodePath("../../../SFXPlayer")
+sfx_loop = Array[AudioStream]([ExtResource("8_yjsn1")])
+sfx_db = -9.0
 
 [node name="ModifyRecoil" type="Node3D" parent="EffectContainer/ElectricInfusion"]
 script = ExtResource("4_o15qj")
 attribute = 11
 modify_value = 40.0
 is_perc = true
+
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -6.0
+bus = &"Gun"

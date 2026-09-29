@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dianaisrjvjxq"
+path="res://.godot/imported/Elemental Barrels Fire Loop.mp3-c401e14a3397904e40555d9ddb2ac907.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/elemental_fire/Elemental Barrels Fire Loop.mp3"
+dest_files=["res://.godot/imported/Elemental Barrels Fire Loop.mp3-c401e14a3397904e40555d9ddb2ac907.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

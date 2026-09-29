@@ -9,6 +9,7 @@ signal reset_barrel_info
 @export var gun_frame_item_ui_prefab: PackedScene
 # SFX
 @export var sfx_open: AudioStream
+@export var sfx_close: AudioStream
 @export var sfx_click: AudioStream
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
@@ -62,7 +63,7 @@ func _input(event: InputEvent) -> void:
 			focused_ui = current_focus_area.get_child(active_focus_idx)
 		
 		if event.is_action_pressed("interact"):
-			close()
+			toggle()
 			get_viewport().set_input_as_handled()
 		
 		elif event.is_action_pressed("ui_accept"):
@@ -114,7 +115,6 @@ func _process(_delta: float) -> void:
 
 
 func toggle():
-	SoundManager.play_sound(sfx_open, "SFX")
 	if visible:
 		close()
 	else:
@@ -122,6 +122,8 @@ func toggle():
 
 
 func open():
+	SoundManager.play_sound(sfx_open, "UI")
+	GameManager.player.is_in_menu = true
 	GameManager.player.controls_disabled = true
 	GameManager.change_fmod_bgm_menu_is_up(true)
 	GameManager.player.toggle_anim_reticle(false)
@@ -130,7 +132,6 @@ func open():
 	visible = true
 	
 	_on_controller_connection(0, GameManager.is_controller_connected)
-	GameManager.player.is_in_menu = true
 	inventory_opened.emit()
 	
 	# We need to wait a frame so the button doesn't drop focus
@@ -143,6 +144,7 @@ func open():
 
 
 func close():
+	SoundManager.play_sound(sfx_close, "UI")
 	GameManager.player.controls_disabled = false
 	GameManager.change_fmod_bgm_menu_is_up(false)
 	GameManager.player.toggle_anim_reticle(true)

@@ -13,7 +13,6 @@ script = ExtResource("1_v4d5e")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="SlowRoller" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Slow Roller"
 display_text_tag = "Slow and steady."
@@ -58,7 +57,6 @@ modify_value = -50.0
 is_perc = true
 
 [node name="SnapCall" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
 display_text_tag = "Supersonic!"

@@ -12,7 +12,8 @@ class_name InfoBox
 
 @export var max_resize_steps: int = 40
 @export var show_header: bool = true
-@export var sfx_unlock: AudioStream
+@export var sfx_already_unlocked: Array[AudioStream]
+@export var sfx_unlocked: Array[AudioStream]
 
 
 func anim_fade_in(time: float) -> void:
@@ -36,11 +37,14 @@ func anim_fade_out(time: float) -> void:
 func win(barrel_data: BarrelDataResource) -> void:
 	unlock_icon.texture = barrel_data.barrel_image
 	var unlock_string: String = ""
+	var _sfx: AudioStream
 	if GameManager.boss_barrels_unlocked[barrel_data.boss_id] == 0:
 		unlock_string = "[i]Unlocked [wave amp=30.0 freq=3.0 connected=0][color=green][font_size=64]%s[/font_size][/color][/wave][/i]" % barrel_data.barrel_name
+		_sfx = sfx_unlocked.pick_random()
 		unlock_icon.modulate = Color.WHITE
 	else:
 		unlock_string = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]" 
+		_sfx = sfx_already_unlocked.pick_random()
 		unlock_icon.modulate = Color.DARK_GRAY
 	
 	unlock_label.text = unlock_string
@@ -50,7 +54,7 @@ func win(barrel_data: BarrelDataResource) -> void:
 	
 	if unlock_container.visible:
 		particles.restart()
-		SoundManager.play_sound(sfx_unlock, "UI")
+		SoundManager.play_sound(_sfx, "UI")
 	
 	await get_tree().create_timer(4.5).timeout
 	await anim_fade_out(0.6)

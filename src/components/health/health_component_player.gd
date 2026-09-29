@@ -4,6 +4,10 @@ signal player_damage(damage: float, damage_pos: Vector3)
 # Hit landed while invincible (dash/crouch i-frames)
 signal damage_blocked(damage_pos: Vector3)
 
+
+@export var sfx_i_frame: Array[AudioStream]
+
+
 func _ready() -> void:
 	super()
 	enabled = !GameManager.CHEAT_godmode
@@ -46,4 +50,5 @@ _color: Color = Color.WHITE, _text_scale_pop: float = 1.3, _detail_text: String 
 
 func block_damage(pos: Vector3) -> void:
 	damage_blocked.emit(pos)
+	SoundManager.play_sound(sfx_i_frame.pick_random(), "SFX")
 	LuckHandler.increase_luck(10, "+10 Dodged", LuckHandler.LuckTriggerType.RARE)

@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dpyj480amlor7"]
+[gd_scene load_steps=15 format=3 uid="uid://dpyj480amlor7"]
 
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_tbrlo"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_item_ui.gd" id="2_2nkrm"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_7nebw"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_fr15b"]
+[ext_resource type="AudioStream" uid="uid://dd8de57ka0nw2" path="res://src/ui/shop/assets/sfx/New Barrel Unlcoked Shop.mp3" id="3_m7k6d"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="5_qrpjr"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="6_01o4k"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="7_67n3m"]
@@ -64,6 +65,7 @@ spin_value_label = NodePath("CenterContainer/ReloadSpinValueLabel")
 locked_panel = NodePath("LockedPanel")
 boss_locked_panel = NodePath("BossLocked")
 boss_unlock_particles = NodePath("UnlockParticles")
+sfx_unlock = Array[AudioStream]([ExtResource("3_m7k6d")])
 button = NodePath("Button")
 border_selected = NodePath("BorderSelected")
 

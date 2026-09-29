@@ -78,6 +78,8 @@ var _barrel_materials: Array[StandardMaterial3D] = []
 @export var TEMP_sfx_click: AudioStream
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
+@export_group("SFX | Spin")
+@export var sfx_roller_ready: Array[AudioStream]
 #
 @export_group("SFX | Barrel Effects")
 @export_subgroup("Gambler's Precision")
@@ -1381,6 +1383,11 @@ func _remove_icon_jam_overlay(idx: int) -> void:
 
 func spark_barrel(idx: int) -> void: 
 	barrel_sparks[idx].restart()
+
+
+func roller_ready(idx: int) -> void:
+	SoundManager.play_sound(sfx_roller_ready.pick_random(), "Gun")
+	spark_barrel(idx)
 
 
 func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:

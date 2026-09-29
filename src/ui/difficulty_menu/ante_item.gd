@@ -43,9 +43,9 @@ signal ante_purchased(ante_number: int)
 		currency_ui.visible = !purchased
 
 # SFX
-@export var sfx_select_ante: AudioStream
-@export var sfx_purchase: AudioStream
-@export var sfx_too_expensive: AudioStream
+@export var sfx_ante_purchase: Array[AudioStream]
+@export var sfx_ante_selected: Array[AudioStream]
+@export var sfx_ante_locked: Array[AudioStream]
 
 
 func _ready() -> void:
@@ -105,18 +105,18 @@ func purchase_ante(idx: int) -> void:
 		GameManager.player_currency -= cost
 		purchased = true
 		locked = false
-		SoundManager.play_ui_sound(sfx_purchase, "UI")
+		SoundManager.play_ui_sound(sfx_ante_purchase.pick_random(), "UI")
 		SaveManager.save_game(GameManager.chosen_slot_id)
 		await UIUtils.animate_ui_elem_shake(self)
 		ante_purchased.emit(idx)
 	else:
-		SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+		SoundManager.play_ui_sound(sfx_ante_locked.pick_random(), "UI")
 		UIUtils.animate_ui_elem_shake(self)
 
 
 func _on_button_pressed() -> void:
 	if purchased:
-		SoundManager.play_ui_sound(sfx_select_ante, "UI")
+		SoundManager.play_ui_sound(sfx_ante_selected.pick_random(), "UI")
 		await UIUtils.animate_ui_elem_shake(self)
 		ante_selected.emit(ante_number)
 		_on_button_focus_exited()

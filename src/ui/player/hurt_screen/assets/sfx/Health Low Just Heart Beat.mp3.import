@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bxonoaidv8swv"
+path="res://.godot/imported/Health Low Just Heart Beat.mp3-ac2defd3f85052c49faeb492d342b4ed.mp3str"
+
+[deps]
+
+source_file="res://src/ui/player/hurt_screen/assets/sfx/Health Low Just Heart Beat.mp3"
+dest_files=["res://.godot/imported/Health Low Just Heart Beat.mp3-ac2defd3f85052c49faeb492d342b4ed.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
