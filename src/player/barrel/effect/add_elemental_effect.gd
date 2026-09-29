@@ -5,10 +5,26 @@ extends BaseBarrelEffect
 @export var build_up_from_damage_multiplier: float = 0.5
 @export var change_color = false
 @export var new_color: Color
+@export var sfx_player: AudioStreamPlayer
+@export var sfx_loop: Array[AudioStream]
+@export var sfx_db: float = -6.0
+
+
+func _ready() -> void:
+	if not GameManager.player:
+		await get_tree().process_frame
+		await get_tree().process_frame
+	GameManager.player.menu_toggle.connect(_on_menu_toggle)
+
+
+func _on_menu_toggle(open: bool) -> void:
+	sfx_player.stream_paused = open
 
 
 func on_barrel_remove():
+	sfx_player.stop()
 	owner_barrel.owner_gun.remove_elemental_anim()
+
 
 func on_effect_set():
 	var element: String
@@ -22,13 +38,18 @@ func on_effect_set():
 		BossCore.BossStatusEffect.SHOCKED:
 			element = "electric"
 	owner_barrel.owner_gun.set_elemental_anim(element)
+	sfx_player.stream = sfx_loop.pick_random()
+	sfx_player.volume_db = sfx_db
+	sfx_player.play()
 
 
 func on_effect_removed():
+	sfx_player.stop()
 	owner_barrel.owner_gun.remove_elemental_anim()
 
 
 func on_barrel_start_spin():
+	sfx_player.stop()
 	owner_barrel.owner_gun.remove_elemental_anim()
 
 

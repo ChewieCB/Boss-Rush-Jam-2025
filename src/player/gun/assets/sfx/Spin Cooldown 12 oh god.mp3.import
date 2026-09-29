@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ca03signax6rx"
+path="res://.godot/imported/Spin Cooldown 12 oh god.mp3-fe85c211b678f33c60417a6b8a38814e.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/Spin Cooldown 12 oh god.mp3"
+dest_files=["res://.godot/imported/Spin Cooldown 12 oh god.mp3-fe85c211b678f33c60417a6b8a38814e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

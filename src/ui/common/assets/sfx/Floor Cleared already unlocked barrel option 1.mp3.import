@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://lj4guv04difj"
+path="res://.godot/imported/Floor Cleared already unlocked barrel option 1.mp3-f9a8f974694198bc1166473b10649d0c.mp3str"
+
+[deps]
+
+source_file="res://src/ui/common/assets/sfx/Floor Cleared already unlocked barrel option 1.mp3"
+dest_files=["res://.godot/imported/Floor Cleared already unlocked barrel option 1.mp3-f9a8f974694198bc1166473b10649d0c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

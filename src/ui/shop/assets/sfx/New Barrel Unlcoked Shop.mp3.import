@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dd8de57ka0nw2"
+path="res://.godot/imported/New Barrel Unlcoked Shop.mp3-7b66d6f19f5a4bdcac49b19302cb63b0.mp3str"
+
+[deps]
+
+source_file="res://src/ui/shop/assets/sfx/New Barrel Unlcoked Shop.mp3"
+dest_files=["res://.godot/imported/New Barrel Unlcoked Shop.mp3-7b66d6f19f5a4bdcac49b19302cb63b0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

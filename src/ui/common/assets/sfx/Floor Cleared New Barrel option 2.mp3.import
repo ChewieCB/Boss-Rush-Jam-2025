@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bchkdtdpth3bm"
+path="res://.godot/imported/Floor Cleared New Barrel option 2.mp3-15540e3a4708ac3055e79bb72cb92e67.mp3str"
+
+[deps]
+
+source_file="res://src/ui/common/assets/sfx/Floor Cleared New Barrel option 2.mp3"
+dest_files=["res://.godot/imported/Floor Cleared New Barrel option 2.mp3-15540e3a4708ac3055e79bb72cb92e67.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

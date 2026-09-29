@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=99 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -53,9 +53,12 @@
 [ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/misc/HitText.tscn" id="35_uogvx"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://c4p2faplbsqt6" path="res://src/player/misc/HealCloudVFX.tscn" id="36_isl1y"]
+[ext_resource type="AudioStream" uid="uid://ulr0mw35spyb" path="res://src/player/gun/assets/sfx/Spin Cooldown End 1.mp3" id="36_yjb3g"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
+[ext_resource type="AudioStream" uid="uid://b6rxyc5484ho2" path="res://src/player/assets/sfx/I-Frame Trigger 1.mp3" id="41_dch3t"]
 [ext_resource type="Script" path="res://src/player/aim_recticle.gd" id="42_rky08"]
+[ext_resource type="AudioStream" uid="uid://c7dv5xrtfhdn8" path="res://src/player/assets/sfx/I-Frame Trigger 2.mp3" id="42_teb02"]
 [ext_resource type="AudioStream" uid="uid://dtujbr2sc5n0g" path="res://src/player/assets/sfx/458533__shyguy014__healpop.mp3" id="45_n5un2"]
 [ext_resource type="PackedScene" uid="uid://diyo7ftvwcl0r" path="res://src/ui/player/status/DrunkUI.tscn" id="46_587r8"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="46_br567"]
@@ -163,6 +166,7 @@ sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_dodge = Array[AudioStream]([ExtResource("31_f53bv"), ExtResource("32_xio04"), ExtResource("33_mlp18")])
 sfx_purchase = ExtResource("31_uqkio")
 sfx_too_expensive = ExtResource("32_vsild")
+sfx_cooldown_end = Array[AudioStream]([ExtResource("36_yjb3g")])
 can_crouch_slide = true
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
@@ -177,6 +181,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")
+sfx_i_frame = Array[AudioStream]([ExtResource("41_dch3t"), ExtResource("42_teb02")])
 max_health = 200.0
 show_damage_text = false
 text_effect = ExtResource("35_uogvx")

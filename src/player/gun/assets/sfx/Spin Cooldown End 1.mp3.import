@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ulr0mw35spyb"
+path="res://.godot/imported/Spin Cooldown End 1.mp3-acd32b9fec999d24422de6712dd96405.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/Spin Cooldown End 1.mp3"
+dest_files=["res://.godot/imported/Spin Cooldown End 1.mp3-acd32b9fec999d24422de6712dd96405.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

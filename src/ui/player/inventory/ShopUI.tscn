@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dxui67spyijhu"]
+[gd_scene load_steps=30 format=3 uid="uid://dxui67spyijhu"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/shop_ui.gd" id="1_j5xux"]
 [ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="2_2niy2"]
@@ -21,12 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="18_ylgjj"]
 [ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="19_cafxn"]
 [ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="20_0d6ii"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bfj2n"]
-random_pitch = 1.36
-streams_count = 2
-stream_0/stream = ExtResource("6_laotd")
-stream_1/stream = ExtResource("7_ag3mq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pve14"]
 shader = ExtResource("12_yy762")
@@ -118,7 +112,8 @@ shop_gun_frame_item_ui_prefab = ExtResource("3_6b57g")
 show_shop_first = true
 barrel_item_ui_prefab = ExtResource("4_wvykx")
 gun_frame_item_ui_prefab = ExtResource("5_2txqk")
-sfx_open = SubResource("AudioStreamRandomizer_bfj2n")
+sfx_open = ExtResource("7_ag3mq")
+sfx_close = ExtResource("6_laotd")
 sfx_click = ExtResource("8_liw3e")
 sfx_purchase = ExtResource("9_ajf4e")
 sfx_too_expensive = ExtResource("10_p5u2d")

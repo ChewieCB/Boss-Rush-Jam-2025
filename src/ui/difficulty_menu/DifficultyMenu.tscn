@@ -1,13 +1,11 @@
-[gd_scene load_steps=48 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=46 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
-[ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="2_0aqwx"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_y6xrk"]
 [ext_resource type="FontFile" uid="uid://bfduksv0gcvwn" path="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf" id="3_0n16t"]
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="3_rlha8"]
 [ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="3_uirlk"]
-[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="3_v8cf1"]
 [ext_resource type="Resource" uid="uid://bblkebtod2bhm" path="res://src/ui/difficulty_menu/boss_slot_profile.tres" id="4_25fox"]
 [ext_resource type="Texture2D" uid="uid://dasqvufg7mqcg" path="res://src/ui/difficulty_menu/boss_ante_images/slots/slotty-ante_1_coins.png" id="4_qiqi4"]
 [ext_resource type="Resource" uid="uid://dwnejm41e6krv" path="res://src/ui/difficulty_menu/boss_roulette_profile.tres" id="5_iim28"]
@@ -65,8 +63,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_5c00o")
-chip_sfx = ExtResource("2_0aqwx")
-locked_sfx = ExtResource("3_v8cf1")
 boss_sprites = [NodePath("TitleRegion/BossSpriteContainer/Slot"), NodePath("TitleRegion/BossSpriteContainer/Roulette"), NodePath("TitleRegion/BossSpriteContainer/Bartender"), NodePath("TitleRegion/BossSpriteContainer/Pit"), NodePath("TitleRegion/BossSpriteContainer/Chip"), NodePath("TitleRegion/BossSpriteContainer/Mechanic"), NodePath("TitleRegion/BossSpriteContainer/Blackjack")]
 boss_ante_textures = Array[Array]([[ExtResource("4_qiqi4"), ExtResource("5_skwt1"), ExtResource("6_bup0l")], [], [], [], [ExtResource("7_c2ef7"), ExtResource("8_xxf63"), ExtResource("9_bchya")], [ExtResource("10_0x2pi"), ExtResource("11_qkcde"), ExtResource("12_bbf4k")], []])
 boss_diff_profiles = Array[ExtResource("3_rlha8")]([ExtResource("4_25fox"), ExtResource("5_iim28"), ExtResource("6_atwte"), ExtResource("7_t6tx6"), ExtResource("8_mh7r4"), ExtResource("9_b2sjg"), ExtResource("10_75fix")])
@@ -581,14 +577,23 @@ theme_override_constants/separation = 80
 layout_mode = 2
 locked = false
 purchased = true
+sfx_ante_purchase = null
+sfx_ante_selected = null
+sfx_ante_locked = null
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 cost = 2514
+sfx_ante_purchase = null
+sfx_ante_selected = null
+sfx_ante_locked = null
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 cost = 4190
+sfx_ante_purchase = null
+sfx_ante_selected = null
+sfx_ante_locked = null
 
 [node name="NotEnoughChipTimer" type="Timer" parent="."]
 wait_time = 3.0

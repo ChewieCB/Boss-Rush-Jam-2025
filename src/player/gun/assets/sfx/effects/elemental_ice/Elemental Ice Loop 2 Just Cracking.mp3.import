@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cvx15rqccgvtb"
+path="res://.godot/imported/Elemental Ice Loop 2 Just Cracking.mp3-8b597635f14e3ae8c5734548064a503c.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/elemental_ice/Elemental Ice Loop 2 Just Cracking.mp3"
+dest_files=["res://.godot/imported/Elemental Ice Loop 2 Just Cracking.mp3-8b597635f14e3ae8c5734548064a503c.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

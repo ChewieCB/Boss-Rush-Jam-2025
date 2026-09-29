@@ -76,7 +76,7 @@
 [ext_resource type="Texture2D" uid="uid://bi1md2pmoenl" path="res://src/bosses/chips/assets/sprites/MCK_Death_2.png" id="55_dxb8s"]
 [ext_resource type="Texture2D" uid="uid://dk3ythhh8s1fd" path="res://src/bosses/chips/assets/sprites/MCK_Death_3.png" id="56_e2pvt"]
 [ext_resource type="PackedScene" uid="uid://eclk54je77sy" path="res://src/bosses/bartender/area_effects/SlowHazardArea.tscn" id="56_sg4b6"]
-[ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="57_1w4hp"]
+[ext_resource type="Resource" uid="uid://uq8dsgp228js" path="res://src/player/barrel/resource/controlled_risk_barrel_data.tres" id="57_do8m1"]
 [ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="65_1jthq"]
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="65_skpgp"]
 [ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="66_ih6eo"]
@@ -399,7 +399,7 @@ phase_1_health = 4000
 phase_2_health = 4000
 boss_id = 5
 chip_spawn_dps_threshold = 70.0
-barrel_to_drop = ExtResource("57_1w4hp")
+barrel_to_drop = ExtResource("57_do8m1")
 sfx_awaken = ExtResource("54_7lt4w")
 sfx_hit = Array[AudioStream]([ExtResource("13_hq7h1"), ExtResource("14_k6k1b"), ExtResource("15_dog2d"), ExtResource("16_ompdj")])
 sfx_death = ExtResource("39_gl65c")

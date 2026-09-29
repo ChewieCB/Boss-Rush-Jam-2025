@@ -5,6 +5,7 @@ class_name BarrelItemUI
 @export var locked_panel: Control
 @export var boss_locked_panel: Control
 @export var boss_unlock_particles: GPUParticles2D
+@export var sfx_unlock: Array[AudioStream]
 
 
 func _ready() -> void:
@@ -29,6 +30,7 @@ func empty_slot() -> void:
 
 
 func unlock_anim() -> void:
+	SoundManager.play_sound(sfx_unlock.pick_random(), "UI")
 	boss_unlock_particles.restart()
 	var tween = get_tree().create_tween()
 	tween.tween_property(boss_locked_panel, "modulate:a", 0.0, boss_unlock_particles.lifetime)

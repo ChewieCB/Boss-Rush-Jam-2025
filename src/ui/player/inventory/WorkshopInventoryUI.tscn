@@ -1,8 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://cu1jrlwvdnnl"]
+[gd_scene load_steps=21 format=3 uid="uid://cu1jrlwvdnnl"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/workshop_inventory_ui.gd" id="1_nmgbf"]
 [ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="2_0be23"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_qu664"]
+[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="4_vgw12"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="5_k10cp"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_6nyw7"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="7_7e1b5"]
 [ext_resource type="PackedScene" uid="uid://bagau1537wut2" path="res://src/ui/player/inventory/EquippedFrameSideView.tscn" id="7_skhd5"]
 [ext_resource type="PackedScene" uid="uid://dhx5vqirejsxe" path="res://src/ui/shop/BarrelSlotUI.tscn" id="8_3rosm"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="9_mcm64"]
@@ -44,6 +48,10 @@ inventory_gun_frame_container = NodePath("MainRegion/BarrelModifyUI/VBoxContaine
 inventory_normal_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer")
 barrel_item_ui_prefab = ExtResource("2_qu664")
 gun_frame_item_ui_prefab = ExtResource("2_0be23")
+sfx_open = ExtResource("5_k10cp")
+sfx_close = ExtResource("4_vgw12")
+sfx_click = ExtResource("6_6nyw7")
+sfx_barrel_equip = ExtResource("7_7e1b5")
 scroll_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer")
 input_prompt_navigate = NodePath("ControlHelp/HBoxContainer/InputPrompt1")
 input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")

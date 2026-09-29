@@ -17,6 +17,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var sfx_dodge: Array[AudioStream]
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
+@export var sfx_cooldown_end: Array[AudioStream]
 
 @export_category("Movement")
 @export var can_wall_jump: bool
@@ -112,6 +113,7 @@ signal new_status_effect_added(status)
 signal status_effect_removed(status_effect_code)
 signal spin_cooldown_started
 signal spin_cooldown_finished
+signal menu_toggle(open: bool)
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 70.0
@@ -220,12 +222,14 @@ var current_gun: Gun = null
 var is_in_menu = false:
 	set(value):
 		is_in_menu = value
-		if is_in_menu:
-			stat_ui.hide_all_ui(true)
-			toggle_anim_reticle(false)
-		else:
-			stat_ui.show_all_ui(true)
-			toggle_anim_reticle(true)
+		
+		stat_ui.hide_all_ui(true) if is_in_menu else stat_ui.show_all_ui(true)
+		toggle_anim_reticle(!is_in_menu)
+		self.process_mode = Node.PROCESS_MODE_DISABLED if is_in_menu else Node.PROCESS_MODE_INHERIT
+		self.set_physics_process(!is_in_menu)
+		self.set_process(!is_in_menu)
+		menu_toggle.emit(is_in_menu)
+
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -583,6 +587,7 @@ func _physics_process(delta):
 			spin_cooldown_timer += delta
 			if spin_cooldown_timer >= spin_cooldown_time:
 				spin_cooldown_timer = 0.0
+				SoundManager.play_sound(sfx_cooldown_end.pick_random(), "UI")
 				spin_cooldown_active = false
 
 
