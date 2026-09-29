@@ -11,6 +11,7 @@ signal tutorial_barrel_collected(barrel_data: BarrelDataResource)
 
 signal trigger_smoke(count: int)
 signal end_smoke
+signal taunt_ended
 
 @export var arena_1_center: Marker3D
 @export var arena_2_center: Marker3D
@@ -1003,8 +1004,11 @@ func shoot_nail_projectile(
 				await stagger_end
 			
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
+			var explosion_particles = spawn_marker.get_child(0)
 			anim_handler.call(j)
 			#anim_player.play(anim_name)
+			explosion_particles.global_position = spawn_marker.global_position
+			explosion_particles.explode()
 			var proj = fire_projectile_pooled(nail_proj_pool, spawn_marker.global_position, 0, sfx_nail_shot)
 			if not proj:
 				return
@@ -1731,7 +1735,7 @@ func taunt() -> void:
 		return
 	
 	if is_taunting:
-		return
+		await taunt_ended
 	
 	is_taunting = true
 	
@@ -1769,6 +1773,7 @@ func taunt() -> void:
 	await wait_for_sfx(taunt_sfx)
 	
 	is_taunting = false
+	taunt_ended.emit()
 	
 	return
 
@@ -1844,8 +1849,9 @@ func _on_tutorial_phase_2_state_entered() -> void:
 	nails_anim_sm.travel("disarm")
 	anim_sm.travel("idle")
 	tutorial_phase_2_started.emit()
-	if not is_taunting:
-		SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
+	if is_taunting:
+		await taunt_ended
+	SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
 
 
 func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
@@ -2035,6 +2041,8 @@ func _on_tutorial_phase_3_state_entered() -> void:
 	velocity = Vector3.ZERO
 	anim_sm.travel("idle")
 	tutorial_phase_3_started.emit()
+	if is_taunting:
+		await taunt_ended
 	SoundManager.play_sound(sfx_taunt_phase_3.pick_random(), "SFX")
 
 
@@ -2117,6 +2125,8 @@ func _on_phase_4_state_entered() -> void:
 	block_hurt_frame = false
 	current_phase = 4
 	phase_4_started.emit()
+	if is_taunting:
+		await taunt_ended
 	SoundManager.play_sound(sfx_taunt_phase_4.pick_random(), "SFX")
 	
 	select_attack()
@@ -2291,6 +2301,8 @@ func _on_phase_5_state_entered() -> void:
 	ranged_phase_count = 0
 	attack_interrupt = false
 	phase_5_started.emit()
+	if is_taunting:
+		await taunt_ended
 	await wait_for_sfx(sfx_taunt_phase_5.pick_random())
 	
 	select_attack()

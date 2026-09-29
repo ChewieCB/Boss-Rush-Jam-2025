@@ -1,4 +1,4 @@
-[gd_scene load_steps=329 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=330 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -150,6 +150,7 @@
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="84_s600r"]
 [ext_resource type="Texture2D" uid="uid://dyqem8rv1515n" path="res://src/bosses/tutorial/assets/sprites/nails_split/nails_idle_top.png" id="84_siud8"]
 [ext_resource type="AudioStream" uid="uid://chl4kfxabg06s" path="res://src/maps/tutorial/assets/sfx/Pipe Burst Steam Loop.wav" id="97_dp741"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="111_bkd0q"]
 [ext_resource type="Texture2D" uid="uid://b2ihlithx0wyf" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_0.png" id="125_6pklb"]
 [ext_resource type="Texture2D" uid="uid://bjntvarc8y1ua" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_1.png" id="126_kae47"]
 [ext_resource type="Texture2D" uid="uid://dygoyomgows5p" path="res://src/bosses/tutorial/assets/sprites/walk/wrench_down/walk_2.png" id="127_wn326"]
@@ -1053,6 +1054,18 @@ tracks/32/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [1.0]
+}
+tracks/33/type = "value"
+tracks/33/imported = false
+tracks/33/enabled = true
+tracks/33/path = NodePath("DebugRangedPivot:visible")
+tracks/33/interp = 1
+tracks/33/loop_wrap = true
+tracks/33/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -3839,7 +3852,7 @@ chip_spawn_mult_cap = 1
 elemental_emitting_vfx = [null, null, null, null, null]
 barrel_to_drop = ExtResource("76_rjrpv")
 barrel_pickup_scene = null
-sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
+sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer6/SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
 sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), ExtResource("30_jv36d"), ExtResource("31_t81ll"), ExtResource("32_qvwbi")])
 base_sprite = ExtResource("16_ukgug")
 hurt_sprite = ExtResource("72_gxdkx")
@@ -3856,7 +3869,7 @@ hit_effect_squash = Vector2(0.08, 0)
 transform = Transform3D(0.999895, -0.0144857, 0, 0.0144857, 0.999895, 0, 0, 0, 1, 0, -0.208356, 0)
 sorting_offset = -1.0
 offset = Vector2(0, 256)
-texture = ExtResource("16_ukgug")
+texture = ExtResource("23_m0iiy")
 
 [node name="UpperTorsoSprite" type="Sprite3D" parent="Sprite3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0804853, 0)
@@ -3923,7 +3936,7 @@ draw_pass_1 = SubResource("ArrayMesh_arxu5")
 [node name="LaserParticlePivot" type="Node3D" parent="." index="2"]
 
 [node name="LaserSpawn" type="Marker3D" parent="LaserParticlePivot" index="0"]
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 0, -1.8)
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 0, 0)
 
 [node name="LaserEndParticles" parent="LaserParticlePivot/LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.19038, 0)
@@ -3940,7 +3953,6 @@ draw_pass_1 = SubResource("QuadMesh_mvva7")
 
 [node name="DebugRangedPivot" type="Marker3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-visible = false
 
 [node name="PivotL" type="Marker3D" parent="DebugRangedPivot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.33156, 1.9474, 0)
@@ -3953,6 +3965,10 @@ skeleton = NodePath("../../../DebugAnimPivot")
 [node name="ProjSpawnL" type="Marker3D" parent="DebugRangedPivot/PivotL/DebugGun1" index="0"]
 transform = Transform3D(1, -6.61744e-24, 0, 0, 1, 8.88178e-16, 0, 0, 1, 0, 0, -0.6)
 
+[node name="ExplosionPoly" parent="DebugRangedPivot/PivotL/DebugGun1/ProjSpawnL" index="0" instance=ExtResource("111_bkd0q")]
+min_scale = 0.5
+max_scale = 0.5
+
 [node name="PivotR" type="Marker3D" parent="DebugRangedPivot" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999999, 1.95792, 0)
 
@@ -3963,6 +3979,10 @@ skeleton = NodePath("../../../DebugAnimPivot")
 
 [node name="ProjSpawnR" type="Marker3D" parent="DebugRangedPivot/PivotR/DebugGun1" index="0"]
 transform = Transform3D(1, -3.30872e-24, 0, 0, 1, 4.44089e-16, 0, 0, 1, 0, 0, -0.6)
+
+[node name="ExplosionPoly" parent="DebugRangedPivot/PivotR/DebugGun1/ProjSpawnR" index="0" instance=ExtResource("111_bkd0q")]
+min_scale = 0.5
+max_scale = 0.5
 
 [node name="CollisionShape3D" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85615, 0)
@@ -5418,6 +5438,7 @@ event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="AnimationPlayer" parent="." index="23"]
+active = false
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "elevator_boss": SubResource("AnimationLibrary_1cydh")
@@ -5442,23 +5463,23 @@ bus = &"SFX"
 unit_size = 35.0
 bus = &"SFX"
 
-[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="31"]
 unit_size = 35.0
 bus = &"SFX"
 
-[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="32"]
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="SFXPlayer6" index="0"]
 unit_size = 35.0
 bus = &"SFX"
 
-[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="33"]
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="32"]
 unit_size = 35.0
 bus = &"SFX"
 
-[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="33"]
 unit_size = 35.0
 bus = &"SFX"
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="36"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="35"]
 active = false
 tree_root = ExtResource("134_ojm1l")
 advance_expression_base_node = NodePath("..")
