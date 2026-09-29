@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=93 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -66,6 +66,7 @@
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
 [ext_resource type="Script" path="res://src/player/interact_ui.gd" id="48_hxlt6"]
 [ext_resource type="PackedScene" uid="uid://dymal26tqayfd" path="res://src/ui/player/luck/LuckMessageUI.tscn" id="49_7wxbq"]
+[ext_resource type="PackedScene" uid="uid://bcb626m7hxgwo" path="res://src/ui/player/status/StatusBuildupGauge.tscn" id="51_gdc44"]
 [ext_resource type="PackedScene" uid="uid://d2m0w0bro5j5l" path="res://src/ui/player/StatUINew.tscn" id="51_vst8k"]
 [ext_resource type="PackedScene" uid="uid://dn3jierj8cai5" path="res://src/player/misc/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
@@ -311,6 +312,24 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.472, 0.826, 0, 0)
+
+[node name="StatusBuildupGaugeContainer" type="VBoxContainer" parent="UI/StatusOverlay"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -232.0
+offset_right = 232.0
+offset_bottom = -212.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="DrunkStatusBuildupGauge" parent="UI/StatusOverlay/StatusBuildupGaugeContainer" instance=ExtResource("51_gdc44")]
+layout_mode = 2
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
