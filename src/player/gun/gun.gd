@@ -11,8 +11,8 @@ signal gun_reloaded
 signal jam_cleared
 signal spin_anim_finished
 
-signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
-signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_spin_started(barrel_idx: int)
+signal barrel_spin_stopped(barrel_idx: int)
 signal barrel_effect_set(barrel_idx: int, effect: BaseBarrelEffect)
 signal barrel_equipped(barrel: SpinBarrel, barrel_idx: int)
 signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
@@ -749,18 +749,18 @@ func highlight_equipped_barrels() -> void:
 
 func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	reset_modifier(true)
-
-	var tween := get_tree().create_tween()
 	var installed_count: int = installed_barrels.size()
 	for i in installed_count:
 		if installed_barrels[i] == null:
 			continue
-		tween.tween_callback(_stop_barrel.bind(i)).set_delay(delay_offset * i)
-	tween.tween_callback(func():
-		is_spinning = false
-		can_fire = true
-		spin_anim_finished.emit()
-	)
+		await get_tree().create_timer(delay_offset * i).timeout
+		_stop_barrel(i)
+	
+	await barrel_spin_stopped
+	
+	is_spinning = false
+	can_fire = true
+	spin_anim_finished.emit()
 	
 	# TODO - wait until all anims have finished then set viewport render update to ONCE
 
@@ -779,17 +779,20 @@ func _stop_barrel(barrel_idx: int) -> void:
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
-
+	
+	await barrel_spin_stopped
+	
 	barrel.get_active_effect().on_effect_set()
-
-	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
-	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 	# Seeded spin stuff - deprecate?
 	#var barrel_label: Label3D = barrel_labels[barrel_idx]
 	#barrel_label.text = "[%s]" % [
 		#barrel.reloads_before_spin - barrel.reload_count
 	#]
+
+func _on_barrel_stop_anim_finished(idx: int) -> void:
+	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
+	barrel_spin_stopped.emit(idx)
 
 
 func _get_icon_texture(icon_id: int) -> CompressedTexture2D:
