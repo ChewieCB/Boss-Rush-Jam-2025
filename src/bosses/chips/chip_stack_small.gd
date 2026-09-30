@@ -315,7 +315,7 @@ func _on_attack_telegraph_state_exited() -> void:
 
 func _init_chip_projectiles() -> void:
 	chip_projectile_pool.clear()
-	for i in range(chip_shots_per_burst * num_bursts):
+	for i in range(chip_shots_per_burst * num_bursts * 3):
 		var _proj = chip_projectile.instantiate()
 		scene_root.add_child.call_deferred(_proj)
 		#await get_tree().physics_frame
