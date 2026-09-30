@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://bhaia8j3ynxwp"]
+[gd_scene load_steps=95 format=3 uid="uid://bhaia8j3ynxwp"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_t3h5b"]
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
@@ -41,6 +41,7 @@
 [ext_resource type="AudioStream" uid="uid://cjl3shf0wt8ho" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 3.mp3" id="27_l1fai"]
 [ext_resource type="AudioStream" uid="uid://5f5asfydiwxp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3" id="28_ult5e"]
 [ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="36_t01eu"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="37_gtfs6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tvcyt"]
 resource_local_to_scene = true
@@ -384,10 +385,10 @@ states/strafe_finish/position = Vector2(1072, 342)
 states/strafe_start/node = SubResource("AnimationNodeAnimation_3imjw")
 states/strafe_start/position = Vector2(1072, 198)
 transitions = ["idle", "strafe_start", SubResource("AnimationNodeStateMachineTransition_vw8b5"), "strafe_start", "strafe", SubResource("AnimationNodeStateMachineTransition_yw8o1"), "strafe", "strafe_finish", SubResource("AnimationNodeStateMachineTransition_vmqtt"), "strafe_finish", "idle", SubResource("AnimationNodeStateMachineTransition_a04xy"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_0uhi5"), "idle", "cannon_idle", SubResource("AnimationNodeStateMachineTransition_mdgo6"), "idle", "jump_telegraph", SubResource("AnimationNodeStateMachineTransition_u8cin"), "jump_telegraph", "jump_start", SubResource("AnimationNodeStateMachineTransition_yt7ww"), "slam_start", "slam_end", SubResource("AnimationNodeStateMachineTransition_5c46i"), "slam_end", "idle", SubResource("AnimationNodeStateMachineTransition_xeehw"), "jump_start", "slam_start", SubResource("AnimationNodeStateMachineTransition_3g73i"), "idle", "spark_telegraph", SubResource("AnimationNodeStateMachineTransition_fo6qk"), "spark_telegraph", "idle", SubResource("AnimationNodeStateMachineTransition_emkpv"), "slash_proj_r", "idle", SubResource("AnimationNodeStateMachineTransition_dsis0"), "slash_proj_l", "idle", SubResource("AnimationNodeStateMachineTransition_0ogj7"), "spark_telegraph", "slash_proj_r", SubResource("AnimationNodeStateMachineTransition_xldkd"), "cannon_idle", "idle", SubResource("AnimationNodeStateMachineTransition_npplf"), "spark_telegraph", "slash_proj_l", SubResource("AnimationNodeStateMachineTransition_03nrh"), "spark_telegraph", "charge", SubResource("AnimationNodeStateMachineTransition_os8jq"), "charge", "idle", SubResource("AnimationNodeStateMachineTransition_25sut"), "cannon_idle", "cannon_shoot", SubResource("AnimationNodeStateMachineTransition_yxm53"), "cannon_shoot", "cannon_idle", SubResource("AnimationNodeStateMachineTransition_xohqb")]
-graph_offset = Vector2(270, 102)
+graph_offset = Vector2(13, 61)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_nxtxm"]
-graph_offset = Vector2(-365, 116)
+graph_offset = Vector2(-365, 73.7654)
 nodes/hurt_blend/node = SubResource("AnimationNodeBlend2_61lwq")
 nodes/hurt_blend/position = Vector2(182, 177)
 nodes/hurt_frame/node = SubResource("AnimationNodeAnimation_ymguk")
@@ -472,6 +473,11 @@ visible = false
 billboard = 2
 render_priority = 1
 texture = ExtResource("12_pln03")
+
+[node name="ExplosionPoly" parent="Sprite3D/FaceSprite" index="0" instance=ExtResource("37_gtfs6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.4, -0.2)
+min_scale = 2.0
+max_scale = 2.0
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0787812, 1.76323, 0)
@@ -971,7 +977,7 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="." index="23"]
 tree_root = SubResource("AnimationNodeBlendTree_nxtxm")
 anim_player = NodePath("../AnimationPlayer")
-parameters/hurt_blend/blend_amount = 0
+parameters/hurt_blend/blend_amount = 0.0
 
 [node name="MeleeTargetingTimer" type="Timer" parent="." index="24"]
 one_shot = true
