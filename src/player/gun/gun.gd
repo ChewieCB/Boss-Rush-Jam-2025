@@ -1389,8 +1389,9 @@ func spark_barrel(idx: int) -> void:
 
 
 func roller_ready(idx: int) -> void:
-	SoundManager.play_sound(sfx_roller_ready.pick_random(), "Gun")
 	spark_barrel(idx)
+	SoundManager.play_sound(sfx_roller_ready.pick_random(), "Gun")
+	InputHelper.rumble_small()
 
 
 func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:
