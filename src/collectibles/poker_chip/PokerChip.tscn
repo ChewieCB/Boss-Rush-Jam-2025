@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b3x1bn1jpkwjo"]
+[gd_scene load_steps=23 format=3 uid="uid://b3x1bn1jpkwjo"]
 
 [ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip.gd" id="1_1s0ep"]
 [ext_resource type="Texture2D" uid="uid://bvw52w4qxdtyx" path="res://src/collectibles/poker_chip/assets/chip_white.png" id="2_1g755"]
@@ -12,6 +12,10 @@
 [ext_resource type="AudioStream" uid="uid://jpfqefwrvbbr" path="res://src/bosses/tutorial/assets/sfx/Ding.mp3" id="9_83ca7"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="9_gmasi"]
 [ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="11_vdflb"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="13_b456e"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="14_vsdga"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="15_pocn3"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="16_cm655"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ipprj"]
 friction = 0.4
@@ -46,6 +50,9 @@ chance_array = Array[int]([15, 25, 25, 20, 10, 4, 1])
 sprite_array = Array[Texture2D]([ExtResource("2_1g755"), ExtResource("2_1g755"), ExtResource("3_soabj"), ExtResource("4_c5koj"), ExtResource("5_nd3i0"), ExtResource("6_kxhky"), ExtResource("6_pkt8q")])
 sfx_pickup = Array[AudioStream]([ExtResource("2_td1fs")])
 sfx_spark = Array[AudioStream]([ExtResource("9_83ca7")])
+pickup_radius = 12.0
+magnet_start_speed = 8.0
+magnet_acceleration = 80.0
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
@@ -90,16 +97,53 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.
 modulate = Color(0, 0, 0, 0.431373)
 texture = ExtResource("9_gmasi")
 
-[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
-process_mode = 3
-aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
-
 [node name="StackSpark" parent="." instance=ExtResource("11_vdflb")]
 process_mode = 4
 layers = 1
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
 
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("13_b456e")
+
+[node name="ChipState" type="Node" parent="StateChart"]
+script = ExtResource("14_vsdga")
+initial_state = NodePath("Inactive")
+
+[node name="Inactive" type="Node" parent="StateChart/ChipState"]
+script = ExtResource("15_pocn3")
+
+[node name="toIdle" type="Node" parent="StateChart/ChipState/Inactive"]
+script = ExtResource("16_cm655")
+to = NodePath("../../Idle")
+event = &"activate"
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/ChipState"]
+script = ExtResource("15_pocn3")
+
+[node name="toInactive" type="Node" parent="StateChart/ChipState/Idle"]
+script = ExtResource("16_cm655")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toMagnet" type="Node" parent="StateChart/ChipState/Idle"]
+script = ExtResource("16_cm655")
+to = NodePath("../../Magnet")
+event = &"start_collect"
+delay_in_seconds = "0.0"
+
+[node name="Magnet" type="Node" parent="StateChart/ChipState"]
+script = ExtResource("15_pocn3")
+
+[node name="toInactive" type="Node" parent="StateChart/ChipState/Magnet"]
+script = ExtResource("16_cm655")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
-[connection signal="screen_entered" from="VisibleOnScreenNotifier3D" to="." method="_on_visible_on_screen_notifier_3d_screen_entered"]
-[connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="." method="_on_visible_on_screen_notifier_3d_screen_exited"]
+[connection signal="state_physics_processing" from="StateChart/ChipState/Idle" to="." method="_on_idle_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/ChipState/Magnet" to="." method="_on_magnet_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/ChipState/Magnet" to="." method="_on_magnet_state_physics_processing"]

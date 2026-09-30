@@ -5454,7 +5454,6 @@ event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="AnimationPlayer" parent="." index="23"]
-active = false
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "elevator_boss": SubResource("AnimationLibrary_1cydh")
@@ -5496,6 +5495,7 @@ unit_size = 35.0
 bus = &"SFX"
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="35"]
+active = false
 tree_root = ExtResource("134_ojm1l")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
