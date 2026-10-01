@@ -453,7 +453,7 @@ func play_hover_sfx():
 
 func _on_controller_connection(_device: int, connected: bool):
 	if self.visible:
-		if connected:
+		if connected and not GameManager.mouse_controller_override:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
