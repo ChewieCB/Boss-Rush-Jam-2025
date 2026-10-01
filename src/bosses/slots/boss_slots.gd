@@ -317,6 +317,7 @@ func select_attack_phase_1() -> void:
 	prev_phase = new_phase
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
+	swipe_cooldown_timer.stop()
 	state_chart.send_event("start_spin_slots")
 
 
@@ -338,6 +339,7 @@ func select_attack_phase_2() -> void:
 	prev_phase = new_phase
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
+	swipe_cooldown_timer.stop()
 	state_chart.send_event("start_spin_slots")
 
 

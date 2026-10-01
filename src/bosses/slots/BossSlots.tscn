@@ -456,7 +456,7 @@ tracks/12/keys = {
 [sub_resource type="Animation" id="Animation_flixy"]
 resource_name = "big_ranged_shot"
 length = 0.5
-step = 0.05
+step = 0.0001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -476,9 +476,12 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.0966, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [0.15, Vector2(0.1, 0)],
+"method": &"hit_effect_sprite_squash"
+}, {
 "args": [],
 "method": &"fire_bomb"
 }]
@@ -514,10 +517,24 @@ tracks/4/path = NodePath("MarkerPivot/ProjectileSpawnMarker:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(0.7, 0.7, 0)]
+"values": [Vector3(0.7, 0.7, 0), Vector3(0.7, -0.2, 0), Vector3(0.7, 0.7, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MarkerPivot/ProjectileSpawnMarker/ExplosionPoly")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [2.2],
+"method": &"explode"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_tgidw"]
@@ -2023,6 +2040,7 @@ base_sprite = ExtResource("5_wqq5t")
 hurt_sprite = ExtResource("62_ci6xi")
 hit_material = SubResource("ShaderMaterial_tewrr")
 hurt_frame_cooldown = 0.9
+current_phase = 2
 attack_recovery_time = 0.5
 telegraph_time = 0.4
 projectiles_per_phase = 8
@@ -2079,6 +2097,10 @@ visible = false
 mesh = SubResource("SphereMesh_lr0sl")
 
 [node name="ExplosionPoly" parent="MarkerPivot/ProjectileSpawnMarker" index="1" instance=ExtResource("65_q3x8w")]
+scale_factor = 2.2
+min_scale = 2.2
+max_scale = 3.3
+emission_radius = 2.2
 
 [node name="SlottyDeathTorso" parent="MarkerPivot" index="1" instance=ExtResource("77_f2kfk")]
 visible = false
