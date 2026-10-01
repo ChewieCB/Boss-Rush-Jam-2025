@@ -18,5 +18,5 @@ func _on_interact_area_body_entered(_body: Node3D) -> void:
 	return
 
 func _on_interact_area_body_exited(body: Node3D) -> void:
-	if body is Player:
+	if body is Player and skill_tree_ui.visible:
 		skill_tree_ui.close()

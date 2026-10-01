@@ -18,6 +18,7 @@ var saved_gun_volume = 0
 
 func _ready() -> void:
 	canvas_layer.visible = false
+	canvas_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	idle_time = GameManager.CHEAT_demomode_timeout
 	GameManager.demo_time_changed.connect(
 		func(time: int):
@@ -46,7 +47,7 @@ func _is_user_input(event: InputEvent) -> bool:
 	if event is InputEventJoypadMotion:
 		if event.axis_value > 0.1:
 			return true
-	
+
 	return (
 		event is InputEventKey and not event.echo
 		or event is InputEventMouseMotion
@@ -56,8 +57,8 @@ func _is_user_input(event: InputEvent) -> bool:
 
 func stop_idle_video() -> void:
 	if not is_video_playing:
-		return 
-	
+		return
+
 	_idle_timer = 0.0 # reset timer
 	video_player.stop()
 	canvas_layer.visible = false
@@ -75,7 +76,7 @@ func stop_idle_video() -> void:
 func play_idle_video() -> void:
 	if not GameManager.CHEAT_demomode:
 		return
-	
+
 	canvas_layer.process_mode = Node.PROCESS_MODE_INHERIT
 	is_video_playing = true
 	# Saved other audio bus volume
