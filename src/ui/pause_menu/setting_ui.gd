@@ -623,3 +623,7 @@ func set_controller_mouse_override(enabled):
 
 func _on_spin_cost_dropdown_item_selected(index: int) -> void:
 	GameManager.CHEAT_spin_cost = index
+
+
+func _on_wip_boss_toggle_toggled(toggled_on: bool) -> void:
+	GameManager.CHEAT_unlock_wip_bosses = toggled_on
