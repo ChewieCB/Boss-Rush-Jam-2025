@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_21ocl")
 boss_id = 4
-boss_quote = "\"Raise the risk, and I’ll raise the reward. Just don’t expect to walk out smiling every time.\""
+boss_quote = ""
 ante_names = Array[String](["Concussion Charge", "Mini Turrets", "Electrical Hazard", "Serious Mode", "Unfair Fight"])
 ante_descriptions = Array[String](["", "", ""])
 ante_purchased_states = Array[bool]([true, false, false])

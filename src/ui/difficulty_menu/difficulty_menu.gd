@@ -15,6 +15,7 @@ class_name DifficultyMenu
 # @onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
 # @onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
 @onready var reset_risk_button: Button = $LeftRegion/ResetRiskButton
+@onready var target_label: Label = $TitleRegion/TargetLabel
 @onready var target_quite_label: Label = $TitleRegion/TargetLabel/TargetQuoteLabel
 @onready var ante_card_container: Control = $RightRegion/AnteSection
 
@@ -106,6 +107,21 @@ func refresh_display():
 		elem.visible = false
 	boss_sprites[int(GameManager.selected_boss_id) - 1].visible = true
 	var _ante_textures = boss_ante_textures[int(GameManager.selected_boss_id) - 1]
+	match boss_profile.boss_id:
+		1:
+			target_label.text = "One Armed Bandit"
+		2:
+			target_label.text = "Roulette"
+		3:
+			target_label.text = "Bartender"
+		4:
+			target_label.text = "Pit Boss"
+		5:
+			target_label.text = "Chip King"
+		6:
+			target_label.text = "The Mechanic"
+		7:
+			target_label.text = "Blackjack"
 	target_quite_label.text = boss_profile.boss_quote
 	
 	for i in range(ante_card_container.get_child_count()):

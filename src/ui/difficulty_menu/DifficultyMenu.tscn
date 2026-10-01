@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=47 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="19_10nox"]
 [ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
 [ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
+[ext_resource type="Texture2D" uid="uid://bp7hure6j5kgv" path="res://src/bosses/tutorial/assets/sprites/STARTING_POSE.png" id="27_02egn"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="34_xjabm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
@@ -160,12 +161,12 @@ texture = ExtResource("8_bymgs")
 visible = false
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = -32.0
-offset_top = -96.0
-offset_right = 480.0
-offset_bottom = 416.0
+offset_left = -153.0
+offset_top = -152.0
+offset_right = 615.0
+offset_bottom = 616.0
 mouse_filter = 2
-texture = ExtResource("8_bymgs")
+texture = ExtResource("27_02egn")
 
 [node name="Blackjack" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
 visible = false
@@ -577,23 +578,14 @@ theme_override_constants/separation = 80
 layout_mode = 2
 locked = false
 purchased = true
-sfx_ante_purchase = null
-sfx_ante_selected = null
-sfx_ante_locked = null
 
 [node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 cost = 2514
-sfx_ante_purchase = null
-sfx_ante_selected = null
-sfx_ante_locked = null
 
 [node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
 layout_mode = 2
 cost = 4190
-sfx_ante_purchase = null
-sfx_ante_selected = null
-sfx_ante_locked = null
 
 [node name="NotEnoughChipTimer" type="Timer" parent="."]
 wait_time = 3.0

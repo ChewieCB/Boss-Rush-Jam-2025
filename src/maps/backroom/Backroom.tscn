@@ -1,4 +1,4 @@
-[gd_scene load_steps=533 format=4 uid="uid://bcpcv8dc854s7"]
+[gd_scene load_steps=534 format=4 uid="uid://bcpcv8dc854s7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
@@ -6573,6 +6573,9 @@ _surfaces = [{
 "vertex_data": PackedByteArray("gMAkvgAAlD8eXd9AzDqYvwAAlD8eXfJAzDqYvwAAwL0eXfJAgMAkvgAAwL0eXd9AzqfvvwAAwL3egexA1jqYvwAAwL0eXfJA1jqYvwAAtD8eXfJAzqfvvwAAtD/egexAAAAl0RtBfHQAACXRG0F8dAAAJdEbQXx0AAAl0RtBfHT///LkAACFzf//8uQAAIXN///y5AAAhc3///LkAACFzQ==")
 }]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_maurh"]
+size = Vector3(0.912, 0.4, 0.4)
+
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_5ruuc"]
 data = PackedVector3Array(-4.2129, 0.630146, 0.715207, -7.4534, -1.50055, -2.10508, -7.45337, -1.50055, -2.1051, -4.2129, 0.630146, 0.715207, -7.45337, -1.50055, -2.1051, -7.45337, -1.50055, -2.1051, -4.2129, 0.630146, 0.715207, -7.45337, -1.50055, -2.1051, -7.45337, -1.51989, -2.1051, -4.2129, 0.630146, 0.715207, -7.45337, -1.51989, -2.1051, -4.2129, -1.49196, 0.715209, -4.2129, 0.630146, 0.715207, -4.2129, -1.49196, 0.715209, -4.2129, -1.49196, 0.715209, -7.45337, -1.51989, -2.1051, -7.45337, -1.50055, -2.1051, -10.0466, -1.50055, 2.92614, -7.45337, -1.51989, -2.1051, -10.0466, -1.50055, 2.92614, -10.0466, -1.51989, 2.92614, -7.45337, -1.51989, -2.1051, -10.0466, -1.51989, 2.92614, -10.0466, -1.51989, 2.92614, -4.2129, 0.630146, 0.715207, -6.3601, 0.630148, 4.46467, -6.3601, 0.630145, 4.46469, -4.2129, 0.630146, 0.715207, -6.3601, 0.630145, 4.46469, -6.36011, 0.630149, 4.46469, -4.2129, 0.630146, 0.715207, -6.36011, 0.630149, 4.46469, -7.45337, -1.50055, -2.1051, -6.3601, 0.630148, 4.46467, -10.0466, -1.50055, 2.92614, -7.45337, -1.50055, -2.1051, -4.2129, -1.49196, 0.715209, -7.45337, -1.51989, -2.1051, -10.0466, -1.51989, 2.92614, -10.0466, -1.51989, 2.92614, -6.3601, -1.49196, 4.46469, -4.2129, -1.49196, 0.715209, -4.2129, -1.49196, 0.715209, -6.3601, -1.49196, 4.46469, -6.3601, 0.630148, 4.46467, -4.2129, -1.49196, 0.715209, -6.3601, 0.630148, 4.46467, -4.2129, 0.630146, 0.715207, -10.0466, -1.51989, 2.92614, -10.0466, -1.50055, 2.92614, -6.3601, 0.630148, 4.46467, -10.0466, -1.51989, 2.92614, -6.3601, 0.630148, 4.46467, -6.3601, -1.49196, 4.46469)
 
@@ -9045,6 +9048,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09525, -0.865251, -8.23505
 metadata/func_godot_mesh_data = {}
 
 [node name="entity_171_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/group_10803_FrameDeco/group_7839_PaintingDeco/entity_171_func_detail_illusionary"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.355, 0)
 mesh = SubResource("ArrayMesh_6iltk")
 
 [node name="group_10807_FrameDeco" type="Node3D" parent="FuncGodotMap"]
@@ -9902,7 +9906,7 @@ transform = Transform3D(0.0174524, 0, 0.999848, 0, 1, 0, -0.999848, 0, 0.0174524
 transform = Transform3D(0.0174524, 0, 0.999848, 0, 1, 0, -0.999848, 0, 0.0174524, -26.7714, -3.0625, -1.99024)
 
 [node name="entity_299_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -1.90625, -16.4857)
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -1.50625, -16.4857)
 entProperties = {
 "_tb_layer": "7946",
 "angle": "180",
@@ -9914,6 +9918,14 @@ entProperties = {
 boss_id = 4
 linked_elevator_doors = NodePath("../entity_291_ElevatorDoors")
 hub_respawn_marker = NodePath("../../../ChipBossRespawnPoint")
+interact_dist = 2.0
+
+[node name="CollisionShape3D" parent="FuncGodotMap/layer_0_Elevators/entity_299_ElevatorButton" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0691895, -0.022363, 1.49012e-08)
+shape = SubResource("BoxShape3D_maurh")
+
+[node name="Label3D" parent="FuncGodotMap/layer_0_Elevators/entity_299_ElevatorButton" index="3"]
+text = "Pit Boss"
 
 [node name="entity_300_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -1.78525, 1.03125, 14.5738)
@@ -9951,7 +9963,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_5ruuc")
 
 [node name="entity_303_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -2.28125, -16.4857)
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -1.84231, -16.4857)
 entProperties = {
 "_tb_layer": "7946",
 "angle": "180",
@@ -9963,9 +9975,17 @@ entProperties = {
 boss_id = 2
 linked_elevator_doors = NodePath("../entity_291_ElevatorDoors")
 hub_respawn_marker = NodePath("../../../ChipBossRespawnPoint")
+interact_dist = 2.0
+
+[node name="CollisionShape3D" parent="FuncGodotMap/layer_0_Elevators/entity_303_ElevatorButton" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0691895, -0.022363, 1.49012e-08)
+shape = SubResource("BoxShape3D_maurh")
+
+[node name="Label3D" parent="FuncGodotMap/layer_0_Elevators/entity_303_ElevatorButton" index="3"]
+text = "Roulette"
 
 [node name="entity_304_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -2.65625, -16.4857)
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -2.19023, -16.4857)
 entProperties = {
 "_tb_layer": "7946",
 "angle": "180",
@@ -9977,6 +9997,14 @@ entProperties = {
 boss_id = 3
 linked_elevator_doors = NodePath("../entity_291_ElevatorDoors")
 hub_respawn_marker = NodePath("../../../ChipBossRespawnPoint")
+interact_dist = 2.0
+
+[node name="CollisionShape3D" parent="FuncGodotMap/layer_0_Elevators/entity_304_ElevatorButton" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0691895, -0.022363, 1.49012e-08)
+shape = SubResource("BoxShape3D_maurh")
+
+[node name="Label3D" parent="FuncGodotMap/layer_0_Elevators/entity_304_ElevatorButton" index="3"]
+text = "Bartender"
 
 [node name="layer_1_collision" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_layer"
@@ -10426,3 +10454,6 @@ transform = Transform3D(7.54979e-08, 0, 1, 0, 1, 0, -1, 0, 7.54979e-08, -24.6426
 
 [editable path="Vendor"]
 [editable path="Workbench"]
+[editable path="FuncGodotMap/layer_0_Elevators/entity_299_ElevatorButton"]
+[editable path="FuncGodotMap/layer_0_Elevators/entity_303_ElevatorButton"]
+[editable path="FuncGodotMap/layer_0_Elevators/entity_304_ElevatorButton"]

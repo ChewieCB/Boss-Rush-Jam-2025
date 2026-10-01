@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_llkqi")
 boss_id = 5
-boss_quote = "\"Let the chips fall as they may.\""
+boss_quote = ""
 ante_names = Array[String](["Short Stacked", "Bomb Pot", "The Chiptopede"])
 ante_descriptions = Array[String](["[center]1x Boss Health[/center]", "[center]1.5x Boss Health[/center]", "[center]2x Boss Health[/center]"])
 ante_purchased_states = Array[bool]([true, false, false])
