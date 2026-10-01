@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://dijn1g2vmnb8g"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/idle_detector.gd" id="1_gyd55"]
-[ext_resource type="VideoStream" path="res://assets/videos/idle-demo-1.ogv" id="2_vqlfr"]
+[ext_resource type="VideoStream" path="res://assets/videos/trailer_demo.ogv" id="3_5wapw"]
 
 [node name="IdleDetector" type="Node"]
 script = ExtResource("1_gyd55")
-video_list = Array[VideoStream]([ExtResource("2_vqlfr")])
+video_list = Array[VideoStream]([ExtResource("3_5wapw")])
 
 [node name="TopCanvasLayer" type="CanvasLayer" parent="."]
 layer = 128
@@ -25,7 +25,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+stream = ExtResource("3_5wapw")
 volume_db = 5.28
-autoplay = true
 expand = true
 loop = true

@@ -61,6 +61,7 @@ func stop_idle_video() -> void:
 	_idle_timer = 0.0 # reset timer
 	video_player.stop()
 	canvas_layer.visible = false
+	canvas_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	is_video_playing = false
 
 	# Reset audio to saved value
@@ -75,6 +76,7 @@ func play_idle_video() -> void:
 	if not GameManager.CHEAT_demomode:
 		return
 	
+	canvas_layer.process_mode = Node.PROCESS_MODE_INHERIT
 	is_video_playing = true
 	# Saved other audio bus volume
 	saved_bgm_volume = AudioServer.get_bus_volume_db(1)

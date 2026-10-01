@@ -219,7 +219,7 @@ var CHEAT_spin_cost: int = DebugSpinCost.COOLDOWN
 var CHEAT_freecam: bool = false
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = false
-var CHEAT_demomode_timeout: int = 60:
+var CHEAT_demomode_timeout: int = 90:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)
