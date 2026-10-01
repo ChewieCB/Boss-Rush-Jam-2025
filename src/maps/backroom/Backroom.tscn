@@ -8209,7 +8209,7 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_37_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/group_7821_CashDeskRoof/entity_37_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_idaxr")
 
-[node name="entity_38_ElevatorButton" parent="FuncGodotMap" instance=ExtResource("36_653qc")]
+[node name="entity_38_ElevatorButton" parent="FuncGodotMap" node_paths=PackedStringArray("hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -26.7657, 8.40625, -2.71875)
 entProperties = {
 "angle": "270",
@@ -8218,6 +8218,7 @@ entProperties = {
 "linked_level": "res://src/maps/blackjack_boss/BossMapBlackjack.tscn",
 "origin": "-87 -856.501 269"
 }
+hub_respawn_marker = NodePath("../../BlackjackBossRespawnPoint")
 
 [node name="group_7863_Shelves" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -9773,6 +9774,7 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.6094
 
 [node name="entity_291_ElevatorDoors" parent="FuncGodotMap/layer_0_Elevators" instance=ExtResource("67_ruh50")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5904, -3.0625, -11.4742)
+is_autodoor = false
 
 [node name="entity_292_Chandellier2LightOnly" parent="FuncGodotMap/layer_0_Elevators" instance=ExtResource("19_cffb6")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -3.01259, 2.8125, 12.4157)
