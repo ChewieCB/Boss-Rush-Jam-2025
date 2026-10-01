@@ -12,7 +12,7 @@ script = ExtResource("1_iw80l")
 
 [node name="AmmoLeech" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_psr82")
-refund_chance = 20.0
+refund_chance = 35.0
 perc_damage_modify = -25.0
 display_text_title = "Ammo Leech"
 display_text_tag = "Lead refund."

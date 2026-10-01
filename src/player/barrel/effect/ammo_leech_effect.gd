@@ -15,8 +15,9 @@ func on_gun_damage_calculation():
 
 func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	super (_damage, _has_pos, _pos)
-	var roll = randi_range(1, 100)
-	if roll <= refund_chance:
+	var proj_per_shot: int = max(1, owner_barrel.owner_gun.modified_projectile_amount)
+	var roll: int = randi_range(1, 100)
+	var _chance = refund_chance * 2 if proj_per_shot > 1 else refund_chance
+	if roll <= _chance / proj_per_shot:
 		owner_barrel.owner_gun.magazine_ammo_left = clamp(0, owner_barrel.owner_gun.magazine_ammo_left + 1, owner_barrel.owner_gun.modified_magazine_size)
 		owner_barrel.owner_gun.regain_ammo(1)
-		# print("ammo refuned")
