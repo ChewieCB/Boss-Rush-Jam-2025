@@ -445,7 +445,7 @@ target_position = Vector3(0, -25, 0)
 debug_shape_custom_color = Color(0.12, 0.838667, 1, 1)
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
-boss_name = "Shortstack"
+boss_name = "Chip King"
 
 [node name="DebugUI" parent="." index="8"]
 process_mode = 4

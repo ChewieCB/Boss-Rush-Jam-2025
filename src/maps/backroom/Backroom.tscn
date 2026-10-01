@@ -1,4 +1,4 @@
-[gd_scene load_steps=527 format=4 uid="uid://bcpcv8dc854s7"]
+[gd_scene load_steps=533 format=4 uid="uid://bcpcv8dc854s7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
@@ -8,15 +8,20 @@
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="8_0ncek"]
 [ext_resource type="PackedScene" uid="uid://djcipi6xiw7yn" path="res://src/ui/difficulty_menu/DifficultyMenu.tscn" id="8_sfu20"]
 [ext_resource type="Texture2D" uid="uid://bhowy7oa70k85" path="res://src/env/decor/assets/stool.png" id="9_oxvqi"]
+[ext_resource type="Texture2D" uid="uid://4hi0nm0dmmxv" path="res://src/bosses/slots/assets/Slotty_Starting_pose.png" id="10_b8gkr"]
 [ext_resource type="Texture2D" uid="uid://dl65xxjqpf0o7" path="res://src/env/decor/assets/trash_can_art_deco_1.png" id="10_xmlee"]
+[ext_resource type="Texture2D" uid="uid://bp7hure6j5kgv" path="res://src/bosses/tutorial/assets/sprites/STARTING_POSE.png" id="11_fyh15"]
 [ext_resource type="Material" uid="uid://d0lnpev1a8x7j" path="res://assets/textures/placeholder/texture_green_green_green_02.tres" id="12_8t61t"]
+[ext_resource type="Texture2D" uid="uid://bsrb3cxm3uxph" path="res://src/bosses/chips/assets/sprites/MCK_Apex.png" id="12_fwnsn"]
 [ext_resource type="Texture2D" uid="uid://d0sojwqbvgh8r" path="res://assets/posters/yuya_shop_1.png" id="12_mfi1x"]
 [ext_resource type="Texture2D" uid="uid://cvn6igtej4xxb" path="res://assets/textures/posters/grand_opening_scuffed.png" id="12_p4val"]
 [ext_resource type="Texture2D" uid="uid://dsbimxr0cp5jn" path="res://assets/textures/posters/might_poster.png" id="12_p22cr"]
 [ext_resource type="Texture2D" uid="uid://uxgmmcirjxj2" path="res://assets/textures/posters/gambling_poster.png" id="13_m46mf"]
 [ext_resource type="Material" uid="uid://bjalp3vgrdgfn" path="res://assets/textures/walls/red_floor_tiles.tres" id="13_tgkfd"]
+[ext_resource type="Texture2D" uid="uid://b67n7jt5lgwe3" path="res://assets/textures/walls/bronze_plaque.png" id="13_wciua"]
 [ext_resource type="Material" uid="uid://cf17nn7fy22gn" path="res://assets/textures/placeholder/texture_orange_08.tres" id="13_x660r"]
 [ext_resource type="Texture2D" uid="uid://drxaghabsqyx1" path="res://assets/textures/platforms/coaster_1.png" id="13_yx2w6"]
+[ext_resource type="FontFile" uid="uid://dq3dq2n62svrd" path="res://assets/fonts/dyer-arts-and-crafts/Dyer Arts and Crafts.ttf" id="14_0cl3f"]
 [ext_resource type="Material" uid="uid://c0mwfj7g1eaav" path="res://assets/textures/walls/peeling_plaster_wall.tres" id="14_5u73f"]
 [ext_resource type="Material" uid="uid://cuh405ors6lok" path="res://assets/textures/placeholder/texture_red_07.tres" id="14_bpg32"]
 [ext_resource type="Material" uid="uid://dtl8ybjw5mgl5" path="res://assets/textures/posters/surveillance_poster.tres" id="14_fxap3"]
@@ -4082,6 +4087,9 @@ _surfaces = [{
 "vertex_data": PackedByteArray("sGIwvmwQkD9JH9tA726Ov2wQkD+Rf+xA726Ov8hzMz6Rf+xAsGIwvshzMz5JH9tAAAAl0f//kSgAACXR//+RKAAAJdH//5EoAAAl0f//kSg=")
 }]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qyhld"]
+albedo_color = Color(0.0705706, 0.063207, 0, 1)
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_2sqwd"]
 lightmap_size_hint = Vector2i(54, 54)
 _surfaces = [{
@@ -7375,6 +7383,87 @@ region_rect = Rect2(0, 44.6073, 512, 467.393)
 
 [node name="Decals" type="Node3D" parent="."]
 
+[node name="BossPosterSlotty" type="Decal" parent="Decals"]
+transform = Transform3D(-0.866026, -0.5, -5.13392e-08, 1.04308e-07, -3.72529e-08, -1, 0.5, -0.866026, 1.3411e-07, -1.82592, 1.82891, 14.582)
+size = Vector3(0.8, 0.8, 0.8)
+texture_albedo = ExtResource("10_b8gkr")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+cull_mask = 1
+
+[node name="BossPosterMechanic" type="Decal" parent="Decals"]
+transform = Transform3D(0.707107, 0.707107, -5.13391e-08, -1.38341e-07, 1.11749e-07, -1, -0.707107, 0.707107, 1.3411e-07, -8.85235, 1.85799, -14.4853)
+size = Vector3(1.3, 1.3, 1.3)
+texture_albedo = ExtResource("11_fyh15")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+cull_mask = 1
+
+[node name="BossPosterChip" type="Decal" parent="Decals"]
+transform = Transform3D(-1.19209e-07, 1, -5.13391e-08, -1.41319e-07, 1.88145e-09, -1, -1, -5.96046e-08, 1.3411e-07, -31.5988, -1.21673, -2.09155)
+size = Vector3(1.2, 1.2, 1.2)
+texture_albedo = ExtResource("12_fwnsn")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+cull_mask = 1
+
+[node name="BossNameplateSlotty" type="Decal" parent="Decals"]
+transform = Transform3D(0.5, 0.866026, 5.96046e-08, 2.46193e-08, 0, 1, 0.866026, -0.5, -4.47035e-08, -4.5799, 3.11803, 9.70323)
+size = Vector3(0.410724, 3, 0.3)
+texture_albedo = ExtResource("13_wciua")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+cull_mask = 1
+
+[node name="Label3D" type="Label3D" parent="Decals/BossNameplateSlotty"]
+transform = Transform3D(-4.37114e-08, 0, -1, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 0, 0.128717, -5.62641e-09, -2.98372e-16)
+layers = 4
+render_priority = 2
+outline_render_priority = 1
+modulate = Color(0.147555, 0.0561284, 0.0104627, 1)
+outline_modulate = Color(0.902629, 0.879125, 0.528526, 1)
+text = "One Armed Bandit"
+font = ExtResource("14_0cl3f")
+outline_size = 32
+
+[node name="BossNameplateChip" type="Decal" parent="Decals"]
+transform = Transform3D(-1, -1.19209e-07, 5.96046e-08, 7.5312e-08, 1.18674e-07, 1, -5.96046e-08, 1, -4.47035e-08, -26.1587, 0.118027, -1.98332)
+size = Vector3(0.410724, 3, 0.3)
+texture_albedo = ExtResource("13_wciua")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+cull_mask = 1
+
+[node name="Label3D" type="Label3D" parent="Decals/BossNameplateChip"]
+transform = Transform3D(-4.37114e-08, 0, -1, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 0, 0.128717, -5.62641e-09, -2.98372e-16)
+layers = 4
+render_priority = 2
+outline_render_priority = 1
+modulate = Color(0.147555, 0.0561284, 0.0104627, 1)
+outline_modulate = Color(0.902629, 0.879125, 0.528526, 1)
+text = "Chip King"
+font = ExtResource("14_0cl3f")
+outline_size = 32
+
+[node name="BossNameplateMechanic" type="Decal" parent="Decals"]
+transform = Transform3D(-0.707107, -0.707107, 5.96046e-08, 2.6244e-08, 1.47728e-07, 1, -0.707107, 0.707107, -4.47035e-08, -5.20249, 3.11803, -10.7438)
+size = Vector3(0.410724, 3, 0.3)
+texture_albedo = ExtResource("13_wciua")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
+cull_mask = 1
+
+[node name="Label3D" type="Label3D" parent="Decals/BossNameplateMechanic"]
+transform = Transform3D(-4.37114e-08, 0, -1, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 0, 0.128717, -5.62641e-09, -2.98372e-16)
+layers = 4
+render_priority = 2
+outline_render_priority = 1
+modulate = Color(0.147555, 0.0561284, 0.0104627, 1)
+outline_modulate = Color(0.902629, 0.879125, 0.528526, 1)
+text = "The Mechanic"
+font = ExtResource("14_0cl3f")
+outline_size = 32
+
 [node name="Decal" type="Decal" parent="Decals"]
 transform = Transform3D(0.996195, 0, -0.0871557, -0.0871557, -4.37114e-08, -0.996195, -3.8097e-09, 1, -4.35451e-08, -17.5633, -1.80872, -11.8672)
 size = Vector3(2, 1.26416, 3)
@@ -8928,6 +9017,7 @@ metadata/func_godot_mesh_data = {}
 
 [node name="entity_165_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/group_10809_FrameDeco/group_10808_PaintingDeco/entity_165_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_e5fyx")
+surface_material_override/2 = SubResource("StandardMaterial3D_qyhld")
 
 [node name="group_10805_FrameDeco" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -8941,6 +9031,7 @@ metadata/func_godot_mesh_data = {}
 
 [node name="entity_168_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/group_10805_FrameDeco/group_10804_PaintingDeco/entity_168_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_2sqwd")
+surface_material_override/2 = SubResource("StandardMaterial3D_qyhld")
 
 [node name="group_10803_FrameDeco" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -8967,6 +9058,7 @@ metadata/func_godot_mesh_data = {}
 
 [node name="entity_174_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/group_10807_FrameDeco/group_10806_PaintingDeco/entity_174_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_lp323")
+surface_material_override/2 = SubResource("StandardMaterial3D_qyhld")
 
 [node name="entity_175_func_detail_illusionary" type="Node3D" parent="FuncGodotMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25267, 5.125, -4.76837e-07)

@@ -2159,7 +2159,7 @@ use_legacy_nav = true
 follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
-boss_name = "Slotty 2 Hotty"
+boss_name = "One Armed Bandit"
 
 [node name="StateChart" parent="." index="9"]
 process_mode = 1
