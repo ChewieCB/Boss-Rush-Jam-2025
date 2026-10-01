@@ -534,8 +534,20 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 	# Inventory slot UI -> Equip a barrel
 	else:
-		# Check we're not overwriting an existing barrel
 		var equip_slots = equip_barrel_container.get_children()
+		# If no specific empty slot was chosen (stale/unset idx, or it's occupied),
+		# fill the next empty slot (from right to left) instead of overwriting.
+		var target_valid: bool = active_equip_idx >= 0 and active_equip_idx < len(equip_slots)
+		if not target_valid or not equip_slots[active_equip_idx].item_ui.is_empty:
+			for i in range(len(equip_slots) - 1, -1, -1):
+				if equip_slots[i].item_ui.is_empty:
+					active_equip_idx = i
+					target_valid = true
+					break
+		if not target_valid:
+			active_equip_idx = len(equip_slots) - 1
+
+		# Only replace an existing barrel when every slot is full
 		var equip_item_ui: ItemUI = equip_slots[active_equip_idx].item_ui
 		if not equip_item_ui.is_empty:
 			GameManager.remove_barrel(equip_item_ui.data.barrel_id)
