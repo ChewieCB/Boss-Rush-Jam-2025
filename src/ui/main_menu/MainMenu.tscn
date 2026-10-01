@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://1t3ui8wme31d"]
+[gd_scene load_steps=36 format=3 uid="uid://1t3ui8wme31d"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -20,6 +20,7 @@
 [ext_resource type="FontFile" uid="uid://bi7vx7s04krj" path="res://assets/fonts/kleptocracy titling/kleptocracy titling bd.otf" id="19_nwl4i"]
 [ext_resource type="FontFile" uid="uid://djistlrjw48qk" path="res://assets/fonts/kleptocracy titling/kleptocracy titling lt.otf" id="20_6j3k5"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="20_j34pk"]
+[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="21_u7faf"]
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="23_8rbfy"]
 [ext_resource type="FontFile" uid="uid://blo25nucsod0p" path="res://assets/fonts/parklane/ParkLaneNF.otf" id="24_c21x1"]
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
@@ -81,6 +82,13 @@ _data = {
 "RESET": SubResource("Animation_cq0qc"),
 "spin_chip": SubResource("Animation_bjuou")
 }
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kbnci"]
+texture = ExtResource("21_u7faf")
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+region_rect = Rect2(0, 0, 93.7968, 22)
+modulate_color = Color(0.901961, 0.776471, 0, 1)
 
 [node name="MainMenu" type="Control" node_paths=PackedStringArray("settings_ui", "credits_ui", "story_ui", "save_ui", "title_column")]
 custom_minimum_size = Vector2(1920, 1080)
@@ -246,7 +254,7 @@ offset_bottom = -115.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 20
-text = "v0.10.5"
+text = "v0.16.5"
 horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -318,9 +326,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = 165.0
+offset_top = 114.0
 offset_right = -32.0
-offset_bottom = -40.0
+offset_bottom = -23.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -331,6 +339,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
+
+[node name="ArtHeader" type="MarginContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/ArtHeader"]
+layout_mode = 2
+theme_override_constants/separation = -24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/ArtHeader/VBoxContainer"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(0.902281, 0.776745, 0, 1)
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "[left]Art[/left]"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator" type="HSeparator" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/ArtHeader/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_kbnci")
 
 [node name="HBoxContainer6" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -344,55 +379,15 @@ size_flags_horizontal = 0
 theme_override_fonts/normal_font = ExtResource("19_nwl4i")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
-text = "[right]Art[/right]"
+text = "[right]Concept Art & Character Animation[/right]"
 fit_content = true
 scroll_active = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
-custom_minimum_size = Vector2(420, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_fonts/normal_font = ExtResource("20_6j3k5")
-theme_override_font_sizes/normal_font_size = 42
-text = "Grace Althea"
-fit_content = true
-scroll_active = false
-
-[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
-custom_minimum_size = Vector2(420, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_fonts/normal_font = ExtResource("20_6j3k5")
-theme_override_font_sizes/normal_font_size = 42
-text = "Spencer Krigbaum"
-fit_content = true
-scroll_active = false
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 24
-
-[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(420, 64)
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_fonts/normal_font = ExtResource("19_nwl4i")
-theme_override_font_sizes/normal_font_size = 48
-bbcode_enabled = true
-text = "[right]Concept Art[/right]"
-fit_content = true
-scroll_active = false
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-
-[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
 custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -403,33 +398,183 @@ text = "Akashdeep Hehar"
 fit_content = true
 scroll_active = false
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainer7" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer3"]
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer7"]
 custom_minimum_size = Vector2(420, 64)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_fonts/normal_font = ExtResource("19_nwl4i")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
-text = "[right]Music[/right]"
+text = "[right]Environmental Art[/right]"
 fit_content = true
 scroll_active = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer7"]
 layout_mode = 2
 
-[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer7/VBoxContainer"]
 custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_fonts/normal_font = ExtResource("20_6j3k5")
 theme_override_font_sizes/normal_font_size = 42
-text = "Lachlan James"
+text = "Spencer Krigbaum"
+fit_content = true
+scroll_active = false
+
+[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer7/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Alicia Guevara"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Additional Art[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+
+[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer8/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Grace Althea"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]3rd Party Assets[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Bell by Quaternius"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Bomb by Poly by Google"
+fit_content = true
+scroll_active = false
+
+[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Kenney.nl"
+fit_content = true
+scroll_active = false
+
+[node name="DesignHeader" type="MarginContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/DesignHeader"]
+layout_mode = 2
+theme_override_constants/separation = -24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/DesignHeader/VBoxContainer"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(0.902281, 0.776745, 0, 1)
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "[left]Design[/left]"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator" type="HSeparator" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/DesignHeader/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_kbnci")
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer10"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Level Design[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer10/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Jack McCaffrey"
 fit_content = true
 scroll_active = false
 
@@ -474,6 +619,63 @@ text = "Lam Nguyen"
 fit_content = true
 scroll_active = false
 
+[node name="SoundHeader" type="MarginContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/SoundHeader"]
+layout_mode = 2
+theme_override_constants/separation = -24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/SoundHeader/VBoxContainer"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(0.902281, 0.776745, 0, 1)
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "[left]Sound[/left]"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator" type="HSeparator" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/SoundHeader/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_kbnci")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Music[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Lachlan James"
+fit_content = true
+scroll_active = false
+
 [node name="HBoxContainer4" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
@@ -493,17 +695,6 @@ scroll_active = false
 [node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 
-[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer4/VBoxContainer"]
-custom_minimum_size = Vector2(420, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_fonts/normal_font = ExtResource("20_6j3k5")
-theme_override_font_sizes/normal_font_size = 42
-text = "Kieran Morrison"
-fit_content = true
-scroll_active = false
-
 [node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer4/VBoxContainer"]
 custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
@@ -515,55 +706,186 @@ text = "Joshua Stead"
 fit_content = true
 scroll_active = false
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainer9" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5"]
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer9"]
 custom_minimum_size = Vector2(420, 64)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_fonts/normal_font = ExtResource("19_nwl4i")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
-text = "[right]3rd Party Assets[/right]"
+text = "[right]Additional Sound[/right]"
 fit_content = true
 scroll_active = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer9"]
 layout_mode = 2
 
-[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5/VBoxContainer"]
+[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer9/VBoxContainer"]
 custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_fonts/normal_font = ExtResource("20_6j3k5")
 theme_override_font_sizes/normal_font_size = 42
-text = "Bell by Quaternius"
+text = "Kieran Morrison"
 fit_content = true
 scroll_active = false
 
-[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5/VBoxContainer"]
+[node name="HBoxContainer12" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer12"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Voice Acting[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer12/VBoxContainer"]
 custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_fonts/normal_font = ExtResource("20_6j3k5")
 theme_override_font_sizes/normal_font_size = 42
-text = "Bomb by Poly by Google [CC-BY] via Poly Pizza"
+text = "Kyle Neary"
 fit_content = true
 scroll_active = false
 
-[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer5/VBoxContainer"]
+[node name="QAHeader" type="MarginContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/QAHeader"]
+layout_mode = 2
+theme_override_constants/separation = -24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/QAHeader/VBoxContainer"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(0.902281, 0.776745, 0, 1)
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "[left]QA[/left]"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator" type="HSeparator" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/QAHeader/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_kbnci")
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Playtesting[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
 custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_fonts/normal_font = ExtResource("20_6j3k5")
 theme_override_font_sizes/normal_font_size = 42
-text = "Kenney.nl"
+text = "James Bridges"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Sonny Fox"
+fit_content = true
+scroll_active = false
+
+[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Reece Spencer"
+fit_content = true
+scroll_active = false
+
+[node name="Name4" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Kyle Neary"
+fit_content = true
+scroll_active = false
+
+[node name="Name5" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Lisa O'Shea"
+fit_content = true
+scroll_active = false
+
+[node name="Name6" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Josh McNelly"
+fit_content = true
+scroll_active = false
+
+[node name="Name7" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer11/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Jack Crabtree"
 fit_content = true
 scroll_active = false
 

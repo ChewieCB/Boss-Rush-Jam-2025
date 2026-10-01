@@ -41,7 +41,7 @@ var prev_phase
 @export var pulled_lever_sprite: CompressedTexture2D
 
 @export_group("Movement")
-@export var DESIRED_HEIGHT: float = 2.6
+@export var DESIRED_HEIGHT: float = 3.6
 var desired_height: float = DESIRED_HEIGHT
 @export var DROP_FACTOR: float = 1.0
 var drop_factor: float = DROP_FACTOR
@@ -278,7 +278,7 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	#super(delta)
 
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
@@ -288,10 +288,16 @@ func _physics_process(delta: float) -> void:
 		if target in hurtbox.get_overlapping_bodies() and swipe_cooldown_timer.is_stopped():
 			_on_hurtbox_body_entered(target)
 	
-	if self.global_position.y > desired_height:
-		self.global_position.y -= delta * drop_factor
-	elif self.global_position.y < desired_height:
-		self.global_position.y += delta * drop_factor
+	var height_diff: float = desired_height - self.global_position.y
+	var max_step: float = drop_factor * delta
+	self.velocity.y = (height_diff / delta) if abs(height_diff) <= max_step else sign(height_diff) * drop_factor
+	
+	#if self.global_position.y > desired_height:
+		#self.global_position.y -= delta * drop_factor
+	#elif self.global_position.y < desired_height:
+		#self.global_position.y += delta * drop_factor
+	
+	move_and_slide()
 
 	if abs(self.global_position.y - desired_height) < 0.1:
 		desired_height_reached.emit()
@@ -311,6 +317,7 @@ func select_attack_phase_1() -> void:
 	prev_phase = new_phase
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
+	swipe_cooldown_timer.stop()
 	state_chart.send_event("start_spin_slots")
 
 
@@ -332,6 +339,7 @@ func select_attack_phase_2() -> void:
 	prev_phase = new_phase
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
+	swipe_cooldown_timer.stop()
 	state_chart.send_event("start_spin_slots")
 
 
@@ -408,8 +416,10 @@ func _death_explosion() -> void:
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
-	if $StateChart/Root/Phase/Phase1/Charge.active or \
-	$StateChart/Root/Phase/Phase2/Charge.active or \
+	if $StateChart/Root/Phase/Phase1/Charge/Charging.active or \
+	$StateChart/Root/Phase/Phase1/Charge/Recover.active or \
+	$StateChart/Root/Phase/Phase2/Charge/Charging.active or \
+	$StateChart/Root/Phase/Phase2/Charge/Recover.active or \
 	$StateChart/Root/Phase/Phase2/CherryBombs.active:
 		return
 	if swipe_cooldown_timer.is_stopped():
@@ -550,12 +560,9 @@ func _on_coin_projectiles_targeting_state_entered() -> void:
 
 func _on_coin_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Shooting"
+	next_attack = ""
 
 	state_chart.send_event("attack_telegraph")
-	# await get_tree().create_timer(0.4, false).timeout
-	#anim_player.play("coin_shot_telegraph")
-	#await anim_player.animation_finished
-	#anim_player.play("RESET")
 	state_chart.send_event("attack_start")
 
 	for i in coin_burst_repeat:
@@ -566,6 +573,8 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 		play_positional_sound(sfx_coin_gun_blast.pick_random())
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(1.0 / coin_firerate, false).timeout
+			if not $StateChart/Root/Phase/Phase1/CoinProjectiles.active and not $StateChart/Root/Phase/Phase2/CoinProjectiles.active:
+				return
 			var proj: BaseBossProjectile = fire_projectile_pooled(coin_proj_pool, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			#var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
@@ -691,6 +700,7 @@ func _on_bell_drop_targeting_state_entered() -> void:
 func _on_bell_drop_dropping_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Dropping"
 	state_chart.send_event("attack_telegraph")
+	next_attack = ""
 
 	# Get a bunch of evenly distributed points clamped to the navmesh
 	bell_spawn_points = Poisson.generate_points_for_circle(
@@ -743,8 +753,11 @@ func _on_bell_drop_recover_state_entered() -> void:
 func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
 	
+	hurtbox_collider.set_deferred("disabled", false)
+	charge_collider.set_deferred("disabled", true)
+	
 	desired_distance = 2.4
-	desired_height = DESIRED_HEIGHT
+	desired_height = 1.4
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	
@@ -781,14 +794,14 @@ func melee_swipe() -> void:
 	sfx_player.play()
 
 	# Hit player in melee range and flee away
+	await get_tree().process_frame
 	if target in hurtbox.get_overlapping_bodies():
 		target.health_component.damage(swipe_damage * GameManager.get_risk_dmg_mult())
 		hurtbox.set_deferred("monitoring", false)
 		# TODO - fix this knockback
 		var knockback_vector = - self.global_basis.z * swipe_knockback
-		target.velocity.x = 0
-		target.velocity.z = 0
-		target.velocity += knockback_vector
+		knockback_vector += Vector3(0, 0.2 * swipe_knockback, 0)
+		target.apply_impulse_to_player(knockback_vector)
 
 		var dodge_vector = self.global_basis.z * swipe_dodge_speed
 
@@ -842,9 +855,11 @@ func _on_lever_swipe_recover_state_entered() -> void:
 	state_chart.send_event("cooldown_end")
 	
 	# Return to previous state if valid
-	state_chart.send_event(next_attack)
-	# Rr select new attack if not
-	#select_attack()
+	if next_attack != "":
+		state_chart.send_event(next_attack)
+	else:
+	# Or select new attack if not
+		select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -885,6 +900,7 @@ func _on_homing_projectiles_targeting_state_physics_processing(delta: float) -> 
 
 func _on_homing_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Shooting"
+	next_attack = ""
 	anim_player.play("diamond_shot")
 	await anim_player.animation_finished
 	# Fire out projctiles in a spiral, each projectile homes in on the player
@@ -944,6 +960,7 @@ func _on_pinball_projectiles_targeting_state_entered() -> void:
 
 func _on_pinball_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Pinball Riochet | Shooting"
+	next_attack = ""
 	# Fire out projctiles in a spiral, each projectile can ricochet
 	for i in range(pinball_shots_per_attack):
 		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack, false).timeout
@@ -973,19 +990,21 @@ func _on_pinball_projectiles_recover_state_entered() -> void:
 # 3 BARs on rollers
 func _on_charge_targeting_state_entered() -> void:
 	debug_state_label.text = "Charge | Targeting"
-
+	
+	# Update the orbit angle relative to the player before we start backing up
+	var to_boss: Vector3 = self.global_position - target.global_position
+	orbit_angle = atan2(to_boss.z, to_boss.x)
+	
 	navigation_component.enable()
 	desired_distance = min_charge_distance * 2
-	MAX_SPEED *= 1.6
+	MAX_SPEED *= 2.5
 	charge_locked = false
-	
-	# Swap melee colliders
-	hurtbox_collider.set_deferred("disabled", true)
-	charge_collider.set_deferred("disabled", false)
 	
 	state_chart.send_event("start_moving")
 
 	await charge_lined_up
+	if not $StateChart/Root/Phase/Phase1/Charge/Targeting.active and not $StateChart/Root/Phase/Phase2/Charge/Targeting.active:
+		return
 	#velocity = Vector3.ZERO
 	state_chart.send_event("attack_telegraph")
 	anim_player.play("charge_telegraph")
@@ -1002,30 +1021,44 @@ func _on_charge_targeting_state_physics_processing(delta: float) -> void:
 			int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 7 - 1))
 		)
 		var result = space_state.intersect_ray(query)
-
-		if self.global_position.distance_to(target.global_position) >= min_charge_distance:
+		
+		var target_dist: float = self.global_position.distance_to(target.global_position)
+		if target_dist < min_charge_distance:
+		#if self.global_position.distance_to(target.global_position) >= min_charge_distance:
+			# Boss is too close - move further away
+			var flee_dir: Vector3 = (self.global_position - target.global_position).normalized()
+			navigation_component.set_nav_target_position(
+				self.global_position + flee_dir * (desired_distance - target_dist)
+			)
+		else:
 			if result == null or result.collider == target:
 				state_chart.send_event("stop_moving")
 				charge_lined_up.emit()
 				charge_locked = true
-				return
 
-		orbit_player(delta)
+		#orbit_player(delta)
 
 func _on_charge_charging_state_entered() -> void:
 	debug_state_label.text = "Charge | Charging"
+	next_attack = ""
 	state_chart.send_event("attack_start")
+	
+	# Swap melee colliders
+	hurtbox_collider.set_deferred("disabled", true)
+	charge_collider.set_deferred("disabled", false)
 
-	MAX_SPEED /= 1.6
-	desired_height = DESIRED_HEIGHT
+	MAX_SPEED /= 2.5
+	#desired_height = DESIRED_HEIGHT
+	desired_height = 1.0
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y
 	drop_factor = 12.0
 	charge_crack_interval_timer = 0
 	spawn_charge_crack()
-
+	
 	navigation_component.disable()
 	hurtbox.set_deferred("monitoring", true)
+	await get_tree().physics_frame
 	hurtbox.body_entered.connect(_on_charge_collision)
 	var charge_dir = self.global_position.direction_to(target.global_position)
 	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
@@ -1125,6 +1158,7 @@ func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Dropping"
+	next_attack = ""
 	desired_height = 10.0
 	if floor_raycast.is_colliding():
 		desired_height += floor_raycast.get_collision_point().y

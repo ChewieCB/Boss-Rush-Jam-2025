@@ -1,4 +1,4 @@
-[gd_scene load_steps=153 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=156 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -84,6 +84,24 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="66_0ywdd"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="67_ifiaw"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="68_pc8wl"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="69_fspfc"]
+[ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="70_f0afj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t82sf"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("69_fspfc")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_alpha = 1.0
+shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
+shader_parameter/tex = ExtResource("70_f0afj")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_brmua"]
 size = Vector3(5, 5, 5)
@@ -627,7 +645,6 @@ _data = {
 }
 
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "blocking_detection_area", "sfx_players") instance=ExtResource("1_262ft")]
-collision_mask = 11
 script = ExtResource("2_km6gh")
 DEBUG_blackjack = false
 DEBUG_bust = false
@@ -719,6 +736,7 @@ barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer1"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12"), NodePath("SFXPlayer13"), NodePath("SFXPlayer14"), NodePath("SFXPlayer15"), NodePath("SFXPlayer16")]
 sfx_hit = Array[AudioStream]([ExtResource("64_ef0pe"), ExtResource("65_8bjro"), ExtResource("66_0ywdd"), ExtResource("67_ifiaw"), ExtResource("68_pc8wl")])
 sfx_slowmo = null
+hit_material = SubResource("ShaderMaterial_t82sf")
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
@@ -800,7 +818,6 @@ scale_factor = 6.0
 min_scale = 6.0
 max_scale = 9.0
 emission_radius = 6.0
-free_on_finished = false
 
 [node name="ExplosionPoly2" parent="HoverPlatform/BustParticles" index="1" instance=ExtResource("20_1mflx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2, -5)
@@ -808,7 +825,6 @@ scale_factor = 6.0
 min_scale = 6.0
 max_scale = 9.0
 emission_radius = 6.0
-free_on_finished = false
 
 [node name="ExplosionPoly3" parent="HoverPlatform/BustParticles" index="2" instance=ExtResource("20_1mflx")]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 1, 1.2, -5)
@@ -816,7 +832,6 @@ scale_factor = 6.0
 min_scale = 6.0
 max_scale = 9.0
 emission_radius = 6.0
-free_on_finished = false
 
 [node name="ExplosionPoly4" parent="HoverPlatform/BustParticles" index="3" instance=ExtResource("20_1mflx")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.57081, 1.2, -2.73998)
@@ -824,7 +839,6 @@ scale_factor = 6.0
 min_scale = 6.0
 max_scale = 9.0
 emission_radius = 6.0
-free_on_finished = false
 
 [node name="ExplosionPoly5" parent="HoverPlatform/BustParticles" index="4" instance=ExtResource("20_1mflx")]
 transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, -1.12132, 1.2, -1.32577)
@@ -832,7 +846,6 @@ scale_factor = 6.0
 min_scale = 6.0
 max_scale = 9.0
 emission_radius = 6.0
-free_on_finished = false
 
 [node name="ExplosionPoly6" parent="HoverPlatform/BustParticles" index="5" instance=ExtResource("20_1mflx")]
 transform = Transform3D(-1, 0, -7.35137e-08, 0, 1, 0, 7.35137e-08, 0, -1, 1.87868, 1.2, -1.32577)
@@ -840,7 +853,6 @@ scale_factor = 6.0
 min_scale = 6.0
 max_scale = 9.0
 emission_radius = 6.0
-free_on_finished = false
 
 [node name="HandAnchor" type="Marker3D" parent="." index="4"]
 
@@ -857,7 +869,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="HealthComponent" parent="." index="7"]
 visible = false
-max_health = 8000.0
+max_health = 14000.0
 
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
 process_mode = 4

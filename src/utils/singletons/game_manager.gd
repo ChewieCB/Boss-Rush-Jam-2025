@@ -18,6 +18,7 @@ signal cheat_godmode_toggle(value: bool)
 signal cheat_boss_godmode_toggle(value: bool)
 signal cheat_boss_attack_debug_toggle(value: bool)
 signal controller_mouse_override_toggle(value: bool)
+signal cheat_unlock_wip_bosses(value: bool)
 
 # TODO: Use Fmod enum to change music state to avoid mismatched name
 enum FmodMusicState {
@@ -218,12 +219,16 @@ var CHEAT_spin_cost: int = DebugSpinCost.COOLDOWN
 var CHEAT_freecam: bool = false
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = false
-var CHEAT_demomode_timeout: int = 60:
+var CHEAT_demomode_timeout: int = 90:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)
 var CHEAT_infinite_ammo: bool = false
 var CHEAT_debug_jam_controls: bool = false
+var CHEAT_unlock_wip_bosses: bool = false:
+	set(value):
+		CHEAT_unlock_wip_bosses = value
+		cheat_unlock_wip_bosses.emit(CHEAT_unlock_wip_bosses)
 
 @export var sfx_screenshot: AudioStream
 

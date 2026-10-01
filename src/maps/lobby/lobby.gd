@@ -16,6 +16,8 @@ signal ui_accept
 @onready var sfx_door_open: AudioStreamPlayer3D = $SFXDoorOpen
 @onready var sfx_door_close: AudioStreamPlayer3D = $SFXDoorClose
 
+@export var wip_bosses_door: ElevatorDoors
+
 @export var vendors: Array[Node]
 
 var display_barrels: Array = []
@@ -65,6 +67,12 @@ func _ready() -> void:
 	
 	if GameManager.elevator_respawn_transform != Transform3D():
 		player.global_transform = GameManager.elevator_respawn_transform
+	
+	wip_bosses_door.is_autodoor = GameManager.CHEAT_unlock_wip_bosses
+	GameManager.cheat_unlock_wip_bosses.connect(
+		func(is_open): 
+			wip_bosses_door.is_autodoor = is_open
+	)
 	
 	# HACK for backroom load
 	await ScreenTransition.transition_in()
