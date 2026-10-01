@@ -48,7 +48,7 @@ func explode():
 			BossCore.BossStatusEffect.BURNING:
 				explosion_vfx.set_colour(Color.TOMATO)
 			BossCore.BossStatusEffect.POISONED:
-				explosion_vfx.set_colour(Color.DARK_GREEN)
+				explosion_vfx.set_colour(Color("#41007d"))
 			BossCore.BossStatusEffect.FROZEN:
 				explosion_vfx.set_colour(Color.AQUA)
 			BossCore.BossStatusEffect.SHOCKED:

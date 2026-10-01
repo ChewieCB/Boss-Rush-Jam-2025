@@ -608,6 +608,7 @@ func show_barrel_effect_ui() -> void:
 	if current_gun.max_barrels == 0:
 		return
 
+	GameManager.change_fmod_bgm_menu_is_up(true)
 	barrel_detail_ui.process_mode = Node.PROCESS_MODE_INHERIT
 	barrel_ui_active = true
 
@@ -627,7 +628,7 @@ func show_barrel_effect_ui() -> void:
 			effect_ui.modulate.a = 0.0
 	await barrel_ui_tween.finished
 
-	Engine.time_scale = 0.1
+	Engine.time_scale = 0.01
 
 
 func hide_barrel_effect_ui() -> void:
@@ -650,6 +651,7 @@ func hide_barrel_effect_ui() -> void:
 			# Fallback
 			effect_ui.modulate.a = 0.0
 	barrel_ui_tween.tween_callback(_disable_barrel_effect_ui)
+	GameManager.change_fmod_bgm_menu_is_up(false)
 
 
 func _disable_barrel_effect_ui() -> void:
