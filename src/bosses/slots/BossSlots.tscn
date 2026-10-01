@@ -1,4 +1,4 @@
-[gd_scene load_steps=223 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=225 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -159,6 +159,8 @@
 [ext_resource type="Texture2D" uid="uid://dopxmvfff58bm" path="res://src/bosses/slots/assets/big_ranged_shot/Slotty_gunTransformation/slotty_gunTrans_33.png" id="136_omfb6"]
 [ext_resource type="Texture2D" uid="uid://cplijr7fp5qxw" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_2.png" id="141_tb8vf"]
 [ext_resource type="Texture2D" uid="uid://dx8m3mdoyrffw" path="res://src/bosses/slots/assets/Slotty_bellSummon.png" id="156_0718p"]
+[ext_resource type="Texture2D" uid="uid://bfpatc7qnpeg" path="res://src/bosses/slots/assets/Slotty_bellSummon_body.png" id="159_rf2tl"]
+[ext_resource type="Texture2D" uid="uid://b5soir5sqsb2t" path="res://src/bosses/slots/assets/Slotty_bellSummon_Gun.png" id="160_2tybl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -201,7 +203,7 @@ radius = 0.35
 height = 0.7
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oavlp"]
-size = Vector3(7, 15, 10)
+size = Vector3(15, 12, 15)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_erym8"]
 size = Vector3(7, 11.6346, 2)
@@ -1700,7 +1702,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("156_0718p")]
+"values": [ExtResource("159_rf2tl")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -1726,7 +1728,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -1762,7 +1764,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(1.9, 0.2, -0.1), Vector3(1.9, -0.1, -0.1), Vector3(1.9, 0.2, -0.1)]
+"values": [Vector3(0.0329572, 0.0661023, -0.1), Vector3(-0.419796, -0.315537, -0.1), Vector3(0.0329572, 0.0661023, -0.1)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -1787,6 +1789,18 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 2.5, 0), Vector3(0, 2, 0), Vector3(0, 2.5, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sprite3D/GunOnlySprite:texture")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("160_2tybl")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
@@ -1901,7 +1915,7 @@ motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
 pulled_lever_sprite = ExtResource("3_dsptn")
-DESIRED_HEIGHT = 2.6
+DESIRED_HEIGHT = 3.6
 DROP_FACTOR = 1.0
 SLOT_TICKS = 20
 sfx_slot_roll_long = ExtResource("3_o5exi")
@@ -1943,9 +1957,9 @@ sfx_shoot_bell_flare = Array[AudioStream]([ExtResource("32_g6j0f"), ExtResource(
 sfx_bell_windup = Array[AudioStream]([ExtResource("26_ttq7b"), ExtResource("27_q6v3x"), ExtResource("28_d1bvs")])
 sfx_bell_impact = Array[AudioStream]([ExtResource("29_757fw"), ExtResource("30_agl3v"), ExtResource("31_opgs0")])
 swipe_damage = 16.0
-swipe_knockback = 50.0
+swipe_knockback = 25.0
 swipe_dodge_speed = 10.0
-swipe_cooldown = 5.0
+swipe_cooldown = 3.0
 sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_31vh7"), ExtResource("34_otbm5")])
 charge_collider = NodePath("Hurtbox/ChargeCollisionShape")
 charge_damage = 32.0
@@ -2008,6 +2022,7 @@ sfx_death = ExtResource("67_pi67a")
 base_sprite = ExtResource("5_wqq5t")
 hurt_sprite = ExtResource("62_ci6xi")
 hit_material = SubResource("ShaderMaterial_tewrr")
+hurt_frame_cooldown = 0.9
 attack_recovery_time = 0.5
 telegraph_time = 0.4
 projectiles_per_phase = 8
@@ -2041,6 +2056,7 @@ texture = ExtResource("4_6oj0s")
 transform = Transform3D(1.01626, 0.264044, 0, -0.264044, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
+sorting_offset = -1.0
 billboard = 2
 texture = ExtResource("66_h52w4")
 
@@ -2105,7 +2121,7 @@ emission_radius = 2.0
 monitoring = true
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 3.3235, -4.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103, 3.323, 0)
 shape = SubResource("BoxShape3D_oavlp")
 
 [node name="ChargeCollisionShape" type="CollisionShape3D" parent="Hurtbox" index="1"]
@@ -2254,13 +2270,6 @@ to = NodePath("../../Shooting")
 event = &"start_shooting"
 delay_in_seconds = "0.0"
 
-[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles/Targeting" index="1"]
-script = ExtResource("5_lu46i")
-to = NodePath("../../../LeverSwipe")
-event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
-delay_in_seconds = "0.0"
-
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="1"]
 script = ExtResource("9_5a0pq")
 
@@ -2270,13 +2279,6 @@ to = NodePath("../../Recover")
 event = &"stop_shooting"
 delay_in_seconds = "0.0"
 
-[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles/Shooting" index="1"]
-script = ExtResource("5_lu46i")
-to = NodePath("../../../LeverSwipe")
-event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
-delay_in_seconds = "0.0"
-
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="2"]
 script = ExtResource("9_5a0pq")
 
@@ -2284,13 +2286,6 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-delay_in_seconds = "0.0"
-
-[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles/Recover" index="1"]
-script = ExtResource("5_lu46i")
-to = NodePath("../../../LeverSwipe")
-event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
 [node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="3"]
@@ -2411,6 +2406,13 @@ event = &"start_spin_slots"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
+[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/Charge" index="4"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../LeverSwipe")
+event = &"start_lever_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
 [node name="LeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("8_0tk6i")
 initial_state = NodePath("Targeting")
@@ -2466,6 +2468,13 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../BellDrop")
 event = &"start_bell_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase1/LeverSwipe" index="6"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Charge")
+event = &"start_charge_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
