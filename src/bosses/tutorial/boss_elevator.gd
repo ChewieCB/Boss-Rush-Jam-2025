@@ -1051,6 +1051,8 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	navigation_component.enable()
 	
+	block_hurt_frame = false
+	
 	select_attack()
 	# HACK - need this call for phase 1, but need to not call it for phase 5
 	if current_phase < 4:
