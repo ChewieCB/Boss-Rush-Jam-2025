@@ -7738,6 +7738,10 @@ target_effect_id = 51
 connected_object = NodePath("../FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
 active = false
 
+[node name="HealthComponent" parent="SingleEffectTrigger" index="0"]
+is_invincible = true
+show_damage_text = false
+
 [node name="CollisionShape3D" parent="SingleEffectTrigger" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.172108, 2.85222, -1.65)
 

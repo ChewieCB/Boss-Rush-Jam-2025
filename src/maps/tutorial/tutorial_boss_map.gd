@@ -438,51 +438,17 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	player.current_gun.cooldown_disabled = false
 	player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
 
-	# Force effect to non-electric and 1st spin to electric
-	await player.current_gun.recheck_installed_barrels()
-	player.current_gun.set_barrel_to_effect(0, 27) # 27 = Gambler's Precision
-	player.current_gun.force_barrel_next_spin(0, 51) # 51 = Hyperfocus
-
 	await get_tree().create_timer(0.8, false).timeout
 
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
 	
-	# Spark the electrical box
-	door_spark_emitter.emitting = true
-	spark_sfx_player.stream = sfx_door_spark.pick_random()
-	spark_sfx_player.play()
-	# Highlight electrical box to shoot
-	# TODO - modulate coloured mesh around box
-	#
-	# Trigger spin tutorial prompt
-	#GameManager.is_free_reroll = true
 	show_tutorial_panel(tutorial_6_trigger_spin)
 	
-	await player.current_gun.barrel_spin_started
+	await player.current_gun.barrel_spin_stopped
 	
-	electric_box_trigger.active = true
-	while electric_box_trigger.active:
-		await get_tree().create_timer(randf_range(1.0, 1.8)).timeout
-		# Spark the electrical box
-		door_spark_emitter.emitting = true
-		spark_sfx_player.stream = sfx_door_spark.pick_random()
-		spark_sfx_player.play()
-		#
-		var highlight_tween: Tween = get_tree().create_tween()
-		highlight_tween.tween_method(
-			_update_shield_mat_colour.bind(door_trigger_highlight_mesh),
-			Color("d9002b00"),
-			Color("d9002b"),
-			0.6
-		).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
-		highlight_tween.chain().tween_method(
-			_update_shield_mat_colour.bind(door_trigger_highlight_mesh),
-			Color("d9002b"),
-			Color("d9002b00"),
-			0.4
-		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-
-	GameManager.is_free_reroll = false
+	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
+	
+	$FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors.activate()
 
 
 func _update_shield_mat_colour(color: Color, mesh: MeshInstance3D) -> void:
