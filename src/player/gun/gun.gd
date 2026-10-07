@@ -1001,6 +1001,31 @@ func _trigger_spin_anim() -> void:
 	spin_anim_trigger.emit()
 
 
+## Preview the spread angle the next shot would have.
+## Polled by the crosshair.
+func get_preview_spread_angle() -> float:
+	var spread_angle := base_spread_angle
+	for effect in _get_active_effects():
+		spread_angle = effect.preview_spread_angle(spread_angle)
+	return spread_angle
+
+func get_preview_spread_horizontal_bias() -> float:
+	var horizontal_bias := 0.5
+	for effect in _get_active_effects():
+		horizontal_bias = effect.preview_spread_horizontal_bias(horizontal_bias)
+	return horizontal_bias
+
+func _get_active_effects() -> Array[BaseBarrelEffect]:
+	var effects: Array[BaseBarrelEffect] = []
+	for barrel in installed_barrels:
+		if barrel == null:
+			continue
+		var effect := barrel.get_active_effect()
+		if effect:
+			effects.append(effect)
+	return effects
+
+
 func reset_modifier(reload_reset = false):
 	n_ammo_consume = 1
 	n_shot_repeat = 1
@@ -1384,7 +1409,7 @@ func _remove_icon_jam_overlay(idx: int) -> void:
 		barrel_icon_meshes[idx].set_surface_override_material(0, _cached_mat)
 
 
-func spark_barrel(idx: int) -> void: 
+func spark_barrel(idx: int) -> void:
 	barrel_sparks[idx].restart()
 
 

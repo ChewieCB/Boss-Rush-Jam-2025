@@ -15,6 +15,11 @@ func on_prepare_to_fire():
 	else:
 		owner_barrel.owner_gun.modified_spread_angle = round(owner_barrel.owner_gun.modified_spread_angle * (1 + modify_perc_spread_moving / 100.0))
 
+func preview_spread_angle(spread_angle: float) -> float:
+	if GameManager.player.velocity.length() < STAND_STILL_THRESHOLD:
+		return round(spread_angle * (1 + modify_perc_spread_stationary / 100.0))
+	return round(spread_angle * (1 + modify_perc_spread_moving / 100.0))
+
 func on_gun_damage_calculation():
 	super ()
 	if GameManager.player.velocity.length() < STAND_STILL_THRESHOLD:

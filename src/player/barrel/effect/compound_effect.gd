@@ -55,6 +55,16 @@ func on_prepare_to_fire():
 	for child in child_effects:
 		child.on_prepare_to_fire()
 
+func preview_spread_angle(spread_angle: float) -> float:
+	for child in child_effects:
+		spread_angle = child.preview_spread_angle(spread_angle)
+	return spread_angle
+
+func preview_spread_horizontal_bias(horizontal_bias: float) -> float:
+	for child in child_effects:
+		horizontal_bias = child.preview_spread_horizontal_bias(horizontal_bias)
+	return horizontal_bias
+
 func on_ammo_consumed():
 	if is_archetype:
 		SoundManager.play_sound_with_pitch(archetype_shot_sfx.pick_random(), randf_range(0.85, 1.15), "Gun")

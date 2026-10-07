@@ -26,6 +26,16 @@ func on_fire_rate_check():
 			#owner_barrel.owner_gun.modified_firerate = calculate_new_value(
 				#owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
 
+func preview_spread_angle(spread_angle: float) -> float:
+	if attribute == AttributeNameEnum.SPREAD_ANGLE:
+		return calculate_new_value(spread_angle, modify_value, is_perc, false)
+	return spread_angle
+
+func preview_spread_horizontal_bias(horizontal_bias: float) -> float:
+	if attribute == AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+		return calculate_new_value(horizontal_bias, modify_value, is_perc, false)
+	return horizontal_bias
+
 func on_prepare_to_fire():
 	super()
 	match attribute:
