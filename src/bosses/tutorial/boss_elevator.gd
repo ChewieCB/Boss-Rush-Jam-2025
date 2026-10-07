@@ -412,7 +412,7 @@ func _on_died() -> void:
 		
 		for i in chip_bonus_on_kill:
 			_spawn_chip(true)
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.1, false).timeout
 		
 		await boss_death_slow_mo()
 		defeated.emit(self)
@@ -1101,7 +1101,7 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	
 	state_chart.send_event("charge_laser")
 
