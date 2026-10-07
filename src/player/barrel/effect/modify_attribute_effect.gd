@@ -4,9 +4,14 @@ extends BaseBarrelEffect
 ## By default is flat value. If is_perc is true, 50 = 50%. For boolean value, 0 for false and 1 for true
 @export var modify_value: float
 @export var is_perc: bool
+@export var exclude_frames: Array[GunFrameResource.GunFrameIdEnum] = []
 
 func on_effect_set():
 	super()
+	
+	if GameManager.equipped_gun_frame.frame_id in exclude_frames:
+		return
+	
 	match attribute:
 		AttributeNameEnum.FIRERATE:
 			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
@@ -28,6 +33,10 @@ func on_fire_rate_check():
 
 func on_prepare_to_fire():
 	super()
+	
+	if GameManager.equipped_gun_frame.frame_id in exclude_frames:
+		return
+	
 	match attribute:
 		AttributeNameEnum.DAMAGE:
 			owner_barrel.owner_gun.modified_damage = calculate_new_value(

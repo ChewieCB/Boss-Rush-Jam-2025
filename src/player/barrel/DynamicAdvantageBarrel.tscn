@@ -43,6 +43,7 @@ script = ExtResource("5_ky52g")
 attribute = 8
 modify_value = 150.0
 is_perc = true
+exclude_frames = Array[int]([2])
 
 [node name="ExplosiveBullet" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("dps_dealt_window_timer")]
 script = ExtResource("6_ayuco")

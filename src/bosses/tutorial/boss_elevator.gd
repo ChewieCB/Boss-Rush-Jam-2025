@@ -412,7 +412,7 @@ func _on_died() -> void:
 		
 		for i in chip_bonus_on_kill:
 			_spawn_chip(true)
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.1, false).timeout
 		
 		await boss_death_slow_mo()
 		defeated.emit(self)
@@ -1051,6 +1051,8 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	navigation_component.enable()
 	
+	block_hurt_frame = false
+	
 	select_attack()
 	# HACK - need this call for phase 1, but need to not call it for phase 5
 	if current_phase < 4:
@@ -1099,7 +1101,7 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	
 	state_chart.send_event("charge_laser")
 
@@ -1136,11 +1138,11 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	)
 
 func _telegraph_laser() -> void:
-	state_chart.send_event("stop_moving")
 	laser_anim_sm.travel("telegraph")
 
 func _laser_firing_delay() -> void:
 	TURN_SPEED_FAST = turn_speed_fast
+	state_chart.send_event("stop_moving")
 
 func _fire_laser() -> void:
 	state_chart.send_event("start_firing")
@@ -1767,6 +1769,10 @@ func taunt() -> void:
 				sfx_taunt_phase_3_active = sfx_taunt_phase_3
 				sfx_taunt_phase_3_active.shuffle()
 				taunt_sfx = sfx_taunt_phase_3_active.pop_front()
+		4:
+			taunt_sfx = sfx_taunt_phase_4.pick_random()
+		5:
+			taunt_sfx = sfx_taunt_phase_5.pick_random()
 		_:
 			taunt_sfx = sfx_taunt_all.pick_random()
 	
