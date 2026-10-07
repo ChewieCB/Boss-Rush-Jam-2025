@@ -55,6 +55,7 @@ var is_cutscene_active: bool = true
 @export var tutorial_4_trigger_dash: TutorialPopupResource
 @export var tutorial_5_trigger_barrel_detail: TutorialPopupResource
 @export var tutorial_6_trigger_spin: TutorialPopupResource
+@export var tutorial_6a_trigger_spin_heal: TutorialPopupResource
 
 #
 @export var electric_box_trigger: StaticBody3D
@@ -439,13 +440,9 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	player.stat_ui._spin_cooldown_anim_instant_drain_to_fill()
 
 	await get_tree().create_timer(0.8, false).timeout
-
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
-	
-	show_tutorial_panel(tutorial_6_trigger_spin)
-	
-	await player.current_gun.barrel_spin_stopped
-	
+	await show_tutorial_panel(tutorial_6_trigger_spin)
+	await show_tutorial_panel(tutorial_6a_trigger_spin_heal)
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
 	
 	$FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors.activate()

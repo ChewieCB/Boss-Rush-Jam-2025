@@ -1,4 +1,4 @@
-[gd_scene load_steps=390 format=4 uid="uid://bb3nslkfnfo81"]
+[gd_scene load_steps=391 format=4 uid="uid://bb3nslkfnfo81"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -151,6 +151,17 @@ close_trigger_actions = Array[String](["spin_barrels"])
 close_trigger_count = 1
 timeout = 0.0
 timeout_on_close = true
+
+[sub_resource type="Resource" id="Resource_kcgum"]
+script = ExtResource("4_mh6ps")
+trigger_on_spawn = false
+one_shot = true
+header_text = ""
+body_items = Array[String](["Spinning heals you"])
+close_trigger_actions = Array[String]([])
+close_trigger_count = 1
+timeout = 3.0
+timeout_on_close = false
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yrvi5"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -5013,6 +5024,7 @@ tutorial_3_trigger_jump = SubResource("Resource_m1p8q")
 tutorial_4_trigger_dash = SubResource("Resource_3epwp")
 tutorial_5_trigger_barrel_detail = SubResource("Resource_faiyk")
 tutorial_6_trigger_spin = SubResource("Resource_1jw3o")
+tutorial_6a_trigger_spin_heal = SubResource("Resource_kcgum")
 electric_box_trigger = NodePath("SingleEffectTrigger")
 spark_sfx_player = NodePath("SingleEffectTrigger/SparkSFXPlayer")
 sfx_door_spark = Array[AudioStream]([ExtResource("8_jg5dj"), ExtResource("9_uk1ct"), ExtResource("10_wu64w"), ExtResource("11_jwj5c"), ExtResource("12_y1s5q"), ExtResource("13_f4ngt"), ExtResource("14_iamu4")])

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c2b8d2f8w0t0g"]
 
 [ext_resource type="Script" path="res://src/ui/common/info_text/prompt_box_ui.gd" id="1_khrjr"]
-[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="2_i6q7e"]
+[ext_resource type="Texture2D" uid="uid://brufsqhjciuy7" path="res://src/ui/common/assets/crapshoot_borders/crapshoot-ui-border5.png" id="4_8dnyu"]
 [ext_resource type="PackedScene" uid="uid://di7bmsw28rqlg" path="res://src/ui/common/info_text/PromptBoxLineContainer.tscn" id="4_p838e"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="6_kamy6"]
 
@@ -42,16 +42,14 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0.356863)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/Background"]
-visible = false
 self_modulate = Color(0.901961, 0.776471, 0, 1)
-custom_minimum_size = Vector2(400, 160)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_i6q7e")
+texture = ExtResource("4_8dnyu")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
