@@ -542,16 +542,17 @@ func select_attack_phase_1() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		match event.keycode:
-			KEY_1:
-				get_stack_positions_around_target(5.0)
-			KEY_2:
-				get_stack_positions_around_target(10.0)
-			KEY_3:
-				get_stack_positions_around_target(15.0)
-			KEY_4:
-				get_stack_positions_around_target(20.0)
+	# DEBUG - for testing small stack positioning
+	#if event is InputEventKey:
+		#match event.keycode:
+			#KEY_1:
+				#get_stack_positions_around_target(5.0)
+			#KEY_2:
+				#get_stack_positions_around_target(10.0)
+			#KEY_3:
+				#get_stack_positions_around_target(15.0)
+			#KEY_4:
+				#get_stack_positions_around_target(20.0)
 		
 	if not DEBUG_BOSS_ATTACKS:
 		return
