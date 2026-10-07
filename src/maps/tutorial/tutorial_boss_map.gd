@@ -446,6 +446,17 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
 	
 	$FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors.activate()
+	
+	player.health_component.health_changed.connect(_tutorial_player_low_health)
+
+
+func _tutorial_player_low_health(_new_health: float, _prev_health: float) -> void:
+	if tutorial_panel_tween.is_running():
+		return
+	if player.spin_cooldown_active:
+		return
+	if player.health_component.current_health_ratio < 0.4:
+		await show_tutorial_panel(tutorial_6_trigger_spin)
 
 
 func _update_shield_mat_colour(color: Color, mesh: MeshInstance3D) -> void:
