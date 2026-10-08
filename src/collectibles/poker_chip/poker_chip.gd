@@ -40,7 +40,8 @@ func _ready() -> void:
 	add_to_group("currency_chips")
 	if start_active:
 		set_value()
-		activate()
+		# Deferred so StateChart enters its initial state first, otherwise the "activate" event is dropped
+		activate.call_deferred()
 
 
 func _process(delta: float) -> void:

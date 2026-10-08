@@ -11,7 +11,6 @@ script = ExtResource("1_iw80l")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="AmmoLeech" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_psr82")
 refund_chance = 35.0
 perc_damage_modify = -25.0
@@ -23,7 +22,6 @@ negative_desc = Array[String](["-25% damage"])
 icon_id = 25
 
 [node name="GamblersPrecision" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("4_s01a7")
 crit_chance = 25.0
 jam_chance_if_missed = 50.0

@@ -181,6 +181,8 @@ var drunk_blur_enabled: bool = true
 		bgm_audio = value
 		update_fmod_bgm_volume_from_setting()
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
+# Linear multiplier on top of the BGM volume setting, for gameplay ducking (Ex: Hyperfocus)
+var fmod_bgm_duck_multiplier: float = 1.0
 @export_range(0, 100, 0.1) var ui_audio: float = 100
 var is_controller_connected: bool = false
 @export var mouse_controller_override: bool = false:
@@ -250,7 +252,7 @@ func _ready() -> void:
 		if scaling_3d > 90.0:
 			scaling_3d = 90.0
 			get_viewport().set_scaling_3d_scale(90 / 100.0)
-	main_bgm_emitter.volume = BASE_FMOD_VOLUME
+	update_fmod_bgm_volume_from_setting()
 	
 	for i in range(63):
 		effect_icon_texture_cache[i] = load("res://assets/sprite/effect_icons/%s.png" % [i])
@@ -611,7 +613,13 @@ func change_fmod_bgm_menu_is_up(menu_up: bool) -> void:
 	main_bgm_emitter.set_parameter("menuIsUp", 1 if menu_up else 0)
 
 func update_fmod_bgm_volume_from_setting() -> void:
-	main_bgm_emitter.volume = BASE_FMOD_VOLUME * (GameManager.master_audio / 100.0) * (GameManager.bgm_audio / 100.0)
+	main_bgm_emitter.volume = BASE_FMOD_VOLUME * (GameManager.master_audio / 100.0) * (GameManager.bgm_audio / 100.0) * fmod_bgm_duck_multiplier
+
+func set_fmod_bgm_duck_multiplier(multiplier: float) -> void:
+	if is_equal_approx(fmod_bgm_duck_multiplier, multiplier):
+		return
+	fmod_bgm_duck_multiplier = multiplier
+	update_fmod_bgm_volume_from_setting()
 
 func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
 	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false,

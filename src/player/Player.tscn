@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=104 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -84,6 +84,8 @@
 [ext_resource type="Script" path="res://src/ui/player/status/status_buildup_gauge_container.gd" id="120_sbgc"]
 [ext_resource type="Script" path="res://src/components/status_buildup/status_buildup_component.gd" id="121_sbc"]
 [ext_resource type="Texture2D" uid="uid://cs3pihvswdkxr" path="res://assets/sprite/status_icon/drunk.png" id="122_drnk"]
+[ext_resource type="Shader" path="res://src/ui/player/hurt_screen/dodge_flash.gdshader" id="200_fcsab"]
+[ext_resource type="Shader" path="res://assets/shaders/tunnel_vision_vignette.gdshader" id="201_fcvig"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -120,6 +122,22 @@ shader_parameter/grazing_angle_modulation_factor = 50.0
 material = SubResource("ShaderMaterial_cjv3t")
 flip_faces = true
 size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fcvig"]
+shader = ExtResource("201_fcvig")
+shader_parameter/intensity = 0.0
+shader_parameter/vignette_color = Color(0, 0, 0, 0.919)
+shader_parameter/inner_radius = 0.3
+shader_parameter/outer_radius = 1.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fcsab"]
+shader = ExtResource("200_fcsab")
+shader_parameter/intensity = 0.0
+shader_parameter/edge_color = Color(1, 1, 1, 0)
+shader_parameter/edge_glow = 0.0
+shader_parameter/aberration_strength = 0.03
+shader_parameter/inner_radius = 0.2
+shader_parameter/outer_radius = 1.25
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xhair"]
 shader = ExtResource("63_q6k82")
@@ -304,6 +322,28 @@ heal_flash_sfx = ExtResource("45_n5un2")
 
 [node name="CustomEffectShader" type="Control" parent="UI"]
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="FocusVignette" type="ColorRect" parent="UI/CustomEffectShader"]
+visible = false
+material = SubResource("ShaderMaterial_fcvig")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="FocusAberration" type="ColorRect" parent="UI/CustomEffectShader"]
+visible = false
+material = SubResource("ShaderMaterial_fcsab")
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

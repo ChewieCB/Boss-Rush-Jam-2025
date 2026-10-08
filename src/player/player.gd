@@ -77,6 +77,8 @@ var barrel_ui_active: bool = false
 @onready var health_ui = stat_ui.health_ui
 @onready var luck_bar_ui = stat_ui.luck_bar_ui
 @onready var drunk_ui: Control = $UI/DrunkUI
+@onready var focus_aberration: ColorRect = $UI/CustomEffectShader/FocusAberration
+@onready var focus_vignette: ColorRect = $UI/CustomEffectShader/FocusVignette
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
