@@ -12,6 +12,10 @@ func on_prepare_to_fire():
 	owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(
 		owner_barrel.owner_gun.modified_spread_angle, increased_spread_amount, false, false)
 
+func preview_spread_angle(spread_angle: float) -> float:
+	var increased_spread_amount = (2.0 / owner_barrel.owner_gun.modified_projectile_amount) + 2
+	return calculate_new_value(spread_angle, increased_spread_amount, false, false)
+
 
 func on_gun_damage_calculation():
 	super()

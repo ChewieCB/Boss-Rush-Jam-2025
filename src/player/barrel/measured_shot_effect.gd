@@ -45,6 +45,11 @@ func on_prepare_to_fire():
 	next_shot_is_powerful = false
 	create_effect()
 
+func preview_spread_angle(spread_angle: float) -> float:
+	if not next_shot_is_powerful:
+		return calculate_new_value(spread_angle, unstable_spread_modify_perc, true, false)
+	return spread_angle
+
 	
 func create_effect():
 	timer.start()

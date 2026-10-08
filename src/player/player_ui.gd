@@ -8,8 +8,7 @@ class_name PlayerUI
 @onready var stat_ui: StatUI = $StatUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
-@onready var reticle_ui_1 = $GunUI/AimRecticle
-@onready var reticle_ui_2 = $GunUI/AimRecticle2
+@onready var aim_reticle = $GunUI/AimRecticle
 @onready var heal_flash_overlay: ColorRect = $StatusOverlay/HealFlash
 
 func _ready() -> void:
@@ -31,8 +30,7 @@ func _ready() -> void:
 
 
 func toggle_aim_reticle(_visible: bool) -> void:
-	for ui in [reticle_ui_1, reticle_ui_2]:
-		ui.visible = _visible
+	aim_reticle.visible = _visible
 
 
 func hide_saving_indicator():

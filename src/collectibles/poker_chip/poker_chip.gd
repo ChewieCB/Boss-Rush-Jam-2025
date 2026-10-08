@@ -22,6 +22,7 @@ signal finished
 @export var magnet_start_speed: float = 6.0
 @export var magnet_acceleration: float = 70.0
 @export var collect_distance: float = 0.5
+@export var start_active: bool = false
 
 var chosen_idx: int = -1
 var value: int = 0
@@ -37,6 +38,9 @@ var _player: Player
 
 func _ready() -> void:
 	add_to_group("currency_chips")
+	if start_active:
+		set_value()
+		activate()
 
 
 func _process(delta: float) -> void:
@@ -167,7 +171,6 @@ func activate() -> void:
 	self.linear_velocity = Vector3.ZERO
 	state_chart.send_event("activate")
 	
-
 
 func deactivate() -> void:
 	self.visible = false

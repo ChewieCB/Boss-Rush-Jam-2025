@@ -143,7 +143,6 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
 [connection signal="state_physics_processing" from="StateChart/ChipState/Idle" to="." method="_on_idle_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/ChipState/Magnet" to="." method="_on_magnet_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/ChipState/Magnet" to="." method="_on_magnet_state_physics_processing"]

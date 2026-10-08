@@ -161,3 +161,14 @@ func on_dash_movement():
 
 func on_player_damaged():
 	return
+
+
+## Special functions
+
+## Side-effect-free preview of gun spread. Polled every frame
+## yeah it annoying but pls copy all spread modification effects to here
+func preview_spread_angle(spread_angle: float) -> float:
+	return spread_angle
+
+func preview_spread_horizontal_bias(horizontal_bias: float) -> float:
+	return horizontal_bias
