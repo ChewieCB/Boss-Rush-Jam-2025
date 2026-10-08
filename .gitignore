@@ -6,3 +6,6 @@
 dist/*
 /build_win/
 /build_linux/
+
+# Temp copies Godot makes when reloading GDExtensions
+addons/**/~*.dll
