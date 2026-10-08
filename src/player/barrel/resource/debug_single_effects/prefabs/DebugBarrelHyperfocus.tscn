@@ -10,14 +10,13 @@ script = ExtResource("1_3inya")
 
 [node name="Hyperfocus" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_bckju")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
+modify_perc_spread_focused = -50.0
+modify_perc_damage_focused = 25.0
+modify_perc_spread_unfocused = 100.0
+modify_perc_damage_unfocused = -25.0
 display_text_title = "Hyperfocus"
 display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"
-positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
-negative_desc = Array[String](["+100% spread, -25% damage when moving"])
+display_text_desc = "Keep your eyes on the target. Accuracy gradually climbs into a bonus while looking at an enemy, and drops when you dash or look away."
+positive_desc = Array[String](["Up to -50% spread, +25% damage the longer you stay locked on an enemy"])
+negative_desc = Array[String](["Up to +100% spread, -25% damage when dashing or looking away"])
 icon_id = 51

@@ -11,6 +11,7 @@ script = ExtResource("1_iw80l")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="AmmoLeech" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_psr82")
 refund_chance = 35.0
 perc_damage_modify = -25.0
@@ -22,6 +23,7 @@ negative_desc = Array[String](["-25% damage"])
 icon_id = 25
 
 [node name="GamblersPrecision" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("4_s01a7")
 crit_chance = 25.0
 jam_chance_if_missed = 50.0
@@ -34,13 +36,13 @@ luck_triggers = Array[int]([0, 1])
 
 [node name="Hyperfocus" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_xsmdb")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
+modify_perc_spread_focused = -75.0
+modify_perc_damage_focused = 25.0
+modify_perc_spread_unfocused = 100.0
+modify_perc_damage_unfocused = -25.0
 display_text_title = "Hyperfocus"
-display_text_tag = "Focus!"
-display_text_desc = "Increased accuracy when stationary, decreased accuracy when moving."
-positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
-negative_desc = Array[String](["+100% spread, -25% damage when moving"])
+display_text_tag = "Or Obsession?"
+display_text_desc = "Keep your eyes on the target. Accuracy gradually climbs into a bonus while looking at an enemy, and drops when you dash or look away."
+positive_desc = Array[String](["Up to -50% spread, +25% damage the longer you stay locked on an enemy"])
+negative_desc = Array[String](["Up to +100% spread, -25% damage when dashing or looking away"])
 icon_id = 51
