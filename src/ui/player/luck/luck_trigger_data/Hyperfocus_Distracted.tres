@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://q33y50n0531"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_2l6ox"]
+
+[resource]
+script = ExtResource("1_2l6ox")
+id = 23
+name = "Distracted"
+desc = "+2 luck on hitting enemy with low focus shot"
+message = ""

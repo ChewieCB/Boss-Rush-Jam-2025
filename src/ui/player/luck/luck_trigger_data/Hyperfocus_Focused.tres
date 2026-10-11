@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://do6is6geeifs2"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_htan8"]
+
+[resource]
+script = ExtResource("1_htan8")
+id = 22
+name = "Focused"
+desc = "+5 luck on hitting enemy with max focus shot"
+message = ""

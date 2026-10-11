@@ -44,3 +44,4 @@ display_text_desc = "Keep your eyes on the target. Accuracy gradually climbs int
 positive_desc = Array[String](["Up to -50% spread, +25% damage the longer you stay locked on an enemy"])
 negative_desc = Array[String](["Up to +100% spread, -25% damage when dashing or looking away"])
 icon_id = 51
+luck_triggers = Array[int]([22, 23])

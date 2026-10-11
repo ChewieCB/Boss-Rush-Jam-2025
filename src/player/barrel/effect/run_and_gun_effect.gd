@@ -29,10 +29,12 @@ extends BaseBarrelEffect
 const FOCUS_DROP_SPEED = 4.0
 const AUDIO_FOLLOW_SPEED = 2.0
 const NO_FILTER_CUTOFF_HZ = 20000.0
+const LUCK_TRIGGER_CHECK_INTERVAL = 1.0
 
 var target_focus = 0.0
 var focus = 0.0
 var time_since_dash = 0.0
+var time_since_luck_trigger = 0.0
 
 var audio_strength = 0.0
 # 0 to 1, audio_strength remapped from fx_start_focus to max focus
@@ -45,30 +47,35 @@ func _process(delta: float) -> void:
 	if owner_barrel == null:
 		return
 
+	time_since_luck_trigger += delta
 	if time_since_dash < recover_delay_after_dash:
 		time_since_dash += delta
-
 	if not is_looking_at_enemy():
 		target_focus = max(target_focus - delta * focus_lost_per_second, -1.0)
 	elif time_since_dash >= recover_delay_after_dash and full_focus_charge_time > 0:
 		target_focus = min(target_focus + delta * 2.0 / full_focus_charge_time, 1.0)
-
 	if focus > target_focus:
 		focus = move_toward(focus, target_focus, delta * FOCUS_DROP_SPEED)
 	else:
 		focus = target_focus
-
 	update_focus_audio(delta)
 
-func _exit_tree() -> void:
-	remove_focus_audio_effects()
-	GameManager.set_fmod_bgm_duck_multiplier(1.0)
+func on_projectile_spawn(projectile: BaseBullet):
+	projectile.misc_data["hyperfocus_focus"] = focus
 
-func is_effect_active() -> bool:
-	return owner_barrel.get_active_effect() == self and not owner_barrel.is_spinning
 
-func is_looking_at_enemy() -> bool:
-	return GameManager.player.aim_assist_ray_boss_check.is_colliding()
+func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
+	if "hyperfocus_focus" in projectile.misc_data:
+		var proj_focus = projectile.misc_data["hyperfocus_focus"]
+		if proj_focus >= 1 or proj_focus <= -0.75:
+			if time_since_luck_trigger > LUCK_TRIGGER_CHECK_INTERVAL:
+				time_since_luck_trigger = 0
+				if proj_focus >= 1.0:
+					LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HYPERFOCUS_MAX_FOCUS)
+					LuckHandler.increase_luck(5, "+5 Focused")
+				else:
+					LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.HYPERFOCUS_MIN_FOCUS)
+					LuckHandler.increase_luck(2, "+2 Distracted", LuckHandler.LuckTriggerType.NEGATIVE)
 
 func on_barrel_install():
 	super()
@@ -85,15 +92,6 @@ func on_dash_movement():
 	target_focus = max(target_focus - focus_lost_per_dash, -1.0)
 	time_since_dash = 0.0
 
-func reset_focus():
-	target_focus = 0.0
-	focus = 0.0
-	time_since_dash = 0.0
-
-func get_focus_modifier(focused_value: float, unfocused_value: float) -> float:
-	if focus >= 0:
-		return focused_value * focus
-	return unfocused_value * -focus
 
 func on_prepare_to_fire():
 	super()
@@ -177,3 +175,24 @@ func update_focus_vignette():
 	var rect: ColorRect = GameManager.player.focus_vignette
 	rect.visible = fx_strength > 0.0
 	rect.material.set_shader_parameter("intensity", fx_strength)
+
+
+func _exit_tree() -> void:
+	remove_focus_audio_effects()
+	GameManager.set_fmod_bgm_duck_multiplier(1.0)
+
+func is_effect_active() -> bool:
+	return owner_barrel.get_active_effect() == self and not owner_barrel.is_spinning
+
+func is_looking_at_enemy() -> bool:
+	return GameManager.player.aim_assist_ray_boss_check.is_colliding()
+
+func reset_focus():
+	target_focus = 0.0
+	focus = 0.0
+	time_since_dash = 0.0
+
+func get_focus_modifier(focused_value: float, unfocused_value: float) -> float:
+	if focus >= 0:
+		return focused_value * focus
+	return unfocused_value * -focus
