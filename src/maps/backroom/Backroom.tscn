@@ -7233,6 +7233,7 @@ player = NodePath("FuncGodotMap/entity_1_PlayerRef")
 elevator_buttons = [NodePath("FuncGodotMap/layer_0_Elevators/entity_294_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_299_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_300_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_301_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_303_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_304_ElevatorButton"), NodePath("FuncGodotMap/entity_38_ElevatorButton")]
 wip_bosses_door = NodePath("FuncGodotMap/layer_0_Elevators/entity_291_ElevatorDoors")
 vendors = [NodePath("Vendor"), NodePath("Workbench")]
+lose_tips = Array[String](["Be more careful next time!"])
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.70711, 0.612371, -0.353551, -1.49013e-08, 0.499998, 0.866027, 0.707104, 0.612376, -0.353553, 0, 0, 0)

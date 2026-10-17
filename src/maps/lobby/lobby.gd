@@ -20,6 +20,10 @@ signal ui_accept
 
 @export var vendors: Array[Node]
 
+const END_PANEL_SCENE: PackedScene = preload("res://src/ui/temp/BossEndPanelUI.tscn")
+@export var lose_tips: Array[String] = [""]
+var is_player_dead: bool = false
+
 var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [] # [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
@@ -31,6 +35,7 @@ func _ready() -> void:
 	for button in elevator_buttons:
 		if button:
 			button.pushed.connect(_on_level_select)
+	player.health_component.died.connect(_on_player_death)
 	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
 	difficulty_menu.bet_cancelled.connect(
 		func():
@@ -116,6 +121,27 @@ func show_panel(panel: Control) -> void:
 	
 	ui_layer.visible = false
 	ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func _on_player_death() -> void:
+	if is_player_dead:
+		return
+	is_player_dead = true
+	
+	LuckHandler.enabled = false
+	var end_panel: InfoBox = END_PANEL_SCENE.instantiate()
+	ui_layer.add_child(end_panel)
+	ui_layer.visible = true
+	ui_layer.process_mode = Node.PROCESS_MODE_INHERIT
+	end_panel.visible = true
+	await end_panel.lose(lose_tips.pick_random())
+	
+	LoadingHandler.start_loading(
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+		"Back Room"
+	)
+	await ScreenTransition.transition_finished
+	LoadingHandler.load_scene_transition()
 
 
 func _on_level_select(level_path: String, _elevator_doors: ElevatorDoors, _respawn_marker: Marker3D) -> void:
