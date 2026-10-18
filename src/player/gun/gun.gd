@@ -284,9 +284,8 @@ func set_stat_from_gun_frame() -> void:
 	#
 	cancel_reload()
 	reset_modifier(true)
-	for barrel in barrel_container.get_children():
-		if barrel is not NullBarrel:
-			barrel.get_active_effect().on_effect_set()
+	for barrel in _get_slot_barrels():
+		barrel.get_active_effect().on_effect_set()
 	reload_no_anim()
 	set_frame_art(current_frame.frame_id)
 	
@@ -782,7 +781,10 @@ func _stop_barrel(barrel_idx: int) -> void:
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	
 	await barrel_spin_stopped
-	
+	# The barrel may have been replaced while it was spinning
+	if not is_instance_valid(barrel):
+		return
+
 	barrel.get_active_effect().on_effect_set()
 
 	# Seeded spin stuff - deprecate?
@@ -1100,24 +1102,16 @@ func play_shotgun_shell_load_sfx():
 
 
 func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) -> void:
-	barrel_count = 0
-	for barrel in barrel_container.get_children():
-		if barrel is not NullBarrel:
-			barrel_count += 1
+	barrel_count = _get_slot_barrels().size()
 
 	var barrel_inst: SpinBarrel
 	if barrel_data == null:
-		barrel_inst = null_barrel_pool.pop_front()
+		barrel_inst = _get_null_barrel()
 	else:
 		barrel_inst = barrel_data.barrel_prefab.instantiate()
 		#barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 		barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
 		barrel_inst.owner_gun = self
-
-		if slot_idx < barrel_container.get_child_count():
-			var _null = barrel_container.get_child(slot_idx)
-			barrel_container.remove_child(_null)
-			null_barrel_pool.push_back(_null)
 
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
@@ -1127,6 +1121,10 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 	# Get first available slot if none specified
 	if barrel_idx == -1:
 		barrel_idx = barrel_count
+
+	# Replace stuff (it MAY not be a barrel idk what it is) sit in the slot so to avoid container grow past 3 slot
+	if barrel_idx < barrel_container.get_child_count():
+		_detach_barrel_node(barrel_container.get_child(barrel_idx))
 
 	barrel_container.add_child(barrel_inst)
 	barrel_container.move_child(barrel_inst, barrel_idx)
@@ -1146,9 +1144,8 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
-	for barrel in barrel_container.get_children():
-		if barrel is not NullBarrel:
-			barrel.get_active_effect().on_effect_set()
+	for barrel in _get_slot_barrels():
+		barrel.get_active_effect().on_effect_set()
 
 	reload_no_anim()
 
@@ -1180,7 +1177,7 @@ func remove_barrel(barrel_idx: int) -> void:
 		barrel.get_active_effect().on_barrel_remove()
 		barrel_unequipped.emit(barrel, barrel_idx)
 		barrel.queue_free()
-		var _null = null_barrel_pool.pop_front()
+		var _null = _get_null_barrel()
 		barrel_container.add_child(_null)
 		barrel_container.move_child(_null, barrel_idx)
 
@@ -1191,9 +1188,8 @@ func remove_barrel(barrel_idx: int) -> void:
 
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
-	for _barrel in barrel_container.get_children():
-		if not _barrel is NullBarrel:
-			_barrel.get_active_effect().on_effect_set()
+	for _barrel in _get_slot_barrels():
+		_barrel.get_active_effect().on_effect_set()
 
 
 func recheck_installed_barrels():
@@ -1230,17 +1226,38 @@ func recheck_installed_barrels():
 				barrel_label.visible = false
 
 
+func _get_slot_barrels() -> Array[SpinBarrel]:
+	var result: Array[SpinBarrel] = []
+	for i in range(mini(max_barrels, barrel_container.get_child_count())):
+		var barrel = barrel_container.get_child(i)
+		if barrel is not NullBarrel and not barrel.is_queued_for_deletion():
+			result.append(barrel)
+	return result
+
+
+func _detach_barrel_node(barrel: Node) -> void:
+	barrel_container.remove_child(barrel)
+	if barrel is NullBarrel:
+		null_barrel_pool.push_back(barrel)
+	else:
+		barrel.queue_free()
+
+
+func _get_null_barrel() -> NullBarrel:
+	if null_barrel_pool.is_empty():
+		return null_barrel_prefab.instantiate()
+	return null_barrel_pool.pop_front()
+
+
 func reinstall_barrels():
 	# Clear old barrels
-	if barrel_container.get_child_count() > 0:
-		for i in range(max_barrels):
-			var barrel = barrel_container.get_child(i)
-			if barrel:
-				if barrel is NullBarrel:
-					continue
-				else:
-					barrel.queue_free()
+	for i in range(max_barrels):
+		var barrel = barrel_container.get_child(i) if i < barrel_container.get_child_count() else null
+		if barrel is not NullBarrel:
 			barrel_unequipped.emit(null, i)
+	# Remove them right away (not just queue_free) so the new barrels go into an empty container
+	for barrel in barrel_container.get_children():
+		_detach_barrel_node(barrel)
 
 	# Instantiate barrels onto gun
 	for i in range(GameManager.equipped_barrels.size()):
