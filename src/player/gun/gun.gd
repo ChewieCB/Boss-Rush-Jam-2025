@@ -218,7 +218,8 @@ func _ready() -> void:
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
 	else:
-		reinstall_barrels()
+		# Wait to make sure we only install barrel (in _on_savefile_loaded) once
+		_on_savefile_loaded.call_deferred()
 
 	is_jammed = false
 

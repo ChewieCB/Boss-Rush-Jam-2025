@@ -67,12 +67,15 @@ var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
 var active_tutorial_panel: Control
 
-
-func _ready() -> void:
+# Run before _ready, so we can clear gun slots
+func _enter_tree() -> void:
 	if not GameManager.tutorial_completed:
 		GameManager.equipped_barrels = [null, null, null]
 		GameManager.inventory_barrels = []
-		player.gun.reinstall_barrels()
+
+
+func _ready() -> void:
+	if not GameManager.tutorial_completed:
 		GameManager.change_fmod_bgm_music_state("TutorialStart")
 	else:
 		GameManager.change_fmod_bgm_music_state("TutorialInterlude")
