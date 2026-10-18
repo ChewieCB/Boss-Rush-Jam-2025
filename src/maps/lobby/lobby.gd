@@ -61,7 +61,6 @@ func _ready() -> void:
 		SaveManager.save_game(GameManager.chosen_slot_id)
 	else:
 		# First time get to lobby, load data from save file
-		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
 	
 	GameManager.reset_reroll_cost()
