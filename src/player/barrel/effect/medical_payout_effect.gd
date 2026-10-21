@@ -27,6 +27,8 @@ func _ready() -> void:
 
 
 func _init_heal_cloud() -> void:
+	if not is_inside_tree():
+		return
 	var cloud = heal_cloud_vfx.instantiate()
 	cloud.finished.connect(_on_heal_cloud_finished.bind(cloud))
 	get_tree().get_root().add_child(cloud)
@@ -39,6 +41,8 @@ func _on_heal_cloud_finished(cloud: GPUParticles3D) -> void:
 
 
 func _init_heal_orb() -> void:
+	if not is_inside_tree():
+		return
 	var orb: ColoredOrb = vfx_heal_orb_prefab.instantiate()
 	orb.finished.connect(_on_orb_finished.bind(orb))
 	get_tree().get_root().add_child(orb)

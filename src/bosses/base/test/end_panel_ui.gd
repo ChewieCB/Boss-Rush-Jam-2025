@@ -9,6 +9,7 @@ class_name InfoBox
 @onready var unlock_container: MarginContainer = $PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay
 @onready var unlock_icon: TextureRect = $PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer2/Panel/NinePatchRect/TextureRect
 @onready var unlock_label: RichTextLabel = $PanelContainer/MarginContainer/VBoxContainer/BossLockedBarrelOverlay/MarginContainer/VBoxContainer/MarginContainer/RichTextLabel
+@onready var lose_hint_label: RichTextLabel = $PanelContainer/MarginContainer/VBoxContainer/LoseHintLabel
 
 @export var max_resize_steps: int = 40
 @export var show_header: bool = true
@@ -36,6 +37,8 @@ func anim_fade_out(time: float) -> void:
 
 func win(barrel_data: BarrelDataResource) -> void:
 	unlock_icon.texture = barrel_data.barrel_image
+	unlock_container.visible = true
+	lose_hint_label.visible = false
 	var unlock_string: String = ""
 	var _sfx: AudioStream
 	if GameManager.boss_barrels_unlocked[barrel_data.boss_id] == 0:
@@ -43,7 +46,7 @@ func win(barrel_data: BarrelDataResource) -> void:
 		_sfx = sfx_unlocked.pick_random()
 		unlock_icon.modulate = Color.WHITE
 	else:
-		unlock_string = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]" 
+		unlock_string = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]"
 		_sfx = sfx_already_unlocked.pick_random()
 		unlock_icon.modulate = Color.DARK_GRAY
 	
@@ -64,6 +67,9 @@ func win(barrel_data: BarrelDataResource) -> void:
 
 func lose(hint_text: String = "") -> void:
 	var _header_text = "[center]The House always wins[/center]"
+	unlock_container.visible = false
+	lose_hint_label.visible = true
+	lose_hint_label.text = "[center]%s[/center]" % [hint_text]
 	header_label.text = _header_text
 	unlock_container.visible = false
 	

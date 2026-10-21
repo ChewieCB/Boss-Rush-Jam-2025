@@ -75,6 +75,8 @@ func spark() -> void:
 
 
 func _check_pickup() -> void:
+	if not is_instance_valid(GameManager.player):
+		return
 	var player: Player = GameManager.player
 	if not player:
 		return

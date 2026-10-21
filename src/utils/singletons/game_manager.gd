@@ -424,13 +424,8 @@ func reset_reroll_cost() -> void:
 
 #region Save helper
 func load_new_save_data():
+	reset_save_data()
 	tutorial_completed = CHEAT_skip_tutorial_on_new_game
-
-	equipped_gun_frame = starting_gun_frame
-	inventory_gun_frames = []
-	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
-	boss_barrels_unlocked = [0, 0, 0, 0, 0, 0, 0, 0]
-	newly_unlocked_barrel = null
 
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
@@ -463,12 +458,22 @@ func load_new_save_data():
 
 
 func reset_current_save_data():
+	reset_save_data()
+	chosen_slot_id = -1
+	start_record_timestamp = 0
+
+
+func reset_save_data():
 	equipped_barrels = [null, null, null]
 	inventory_barrels = []
 	shop_barrels = []
+	equipped_gun_frame = starting_gun_frame
 	inventory_gun_frames = []
 	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
 	player_currency = 0
+	player_level = 1 # in case we yse them in future
+	player_skill_points = 0
+	player_skill_dict = {}
 	player_gained_first_barrel = false
 	barrel_tutorial_shown = false
 	bosses_defeated = []
@@ -476,8 +481,6 @@ func reset_current_save_data():
 	boss_barrels_unlocked = [0, 0, 0, 0, 0, 0, 0, 0]
 	newly_unlocked_barrel = null
 	victory_ui_shown = false
-	chosen_slot_id = -1
-	start_record_timestamp = 0
 	total_playtime = 0
 	tutorial_completed = false
 	reset_difficulty_modifier()
@@ -490,6 +493,7 @@ func update_total_playtime():
 	var current_time = Time.get_ticks_msec()
 	var played_time = current_time - start_record_timestamp
 	total_playtime += played_time
+	start_record_timestamp = current_time
 #endregion
 
 #region Boss stuff

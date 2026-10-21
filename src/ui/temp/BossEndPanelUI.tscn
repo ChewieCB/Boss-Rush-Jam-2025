@@ -233,3 +233,13 @@ theme_override_font_sizes/bold_font_size = 48
 bbcode_enabled = true
 text = "[i][color=gray][font_size=64]Already unlocked![/font_size][/color]"
 fit_content = true
+
+[node name="LoseHintLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[center]Try better next time![/center]"
+fit_content = true
+scroll_active = false

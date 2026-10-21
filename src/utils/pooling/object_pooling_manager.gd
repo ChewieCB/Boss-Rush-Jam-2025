@@ -44,6 +44,7 @@ func _ready() -> void:
 		available_object_pool.append([])
 	
 	init_object_pools()
+	LoadingHandler.loading_started.connect(reset_pools)
 
 
 func init_object_pools() -> void:
@@ -136,6 +137,17 @@ func return_object_to_pool(object: Node, object_enum: PooledObjectEnum, deactiva
 	
 	if deactivate:
 		object.deactivate()
+
+# Should run on every scene load
+func reset_pools() -> void:
+	for object_enum in PooledObjectEnum.values():
+		for obj in active_object_pool[object_enum].duplicate():
+			if is_instance_valid(obj):
+				return_object_to_pool(obj, object_enum)
+		active_object_pool[object_enum].clear()
+		available_object_pool[object_enum] = available_object_pool[object_enum].filter(
+			func(obj): return is_instance_valid(obj)
+		)
 
 
 func recycle_in_use_object(object_enum: PooledObjectEnum):

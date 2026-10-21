@@ -111,6 +111,7 @@ func load_data_only(slot_id: int) -> Dictionary:
 
 func load_game(slot_id):
 	save_data_is_loaded = true
+	GameManager.start_record_playtime()
 	var save_data: Dictionary = load_data_only(slot_id)
 	if save_data.is_empty():
 		GameManager.load_new_save_data()
