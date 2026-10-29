@@ -346,6 +346,18 @@ func _unhandled_input(event):
 			# Has to check Trigger buttons first, since they are also InputEventJoypadMotion
 			return
 
+	# Controller interact share button with reload so this put prio on interact
+	if event.is_action_pressed("interact"):
+		if object_to_be_interacted:
+			object_to_be_interacted.interact()
+			get_viewport().set_input_as_handled()
+			return
+		elif GameManager.CHEAT_always_inventory:
+			debug_inventory_ui.toggle()
+			GameManager.player.input_dir = Vector2.ZERO
+			GameManager.player.vel_horizontal = Vector2.ZERO
+			GameManager.player.velocity = Vector3.ZERO
+
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
@@ -400,16 +412,6 @@ func _unhandled_input(event):
 			pe.global_position = global_position
 			pe.rotate_y(angle_radians)
 			pe.activate()
-
-	if Input.is_action_just_pressed("interact"):
-		if object_to_be_interacted:
-			object_to_be_interacted.interact()
-			get_viewport().set_input_as_handled()
-		elif GameManager.CHEAT_always_inventory:
-			debug_inventory_ui.toggle()
-			GameManager.player.input_dir = Vector2.ZERO
-			GameManager.player.vel_horizontal = Vector2.ZERO
-			GameManager.player.velocity = Vector3.ZERO
 
 	if Input.is_action_just_pressed("crouch"):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
