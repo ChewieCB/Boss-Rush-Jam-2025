@@ -8,13 +8,7 @@ signal start_slots_spin
 
 
 # Juice TODO:
-# -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player.  DONE
-# -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once at higher difficulty. DONE
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
-# -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact. DONE
-# -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE  Shake and push player if connect.
-# -Cherry Bomb: Add burning wick. Add explosion range indicator. Improve sfx. DONE
-# -General: Add dust particle below to show that he's hovering. DONE
 
 
 # Antes note:
@@ -23,6 +17,11 @@ signal start_slots_spin
 # Ante 3: Pinball Gamble - Enable new projectile attack that can ricochet
 # Ante 4: New phase? At 20% HP, Overclock, where the boss significantly reduce its attack cooldown
 # Ante 5: Greed Machine - Boss can pick up / steal dropped chips to recover HP
+
+
+# Extra idea for higher ante:
+# Cherry Bomb splitted into 2 smaller bomb
+# Cherry Bomb become Cherry Mine after hit the ground?
 
 # Status
 # Weak to Shock (he's a machine), resist to Bleeding (same reason)
@@ -172,11 +171,13 @@ var pinball_proj_pool: Array = []
 
 @export_subgroup("Cherry Bombs")
 @export var bomb_damage: float = 36
+@export var bomb_reflect_damage: float = 200
 @export var bomb_projectile: PackedScene
 var bomb_proj_pool: Array = []
 @export var bombs_per_attack: int = 5
 @export var bomb_fuse_time: float = 2.5
-@export var bomb_impulse: float = 100000.0
+@export var bomb_flight_time: float = 1.0
+@export var bomb_spread_distance: float = 6.0
 @export var max_drop_distance: float = 20.0
 @export var bomb_drop_delay: float = 0.4
 var active_bombs: Array = []
@@ -266,6 +267,7 @@ func _init_bomb_proj() -> void:
 	bomb.destroyed.connect(_on_bomb_destroy.bind(bomb))
 
 func _on_bomb_destroy(bomb: RigidBody3D) -> void:
+	active_bombs.erase(bomb)
 	bomb.deactivate()
 	bomb_proj_pool.push_back(bomb)
 
@@ -279,7 +281,6 @@ func activate() -> void:
 
 func _physics_process(delta: float) -> void:
 	#super(delta)
-
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
 		slot_icons_parent.look_at(target.global_position)
@@ -397,7 +398,7 @@ func _on_died() -> void:
 	death_torso_rigid.apply_central_impulse(Vector3.DOWN * 15.0)
 	
 	var tween = get_tree().create_tween()
-	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 	
 	await death_anim_finished
 	await boss_death_slow_mo()
@@ -1194,11 +1195,23 @@ func fire_bomb() -> void:
 	sfx_player.play()
 	var projectile = bomb_proj_pool.pop_front() as RigidBody3D
 	#var projectile := bomb_projectile.instantiate() as RigidBody3D
-	projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time)
+	projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time, self, bomb_reflect_damage)
 	projectile.global_position = projectile_spawn_marker.global_position
-	projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * bomb_dir_counter)
-	projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
+	projectile.linear_velocity = _get_bomb_launch_velocity(projectile.global_position, _get_bomb_landing_pos())
 	active_bombs.append(projectile)
+
+
+func _get_bomb_landing_pos() -> Vector3:
+	var to_target: Vector3 = target.global_position - global_position
+	to_target.y = 0
+	var side: Vector3 = Vector3.UP.cross(to_target.normalized())
+	return target.global_position + side * bomb_spread_distance * bomb_dir_counter
+
+
+func _get_bomb_launch_velocity(from: Vector3, landing_pos: Vector3) -> Vector3:
+	var gravity: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector") \
+		* ProjectSettings.get_setting("physics/3d/default_gravity")
+	return (landing_pos - from) / bomb_flight_time - 0.5 * gravity * bomb_flight_time
 
 
 func _on_cherry_bombs_recover_state_entered() -> void:
@@ -1221,10 +1234,12 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-func _cleanup_bombs() -> void:
-	for bomb in active_bombs:
+func _cleanup_bombs(keep_reflected: bool = false) -> void:
+	for bomb in active_bombs.duplicate():
+		if keep_reflected and bomb.is_reflected:
+			continue
 		bomb.destroy(false)
-	active_bombs = []
+		active_bombs.erase(bomb)
 
 
 func _on_boss_collect_chip(chip: PokerChip):
@@ -1258,4 +1273,4 @@ func _on_absorb_chip_timer_timeout() -> void:
 
 
 func _on_cherry_bombs_state_exited() -> void:
-	_cleanup_bombs()
+	_cleanup_bombs(true)
