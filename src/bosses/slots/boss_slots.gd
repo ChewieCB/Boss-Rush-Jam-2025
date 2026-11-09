@@ -182,6 +182,14 @@ var bomb_proj_pool: Array = []
 @export var bomb_drop_delay: float = 0.4
 var active_bombs: Array = []
 var bomb_dir_counter: int = -1
+var bomb_split_enabled: bool = false # Based on ante 2
+@export var bomb_split_count: int = 2
+@export var bomb_split_size_mult: float = 0.6
+@export var bomb_split_damage_mult: float = 0.5
+@export var bomb_split_reflect_damage_mult: float = 0.25
+@export var bomb_split_fuse_time: float = 0.8
+@export var bomb_split_distance: float = 6.0
+@export var bomb_split_flight_time: float = 0.6
 # SFX
 # Moved to the bomb objects
 @export var sfx_bomb_launch: Array[AudioStream]
@@ -211,7 +219,14 @@ var absorb_chip_enabled = false
 
 func _ready() -> void:
 	super()
-	
+
+	if GameManager.boss_ante >= 2:
+		bomb_split_enabled = true
+
+	var bomb_pool_size: int = bombs_per_attack
+	if bomb_split_enabled:
+		bomb_pool_size += bombs_per_attack * bomb_split_count
+
 	for i in range(coin_burst_repeat * coin_shots_per_burst):
 		_init_coin_proj.call_deferred()
 	for i in range(diamond_shots_per_attack):
@@ -221,7 +236,7 @@ func _ready() -> void:
 		_init_bell.call_deferred()
 	for i in range(pinball_shots_per_attack):
 		_init_pinball_proj.call_deferred()
-	for i in range(bombs_per_attack):
+	for i in range(bomb_pool_size):
 		_init_bomb_proj.call_deferred()
 
 
@@ -265,6 +280,7 @@ func _init_pinball_proj() -> void:
 func _init_bomb_proj() -> void:
 	var bomb = await _init_pooled_spawn(bomb_projectile, bomb_proj_pool)
 	bomb.destroyed.connect(_on_bomb_destroy.bind(bomb))
+	bomb.split_requested.connect(_on_bomb_split.bind(bomb))
 
 func _on_bomb_destroy(bomb: RigidBody3D) -> void:
 	active_bombs.erase(bomb)
@@ -1196,9 +1212,34 @@ func fire_bomb() -> void:
 	var projectile = bomb_proj_pool.pop_front() as RigidBody3D
 	#var projectile := bomb_projectile.instantiate() as RigidBody3D
 	projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time, self, bomb_reflect_damage)
+	projectile.can_split = bomb_split_enabled
 	projectile.global_position = projectile_spawn_marker.global_position
 	projectile.linear_velocity = _get_bomb_launch_velocity(projectile.global_position, _get_bomb_landing_pos())
 	active_bombs.append(projectile)
+
+
+func _on_bomb_split(pos: Vector3, parent_bomb: RigidBody3D) -> void:
+	if health_component.has_died:
+		return
+	var angle_offset: float = randf() * TAU
+	for i in range(bomb_split_count):
+		var mini_bomb = bomb_proj_pool.pop_front() as RigidBody3D
+		if not mini_bomb:
+			return
+		mini_bomb.init(
+			bomb_damage * bomb_split_damage_mult * GameManager.get_risk_dmg_mult(),
+			bomb_split_fuse_time,
+			self,
+			bomb_reflect_damage * bomb_split_reflect_damage_mult,
+			bomb_split_size_mult,
+		)
+		# Parent bomb is still shrinking when this spawns
+		mini_bomb.add_collision_exception_with(parent_bomb)
+		mini_bomb.global_position = pos + Vector3.UP * 0.5
+		var angle: float = angle_offset + TAU * i / bomb_split_count
+		var landing_pos: Vector3 = pos + Vector3(cos(angle), 0, sin(angle)) * bomb_split_distance
+		mini_bomb.linear_velocity = _get_bomb_launch_velocity(mini_bomb.global_position, landing_pos, bomb_split_flight_time)
+		active_bombs.append(mini_bomb)
 
 
 func _get_bomb_landing_pos() -> Vector3:
@@ -1208,10 +1249,10 @@ func _get_bomb_landing_pos() -> Vector3:
 	return target.global_position + side * bomb_spread_distance * bomb_dir_counter
 
 
-func _get_bomb_launch_velocity(from: Vector3, landing_pos: Vector3) -> Vector3:
+func _get_bomb_launch_velocity(from: Vector3, landing_pos: Vector3, flight_time: float = bomb_flight_time) -> Vector3:
 	var gravity: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector") \
 		* ProjectSettings.get_setting("physics/3d/default_gravity")
-	return (landing_pos - from) / bomb_flight_time - 0.5 * gravity * bomb_flight_time
+	return (landing_pos - from) / flight_time - 0.5 * gravity * flight_time
 
 
 func _on_cherry_bombs_recover_state_entered() -> void:

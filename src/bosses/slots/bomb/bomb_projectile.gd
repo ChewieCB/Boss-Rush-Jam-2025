@@ -4,6 +4,7 @@ class_name BombProjectile
 # This is Boss Slot's Cherry Bomb script
 
 signal destroyed
+signal split_requested(pos: Vector3)
 
 @export_group("Bomb Behaviour")
 @export var fuse_time: float = 1.0
@@ -36,6 +37,7 @@ signal destroyed
 
 const TREMOR_INTENSITY = 0.5
 const BASE_ALBEDO_RED = 0.298
+const BASE_MESH_SCALE = 4.0
 
 var body_state: PhysicsDirectBodyState3D
 var mesh_material: StandardMaterial3D
@@ -45,18 +47,30 @@ var is_reflected: bool = false
 var has_landed: bool = false
 var reflect_target: Node3D
 var reflect_damage: float = 0.0
+var base_explosion_radius: float
+var can_split: bool = false
 
 
 func _ready() -> void:
 	mesh_material = mesh.mesh.surface_get_material(0).duplicate()
 	mesh.set_surface_override_material(0, mesh_material)
+	# Bomb shape is shared across instances, but mini bombs need their own radius
+	explosion_collider.shape = explosion_collider.shape.duplicate()
+	base_explosion_radius = explosion_radius
 	health_component.died.connect(_on_shot)
 
 
-func init(_damage: float, _fuse_time: float, _reflect_target: Node3D = null, _reflect_damage: float = 0.0):
+func init(
+	_damage: float,
+	_fuse_time: float,
+	_reflect_target: Node3D = null,
+	_reflect_damage: float = 0.0,
+	_size_mult: float = 1.0,
+):
 	activate()
 
-	mesh.scale = Vector3(4.0, 4.0, 4.0)
+	explosion_radius = base_explosion_radius * _size_mult
+	mesh.scale = Vector3.ONE * BASE_MESH_SCALE * _size_mult
 	explosion_damage = _damage
 	explosion_collider.shape.radius = explosion_radius
 	reflect_target = _reflect_target
@@ -65,7 +79,7 @@ func init(_damage: float, _fuse_time: float, _reflect_target: Node3D = null, _re
 	explosion_range_indicator.scale = Vector3.ONE * explosion_radius
 
 	fuse_time = _fuse_time
-	fuse_time += randf_range(0, fuse_variance)
+	fuse_time += randf_range(0, fuse_variance * _size_mult)
 	timer.start(fuse_time)
 
 	mesh_material.albedo_color = Color(BASE_ALBEDO_RED, 0.305, 0.29)
@@ -106,6 +120,8 @@ func destroy(explode: bool = true) -> void:
 		explosion_vfx.explode()
 		sfx_player.stream = sfx_bomb_explode.pick_random()
 		sfx_player.play()
+		if can_split and not is_reflected:
+			split_requested.emit(global_position)
 
 	var tween = get_tree().create_tween()
 
@@ -190,6 +206,9 @@ func activate() -> void:
 	is_active = true
 	is_reflected = false
 	has_landed = false
+	can_split = false
+	for other in get_collision_exceptions():
+		remove_collision_exception_with(other)
 	gravity_scale = 1.0
 	health_component.initialize_health()
 	explosion_collider.set_deferred("disabled", true)
