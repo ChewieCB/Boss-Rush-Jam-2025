@@ -114,6 +114,16 @@ const FLARE_PEAK_HEIGHT = 15
 @export var bells_to_spawn: int = 4
 const BELL_RADIUS = 6.0
 var bell_spawn_points: Array = []
+var bell_shockwave_enabled: bool = false # Based on ante 2
+@export var bell_shockwave_prefab: PackedScene = preload("res://src/bosses/chips/minions/SlamShockwave.tscn")
+var bell_shockwave_pool: Array = []
+@export var bell_shockwave_damage: float = 10.0
+@export var bell_shockwave_radius: float = 25.0
+@export var bell_shockwave_time: float = 1
+@export var bell_shockwave_knockback: float = 25.0
+@export var bell_shockwave_color: Color = Color(1.0, 0.75, 0.15, 0.6)
+@export var bell_shockwave_glow: float = 0.7
+@export var bell_shockwave_height_scale: float = 2
 # SFX
 #@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
 # Moved to the bell objects
@@ -222,6 +232,7 @@ func _ready() -> void:
 
 	if GameManager.boss_ante >= 2:
 		bomb_split_enabled = true
+		bell_shockwave_enabled = true
 
 	var bomb_pool_size: int = bombs_per_attack
 	if bomb_split_enabled:
@@ -234,6 +245,8 @@ func _ready() -> void:
 	for i in range(8):
 		_init_bell_flare.call_deferred()
 		_init_bell.call_deferred()
+		if bell_shockwave_enabled:
+			_init_bell_shockwave.call_deferred()
 	for i in range(pinball_shots_per_attack):
 		_init_pinball_proj.call_deferred()
 	for i in range(bomb_pool_size):
@@ -242,7 +255,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	# Cleanup spawned instances
-	for pool in [coin_proj_pool, bell_pool, bell_flare_pool, diamond_proj_pool, pinball_proj_pool, bomb_proj_pool]:
+	for pool in [coin_proj_pool, bell_pool, bell_flare_pool, bell_shockwave_pool, diamond_proj_pool, pinball_proj_pool, bomb_proj_pool]:
 		if pool:
 			for inst in pool:
 				if is_instance_valid(inst):
@@ -256,12 +269,34 @@ func _init_coin_proj() -> void:
 	_init_pooled_spawn(coin_projectile, coin_proj_pool)
 
 func _init_bell() -> void:
-	_init_pooled_spawn(bell_scene, bell_pool)
+	var bell = await _init_pooled_spawn(bell_scene, bell_pool)
+	if bell_shockwave_enabled:
+		bell.landed.connect(_spawn_bell_shockwave)
 	#bell.destroyed.connect(_bell_finished_callback)
 
 func _bell_finished_callback(bell: Bell) -> void:
 	bell.deactivate()
 	bell_pool.push_back(bell)
+
+func _init_bell_shockwave() -> void:
+	var shockwave = await _init_pooled_spawn(bell_shockwave_prefab, bell_shockwave_pool)
+	shockwave.free_on_finished = false
+	shockwave.height_scale = bell_shockwave_height_scale
+	shockwave.set_color(bell_shockwave_color, bell_shockwave_glow)
+
+func _spawn_bell_shockwave(pos: Vector3) -> void:
+	if health_component.has_died:
+		return
+	var shockwave = bell_shockwave_pool.pop_front()
+	if not shockwave:
+		return
+	shockwave.global_position = pos
+	shockwave.arc_angle = 360
+	shockwave.max_radius = bell_shockwave_radius
+	shockwave.wave_time = bell_shockwave_time
+	shockwave.damage = bell_shockwave_damage * GameManager.get_risk_dmg_mult()
+	shockwave.knockback_force = bell_shockwave_knockback
+	shockwave.start_shockwave()
 
 func _init_bell_flare() -> void:
 	var flare = await _init_pooled_spawn(bell_flare_prefab, bell_flare_pool)
@@ -1265,7 +1300,7 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	MAX_SPEED /= 2.0
 
 	await desired_height_reached
-	
+
 	drop_factor = DROP_FACTOR
 
 	await get_tree().create_timer(attack_recovery_time, false).timeout
@@ -1275,10 +1310,8 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-func _cleanup_bombs(keep_reflected: bool = false) -> void:
+func _cleanup_bombs() -> void:
 	for bomb in active_bombs.duplicate():
-		if keep_reflected and bomb.is_reflected:
-			continue
 		bomb.destroy(false)
 		active_bombs.erase(bomb)
 
@@ -1311,7 +1344,3 @@ func boss_suck_chip() -> void:
 
 func _on_absorb_chip_timer_timeout() -> void:
 	boss_suck_chip()
-
-
-func _on_cherry_bombs_state_exited() -> void:
-	_cleanup_bombs(true)

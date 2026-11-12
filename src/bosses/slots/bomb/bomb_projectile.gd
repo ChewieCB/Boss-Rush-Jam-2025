@@ -239,4 +239,6 @@ func deactivate() -> void:
 	# Prevent cutoff
 	if sfx_player.playing:
 		await sfx_player.finished
+		if is_active:
+			return
 	self.process_mode = Node.PROCESS_MODE_DISABLED

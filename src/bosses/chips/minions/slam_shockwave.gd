@@ -6,16 +6,30 @@ signal finished
 @export var wave_time: float = 1.8
 @export var arc_angle: float = 40.0
 @export var damage: float = 10.0
+@export var knockback_force: float = 0.0
+@export var knockback_up_force: float = 8.0
 
 @export var arc_thickness_ratio: float = 0.8
 @export var arc_angle_deg := 90.0
 @export var free_on_finished: bool = true
+@export var height_scale: float = 0.5
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
-@onready var mesh_material := mesh.mesh.surface_get_material(0)
+@onready var mesh_material: ShaderMaterial = mesh.mesh.surface_get_material(0)
 
 var current_radius: float = 0.0
+
+
+func _ready() -> void:
+	# Material is shared between instances by default
+	mesh_material = mesh_material.duplicate()
+	mesh.mesh.material = mesh_material
+
+
+func set_color(color: Color, emission_strength: float = 0.0) -> void:
+	mesh_material.set_shader_parameter("base_color", color)
+	mesh_material.set_shader_parameter("emission_strength", emission_strength)
 
 
 func deactivate() -> void:
@@ -32,7 +46,8 @@ func activate() -> void:
 
 func start_shockwave(wipe_arc: bool = false) -> void:
 	activate()
-	
+
+	mesh.scale.y = height_scale
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -81,3 +96,7 @@ func _on_body_entered(body: Node3D) -> void:
 			var dot_product: float = arc_facing_dir.dot(to_body_dir)
 			if dot_product > angle_threshold:
 				body.health_component.damage(damage)
+				if knockback_force > 0:
+					var push_dir: Vector3 = self.global_position.direction_to(body.global_position)
+					push_dir.y = 0
+					body.apply_impulse_to_player(push_dir.normalized() * knockback_force + Vector3.UP * knockback_up_force)
