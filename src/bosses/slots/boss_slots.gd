@@ -8,21 +8,15 @@ signal start_slots_spin
 
 
 # Juice TODO:
-# -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player.  DONE
-# -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once at higher difficulty. DONE
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
-# -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact. DONE
-# -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE  Shake and push player if connect.
-# -Cherry Bomb: Add burning wick. Add explosion range indicator. Improve sfx. DONE
-# -General: Add dust particle below to show that he's hovering. DONE
 
 
-# Antes note:
-# Ante 1: Room of Fortune - Add a slot machine that add modifier to stages. Boss can interact with it too ( on a CD)
-# Ante 2: Hidden Motive - Hide the slot UI / attack indicator
-# Ante 3: Pinball Gamble - Enable new projectile attack that can ricochet
-# Ante 4: New phase? At 20% HP, Overclock, where the boss significantly reduce its attack cooldown
-# Ante 5: Greed Machine - Boss can pick up / steal dropped chips to recover HP
+# Antes idea:
+# Room of Fortune - Add a slot machine that add modifier to stages. Boss can interact with it too ( on a CD)
+# Hidden Motive - Hide the slot UI / attack indicator
+# Pinball Gamble - Enable new projectile attack that can ricochet
+# New phase? At 20% HP, Overclock, where the boss significantly reduce its attack cooldown
+# Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
 # Status
 # Weak to Shock (he's a machine), resist to Bleeding (same reason)
@@ -96,6 +90,9 @@ var coin_proj_pool: Array = []
 @export var coin_firerate: float = 4
 @export var coin_spread: float = 15
 @export var delay_between_coin_burst: float = 0.5
+var coin_fan_enabled: bool = false # Based on ante 2
+@export var coin_fan_count: int = 5
+@export var coin_fan_angle: float = 60.0
 # SFX
 @export var sfx_coin_gun_blast: Array[AudioStream]
 @export var sfx_coin_shot: Array[AudioStream]
@@ -115,6 +112,17 @@ const FLARE_PEAK_HEIGHT = 15
 @export var bells_to_spawn: int = 4
 const BELL_RADIUS = 6.0
 var bell_spawn_points: Array = []
+var bell_shockwave_enabled: bool = false # Based on ante 2
+@export var bell_shockwave_prefab: PackedScene = preload("res://src/bosses/chips/minions/SlamShockwave.tscn")
+var bell_shockwave_pool: Array = []
+@export var bell_shockwave_damage: float = 10.0
+@export var bell_shockwave_radius: float = 25.0
+@export var bell_shockwave_time: float = 1
+@export var bell_shockwave_knockback: float = 25.0
+@export var bell_shockwave_color: Color = Color(1.0, 0.55, 0.1, 0.6)
+@export var bell_shockwave_glow: float = 0.7
+@export var bell_shockwave_height_scale: float = 0.8
+@export var bell_shockwave_fade_time: float = 0.4
 # SFX
 #@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
 # Moved to the bell objects
@@ -142,6 +150,10 @@ var interrupted_state: String
 const CHARGE_CRACK_INTERVAL = 0.1
 var charge_crack_interval_timer = 0
 var charge_locked: bool = false
+var charge_chain_enabled: bool = false # Based on ante 2
+@export var charge_chain_chance: float = 0.5
+@export var max_charge_chains: int = 2
+var charge_chain_count: int = 0
 # SFX
 @export var sfx_charge: Array[AudioStream]
 @export var sfx_charge_impact: Array[AudioStream]
@@ -154,6 +166,8 @@ var charge_locked: bool = false
 @export var diamond_projectile: PackedScene
 var diamond_proj_pool: Array = []
 @export var diamond_shots_per_attack: int = 7
+## Fire anyway if the boss can't get in range in time
+@export var diamond_max_approach_time: float = 2.0
 # SFX
 @export var sfx_diamond_gun_blast: Array[AudioStream]
 @export var sfx_diamond_shot: Array[AudioStream]
@@ -172,15 +186,25 @@ var pinball_proj_pool: Array = []
 
 @export_subgroup("Cherry Bombs")
 @export var bomb_damage: float = 36
+@export var bomb_reflect_damage: float = 200
 @export var bomb_projectile: PackedScene
 var bomb_proj_pool: Array = []
 @export var bombs_per_attack: int = 5
 @export var bomb_fuse_time: float = 2.5
-@export var bomb_impulse: float = 100000.0
+@export var bomb_flight_time: float = 1.0
+@export var bomb_spread_distance: float = 6.0
 @export var max_drop_distance: float = 20.0
 @export var bomb_drop_delay: float = 0.4
 var active_bombs: Array = []
 var bomb_dir_counter: int = -1
+var bomb_split_enabled: bool = false # Based on ante 2
+@export var bomb_split_count: int = 2
+@export var bomb_split_size_mult: float = 0.6
+@export var bomb_split_damage_mult: float = 0.5
+@export var bomb_split_reflect_damage_mult: float = 0.25
+@export var bomb_split_fuse_time: float = 0.8
+@export var bomb_split_distance: float = 6.0
+@export var bomb_split_flight_time: float = 0.6
 # SFX
 # Moved to the bomb objects
 @export var sfx_bomb_launch: Array[AudioStream]
@@ -198,6 +222,7 @@ var absorb_chip_enabled = false
 @export var chip_value_to_heal_ratio: float = 0.5
 
 @onready var floor_raycast: RayCast3D = $FloorRaycast
+@onready var base_max_speed: float = MAX_SPEED
 
 # Death anim
 @onready var death_torso_rigid: RigidBody3D = $MarkerPivot/SlottyDeathTorso
@@ -210,23 +235,39 @@ var absorb_chip_enabled = false
 
 func _ready() -> void:
 	super()
-	
-	for i in range(coin_burst_repeat * coin_shots_per_burst):
+
+	if GameManager.boss_ante >= 2:
+		bomb_split_enabled = true
+		bell_shockwave_enabled = true
+		charge_chain_enabled = true
+		coin_fan_enabled = true
+
+	var bomb_pool_size: int = bombs_per_attack
+	if bomb_split_enabled:
+		bomb_pool_size += bombs_per_attack * bomb_split_count
+
+	var coin_pool_size: int = coin_burst_repeat * coin_shots_per_burst
+	if coin_fan_enabled:
+		coin_pool_size += coin_fan_count
+
+	for i in range(coin_pool_size):
 		_init_coin_proj.call_deferred()
 	for i in range(diamond_shots_per_attack):
 		_init_diamond_proj.call_deferred()
 	for i in range(8):
 		_init_bell_flare.call_deferred()
 		_init_bell.call_deferred()
+		if bell_shockwave_enabled:
+			_init_bell_shockwave.call_deferred()
 	for i in range(pinball_shots_per_attack):
 		_init_pinball_proj.call_deferred()
-	for i in range(bombs_per_attack):
+	for i in range(bomb_pool_size):
 		_init_bomb_proj.call_deferred()
 
 
 func _exit_tree() -> void:
 	# Cleanup spawned instances
-	for pool in [coin_proj_pool, bell_pool, bell_flare_pool, diamond_proj_pool, pinball_proj_pool, bomb_proj_pool]:
+	for pool in [coin_proj_pool, bell_pool, bell_flare_pool, bell_shockwave_pool, diamond_proj_pool, pinball_proj_pool, bomb_proj_pool]:
 		if pool:
 			for inst in pool:
 				if is_instance_valid(inst):
@@ -240,12 +281,35 @@ func _init_coin_proj() -> void:
 	_init_pooled_spawn(coin_projectile, coin_proj_pool)
 
 func _init_bell() -> void:
-	_init_pooled_spawn(bell_scene, bell_pool)
+	var bell = await _init_pooled_spawn(bell_scene, bell_pool)
+	if bell_shockwave_enabled:
+		bell.landed.connect(_spawn_bell_shockwave)
 	#bell.destroyed.connect(_bell_finished_callback)
 
 func _bell_finished_callback(bell: Bell) -> void:
 	bell.deactivate()
 	bell_pool.push_back(bell)
+
+func _init_bell_shockwave() -> void:
+	var shockwave = await _init_pooled_spawn(bell_shockwave_prefab, bell_shockwave_pool)
+	shockwave.free_on_finished = false
+	shockwave.height_scale = bell_shockwave_height_scale
+	shockwave.fade_time = bell_shockwave_fade_time
+	shockwave.set_color(bell_shockwave_color, bell_shockwave_glow)
+
+func _spawn_bell_shockwave(pos: Vector3) -> void:
+	if health_component.has_died:
+		return
+	var shockwave = bell_shockwave_pool.pop_front()
+	if not shockwave:
+		return
+	shockwave.global_position = pos
+	shockwave.arc_angle = 360
+	shockwave.max_radius = bell_shockwave_radius
+	shockwave.wave_time = bell_shockwave_time
+	shockwave.damage = bell_shockwave_damage * GameManager.get_risk_dmg_mult()
+	shockwave.knockback_force = bell_shockwave_knockback
+	shockwave.start_shockwave()
 
 func _init_bell_flare() -> void:
 	var flare = await _init_pooled_spawn(bell_flare_prefab, bell_flare_pool)
@@ -264,8 +328,10 @@ func _init_pinball_proj() -> void:
 func _init_bomb_proj() -> void:
 	var bomb = await _init_pooled_spawn(bomb_projectile, bomb_proj_pool)
 	bomb.destroyed.connect(_on_bomb_destroy.bind(bomb))
+	bomb.split_requested.connect(_on_bomb_split.bind(bomb))
 
 func _on_bomb_destroy(bomb: RigidBody3D) -> void:
+	active_bombs.erase(bomb)
 	bomb.deactivate()
 	bomb_proj_pool.push_back(bomb)
 
@@ -279,7 +345,6 @@ func activate() -> void:
 
 func _physics_process(delta: float) -> void:
 	#super(delta)
-
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
 		slot_icons_parent.look_at(target.global_position)
@@ -318,6 +383,8 @@ func select_attack_phase_1() -> void:
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
 	swipe_cooldown_timer.stop()
+	charge_chain_count = 0
+	MAX_SPEED = base_max_speed
 	state_chart.send_event("start_spin_slots")
 
 
@@ -340,6 +407,8 @@ func select_attack_phase_2() -> void:
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
 	swipe_cooldown_timer.stop()
+	charge_chain_count = 0
+	MAX_SPEED = base_max_speed
 	state_chart.send_event("start_spin_slots")
 
 
@@ -397,7 +466,7 @@ func _on_died() -> void:
 	death_torso_rigid.apply_central_impulse(Vector3.DOWN * 15.0)
 	
 	var tween = get_tree().create_tween()
-	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 	
 	await death_anim_finished
 	await boss_death_slow_mo()
@@ -585,7 +654,30 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 		# Dont play animation for the last one (since boss no longer actually shoot)
 		if i < coin_burst_repeat - 1:
 			anim_player.play("ranged_shot_spin")
+
+	if coin_fan_enabled:
+		await get_tree().create_timer(delay_between_coin_burst, false).timeout
+		if not $StateChart/Root/Phase/Phase1/CoinProjectiles.active and not $StateChart/Root/Phase/Phase2/CoinProjectiles.active:
+			return
+		fire_coin_fan()
+		anim_player.play("ranged_shot_spin_shoot")
+		await anim_player.animation_finished
+
 	state_chart.send_event("stop_shooting")
+
+
+func fire_coin_fan() -> void:
+	explode_vfx.explode()
+	play_positional_sound(sfx_coin_gun_blast.pick_random())
+	play_positional_sound(sfx_coin_shot.pick_random())
+	for i in coin_fan_count:
+		var proj: BaseBossProjectile = fire_projectile_pooled(coin_proj_pool, projectile_spawn_marker.global_position)
+		if not proj:
+			return
+		var t: float = float(i) / (coin_fan_count - 1) if coin_fan_count > 1 else 0.5
+		var angle: float = lerp(-coin_fan_angle / 2, coin_fan_angle / 2, t)
+		proj.rotate_y(deg_to_rad(angle))
+		proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
 
 
 func _on_coin_projectiles_recover_state_entered() -> void:
@@ -887,6 +979,9 @@ func _on_homing_projectiles_targeting_state_entered() -> void:
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	desired_distance = 8.0
+	await get_tree().create_timer(diamond_max_approach_time, false).timeout
+	if $StateChart/Root/Phase/Phase2/HomingProjectiles/Targeting.active:
+		state_chart.send_event("start_shooting")
 	# await get_tree().create_timer(0.8, false).timeout
 	#anim_player.play("diamond_shot_telegraph")
 	#await anim_player.animation_finished
@@ -1047,7 +1142,7 @@ func _on_charge_charging_state_entered() -> void:
 	hurtbox_collider.set_deferred("disabled", true)
 	charge_collider.set_deferred("disabled", false)
 
-	MAX_SPEED /= 2.5
+	MAX_SPEED = base_max_speed
 	#desired_height = DESIRED_HEIGHT
 	desired_height = 1.0
 	if floor_raycast.is_colliding():
@@ -1124,7 +1219,13 @@ func _on_charge_recover_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)
-	
+
+	if charge_chain_enabled and charge_chain_count < max_charge_chains and randf() < charge_chain_chance:
+		charge_chain_count += 1
+		state_chart.send_event("cooldown_end")
+		state_chart.send_event("end_recovery") # Recover -> Charge Targeting
+		return
+
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	
 	state_chart.send_event("cooldown_end")
@@ -1174,16 +1275,19 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 
 	state_chart.send_event("attack_start")
 
-	bomb_dir_counter = -1
+	var first_side: int = [-1, 1].pick_random()
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
 		if $StateChart/Root/Health/Dead.active:
 			break
+		# First bomb at the player, then alternate sides
+		if i == 0:
+			bomb_dir_counter = 0
+		else:
+			bomb_dir_counter = first_side if i % 2 == 1 else -first_side
 		anim_player.play("big_ranged_shot")
 		await anim_player.animation_finished
-		bomb_dir_counter += 1
-		bomb_dir_counter = wrapi(bomb_dir_counter, -1, 2)
-	
+
 	anim_player.play("big_ranged_shot_finish")
 	sfx_player.volume_db = 0.0
 	state_chart.send_event("stop_dropping_bombs")
@@ -1194,11 +1298,48 @@ func fire_bomb() -> void:
 	sfx_player.play()
 	var projectile = bomb_proj_pool.pop_front() as RigidBody3D
 	#var projectile := bomb_projectile.instantiate() as RigidBody3D
-	projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time)
+	projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time, self, bomb_reflect_damage)
+	projectile.can_split = bomb_split_enabled
 	projectile.global_position = projectile_spawn_marker.global_position
-	projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * bomb_dir_counter)
-	projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
+	projectile.linear_velocity = _get_bomb_launch_velocity(projectile.global_position, _get_bomb_landing_pos())
 	active_bombs.append(projectile)
+
+
+func _on_bomb_split(pos: Vector3, parent_bomb: RigidBody3D) -> void:
+	if health_component.has_died:
+		return
+	var angle_offset: float = randf() * TAU
+	for i in range(bomb_split_count):
+		var mini_bomb = bomb_proj_pool.pop_front() as RigidBody3D
+		if not mini_bomb:
+			return
+		mini_bomb.init(
+			bomb_damage * bomb_split_damage_mult * GameManager.get_risk_dmg_mult(),
+			bomb_split_fuse_time,
+			self,
+			bomb_reflect_damage * bomb_split_reflect_damage_mult,
+			bomb_split_size_mult,
+		)
+		# Parent bomb is still shrinking when this spawns
+		mini_bomb.add_collision_exception_with(parent_bomb)
+		mini_bomb.global_position = pos + Vector3.UP * 0.5
+		var angle: float = angle_offset + TAU * i / bomb_split_count
+		var landing_pos: Vector3 = pos + Vector3(cos(angle), 0, sin(angle)) * bomb_split_distance
+		mini_bomb.linear_velocity = _get_bomb_launch_velocity(mini_bomb.global_position, landing_pos, bomb_split_flight_time)
+		active_bombs.append(mini_bomb)
+
+
+func _get_bomb_landing_pos() -> Vector3:
+	var to_target: Vector3 = target.global_position - global_position
+	to_target.y = 0
+	var side: Vector3 = Vector3.UP.cross(to_target.normalized())
+	return target.global_position + side * bomb_spread_distance * bomb_dir_counter
+
+
+func _get_bomb_launch_velocity(from: Vector3, landing_pos: Vector3, flight_time: float = bomb_flight_time) -> Vector3:
+	var gravity: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector") \
+		* ProjectSettings.get_setting("physics/3d/default_gravity")
+	return (landing_pos - from) / flight_time - 0.5 * gravity * flight_time
 
 
 func _on_cherry_bombs_recover_state_entered() -> void:
@@ -1208,10 +1349,10 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	navigation_component.follow_target = false
 	drop_factor = 12.0
 	desired_height = DESIRED_HEIGHT
-	MAX_SPEED /= 2.0
+	MAX_SPEED = base_max_speed
 
 	await desired_height_reached
-	
+
 	drop_factor = DROP_FACTOR
 
 	await get_tree().create_timer(attack_recovery_time, false).timeout
@@ -1222,9 +1363,9 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 
 
 func _cleanup_bombs() -> void:
-	for bomb in active_bombs:
+	for bomb in active_bombs.duplicate():
 		bomb.destroy(false)
-	active_bombs = []
+		active_bombs.erase(bomb)
 
 
 func _on_boss_collect_chip(chip: PokerChip):
@@ -1255,7 +1396,3 @@ func boss_suck_chip() -> void:
 
 func _on_absorb_chip_timer_timeout() -> void:
 	boss_suck_chip()
-
-
-func _on_cherry_bombs_state_exited() -> void:
-	_cleanup_bombs()

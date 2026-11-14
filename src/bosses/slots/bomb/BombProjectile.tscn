@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://yw8o87v7ydx1"]
+[gd_scene load_steps=33 format=3 uid="uid://yw8o87v7ydx1"]
 
 [ext_resource type="Script" path="res://src/bosses/slots/bomb/bomb_projectile.gd" id="1_4scaw"]
 [ext_resource type="ArrayMesh" uid="uid://d5m2g14coy2c" path="res://src/bosses/slots/bell/bomb_mesh.tres" id="1_pne0t"]
@@ -26,6 +26,7 @@
 [ext_resource type="AudioStream" uid="uid://jqugutq06ydl" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 4.mp3" id="22_omxju"]
 [ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="23_f32ey"]
 [ext_resource type="PackedScene" uid="uid://c54o67tient15" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmit.tscn" id="26_ke4ar"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="27_hpcmp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pl4mw"]
 bounce = 0.7
@@ -104,6 +105,10 @@ time_until_queue_free = 5.0
 [node name="LifetimeTimer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
+
+[node name="HealthComponent" parent="." instance=ExtResource("27_hpcmp")]
+max_health = 1.0
+show_damage_text = false
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

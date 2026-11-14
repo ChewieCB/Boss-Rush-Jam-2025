@@ -12,13 +12,13 @@ enum TargetMapEditor {
 ## Determines how model interprets [member scale_expression].
 @export var target_map_editor: TargetMapEditor = TargetMapEditor.GENERIC
 ## Display model export folder relative to the model folder set by [FuncGodotLocalConfig].
-@export var models_sub_folder : String = ""
+@export var models_sub_folder: String = ""
 ## Scale expression applied to model. See the [TrenchBroom Documentation](https://trenchbroom.github.io/manual/latest/#display-models-for-entities) for more information.
-@export var scale_expression : String = ""
+@export var scale_expression: String = ""
 ## Model Point Class can override the 'size' meta property by auto-generating a value from the meshes' [AABB]. Proper generation requires 'scale_expression' set to a float or [Vector3]. **WARNING:** Generated size property unlikely to align cleanly to grid!
-@export var generate_size_property : bool = false
+@export var generate_size_property: bool = false
 ## Creates a .gdignore file in the model export folder to prevent Godot importing the display models. Only needs to be generated once.
-@export var generate_gd_ignore_file : bool = false :
+@export var generate_gd_ignore_file: bool = false:
 	get:
 		return generate_gd_ignore_file
 	set(ignore):
@@ -42,7 +42,7 @@ func build_def_text(target_editor: FuncGodotFGDFile.FuncGodotTargetMapEditors = 
 
 func _generate_model() -> void:
 	if not scene_file:
-		return 
+		return
 	
 	var gltf_state := GLTFState.new()
 	var path = _get_export_dir()
@@ -58,7 +58,7 @@ func _generate_model() -> void:
 			meta_properties[model_key] = '"%s"' % _get_local_path()
 		else:
 			meta_properties[model_key] = '{"path": "%s", "scale": %s }' % [
-				_get_local_path(), 
+				_get_local_path(),
 				scale_expression
 			]
 	else:
@@ -69,7 +69,7 @@ func _generate_model() -> void:
 
 func _get_node() -> Node3D:
 	var node := scene_file.instantiate()
-	if node is Node3D: 
+	if node is Node3D:
 		return node as Node3D
 	node.queue_free()
 	printerr("Scene is not of type 'Node3D'")
@@ -98,7 +98,8 @@ func _create_gltf_file(gltf_state: GLTFState, path: String, node: Node3D) -> boo
 	gltf_state.create_animations = false
 	
 	node.rotate_y(deg_to_rad(-90))
-	
+	_convert_sprites_to_meshes(node)
+
 	# With TrenchBroom we can specify a scale expression, but for other editors we need to scale our models manually.
 	if target_map_editor != TargetMapEditor.TRENCHBROOM:
 		var scale_factor: Vector3 = Vector3.ONE
@@ -123,16 +124,54 @@ func _create_gltf_file(gltf_state: GLTFState, path: String, node: Node3D) -> boo
 	call_deferred("_save_to_file_system", gltf_document, gltf_state, global_export_path)
 	return true
 
+# GLTFDocument does not export Sprite3D nodes, so sprite-only scenes produce an empty model
+# that map editors fail to render. Replace each visible Sprite3D with an equivalent textured quad.
+func _convert_sprites_to_meshes(root: Node3D) -> void:
+	for sprite in root.find_children("*", "Sprite3D", true, false):
+		if not sprite.visible or sprite.texture == null:
+			continue
+		var rect: Rect2 = sprite.get_item_rect()
+		rect = Rect2(rect.position * sprite.pixel_size, rect.size * sprite.pixel_size)
+		var material := StandardMaterial3D.new()
+		material.albedo_texture = sprite.texture
+		material.albedo_color = sprite.modulate
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		# Map editors can't billboard and usually ignore double-sidedness, so emit two crossed
+		# planes with explicit front and back faces to keep the sprite visible from any angle.
+		var holder := Node3D.new()
+		holder.name = sprite.name
+		holder.transform = sprite.transform
+		var parent: Node = sprite.get_parent()
+		parent.add_child(holder)
+		parent.move_child(holder, sprite.get_index())
+		holder.owner = root
+		for angle in [0.0, 90.0]:
+			for flip in [false, true]:
+				var quad := QuadMesh.new()
+				quad.size = rect.size
+				quad.center_offset = Vector3(rect.get_center().x, rect.get_center().y, 0.0)
+				quad.flip_faces = flip
+				quad.material = material
+				var mesh_instance := MeshInstance3D.new()
+				mesh_instance.mesh = quad
+				mesh_instance.rotation_degrees.y = angle
+				holder.add_child(mesh_instance)
+				mesh_instance.owner = root
+		parent.remove_child(sprite)
+		sprite.free()
+
 func _save_to_file_system(gltf_document: GLTFDocument, gltf_state: GLTFState, path: String) -> void:
 	var error: Error = DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 	if error != Error.OK:
 		printerr("Failed creating dir", error)
-		return 
+		return
 	
 	error = gltf_document.write_to_filesystem(gltf_state, path)
 	if error != OK:
 		printerr("Failed writing to file system", error)
-		return 
+		return
 	print('Exported model to ', path)
 
 func _generate_size_from_aabb(meshes: Array[GLTFMesh]) -> AABB:

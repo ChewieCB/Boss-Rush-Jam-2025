@@ -3,6 +3,7 @@ class_name Bell
 
 signal finished
 signal destroyed(bell: Bell)
+signal landed(pos: Vector3)
 
 @export var damage: float = 20.0
 @export var explosion_prefab: PackedScene
@@ -49,6 +50,7 @@ func drop() -> void:
 
 func destroy() -> void:
 	# Impact
+	landed.emit(global_position)
 	var dust_cloud_vfx = dust_cloud_prefab.instantiate()
 	get_tree().get_root().add_child(dust_cloud_vfx)
 	dust_cloud_vfx.global_position = global_position + Vector3(0, 1, 0)

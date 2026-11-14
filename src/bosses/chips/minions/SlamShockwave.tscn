@@ -13,6 +13,7 @@ uniform float arc_end_deg = 90.0;
 varying vec3 local_pos;
 
 uniform vec4 base_color : source_color;
+uniform float emission_strength = 0.0;
 
 
 void vertex() {
@@ -38,6 +39,7 @@ void fragment() {
     }
 
     ALBEDO = base_color.rgb;
+    EMISSION = base_color.rgb * emission_strength;
     ALPHA = base_color.a;
 }"
 

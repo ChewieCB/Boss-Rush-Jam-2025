@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=98 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -48,6 +48,8 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="33_rnf52"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="34_nkrfy"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="35_efay1"]
+[ext_resource type="Shader" path="res://src/bosses/base/hit_flash.gdshader" id="45_l335m"]
+[ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="46_chlns"]
 [ext_resource type="Texture2D" uid="uid://fhaaebf6bamn" path="res://src/bosses/bartender/assets/Bartender_base_open_hand.png" id="46_ulosq"]
 [ext_resource type="Texture2D" uid="uid://dmibr0fgehn7l" path="res://src/bosses/bartender/assets/Bartender_base_open_hand_turned.png" id="47_tp2kw"]
 [ext_resource type="Texture2D" uid="uid://711teiotxavy" path="res://src/bosses/bartender/assets/empty_bottle.png" id="48_mdqxm"]
@@ -65,6 +67,22 @@
 [ext_resource type="Texture2D" uid="uid://brih8hrl87d0d" path="res://src/bosses/bartender/assets/tar_bottle.png" id="58_603cq"]
 [ext_resource type="Texture2D" uid="uid://ddk5o5id7o0v5" path="res://src/bosses/bartender/assets/heal_bottle.png" id="59_4v7r0"]
 [ext_resource type="Texture2D" uid="uid://dy6pwm2pvkfkh" path="res://src/bosses/bartender/assets/beer_barrel.png" id="60_eutt6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2dnjp"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("45_l335m")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_alpha = 1.0
+shader_parameter/y_billboard = true
+shader_parameter/tex_alpha = 1.0
+shader_parameter/scale = 1.0
+shader_parameter/deform = Vector2(0, 0)
+shader_parameter/deform_h_scale = 1.0
+shader_parameter/knockback_scale = 0.4
+shader_parameter/depth_bias = 0.0
+shader_parameter/tex = ExtResource("46_chlns")
 
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)
@@ -1482,7 +1500,6 @@ _data = {
 }
 
 [node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
-collision_mask = 11
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.6
 phase_3_health_percentage_trigger = 0.3
@@ -1558,6 +1575,7 @@ sfx_telegraph = ExtResource("13_a7i4i")
 base_sprite = ExtResource("23_33lgi")
 hurt_sprite = ExtResource("8_jooce")
 death_sprites = Array[CompressedTexture2D]([ExtResource("9_fm23x"), ExtResource("10_d78ef")])
+hit_material = SubResource("ShaderMaterial_2dnjp")
 hurt_frame_window = 0.4
 attack_targeting_time = 0.3
 
