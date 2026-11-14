@@ -20,6 +20,7 @@ signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
 signal destroyed(projectile: BaseBullet, hit_boss: bool)
+signal refund_return_finished
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
@@ -56,6 +57,10 @@ var is_hitscan = false
 var infused_status_effect = [false, false, false, false, false]
 var can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
 var min_lifetime_before_can_be_aim_guided = 0.2
+var is_refund_returning: bool = false
+var destroy_on_impact: bool = true
+var t_return: float = 0.0
+var t_return_scale: float = 0.002
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0

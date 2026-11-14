@@ -330,7 +330,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="FocusVignette" type="ColorRect" parent="UI/CustomEffectShader"]
-visible = false
 material = SubResource("ShaderMaterial_fcvig")
 layout_mode = 1
 anchors_preset = 15
@@ -341,7 +340,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="FocusAberration" type="ColorRect" parent="UI/CustomEffectShader"]
-visible = false
 material = SubResource("ShaderMaterial_fcsab")
 layout_mode = 1
 anchors_preset = 15

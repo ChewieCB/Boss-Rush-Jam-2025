@@ -12,8 +12,7 @@ script = ExtResource("1_iw80l")
 
 [node name="AmmoLeech" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_psr82")
-refund_chance = 35.0
-perc_damage_modify = -25.0
+refund_chance = 100.0
 display_text_title = "Ammo Leech"
 display_text_tag = "Lead refund."
 display_text_desc = "Chance to regain spent ammo on hit."
@@ -22,6 +21,7 @@ negative_desc = Array[String](["-25% damage"])
 icon_id = 25
 
 [node name="GamblersPrecision" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("4_s01a7")
 crit_chance = 25.0
 jam_chance_if_missed = 50.0
@@ -33,6 +33,7 @@ icon_id = 27
 luck_triggers = Array[int]([0, 1])
 
 [node name="Hyperfocus" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("4_xsmdb")
 modify_perc_spread_focused = -75.0
 modify_perc_damage_focused = 25.0

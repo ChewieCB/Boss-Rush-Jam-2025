@@ -63,6 +63,8 @@ var barrel_cached_materials: Array[StandardMaterial3D] = []
 var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 @onready var effect_icons_viewport: SubViewport = $EffectIconsViewport
+# Ammo Leech
+@onready var leech_spiral_pathfollow: PathFollow3D = $EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 #
@@ -1476,3 +1478,46 @@ func set_elemental_anim(element: String = "") -> void:
 		anim_tree["parameters/elemental_add/add_amount"] = 1.0
 	else:
 		anim_tree["parameters/elemental_add/add_amount"] = 0.0
+
+
+func ammo_leech_bullet_return(proj: BaseBullet, proj_origin: Vector3, arc_height: float = 1.5, proj_speed: float = 1.2) -> Vector3:
+	proj.life_timer.stop()
+	# Play a particle effect at the impact point
+	# TODO
+	
+	proj.is_refund_returning = true
+	await proj.refund_return_finished
+	# Scale up mesh, trail, and vfx - or copy them over to a new visual only node for the spiral anim
+	proj._deactivate_physics()
+	proj.scale = Vector3.ONE * 4
+	proj.get_parent().remove_child(proj)
+	leech_spiral_pathfollow.add_child(proj)
+	
+	await get_tree().physics_frame
+	proj.global_position = leech_spiral_pathfollow.global_position
+	var curve_tween = get_tree().create_tween()
+	#curve_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+	curve_tween.tween_property(leech_spiral_pathfollow, "progress_ratio", 1.0, proj_speed * 2)
+	#
+	await curve_tween.finished
+	proj.scale = Vector3.ONE
+	# Play a particle effect
+	# TODO
+	
+	proj.finished.emit()
+	
+	return Vector3.ZERO
+
+
+# TODO - move to utils
+func _create_curved_path(start_pos: Vector3, goal_pos: Vector3, height: float, apex_ratio: float = 0.5, out_ratio: float = 0.6667, in_ratio: float = 0.6667) -> Curve3D:
+	var curve = Curve3D.new()
+	var mid_point: Vector3 = start_pos.lerp(goal_pos, apex_ratio) + Vector3(0, height, 0)
+
+	# Calculate bezier control points
+	var out_0 = (mid_point - start_pos) * out_ratio
+	var in_1 = (mid_point - goal_pos) * in_ratio
+	curve.add_point(start_pos, Vector3.ZERO, out_0)
+	curve.add_point(goal_pos, in_1, Vector3.ZERO)
+
+	return curve

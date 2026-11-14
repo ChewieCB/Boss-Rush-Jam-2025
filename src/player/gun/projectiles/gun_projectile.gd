@@ -90,23 +90,43 @@ func _deactivate_physics() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if homing_strength > 0 and GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
-		var target = GameManager.player.last_look_enemy_target
-		var target_pos = target.global_position
-		if target.has_node("BodyCenter"):
-			target_pos = target.get_node("BodyCenter").global_position
+	# TODO - give the base bullet class a state chart and handle this logic in discrete states?
+	# AMMO LEECH RETURN
+	if is_refund_returning and GameManager.player:
+		t_return += delta * t_return_scale
+		#t_return_scale += 0.01  # Speed up as we get to the end
+		# TODO - lerp position towards bullet spawn position, emit signal when reached to trigger anims
+		var target_pos = owner_gun.bullet_spawn_marker.global_position
 		var dist_to_target = global_position.distance_to(target_pos)
-		var homing_range = homing_strength * HOMING_RANGE_FACTOR
-		if dist_to_target <= homing_range:
-			var current_dir_vec = - transform.basis.z
-			var dir_to_target = global_position.direction_to(target_pos)
-			var new_dir = current_dir_vec.lerp(dir_to_target, homing_strength * HOMING_STRENGTH_FACTOR).normalized()
-			homing_curved_degrees += rad_to_deg(current_dir_vec.angle_to(new_dir))
-			look_at(global_position + new_dir)
-	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
-		var aiming_position = GunUtils.get_player_aiming_position()
-		var dir_to_target = global_position.direction_to(aiming_position)
-		look_at(global_position + dir_to_target)
+		if dist_to_target < 0.3:
+			refund_return_finished.emit()
+			is_refund_returning = false
+			t_return = 0.0
+		else:
+			self.global_position = self.global_position.lerp(target_pos, t_return)
+			look_at(target_pos)
+	# Don't have homing or guided or any other bullet movement logic apply if we're refunding a shot,
+	# this is just a visual effect
+	else:
+		# HOMING
+		if homing_strength > 0 and GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+			var target = GameManager.player.last_look_enemy_target
+			var target_pos = target.global_position
+			if target.has_node("BodyCenter"):
+				target_pos = target.get_node("BodyCenter").global_position
+			var dist_to_target = global_position.distance_to(target_pos)
+			var homing_range = homing_strength * HOMING_RANGE_FACTOR
+			if dist_to_target <= homing_range:
+				var current_dir_vec = - transform.basis.z
+				var dir_to_target = global_position.direction_to(target_pos)
+				var new_dir = current_dir_vec.lerp(dir_to_target, homing_strength * HOMING_STRENGTH_FACTOR).normalized()
+				homing_curved_degrees += rad_to_deg(current_dir_vec.angle_to(new_dir))
+				look_at(global_position + new_dir)
+		# GUIDED HAND
+		elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+			var aiming_position = GunUtils.get_player_aiming_position()
+			var dir_to_target = global_position.direction_to(aiming_position)
+			look_at(global_position + dir_to_target)
 
 	velocity = - transform.basis.z * projectile_speed * delta
 	global_position += velocity
@@ -131,6 +151,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	if not is_ricochet_shot:
 		activate()
 	
+	destroy_on_impact = true
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
@@ -196,7 +217,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		on_player_contact.emit(self)
 		if time_ricochetted == 0:
 			return
-
+	
 	check_raycast_col()
 	
 	var calculated_damage = calculate_bullet_damage()
@@ -232,9 +253,15 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
+	elif is_refund_returning:
+		return
 	else:
 		destroyed.emit(self, hit_boss)
-		finished.emit.call_deferred()
+		# TODO - move this finished emit to within the projectile_destroyed hook,
+		# so we can default to deactivating the projectile but override it where needed -
+		# i.e. ammo leech
+		if destroy_on_impact:
+			finished.emit.call_deferred()
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	super(split_count, split_spread_radius, _has_pos, _pos)
