@@ -13,6 +13,7 @@ signal finished
 @export var arc_angle_deg := 90.0
 @export var free_on_finished: bool = true
 @export var height_scale: float = 0.5
+@export var fade_time: float = 0.0
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
@@ -65,7 +66,10 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	#tween.parallel().tween_property(collider.shape)
 	
 	await tween.finished
-	
+
+	if fade_time > 0:
+		await _fade_out()
+
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -78,6 +82,18 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 		self.queue_free()
 	
 	deactivate()
+
+
+func _fade_out() -> void:
+	collider.set_deferred("disabled", true)
+	var color: Color = mesh_material.get_shader_parameter("base_color")
+	var fade_tween: Tween = create_tween()
+	fade_tween.tween_method(
+		func(alpha: float): mesh_material.set_shader_parameter("base_color", Color(color, alpha)),
+		color.a, 0.0, fade_time
+	)
+	await fade_tween.finished
+	mesh_material.set_shader_parameter("base_color", color)
 
 
 func _set_arc_angle(angle: float) -> void:

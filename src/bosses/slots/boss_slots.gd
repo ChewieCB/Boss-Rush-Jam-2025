@@ -121,9 +121,10 @@ var bell_shockwave_pool: Array = []
 @export var bell_shockwave_radius: float = 25.0
 @export var bell_shockwave_time: float = 1
 @export var bell_shockwave_knockback: float = 25.0
-@export var bell_shockwave_color: Color = Color(1.0, 0.75, 0.15, 0.6)
+@export var bell_shockwave_color: Color = Color(1.0, 0.55, 0.1, 0.6)
 @export var bell_shockwave_glow: float = 0.7
-@export var bell_shockwave_height_scale: float = 2
+@export var bell_shockwave_height_scale: float = 0.8
+@export var bell_shockwave_fade_time: float = 0.4
 # SFX
 #@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
 # Moved to the bell objects
@@ -151,6 +152,10 @@ var interrupted_state: String
 const CHARGE_CRACK_INTERVAL = 0.1
 var charge_crack_interval_timer = 0
 var charge_locked: bool = false
+var charge_chain_enabled: bool = false # Based on ante 2
+@export var charge_chain_chance: float = 0.5
+@export var max_charge_chains: int = 2
+var charge_chain_count: int = 0
 # SFX
 @export var sfx_charge: Array[AudioStream]
 @export var sfx_charge_impact: Array[AudioStream]
@@ -233,6 +238,7 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 2:
 		bomb_split_enabled = true
 		bell_shockwave_enabled = true
+		charge_chain_enabled = true
 
 	var bomb_pool_size: int = bombs_per_attack
 	if bomb_split_enabled:
@@ -282,6 +288,7 @@ func _init_bell_shockwave() -> void:
 	var shockwave = await _init_pooled_spawn(bell_shockwave_prefab, bell_shockwave_pool)
 	shockwave.free_on_finished = false
 	shockwave.height_scale = bell_shockwave_height_scale
+	shockwave.fade_time = bell_shockwave_fade_time
 	shockwave.set_color(bell_shockwave_color, bell_shockwave_glow)
 
 func _spawn_bell_shockwave(pos: Vector3) -> void:
@@ -370,6 +377,7 @@ func select_attack_phase_1() -> void:
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
 	swipe_cooldown_timer.stop()
+	charge_chain_count = 0
 	state_chart.send_event("start_spin_slots")
 
 
@@ -392,6 +400,7 @@ func select_attack_phase_2() -> void:
 	next_attack = new_phase[0]
 	next_attack_idx = new_phase[1]
 	swipe_cooldown_timer.stop()
+	charge_chain_count = 0
 	state_chart.send_event("start_spin_slots")
 
 
@@ -1176,7 +1185,13 @@ func _on_charge_recover_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)
-	
+
+	if charge_chain_enabled and charge_chain_count < max_charge_chains and randf() < charge_chain_chance:
+		charge_chain_count += 1
+		state_chart.send_event("cooldown_end")
+		state_chart.send_event("end_recovery") # Recover -> Charge Targeting
+		return
+
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 	
 	state_chart.send_event("cooldown_end")
