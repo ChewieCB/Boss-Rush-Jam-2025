@@ -11,17 +11,12 @@ signal start_slots_spin
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
 
 
-# Antes note:
-# Ante 1: Room of Fortune - Add a slot machine that add modifier to stages. Boss can interact with it too ( on a CD)
-# Ante 2: Hidden Motive - Hide the slot UI / attack indicator
-# Ante 3: Pinball Gamble - Enable new projectile attack that can ricochet
-# Ante 4: New phase? At 20% HP, Overclock, where the boss significantly reduce its attack cooldown
-# Ante 5: Greed Machine - Boss can pick up / steal dropped chips to recover HP
-
-
-# Extra idea for higher ante:
-# Cherry Bomb splitted into 2 smaller bomb
-# Cherry Bomb become Cherry Mine after hit the ground?
+# Antes idea:
+# Room of Fortune - Add a slot machine that add modifier to stages. Boss can interact with it too ( on a CD)
+# Hidden Motive - Hide the slot UI / attack indicator
+# Pinball Gamble - Enable new projectile attack that can ricochet
+# New phase? At 20% HP, Overclock, where the boss significantly reduce its attack cooldown
+# Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
 # Status
 # Weak to Shock (he's a machine), resist to Bleeding (same reason)
@@ -95,6 +90,9 @@ var coin_proj_pool: Array = []
 @export var coin_firerate: float = 4
 @export var coin_spread: float = 15
 @export var delay_between_coin_burst: float = 0.5
+var coin_fan_enabled: bool = false # Based on ante 2
+@export var coin_fan_count: int = 5
+@export var coin_fan_angle: float = 60.0
 # SFX
 @export var sfx_coin_gun_blast: Array[AudioStream]
 @export var sfx_coin_shot: Array[AudioStream]
@@ -168,6 +166,8 @@ var charge_chain_count: int = 0
 @export var diamond_projectile: PackedScene
 var diamond_proj_pool: Array = []
 @export var diamond_shots_per_attack: int = 7
+## Fire anyway if the boss can't get in range in time
+@export var diamond_max_approach_time: float = 2.0
 # SFX
 @export var sfx_diamond_gun_blast: Array[AudioStream]
 @export var sfx_diamond_shot: Array[AudioStream]
@@ -222,6 +222,7 @@ var absorb_chip_enabled = false
 @export var chip_value_to_heal_ratio: float = 0.5
 
 @onready var floor_raycast: RayCast3D = $FloorRaycast
+@onready var base_max_speed: float = MAX_SPEED
 
 # Death anim
 @onready var death_torso_rigid: RigidBody3D = $MarkerPivot/SlottyDeathTorso
@@ -239,12 +240,17 @@ func _ready() -> void:
 		bomb_split_enabled = true
 		bell_shockwave_enabled = true
 		charge_chain_enabled = true
+		coin_fan_enabled = true
 
 	var bomb_pool_size: int = bombs_per_attack
 	if bomb_split_enabled:
 		bomb_pool_size += bombs_per_attack * bomb_split_count
 
-	for i in range(coin_burst_repeat * coin_shots_per_burst):
+	var coin_pool_size: int = coin_burst_repeat * coin_shots_per_burst
+	if coin_fan_enabled:
+		coin_pool_size += coin_fan_count
+
+	for i in range(coin_pool_size):
 		_init_coin_proj.call_deferred()
 	for i in range(diamond_shots_per_attack):
 		_init_diamond_proj.call_deferred()
@@ -378,6 +384,7 @@ func select_attack_phase_1() -> void:
 	next_attack_idx = new_phase[1]
 	swipe_cooldown_timer.stop()
 	charge_chain_count = 0
+	MAX_SPEED = base_max_speed
 	state_chart.send_event("start_spin_slots")
 
 
@@ -401,6 +408,7 @@ func select_attack_phase_2() -> void:
 	next_attack_idx = new_phase[1]
 	swipe_cooldown_timer.stop()
 	charge_chain_count = 0
+	MAX_SPEED = base_max_speed
 	state_chart.send_event("start_spin_slots")
 
 
@@ -646,7 +654,30 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 		# Dont play animation for the last one (since boss no longer actually shoot)
 		if i < coin_burst_repeat - 1:
 			anim_player.play("ranged_shot_spin")
+
+	if coin_fan_enabled:
+		await get_tree().create_timer(delay_between_coin_burst, false).timeout
+		if not $StateChart/Root/Phase/Phase1/CoinProjectiles.active and not $StateChart/Root/Phase/Phase2/CoinProjectiles.active:
+			return
+		fire_coin_fan()
+		anim_player.play("ranged_shot_spin_shoot")
+		await anim_player.animation_finished
+
 	state_chart.send_event("stop_shooting")
+
+
+func fire_coin_fan() -> void:
+	explode_vfx.explode()
+	play_positional_sound(sfx_coin_gun_blast.pick_random())
+	play_positional_sound(sfx_coin_shot.pick_random())
+	for i in coin_fan_count:
+		var proj: BaseBossProjectile = fire_projectile_pooled(coin_proj_pool, projectile_spawn_marker.global_position)
+		if not proj:
+			return
+		var t: float = float(i) / (coin_fan_count - 1) if coin_fan_count > 1 else 0.5
+		var angle: float = lerp(-coin_fan_angle / 2, coin_fan_angle / 2, t)
+		proj.rotate_y(deg_to_rad(angle))
+		proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
 
 
 func _on_coin_projectiles_recover_state_entered() -> void:
@@ -948,6 +979,9 @@ func _on_homing_projectiles_targeting_state_entered() -> void:
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	desired_distance = 8.0
+	await get_tree().create_timer(diamond_max_approach_time, false).timeout
+	if $StateChart/Root/Phase/Phase2/HomingProjectiles/Targeting.active:
+		state_chart.send_event("start_shooting")
 	# await get_tree().create_timer(0.8, false).timeout
 	#anim_player.play("diamond_shot_telegraph")
 	#await anim_player.animation_finished
@@ -1108,7 +1142,7 @@ func _on_charge_charging_state_entered() -> void:
 	hurtbox_collider.set_deferred("disabled", true)
 	charge_collider.set_deferred("disabled", false)
 
-	MAX_SPEED /= 2.5
+	MAX_SPEED = base_max_speed
 	#desired_height = DESIRED_HEIGHT
 	desired_height = 1.0
 	if floor_raycast.is_colliding():
@@ -1241,16 +1275,19 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 
 	state_chart.send_event("attack_start")
 
-	bomb_dir_counter = -1
+	var first_side: int = [-1, 1].pick_random()
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
 		if $StateChart/Root/Health/Dead.active:
 			break
+		# First bomb at the player, then alternate sides
+		if i == 0:
+			bomb_dir_counter = 0
+		else:
+			bomb_dir_counter = first_side if i % 2 == 1 else -first_side
 		anim_player.play("big_ranged_shot")
 		await anim_player.animation_finished
-		bomb_dir_counter += 1
-		bomb_dir_counter = wrapi(bomb_dir_counter, -1, 2)
-	
+
 	anim_player.play("big_ranged_shot_finish")
 	sfx_player.volume_db = 0.0
 	state_chart.send_event("stop_dropping_bombs")
@@ -1312,7 +1349,7 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	navigation_component.follow_target = false
 	drop_factor = 12.0
 	desired_height = DESIRED_HEIGHT
-	MAX_SPEED /= 2.0
+	MAX_SPEED = base_max_speed
 
 	await desired_height_reached
 

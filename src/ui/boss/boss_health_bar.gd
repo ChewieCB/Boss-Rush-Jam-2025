@@ -36,7 +36,6 @@ func _ready() -> void:
 
 func _on_timer_timeout():
 	var tween: Tween = get_tree().create_tween()
-	tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(damage_bar, "value", health_bar.value, 0.4)
 
