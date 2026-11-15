@@ -1,11 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=223 format=3 uid="uid://cyxkgv6ghxahc"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kcf6t"]
-animation = &"ammo_leech_spiral"
-
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_pls64"]
-filter_enabled = true
-filters = ["EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D/LaserEndParticles:emitting", "EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D/LaserEndParticles:process_material:scale", "EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D/Sprite3D:modulate", "EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D:progress_ratio", "EffectIconsViewport/EffectIconsParent/SpiralAura:surface_material_override/0:shader_parameter/travel_progress"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=221 format=3 uid="uid://cyxkgv6ghxahc"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_3t03u"]
 
@@ -875,11 +868,7 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(13, -91)
 
 [resource]
-graph_offset = Vector2(580.383, 166.826)
-nodes/ammo_leech/node = SubResource("AnimationNodeAnimation_kcf6t")
-nodes/ammo_leech/position = Vector2(848, 528)
-nodes/ammo_leech_shot/node = SubResource("AnimationNodeOneShot_pls64")
-nodes/ammo_leech_shot/position = Vector2(1088, 224)
+graph_offset = Vector2(344.122, 79.5509)
 nodes/barrel_1+2/node = SubResource("AnimationNodeAdd2_3t03u")
 nodes/barrel_1+2/position = Vector2(-340, -140)
 nodes/barrel_12+3/node = SubResource("AnimationNodeAdd2_vi7yb")
@@ -943,4 +932,4 @@ nodes/spin_shot/node = SubResource("AnimationNodeOneShot_7h8f4")
 nodes/spin_shot/position = Vector2(160, 60)
 nodes/spin_state_UNUSED/node = SubResource("AnimationNodeStateMachine_gscp2")
 nodes/spin_state_UNUSED/position = Vector2(1120, 816)
-node_connections = [&"ammo_leech_shot", 0, &"jam_shot", &"ammo_leech_shot", 1, &"ammo_leech", &"barrel_1+2", 0, &"barrel_1_state", &"barrel_1+2", 1, &"barrel_2_state", &"barrel_12+3", 0, &"barrel_1+2", &"barrel_12+3", 1, &"barrel_3_state", &"barrels+reload", 0, &"spin_shot", &"barrels+reload", 1, &"reload_timescale", &"elemental_add", 0, &"barrels+reload", &"elemental_add", 1, &"elemental_state", &"elemental_state", 0, &"elemental_shotgun", &"elemental_state", 1, &"elemental_smg", &"elemental_state", 2, &"elemental_rifle", &"elemental_state_old", 0, &"fire_shotgun", &"elemental_state_old", 1, &"fire_smg", &"elemental_state_old", 2, &"fire_rifle", &"elemental_state_old", 3, &"cold_shotgun", &"elemental_state_old", 4, &"cold_smg", &"elemental_state_old", 5, &"cold_rifle", &"elemental_state_old", 6, &"electric_shotgun", &"elemental_state_old", 7, &"electric_smg", &"elemental_state_old", 8, &"electric_rifle", &"elemental_state_old", 9, &"poison_shotgun", &"elemental_state_old", 10, &"poison_smg", &"elemental_state_old", 11, &"poison_rifle", &"jam_shot", 0, &"elemental_add", &"jam_shot", 1, &"failed_shot", &"output", 0, &"ammo_leech_shot", &"reload_timescale", 0, &"idle_frame_state", &"spin_shot", 0, &"barrel_12+3", &"spin_shot", 1, &"spin_barrel"]
+node_connections = [&"barrel_1+2", 0, &"barrel_1_state", &"barrel_1+2", 1, &"barrel_2_state", &"barrel_12+3", 0, &"barrel_1+2", &"barrel_12+3", 1, &"barrel_3_state", &"barrels+reload", 0, &"spin_shot", &"barrels+reload", 1, &"reload_timescale", &"elemental_add", 0, &"barrels+reload", &"elemental_add", 1, &"elemental_state", &"elemental_state", 0, &"elemental_shotgun", &"elemental_state", 1, &"elemental_smg", &"elemental_state", 2, &"elemental_rifle", &"elemental_state_old", 0, &"fire_shotgun", &"elemental_state_old", 1, &"fire_smg", &"elemental_state_old", 2, &"fire_rifle", &"elemental_state_old", 3, &"cold_shotgun", &"elemental_state_old", 4, &"cold_smg", &"elemental_state_old", 5, &"cold_rifle", &"elemental_state_old", 6, &"electric_shotgun", &"elemental_state_old", 7, &"electric_smg", &"elemental_state_old", 8, &"electric_rifle", &"elemental_state_old", 9, &"poison_shotgun", &"elemental_state_old", 10, &"poison_smg", &"elemental_state_old", 11, &"poison_rifle", &"jam_shot", 0, &"elemental_add", &"jam_shot", 1, &"failed_shot", &"output", 0, &"jam_shot", &"reload_timescale", 0, &"idle_frame_state", &"spin_shot", 0, &"barrel_12+3", &"spin_shot", 1, &"spin_barrel"]

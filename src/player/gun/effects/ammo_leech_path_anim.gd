@@ -8,7 +8,7 @@ signal path_finished
 var projectile: BaseBullet
 
 
-func _ready() -> void:
+func vary_mesh_visuals() -> void:
 	var _mat: ShaderMaterial = path_mesh.get_surface_override_material(0)
 	var colour_var = _mat.get_shader_parameter("ring_color")
 	colour_var += Color(  
@@ -20,6 +20,8 @@ func _ready() -> void:
 	var freq_var: float = _mat.get_shader_parameter("ring_frequency")
 	freq_var += randf_range(-5.0, 5.0)
 	_mat.set_shader_parameter("ring_frequency", freq_var)
+	path_mesh.set_surface_override_material(0, _mat)
+	print()
 
 
 func add_to_path(obj: Node3D) -> void:

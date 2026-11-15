@@ -65,7 +65,7 @@ var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var effect_icons_viewport: SubViewport = $EffectIconsViewport
 # Ammo Leech
 @onready var leech_spiral_path: Path3D = $EffectIconsViewport/EffectIconsParent/BarrelSpiralPath
-@onready var leech_spiral_pathfollow: PathFollow3D = $EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D
+#@onready var leech_spiral_pathfollow: PathFollow3D = $EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D
 @export var ammo_leech_path_anim_scene: PackedScene
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -1494,13 +1494,23 @@ func ammo_leech_bullet_return(proj: BaseBullet, proj_origin: Vector3, arc_height
 	var path_anim = ammo_leech_path_anim_scene.instantiate()
 	leech_spiral_path.add_child(path_anim)
 	var _pathfollow: PathFollow3D = path_anim.unpack_pathfollow()
-	leech_spiral_path.add_child(_pathfollow) 
+	leech_spiral_path.add_child(_pathfollow)
 	
+	# FIXME - bullet mesh and vfx not moving along path
+	# TODO - scale bullet return speed and path animation speed with projectile speed property
 	var proj_visuals: Array[String] = ["MeshInstance3D", "Trail", "ElementalVFX", "BarrelVFXEffectContainer"]
 	for node_path: String in proj_visuals:
 		var _node: Node3D = proj.get_node(node_path).duplicate()
 		_node.scale = Vector3.ONE * 5
+		match node_path:
+			"MeshInstance3D":
+				var _path_colour = _node.mesh.material.albedo_color
+				var _mat: ShaderMaterial = path_anim.path_mesh.get_surface_override_material(0).duplicate()
+				_mat.set_shader_parameter("ring_color", _path_colour)
+				path_anim.path_mesh.set_surface_override_material(0, _mat)
 		path_anim.add_to_path(_node)
+	
+	path_anim.vary_mesh_visuals()
 	
 	proj.finished.emit()
 	path_anim.start_path()
