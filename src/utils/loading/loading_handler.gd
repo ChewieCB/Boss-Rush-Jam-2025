@@ -1,7 +1,5 @@
 extends Node
 
-signal materials_compiled
-signal icon_anims_compiled
 signal loading_started
 signal scene_path_loaded(scene_path: String)
 signal loading_finished(scene: PackedScene)
@@ -48,43 +46,23 @@ var skip_equip_anim: bool = false
 # after return from boss fight, to skip the fancy transition stuff
 var skip_transition_in: bool = false
 
-# Shader pre-compilation
-const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"
-const IGNORED_PATH_EXTENSIONS: Array[String] = [
-	"mp3", "wav",
-	"png", "jpg", "svg",
-]
-@export var debug_skip_pre_compile: bool = false
-@export var max_materials_compiled_per_frame: int = 8
-var scenes_to_compile: Array = []
-var compiling_materials_count: int = 0
-var compiled_material_paths := []
-var is_compiling: bool = false
-var is_materials_compiled: bool = false
+# Material warm-up
+const WARM_FILE_EXTENSIONS: Array[String] = ["tscn", "scn", "tres", "res"]
+const WARM_FRAME_BUDGET_MSEC: int = 30
+const WARM_DRAW_FRAMES: int = 2 # Main pass + depth pre-pass
+const WARM_PARTICLE_SECONDS: float = 0.5
+# Far below every level, so the warm camera sees nothing but the warm meshes
+const WARM_CAMERA_POSITION := Vector3(0.0, -5000.0, 0.0)
+const IN_FRONT_OF_WARM_CAMERA := Vector3(0.0, 0.0, -2.0)
+var _warmed_materials: Dictionary = {}
+var _materials_being_drawn: int = 0
 
-@onready var compile_parent = $CompileParent
+@onready var compile_parent: Node3D = $CompileParent
 
 
-func collect_scenes_to_compile() -> void:
-	var file = FileAccess.open(PRECOMPILE_CONFIG_PATH, FileAccess.READ)
-	var path = file.get_line()
-	while path != "":
-		scenes_to_compile.append(path)
-		path = file.get_line()
-
-
-func initial_load() -> void:
-	# Pre-cache files we know contain materials to load
-	if OS.is_debug_build() and not debug_skip_pre_compile:
-		await Engine.get_main_loop().process_frame
-		ScreenTransition.set_loading_detail_text("Parsing scene paths to compile")
-		parse_scene_paths_to_compile()
-	await Engine.get_main_loop().process_frame
-	ScreenTransition.set_loading_detail_text("Collecting scenes to compile")
-	collect_scenes_to_compile()
-	await Engine.get_main_loop().process_frame
-	ScreenTransition.set_loading_detail_text("Compiling materials")
-	is_compiling = true
+func _ready() -> void:
+	compile_parent.position = WARM_CAMERA_POSITION
+	compile_parent.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 
 
 func start_loading(scene_path: String, scene_name: String = "", transition_out: bool = true) -> void:
@@ -101,22 +79,15 @@ func start_loading(scene_path: String, scene_name: String = "", transition_out: 
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
-	
-	if not is_materials_compiled:
-		initial_load()
-		await materials_compiled
-	
-	#await Engine.get_main_loop().process_frame
 
 
 func load_scene_transition() -> void:
-	if not is_materials_compiled:
-		await materials_compiled
-	
 	can_transition = true
 	await scene_path_loaded
-	
+	can_transition = false
+
 	var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
+	await warm_scene_materials(current_scene_path)
 	_load_scene(packed_scene)
 	ScreenTransition.set_loading_visible(false)
 	ScreenTransition.transition_in()
@@ -141,10 +112,8 @@ func find_and_load_scene_bgm(scene_name: String = "") -> void:
 	if music_state != "":
 		GameManager.change_fmod_bgm_music_state(music_state)
 
+
 func load_scene_seamless() -> void:
-	if not is_materials_compiled:
-		await materials_compiled
-	
 	can_transition = true
 	await scene_path_loaded
 	
@@ -172,197 +141,132 @@ func _process(_delta: float) -> void:
 			scene_path_loaded.emit(current_scene_path)
 
 
-func _physics_process(_delta: float) -> void:
-	if is_compiling:
-		compile_materials()
+#region Material warm-up
+## Only call this while the screen is covered, it takes over the 3D camera.
+func warm_scene_materials(scene_path: String) -> void:
+	var gameplay_camera := get_viewport().get_camera_3d()
+	var warm_camera := Camera3D.new()
+	compile_parent.add_child(warm_camera)
+	compile_parent.visible = true
+	warm_camera.make_current()
+
+	var resource_paths := {}
+	_collect_scene_and_dependencies(scene_path, resource_paths)
+
+	var frame_start := Time.get_ticks_msec()
+	for path in resource_paths:
+		_warm_resource(path)
+		if Time.get_ticks_msec() - frame_start >= WARM_FRAME_BUDGET_MSEC:
+			await get_tree().process_frame
+			frame_start = Time.get_ticks_msec()
+
+	while _materials_being_drawn > 0:
+		await get_tree().process_frame
+
+	_warmed_materials.clear()
+	compile_parent.visible = false
+	warm_camera.queue_free()
+	if is_instance_valid(gameplay_camera):
+		gameplay_camera.make_current()
 
 
-func parse_scene_paths_to_compile() -> void:
-	var scene_path_list := []
-	var regex_pattern := "(sub_resource|ext_resource) type=\"(ParticleProcessMaterial|ShaderMaterial|Material|CanvasItemMaterial|StandardMaterial3D)\""
-	var regex = RegEx.new()
-	regex.compile(regex_pattern)
-
-	var instantiation_list := []
-	var filepaths = get_filepaths_from_nested_directory("res://src", true)
-	for filepath in filepaths:
-		if filepath.get_extension() in IGNORED_PATH_EXTENSIONS:
-			continue
-
-		var file = FileAccess.open(filepath, FileAccess.READ)
-		if file == null:
-			continue
-		var text = file.get_as_text()
-		
-		var regex_match = regex.search(text)
-		if regex_match:
-			instantiation_list.append(filepath)
-
-	for scene_path in instantiation_list:
-		ResourceLoader.load(scene_path)
-		scene_path_list.append(scene_path)
-
-	var save_file = FileAccess.open(PRECOMPILE_CONFIG_PATH, FileAccess.WRITE)
-	for path in instantiation_list:
-		save_file.store_line(path)
-
-
-# TODO - move this to a utility script
-func get_filepaths_from_nested_directory(dir_path: String, incl_files_from_given_dir: bool = true) -> Array:
-	var files = []
-	var item
-	var item_path
-
-	var dir := DirAccess.open(dir_path)
-	if dir == null:
-		printerr("Could not open folder", dir_path)
-		return files
-
-	dir.list_dir_begin()
-	item = dir.get_next()
-	while item != "":
-		item_path = dir_path + "/" + item
-		if dir.dir_exists(item_path):
-			files += (get_filepaths_from_nested_directory(item_path, true))
-		if dir.file_exists(item_path) and incl_files_from_given_dir:
-			files.append(item_path)
-		item = dir.get_next()
-	dir.list_dir_end()
-
-	return files
-
-
-func compile_materials() -> void:
-	var to_process: Array = scenes_to_compile.slice(0, max_materials_compiled_per_frame)
-	scenes_to_compile = scenes_to_compile.slice(max_materials_compiled_per_frame)
-	
-	for scene_path in to_process:
-		_compile_scene(scene_path)
-
-	if scenes_to_compile.is_empty() and compiling_materials_count == 0:
-		print("All scenes compiled.")
-		is_materials_compiled = true
-		is_compiling = false
-		ScreenTransition.set_loading_detail_text("Materials compiled")
-		materials_compiled.emit()
-
-
-func _compile_scene(scene_path: String) -> void:
-	print("Precompile resources in %s" % scene_path)
-	var scene_resource := ResourceLoader.load(scene_path)
-	if not scene_resource:
+func _collect_scene_and_dependencies(path: String, collected_paths: Dictionary) -> void:
+	if collected_paths.has(path) or path.get_extension() not in WARM_FILE_EXTENSIONS:
 		return
-	
-	if scene_resource is PackedScene:
-		var scene = scene_resource.instantiate()
-		_compile_node_recursive(scene)
-		
-		# Special case: Trail3D assigns material_override at runtime
-		for trail in scene.find_children("*", "MeshInstance3D", true):
-			if trail.get_script() and trail.get_script().resource_path.contains("Trail3D"):
-				if trail.material_override:
-					_compile_material_resource(trail.material_override)
-		
-		scene.queue_free()
+	collected_paths[path] = true
 
-	elif scene_resource is Material:
-		_compile_material_resource(scene_resource)
+	for dependency in ResourceLoader.get_dependencies(path):
+		# A dependency is either "path" or "uid::type::path"
+		var dependency_path := dependency.get_slice("::", 2) if "::" in dependency else dependency
+		_collect_scene_and_dependencies(dependency_path, collected_paths)
 
 
-func _compile_node_recursive(node: Node) -> void:
+func _warm_resource(path: String) -> void:
+	# Loading something that is not in memory yet would freeze the game
+	if not ResourceLoader.has_cached(path):
+		return
+
+	var resource := ResourceLoader.load(path)
+	if resource is PackedScene:
+		var scene: Node = resource.instantiate()
+		_warm_node_and_children(scene)
+		scene.free()
+	elif resource is Material:
+		_warm_material(resource)
+
+
+func _warm_node_and_children(node: Node) -> void:
+	if node is GeometryInstance3D:
+		_warm_material(node.material_override)
+
 	if node is MeshInstance3D:
-		var mesh_inst := node as MeshInstance3D
-		if mesh_inst.mesh:
-			for surface_idx in mesh_inst.mesh.get_surface_count():
-				var mat = mesh_inst.mesh.surface_get_material(surface_idx)
-				if mat:
-					_compile_material_resource(mat)
-			for surface_idx in mesh_inst.get_surface_override_material_count():
-				var mat = mesh_inst.get_surface_override_material(surface_idx)
-				if mat:
-					_compile_material_resource(mat)
-				
+		_warm_mesh_materials(node.mesh)
+		for surface in node.get_surface_override_material_count():
+			_warm_material(node.get_surface_override_material(surface))
 	elif node is GPUParticles3D:
-		if node.process_material:
-			_compile_particles_node(node)
-	
-	elif node.get("material") != null:
-		_compile_material_node(node)
-	
+		_warm_particles(node)
+	elif node.get("material") is Material:
+		_warm_material(node.material)
+
 	for child in node.get_children():
-		_compile_node_recursive(child)
+		_warm_node_and_children(child)
 
 
-func _compile_material_resource(mat: Material) -> void:
-	var path := mat.resource_path
-	if path in compiled_material_paths:
-		print("Found %s in cache, skipping." % path)
+func _warm_mesh_materials(mesh: Mesh) -> void:
+	if mesh == null:
 		return
-
-	compiling_materials_count += 1
-	print("Caching material %s" % mat)
-
-	var node = MeshInstance3D.new()
-	node.mesh = QuadMesh.new()
-	node.set_surface_override_material(0, mat)
-	#node.mesh.material = mat
-	compile_parent.add_child(node)
-
-	if path:
-		compiled_material_paths.append(path)
-		print("Caching %s" % path)
-	
-	# Main pass
-	await RenderingServer.frame_post_draw
-	# Depth pre-pass
-	await RenderingServer.frame_post_draw
-	
-	compiling_materials_count -= 1
-	if is_instance_valid(node):
-		node.queue_free()
+	for surface in mesh.get_surface_count():
+		_warm_material(mesh.surface_get_material(surface))
 
 
-func _compile_material_node(child: Node) -> void:
-	if child.material.resource_path in compiled_material_paths:
-		print("Found %s in cache, skipping." % child.material.resource_path)
+func _warm_material(material: Material) -> void:
+	if material == null or _warmed_materials.has(material) or not _is_3d_material(material):
 		return
+	_warmed_materials[material] = true
 
-	compiling_materials_count += 1
-	print("Caching material from %s" % child.name)
+	var quad := MeshInstance3D.new()
+	quad.mesh = QuadMesh.new()
+	quad.material_override = material
+	quad.position = IN_FRONT_OF_WARM_CAMERA
+	compile_parent.add_child(quad)
 
-	var node = MeshInstance3D.new()
-	node.mesh = QuadMesh.new()
-	node.mesh.material = child.material
-	compile_parent.add_child(node)
+	_materials_being_drawn += 1
+	for frame in WARM_DRAW_FRAMES:
+		await RenderingServer.frame_post_draw
+	_materials_being_drawn -= 1
 
-	if child.material.resource_path:
-		compiled_material_paths.append(child.material.resource_path)
-		print("Caching %s" % child.material.resource_path)
-
-	compiling_materials_count -= 1
-	if is_instance_valid(node):
-		node.queue_free()
+	quad.queue_free()
 
 
-func _compile_particles_node(child: GPUParticles3D) -> void:
-	if child.process_material.resource_path in compiled_material_paths:
-		print("Found %s in cache, skipping." % child.process_material.resource_path)
+func _is_3d_material(material: Material) -> bool:
+	if material is ShaderMaterial:
+		return material.shader != null and material.shader.get_mode() == Shader.MODE_SPATIAL
+	return material is BaseMaterial3D
+
+
+func _warm_particles(source: GPUParticles3D) -> void:
+	for draw_pass in source.draw_passes:
+		_warm_mesh_materials(source.get_draw_pass_mesh(draw_pass))
+
+	var process_material := source.process_material
+	if process_material == null or _warmed_materials.has(process_material):
 		return
+	_warmed_materials[process_material] = true
 
-	compiling_materials_count += 1
-	print("Caching material from %s" % child.name)
-
-	var particles = GPUParticles3D.new()
-	particles.process_material = child.process_material
+	var particles := GPUParticles3D.new()
+	particles.process_material = process_material
+	particles.material_override = source.material_override
+	particles.draw_passes = source.draw_passes
+	for draw_pass in source.draw_passes:
+		particles.set_draw_pass_mesh(draw_pass, source.get_draw_pass_mesh(draw_pass))
+	particles.position = IN_FRONT_OF_WARM_CAMERA
 	particles.emitting = true
 	compile_parent.add_child(particles)
 
-	if child.process_material.resource_path:
-		compiled_material_paths.append(child.process_material.resource_path)
-		print("Caching %s" % [child.process_material.resource_path])
+	_materials_being_drawn += 1
+	var ignore_time_scale := true
+	await get_tree().create_timer(WARM_PARTICLE_SECONDS, true, false, ignore_time_scale).timeout
+	_materials_being_drawn -= 1
 
-	await get_tree().create_timer(0.5).timeout
-
-	compiling_materials_count -= 1
-	if is_instance_valid(particles):
-		particles.queue_free()
+	particles.queue_free()
+#endregion

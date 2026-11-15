@@ -31,13 +31,15 @@ var _blur_tween: Tween
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	story_ui.visible = show_story_panel
-	if not LoadingHandler.is_materials_compiled:
-		LoadingHandler.initial_load()
-		await LoadingHandler.materials_compiled
 
 	# Must place it before connect input signal to avoid mouse finiciky stuff idk
 	# it just work
 	spawn_backdrop()
+
+	# When returning from a level, skip warm the hub
+	var is_game_boot: bool = LoadingHandler.current_scene_path.is_empty()
+	if is_game_boot:
+		await LoadingHandler.warm_scene_materials(lobby_scene.resource_path)
 
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	for slot: SaveSlotItem in save_slot_items:

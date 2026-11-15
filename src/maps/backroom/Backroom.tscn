@@ -130,7 +130,6 @@ fractal_lacunarity = 1.865
 [sub_resource type="NoiseTexture3D" id="NoiseTexture3D_rjngo"]
 width = 256
 height = 256
-depth = 4901
 noise = SubResource("FastNoiseLite_1mao8")
 
 [sub_resource type="FogMaterial" id="FogMaterial_44vgd"]
