@@ -60,7 +60,7 @@ var min_lifetime_before_can_be_aim_guided = 0.2
 var is_refund_returning: bool = false
 var destroy_on_impact: bool = true
 var t_return: float = 0.0
-var t_return_scale: float = 0.002
+var t_return_scale: float = 1.0
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0

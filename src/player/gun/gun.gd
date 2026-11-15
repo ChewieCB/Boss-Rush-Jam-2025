@@ -64,7 +64,9 @@ var _barrel_materials: Array[StandardMaterial3D] = []
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 @onready var effect_icons_viewport: SubViewport = $EffectIconsViewport
 # Ammo Leech
+@onready var leech_spiral_path: Path3D = $EffectIconsViewport/EffectIconsParent/BarrelSpiralPath
 @onready var leech_spiral_pathfollow: PathFollow3D = $EffectIconsViewport/EffectIconsParent/BarrelSpiralPath/PathFollow3D
+@export var ammo_leech_path_anim_scene: PackedScene
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 #
@@ -242,7 +244,7 @@ func equip_active() -> void:
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
-	# EXPERIMENTAL for hold/release spinning
+ 	# EXPERIMENTAL for hold/release spinning
 	#if Input.is_action_just_released("spin_barrels"):
 		#var state_machine = anim_tree.get("parameters/spin_state/playback")
 		#state_machine.travel("released")
@@ -1481,6 +1483,7 @@ func set_elemental_anim(element: String = "") -> void:
 
 
 func ammo_leech_bullet_return(proj: BaseBullet, proj_origin: Vector3, arc_height: float = 1.5, proj_speed: float = 1.2) -> Vector3:
+	# TODO - move to ammo leech effect
 	proj.life_timer.stop()
 	# Play a particle effect at the impact point
 	# TODO
@@ -1488,23 +1491,37 @@ func ammo_leech_bullet_return(proj: BaseBullet, proj_origin: Vector3, arc_height
 	proj.is_refund_returning = true
 	await proj.refund_return_finished
 	# Scale up mesh, trail, and vfx - or copy them over to a new visual only node for the spiral anim
-	proj._deactivate_physics()
-	proj.scale = Vector3.ONE * 4
-	proj.get_parent().remove_child(proj)
-	leech_spiral_pathfollow.add_child(proj)
+	var path_anim = ammo_leech_path_anim_scene.instantiate()
+	leech_spiral_path.add_child(path_anim)
+	var _pathfollow: PathFollow3D = path_anim.unpack_pathfollow()
+	leech_spiral_path.add_child(_pathfollow) 
 	
-	await get_tree().physics_frame
-	proj.global_position = leech_spiral_pathfollow.global_position
-	var curve_tween = get_tree().create_tween()
-	#curve_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
-	curve_tween.tween_property(leech_spiral_pathfollow, "progress_ratio", 1.0, proj_speed * 2)
-	#
-	await curve_tween.finished
-	proj.scale = Vector3.ONE
-	# Play a particle effect
-	# TODO
+	var proj_visuals: Array[String] = ["MeshInstance3D", "Trail", "ElementalVFX", "BarrelVFXEffectContainer"]
+	for node_path: String in proj_visuals:
+		var _node: Node3D = proj.get_node(node_path).duplicate()
+		_node.scale = Vector3.ONE * 5
+		path_anim.add_to_path(_node)
 	
 	proj.finished.emit()
+	path_anim.start_path()
+	await path_anim.path_finished
+	#proj.get_parent().remove_child(proj)
+	#leech_spiral_pathfollow.add_child(proj) 
+	#anim_tree.set("parameters/ammo_leech_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	
+	#await get_tree().physics_frame
+	#proj.position = Vector3.ZERO
+	#proj.global_position = leech_spiral_pathfollow.global_position
+	#var curve_tween = get_tree().create_tween()
+	##curve_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+	#curve_tween.tween_property(leech_spiral_pathfollow, "progress_ratio", 1.0, 3.0)
+	##
+	#await curve_tween.finished
+	#proj.scale = Vector3.ONE
+	## Play a particle effect
+	## TODO
+	#
+	#proj.finished.emit()
 	
 	return Vector3.ZERO
 

@@ -93,18 +93,20 @@ func _physics_process(delta: float) -> void:
 	# TODO - give the base bullet class a state chart and handle this logic in discrete states?
 	# AMMO LEECH RETURN
 	if is_refund_returning and GameManager.player:
-		t_return += delta * t_return_scale
+		t_return += delta * t_return_scale 
 		#t_return_scale += 0.01  # Speed up as we get to the end
-		# TODO - lerp position towards bullet spawn position, emit signal when reached to trigger anims
+		# TODO - lerp position towards bullet spawn position, 
+		# emit signal when reached to trigger anims
 		var target_pos = owner_gun.bullet_spawn_marker.global_position
 		var dist_to_target = global_position.distance_to(target_pos)
-		if dist_to_target < 0.3:
+		if dist_to_target < 0.2:
 			refund_return_finished.emit()
 			is_refund_returning = false
 			t_return = 0.0
 		else:
 			self.global_position = self.global_position.lerp(target_pos, t_return)
 			look_at(target_pos)
+			return
 	# Don't have homing or guided or any other bullet movement logic apply if we're refunding a shot,
 	# this is just a visual effect
 	else:
