@@ -1,7 +1,6 @@
-[gd_scene load_steps=36 format=3 uid="uid://1t3ui8wme31d"]
+[gd_scene load_steps=35 format=3 uid="uid://1t3ui8wme31d"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
-[ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="1_jqa14"]
 [ext_resource type="AudioStream" uid="uid://bjjecuxqteiru" path="res://src/ui/main_menu/assets/sfx/drumMenu1.mp3" id="3_7ak47"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="3_j6oww"]
@@ -32,7 +31,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
-shader_parameter/blur_amount = 2.0
+shader_parameter/blur_amount = 0.0
 shader_parameter/mix_amount = 0.0
 shader_parameter/color_over = null
 
@@ -109,20 +108,12 @@ credits_ui = NodePath("CreditsUI")
 story_ui = NodePath("StoryUI")
 save_ui = NodePath("SaveUI")
 title_column = NodePath("TitleColumn")
+show_story_panel = null
 
 [node name="IdleDetector" parent="." instance=ExtResource("25_bigae")]
 
-[node name="OverallBackground" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_gnvwu")
-expand_mode = 5
-
 [node name="BlurShader" type="TextureRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_2x62q")
 layout_mode = 1
 anchors_preset = 15

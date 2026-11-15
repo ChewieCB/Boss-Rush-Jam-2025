@@ -44,6 +44,9 @@ var current_scene_path: String:
 		ResourceLoader.load_threaded_request(current_scene_path)
 var can_transition: bool = false
 var skip_equip_anim: bool = false
+# This will be false when we first load the backroom (from main menu) and true
+# after return from boss fight, to skip the fancy transition stuff
+var skip_transition_in: bool = false
 
 # Shader pre-compilation
 const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"

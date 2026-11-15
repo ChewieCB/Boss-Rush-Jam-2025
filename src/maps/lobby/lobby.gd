@@ -28,8 +28,16 @@ var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [] # [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
+# Add menu sway so it very clearly 3d (we wasted the performance for this after all)
+const MENU_SWAY_YAW_DEG: float = 4
+const MENU_SWAY_PITCH_DEG: float = 2
+var is_menu_backdrop: bool = false
+var _menu_sway_time: float = 0.0
+var _menu_sway_weight: float = 1.0
+
 
 func _ready() -> void:
+	set_process(is_menu_backdrop)
 	Engine.time_scale = 1
 	#SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
@@ -53,6 +61,11 @@ func _ready() -> void:
 	
 	GameManager.selected_boss_id = BossCore.BossIdEnum.BASE
 	GameManager.current_boss_map = self
+
+	if is_menu_backdrop:
+		setup_menu_backdrop()
+		return
+
 	GameManager.change_fmod_bgm_music_state("Backroom") # Backroom is the new Lobby
 	
 	# Save and load check
@@ -74,13 +87,17 @@ func _ready() -> void:
 	
 	wip_bosses_door.is_autodoor = GameManager.CHEAT_unlock_wip_bosses
 	GameManager.cheat_unlock_wip_bosses.connect(
-		func(is_open): 
+		func(is_open):
 			wip_bosses_door.is_autodoor = is_open
 	)
 	
-	# HACK for backroom load
-	await ScreenTransition.transition_in()
-	
+	if LoadingHandler.skip_transition_in:
+		LoadingHandler.skip_transition_in = false
+		ScreenTransition.transition_midpoint_in.emit()
+	else:
+		# HACK for backroom load
+		await ScreenTransition.transition_in()
+
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
@@ -100,7 +117,39 @@ func _ready() -> void:
 	player.controls_disabled = false
 
 
+func setup_menu_backdrop() -> void:
+	# The main menu has its own idle detector, so we delete the lobby one
+	var idle_detector = get_node_or_null("IdleDetector")
+	if idle_detector:
+		idle_detector.queue_free()
+
+	# Disable HUD and pause menu
+	player.player_ui.visible = false
+	player.player_ui.process_mode = Node.PROCESS_MODE_DISABLED
+
+	# No save is loaded yet, so there is no gun to show. Disconnect equip animation
+	player.gun_container.visible = false
+	var equip_callable: Callable = player.current_gun.equip_active
+	if ScreenTransition.transition_midpoint_in.is_connected(equip_callable):
+		ScreenTransition.transition_midpoint_in.disconnect(equip_callable)
+
+
+func _process(delta: float) -> void:
+	_menu_sway_time += delta
+	player.neck.rotation.y = deg_to_rad(MENU_SWAY_YAW_DEG) * sin(_menu_sway_time * 0.25) * _menu_sway_weight
+	player.neck.rotation.x = deg_to_rad(MENU_SWAY_PITCH_DEG) * sin(_menu_sway_time * 0.17) * _menu_sway_weight
+
+
+## Reset the camera back to the player normal view
+func settle_menu_camera(duration: float) -> void:
+	var tween = create_tween()
+	tween.tween_property(self, "_menu_sway_weight", 0.0, duration).set_trans(Tween.TRANS_SINE)
+	await tween.finished
+
+
 func _input(event: InputEvent) -> void:
+	if is_menu_backdrop:
+		return
 	if event.is_action_pressed("interact"):
 		ui_accept.emit()
 
